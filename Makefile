@@ -2,7 +2,11 @@ all: iso
 
 .PHONY: apt-depends
 apt-depends:
-	sudo apt-get install -y cloud-image-utils yamllint
+	sudo apt-get install -y cloud-image-utils yamllint zip unzip
+
+.PHONY: import-cndo
+import-cndo:
+	scripts/import-project.sh cndo
 
 iso: scripts/cloud-init-iso.sh
 	mkdir -p iso

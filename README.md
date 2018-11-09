@@ -1,7 +1,7 @@
 # NSRC Virtual Training Platform - GNS3 configurations
 
-Download the `project-cndo` directory as a zipfile and change the extension
-to `.gns3project`.  This is a "portable project" which you should be able to
+Download `cndo.gns3project`.  This is a GNS3 "portable project" which you
+should be able to import using `File > Import Portable Project`.
 import into another GNS3 server.
 
 # Images required
