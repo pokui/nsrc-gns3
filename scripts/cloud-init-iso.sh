@@ -100,6 +100,17 @@ write_files:
 EOS
   cat <<EOS >"$TMPDIR/network-config"
 version: 2
+# This doesn't work until bridge-utils is in the image
+#ethernets:
+#  $NIC: {}
+#bridges:
+#  br0:
+#    interfaces:
+#      - $NIC
+#    parameters:
+#      stp: false
+#      forward-delay: 0
+#    addresses: ... etc
 ethernets:
   $NIC:
     addresses:
