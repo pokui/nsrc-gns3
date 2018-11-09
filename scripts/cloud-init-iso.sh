@@ -5,6 +5,7 @@
 # Inspired by https://github.com/asenci/gns3-ubuntu-cloud-init-data/
 # See also:
 # https://cloudinit.readthedocs.io/en/latest/topics/datasources/nocloud.html
+# https://cloudinit.readthedocs.io/en/latest/topics/network-config-format-v1.html
 # https://cloudinit.readthedocs.io/en/latest/topics/network-config-format-v2.html
 # https://cloudinit.readthedocs.io/en/latest/topics/modules.html
 
@@ -98,32 +99,26 @@ write_files:
       net.ipv6.conf.default.dad_transmits = 0
       net.ipv6.conf.$NIC.dad_transmits = 0
 EOS
+  # version 2 appears to be broken on Ubuntu 16.04: it doesn't add
+  # dns-nameservers or dns-search to /etc/network/interfaces.d/50-cloud-init.cfg
   cat <<EOS >"$TMPDIR/network-config"
-version: 2
-# This doesn't work until bridge-utils is in the image
-#ethernets:
-#  $NIC: {}
-#bridges:
-#  br0:
-#    interfaces:
-#      - $NIC
-#    parameters:
-#      stp: false
-#      forward-delay: 0
-#    addresses: ... etc
-ethernets:
-  $NIC:
-    addresses:
-      - $IPV4/28
-      - $IPV6/64
-    gateway4: 100.68.$i.129
-    gateway6: 2001:db8:$i:1::1
-    nameservers:
-      addresses:
-        - 192.168.122.1
-      search:
-        - campus$i.ws.nsrc.org
-        - ws.nsrc.org
+version: 1
+config:
+  - type: physical
+    name: $NIC
+    subnets:
+      - type: static
+        address: $IPV4/28
+        gateway: 100.68.$i.129
+      - type: static6
+        address: $IPV6/64
+        gateway: 2001:db8:$i:1::1
+  - type: nameserver
+    address:
+      - 192.168.122.1
+    search:
+      - campus$i.ws.nsrc.org
+      - ws.nsrc.org
 EOS
   yamllint "$TMPDIR/user-data"
   yamllint "$TMPDIR/network-config"
