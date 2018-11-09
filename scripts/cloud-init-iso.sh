@@ -14,10 +14,12 @@ PASSWD='$6$XqBb4pf3$rTN75u32r30VDbY252DwLLJ0rAuxIMvZceX02YFXK/WjAJ0FVjrUCQSkdPWA
 DATETIME="$(date -u +%Y%m%d%H%M)"
 
 for i in $(seq 1 6); do
+  FQDN="srv1.campus$i.ws.nsrc.org"
+  IPV4="100.68.$i.130"
+  IPV6="2001:db8:$i:1::129"
   cat <<EOS >"$TMPDIR/user-data"
 #cloud-config
-fqdn: srv1.campus$i.ws.nsrc.org
-manage_etc_hosts: true
+fqdn: $FQDN
 chpasswd: { expire: False }
 ssh_pwauth: True
 users:
@@ -27,6 +29,19 @@ users:
     lock_passwd: false
     passwd: $PASSWD
 write_files:
+  - path: /etc/hosts
+    content: |
+      $IPV4 $FQDN srv1
+      $IPV6 $FQDN srv1
+      127.0.0.1 localhost
+
+      # The following lines are desirable for IPv6 capable hosts
+      ::1 ip6-localhost ip6-loopback
+      fe00::0 ip6-localnet
+      ff00::0 ip6-mcastprefix
+      ff02::1 ip6-allnodes
+      ff02::2 ip6-allrouters
+      ff02::3 ip6-allhosts
   # Assume classroom server has virbr0 on standard address and apt-cacher-ng is available
   - path: /etc/apt/apt.conf.d/99proxy
     content: |
@@ -88,8 +103,8 @@ version: 2
 ethernets:
   $NIC:
     addresses:
-      - 100.68.$i.130/28
-      - 2001:db8:$i:1::129/64
+      - $IPV4/28
+      - $IPV6/64
     gateway4: 100.68.$i.129
     gateway6: 2001:db8:$i:1::1
     nameservers:
@@ -101,6 +116,6 @@ ethernets:
 EOS
   yamllint "$TMPDIR/user-data"
   yamllint "$TMPDIR/network-config"
-  cloud-localds -N "$TMPDIR/network-config" \
+  cloud-localds -H "$FQDN" -N "$TMPDIR/network-config" \
       "iso/srv1-campus${i}-init-$DATETIME.iso" "$TMPDIR/user-data"
 done
