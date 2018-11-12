@@ -1,0 +1,41 @@
+#!/bin/bash -eu
+CAMPUS=$2
+
+. ../address-mappings
+
+cat <<EOM
+hostname bdr1.campus${CAMPUS}
+!
+aaa new-model
+aaa authentication login default local
+aaa authentication enable default enable
+aaa session-id common
+!
+!
+no logging console
+logging buffered 8192 debugging
+ipv6 unicast-routing
+ipv6 cef
+no ip domain-lookup
+ip domain name ws.nsrc.org
+
+username cndlab secret lab-PW
+enable secret lab-EN
+service password-encryption
+
+line con 0
+ exec-timeout 0 0
+ transport preferred none
+ stopbits 1
+line aux 0
+ exec-timeout 0 0
+ transport preferred none
+ stopbits 1
+line vty 0 4
+ exec-timeout 0 0
+ transport preferred none
+
+!
+!
+end
+EOM

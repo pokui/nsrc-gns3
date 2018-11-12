@@ -1,0 +1,47 @@
+#!/bin/bash -eu
+CAMPUS=$2
+
+. ../address-mappings
+
+PRIORITY=0
+
+cat <<EOM
+hostname core1.campus${CAMPUS}
+!
+aaa new-model
+aaa authentication login default local
+aaa authentication enable default enable
+!
+no logging console
+logging buffered 8192 debugging
+ipv6 unicast-routing
+ipv6 cef
+no ip domain-lookup
+ip domain name ws.nsrc.org
+!
+username cndlab secret lab-PW
+enable secret lab-EN
+service password-encryption
+!
+interface Vlan 1
+ ip address ${CAMPUS_V4_BLOCK}.0.2 255.255.0.0
+ ipv6 address ${CAMPUS_V6_BLOCK}:1::2/64
+ load-interval 30
+ no shut
+!
+spanning-tree vlan 1 priority ${PRIORITY}
+!
+line con 0
+ exec-timeout 0 0
+ transport preferred none
+ stopbits 1
+line aux 0
+ exec-timeout 0 0
+ transport preferred none
+ stopbits 1
+line vty 0 4
+ exec-timeout 0 0
+ transport preferred none
+!
+end
+EOM

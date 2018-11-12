@@ -1,0 +1,48 @@
+#!/bin/bash -eu
+DEV=$1
+BUILDING=$2
+CAMPUS=$3
+
+. ../address-mappings
+
+IPV4_ADDRESS="${CAMPUS_V4_BLOCK}.0.$((3 * ${BUILDING} + ${DEV}))"
+IPV6_ADDRESS="${CAMPUS_V6_BLOCK}:1::$((3 * ${BUILDING} + ${DEV}))"
+
+cat <<EOM
+hostname edge${DEV}-b${BUILDING}.campus${CAMPUS}
+!
+aaa new-model
+aaa authentication login default local
+aaa authentication enable default enable
+!
+no logging console
+logging buffered 8192 debugging
+ipv6 unicast-routing
+ipv6 cef
+no ip domain-lookup
+ip domain name ws.nsrc.org
+!
+username cndlab secret lab-PW
+enable secret lab-EN
+service password-encryption
+!
+interface Vlan 1
+ ip address ${IPV4_ADDRESS} 255.255.0.0
+ ipv6 address ${IPV6_ADDRESS}/64
+ load-interval 30
+ no shut
+! 
+line con 0
+ exec-timeout 0 0
+ transport preferred none
+ stopbits 1
+line aux 0
+ exec-timeout 0 0
+ transport preferred none
+ stopbits 1
+line vty 0 4
+ exec-timeout 0 0
+ transport preferred none
+!
+end
+EOM

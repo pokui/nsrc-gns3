@@ -1,0 +1,6 @@
+#!/bin/bash -eu
+CAMPUS=$2
+
+cat <<EOM
+end
+EOM

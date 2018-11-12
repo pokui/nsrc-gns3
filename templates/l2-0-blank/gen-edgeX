@@ -1,0 +1,8 @@
+#!/bin/bash -eu
+DEV=$1
+BUILDING=$2
+CAMPUS=$3
+
+cat <<EOM
+end
+EOM

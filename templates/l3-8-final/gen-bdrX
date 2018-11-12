@@ -1,0 +1,160 @@
+#!/bin/bash -eu
+CAMPUS=$2
+
+. ../address-mappings
+
+NREN_V4_HOST="$((4 * ${CAMPUS} - 2))"
+NREN_V4_NET="$((4 * ${CAMPUS} - 4))" 
+
+cat <<EOM
+hostname bdr1.campus${CAMPUS}
+!
+aaa new-model
+aaa authentication login default local
+aaa authentication enable default enable
+!
+no logging console
+logging buffered 8192 debugging
+ipv6 unicast-routing
+ipv6 cef
+no ip domain-lookup
+ip domain name ws.nsrc.org
+!
+username cndlab secret lab-PW
+enable secret lab-EN
+service password-encryption
+!
+flow exporter EXPORTER-1
+  description Export to VM
+  destination ${CAMPUS_CORE_V4_SUBNET}.130
+  transport udp 9996
+  template data timeout 60
+!
+flow monitor FLOW-MONITOR-V4
+  exporter EXPORTER-1
+  record netflow ipv4 original-input
+  cache timeout active 300
+!
+flow monitor FLOW-MONITOR-V6
+  exporter EXPORTER-1
+  record netflow ipv6 original-input
+  cache timeout active 300
+!
+interface Null0
+ no ip unreachables
+!
+interface Loopback 0
+ description Loopback
+ ip address ${CAMPUS_LOOP_V4_SUBNET}.241 255.255.255.255
+ ipv6 address ${CAMPUS_LOOP_V6_SUBNET}::241/128
+ ip ospf 41 area 0
+ ipv6 ospf 41 area 0
+ no shutdown
+!
+interface FastEthernet0/0
+ description Link to NREN
+ ip address ${NREN_V4_SUBNET}.${NREN_V4_HOST} 255.255.255.252
+ ipv6 address ${NREN_V6_SUBNET}:${CAMPUS}::1/127
+ ip nat outside
+ load-interval 30
+ ip access-group from-nren in
+ ip access-group to-nren out
+ ipv6 traffic-filter from-nren-v6 in
+ ipv6 traffic-filter to-nren-v6 out
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+ no shutdown
+!
+interface FastEthernet0/1
+ description Link to CAMPUS CORE
+ ip address ${CAMPUS_CORE_V4_SUBNET}.1 255.255.255.240
+ ip ospf 41 area 0
+ ip nat inside
+ ipv6 address ${CAMPUS_CORE_V6_SUBNET}::1/64
+ ipv6 ospf 41 area 0
+ load-interval 30
+ ip flow monitor FLOW-MONITOR-V4 input
+ ip flow monitor FLOW-MONITOR-V4 output
+ ipv6 flow monitor FLOW-MONITOR-V6 input
+ ipv6 flow monitor FLOW-MONITOR-V6 output
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+ no shutdown
+!
+router ospf 41
+ router-id ${CAMPUS_LOOP_V4_SUBNET}.241
+ log-adjacency-changes
+ passive-interface default
+ no passive-interface FastEthernet0/1
+ default-information originate
+!
+ipv6 router ospf 41
+ router-id ${CAMPUS_LOOP_V4_SUBNET}.241
+ log-adjacency-changes
+ passive-interface default
+ no passive-interface FastEthernet0/1
+ default-information originate
+!
+ip route 0.0.0.0 0.0.0.0 ${NREN_V4_SUBNET}.$((${NREN_V4_HOST} - 1))
+ipv6 route ::/0 ${NREN_V6_SUBNET}:${CAMPUS}::0
+!
+ip route ${CAMPUS_CORE_V4_SUBNET}.0 255.255.255.0 Null0
+ip route ${CAMPUS_V4_BLOCK}.0.0 255.255.0.0 Null0
+ipv6 route ${CAMPUS_V6_BLOCK}::/48 Null0
+!
+ip nat pool campus${CAMPUS} ${CAMPUS_CORE_V4_SUBNET}.33 ${CAMPUS_CORE_V4_SUBNET}.46 prefix 28
+ip nat inside source list NATplus pool campus${CAMPUS} overload
+!
+ip access-list extended NATplus
+ remark Do not NAT NREN address space
+ deny ip ${NREN_V4_SUBNET}.0 0.0.0.255 any
+ remark Do not NAT our public addresses
+ deny ip ${CAMPUS_CORE_V4_SUBNET}.0 0.0.0.255 any
+ remark NAT traffic which goes to the Internet
+ permit ip ${CAMPUS_V4_BLOCK}.0.0 0.0.255.255 any
+ remark Do not NAT anything else
+ deny ip any any
+!
+ip access-list extended from-nren
+ deny   ip ${CAMPUS_CORE_V4_SUBNET}.0 0.0.0.255 any
+ permit ip any any
+ip access-list extended to-nren
+ remark Permit NREN point link subnet
+ permit ip ${NREN_V4_SUBNET}.${NREN_V4_NET} 0.0.0.3 any
+ remark Permit Campus ${CAMPUS} public IPv4 address block
+ permit ip ${CAMPUS_CORE_V4_SUBNET}.0 0.0.0.255 any
+ remark Deny any other sources
+ deny   ip any any
+!
+ipv6 access-list from-nren-v6
+ deny ipv6 ${CAMPUS_V6_BLOCK}::/48 any
+ permit ipv6 any any
+!
+ipv6 access-list to-nren-v6
+ remark Permit NREN point to point link subnet
+ permit ipv6 ${NREN_V6_SUBNET}:${CAMPUS}::/127 any
+ remark Permit Campus ${CAMPUS} public IPv6 address block
+ permit ipv6 ${CAMPUS_V6_BLOCK}::/48 any
+ remark Deny any other sources
+ deny ipv6 any any
+!
+access-list 99 permit ${CAMPUS_CORE_V4_SUBNET}.128 0.0.0.15
+access-list 99 permit ${WS_V4_SUBNET}.0 0.0.0.255
+!
+snmp-server community NetManage RO 99
+snmp-server ifindex persist
+!
+line con 0
+ exec-timeout 0 0
+ transport preferred none
+ stopbits 1
+line aux 0
+ exec-timeout 0 0
+ transport preferred none
+ stopbits 1
+line vty 0 4
+ exec-timeout 0 0
+ transport preferred none
+!
+end
+EOM

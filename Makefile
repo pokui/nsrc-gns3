@@ -1,4 +1,4 @@
-all: iso
+all: iso snapshots
 
 .PHONY: apt-depends
 apt-depends:
@@ -7,6 +7,10 @@ apt-depends:
 .PHONY: import-cndo
 import-cndo:
 	scripts/import-project.sh cndo
+
+.PHONY: snapshots
+snapshots:
+	scripts/make-snapshots.py
 
 iso: scripts/cloud-init-iso.sh
 	mkdir -p iso

@@ -1,0 +1,116 @@
+#!/bin/bash -eu
+BUILDING=$2
+CAMPUS=$3
+
+. ../address-mappings
+
+case ${BUILDING} in
+  1)
+      IPV4_ADDRESS="${CAMPUS_BLD1_V4_MGMT_SUBNET}.2"
+      IPV6_ADDRESS="${CAMPUS_BLD1_V6_MGMT_SUBNET}::2"
+  ;;
+  2)
+      IPV4_ADDRESS="${CAMPUS_BLD2_V4_MGMT_SUBNET}.2"
+      IPV6_ADDRESS="${CAMPUS_BLD2_V6_MGMT_SUBNET}::2"
+  ;;
+esac
+
+PRIORITY=12288
+
+cat <<EOM
+hostname dist1-b${BUILDING}.campus${CAMPUS}
+!
+aaa new-model
+aaa authentication login default local
+aaa authentication enable default enable
+!
+no logging console
+logging buffered 8192 debugging
+ipv6 unicast-routing
+ipv6 cef
+no ip domain-lookup
+ip domain name ws.nsrc.org
+!
+username cndlab secret lab-PW
+enable secret lab-EN
+service password-encryption
+!
+vtp mode transparent
+!
+vlan ${BUILDING}0
+ name MGMT${BUILDING}
+vlan ${BUILDING}1
+ name STAFF${BUILDING}
+vlan ${BUILDING}2
+ name STUDENT${BUILDING}
+!
+interface Vlan 1
+ shutdown
+!
+interface Vlan${BUILDING}0
+ description Management VLAN Building ${BUILDING}
+ ip address ${IPV4_ADDRESS} 255.255.255.0
+ ipv6 address ${IPV6_ADDRESS}/64
+ load-interval 30
+ no shut
+!
+spanning-tree vlan ${BUILDING}0 priority ${PRIORITY}
+spanning-tree vlan ${BUILDING}1 priority ${PRIORITY}
+spanning-tree vlan ${BUILDING}2 priority ${PRIORITY}
+!
+interface Port-channel1
+ switchport mode trunk
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1,2,${BUILDING}0-${BUILDING}2,1002-1005
+ description LAG to Edge Switch 1
+ load-interval 30
+ no shut
+!
+interface FastEthernet1/12
+ description Trunk Link to edge1-b${BUILDING}.campus${CAMPUS}
+ switchport mode trunk
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1,2,${BUILDING}0-${BUILDING}2,1002-1005
+ channel-group 1 mode on
+ load-interval 30
+ no shut
+!
+interface FastEthernet1/13
+ description Trunk Link to edge1-b${BUILDING}.campus${CAMPUS}
+ switchport mode trunk
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1,2,${BUILDING}0-${BUILDING}2,1002-1005
+ channel-group 1 mode on
+ load-interval 30
+ no shut
+!
+interface FastEthernet1/14
+ description Trunk Link to edge2-b${BUILDING}.campus${CAMPUS}
+ switchport mode trunk
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1,2,${BUILDING}0-${BUILDING}2,1002-1005
+ load-interval 30
+ no shut
+!
+interface FastEthernet1/15
+ description Trunk Link to core1.campus${CAMPUS}
+ switchport mode trunk
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1,2,${BUILDING}0-${BUILDING}2,1002-1005
+ load-interval 30
+ no shut
+!
+line con 0
+ exec-timeout 0 0
+ transport preferred none
+ stopbits 1
+line aux 0
+ exec-timeout 0 0
+ transport preferred none
+ stopbits 1
+line vty 0 4
+ exec-timeout 0 0
+ transport preferred none
+!
+end
+EOM

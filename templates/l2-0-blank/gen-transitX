@@ -1,0 +1,427 @@
+#!/bin/bash -eu
+DEV=$1
+CAMPUS=7
+
+. ../address-mappings
+
+CAMPUS_A="${DEV}"
+CAMPUS_B="$((${DEV} + 2))"
+CAMPUS_C="$((${DEV} + 4))"
+CAMPUS_D="$((${DEV} + 6))"
+CAMPUS_E="$((${DEV} + 8))"
+CAMPUS_F="$((${DEV} + 10))"
+CAMPUS_G="$((${DEV} + 12))"
+
+TR="$((${DEV} + 234))"
+
+CAMPUS_A_V4_HOST="$((4 * ${CAMPUS_A} - 3))"
+
+CAMPUS_B_V4_HOST="$((4 * ${CAMPUS_B} - 3))"
+
+CAMPUS_C_V4_HOST="$((4 * ${CAMPUS_C} - 3))"
+
+CAMPUS_D_V4_HOST="$((4 * ${CAMPUS_D} - 3))"
+
+CAMPUS_E_V4_HOST="$((4 * ${CAMPUS_E} - 3))"
+
+CAMPUS_F_V4_HOST="$((4 * ${CAMPUS_F} - 3))"
+
+CAMPUS_G_V4_HOST="$((4 * ${CAMPUS_G} - 3))"
+
+OTHER_DEV="$((3 - ${DEV}))"
+
+cat <<EOM
+hostname transit${DEV}.nren
+!
+aaa new-model
+aaa authentication login default local
+aaa authentication enable default enable
+aaa session-id common
+!
+!
+no logging console
+logging buffered 8192 debugging
+ipv6 unicast-routing
+no ip domain-lookup
+ip domain name ws.nsrc.org
+ipv6 cef
+no ip source-route
+no ipv6 source-route
+
+username nsrc secret lab-PW
+enable secret lab-EN
+service password-encryption
+
+interface Loopback 0
+ description Loopback
+ ip address ${NREN_V4_SUBNET}.25${DEV} 255.255.255.255
+ ip ospf 42 area 0
+ ipv6 address ${NREN_V6_SUBNET}:FF::25${DEV}/128
+ ipv6 ospf 42 area 0
+ no shutdown
+!
+interface FastEthernet0/0
+ description Workshop LAN
+ ip address ${WS_V4_SUBNET}.${TR} 255.255.255.0
+ ip ospf 42 area 0
+ ipv6 address ${NREN_V6_SUBNET}:0::${TR}/64
+ ipv6 ospf 42 area 0
+ ipv6 nd prefix default no-advertise  
+ ipv6 nd ra suppress all
+ load 30
+ no shutdown
+!
+interface FastEthernet0/1
+ description Campus ${CAMPUS_A}
+ ip address ${NREN_V4_SUBNET}.${CAMPUS_A_V4_HOST} 255.255.255.252
+ ipv6 address ${NREN_V6_SUBNET}:${CAMPUS_A}::0/127
+ ip ospf 42 area 0
+ ipv6 ospf 42 area 0
+ ipv6 nd prefix default no-advertise  
+ ipv6 nd ra suppress all
+ load 30
+ no shutdown
+! 
+EOM
+
+if [ "$CAMPUS" -gt "2" ]
+then
+  cat <<EOM
+interface FastEthernet1/0
+ description Campus ${CAMPUS_B}
+ ip address ${NREN_V4_SUBNET}.${CAMPUS_B_V4_HOST} 255.255.255.252
+ ipv6 address ${NREN_V6_SUBNET}:${CAMPUS_B}::0/127
+ ip ospf 42 area 0
+ ipv6 ospf 42 area 0
+ ipv6 nd prefix default no-advertise  
+ ipv6 nd ra suppress all
+ load 30
+ no shutdown
+! 
+EOM
+fi
+
+if [ "$CAMPUS" -gt "4" ]
+then
+  cat <<EOM
+interface FastEthernet1/1
+ description Campus ${CAMPUS_C}
+ ip address ${NREN_V4_SUBNET}.${CAMPUS_C_V4_HOST} 255.255.255.252
+ ipv6 address ${NREN_V6_SUBNET}:${CAMPUS_C}::0/127
+ ip ospf 42 area 0
+ ipv6 ospf 42 area 0
+ ipv6 nd prefix default no-advertise  
+ ipv6 nd ra suppress all
+ load 30
+ no shutdown
+!
+EOM
+fi
+
+if [ "$CAMPUS" -gt "6" ]
+then
+  cat <<EOM
+interface FastEthernet2/0
+ description Campus ${CAMPUS_D}
+ ip address ${NREN_V4_SUBNET}.${CAMPUS_D_V4_HOST} 255.255.255.252
+ ipv6 address ${NREN_V6_SUBNET}:${CAMPUS_D}::0/127
+ ip ospf 42 area 0
+ ipv6 ospf 42 area 0
+ ipv6 nd prefix default no-advertise  
+ ipv6 nd ra suppress all
+ load 30
+ no shutdown
+!
+EOM
+fi
+
+if [ "$CAMPUS" -gt "8" ]
+then
+  cat <<EOM
+interface FastEthernet2/1
+ description Campus ${CAMPUS_E}
+ ip address ${NREN_V4_SUBNET}.${CAMPUS_E_V4_HOST} 255.255.255.252
+ ipv6 address ${NREN_V6_SUBNET}:${CAMPUS_E}::0/127
+ ip ospf 42 area 0
+ ipv6 ospf 42 area 0
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+ load 30
+ no shutdown
+!
+EOM
+fi
+
+if [ "$CAMPUS" -gt "10" ]
+then
+  cat <<EOM
+interface FastEthernet3/0
+ description Campus ${CAMPUS_F}
+ ip address ${NREN_V4_SUBNET}.${CAMPUS_F_V4_HOST} 255.255.255.252
+ ipv6 address ${NREN_V6_SUBNET}:${CAMPUS_F}::0/127
+ ip ospf 42 area 0
+ ipv6 ospf 42 area 0
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+ load 30
+ no shutdown
+!
+EOM
+fi
+
+if [ "$CAMPUS" -gt "12" ]
+then
+  cat <<EOM
+interface FastEthernet3/1
+ description Campus ${CAMPUS_G}
+ ip address ${NREN_V4_SUBNET}.${CAMPUS_G_V4_HOST} 255.255.255.252
+ ipv6 address ${NREN_V6_SUBNET}:${CAMPUS_G}::0/127
+ ip ospf 42 area 0
+ ipv6 ospf 42 area 0
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+ load 30
+ no shutdown
+!
+EOM
+fi
+
+cat <<EOM
+router ospf 42
+ router-id ${NREN_V4_SUBNET}.25${DEV}
+ passive-interface default
+ no passive-interface FastEthernet0/0
+!
+ipv6 router ospf 42
+ router-id ${NREN_V4_SUBNET}.25${DEV}
+ passive-interface default
+ no passive-interface FastEthernet0/0
+!
+router bgp 65534
+ bgp router-id ${NREN_V4_SUBNET}.25${DEV}
+ bgp log-neighbor-changes
+ no bgp default ipv4-unicast
+ !
+ address-family ipv4
+  network 100.68.${CAMPUS_A}.0 mask 255.255.255.0
+EOM
+
+if [ "$CAMPUS" -gt "2" ]
+then
+  cat <<EOM
+  network 100.68.${CAMPUS_B}.0 mask 255.255.255.0
+EOM
+fi
+
+if [ "$CAMPUS" -gt "4" ]
+then
+  cat <<EOM
+  network 100.68.${CAMPUS_C}.0 mask 255.255.255.0
+EOM
+fi
+
+if [ "$CAMPUS" -gt "6" ]
+then
+  cat <<EOM
+  network 100.68.${CAMPUS_D}.0 mask 255.255.255.0
+EOM
+fi
+
+if [ "$CAMPUS" -gt "8" ]
+then
+  cat <<EOM
+  network 100.68.${CAMPUS_E}.0 mask 255.255.255.0
+EOM
+fi
+
+if [ "$CAMPUS" -gt "10" ]
+then
+  cat <<EOM
+  network 100.68.${CAMPUS_F}.0 mask 255.255.255.0
+EOM
+fi
+
+if [ "$CAMPUS" -gt "12" ]
+then
+  cat <<EOM
+  network 100.68.${CAMPUS_G}.0 mask 255.255.255.0
+EOM
+fi
+
+cat <<EOM
+  neighbor ${NREN_V4_SUBNET}.25${OTHER_DEV} remote-as 65534
+  neighbor ${NREN_V4_SUBNET}.25${OTHER_DEV} description iBGP with transit${OTHER_DEV}
+  neighbor ${NREN_V4_SUBNET}.25${OTHER_DEV} update-source Loopback0
+  neighbor ${NREN_V4_SUBNET}.25${OTHER_DEV} activate
+  neighbor ${NREN_V4_SUBNET}.25${OTHER_DEV} next-hop-self
+  distance bgp 200 200 200
+  exit-address-family
+ !
+ address-family ipv6
+  network 2001:DB8:${CAMPUS_A}::/48
+EOM
+
+if [ "$CAMPUS" -gt "2" ]
+then
+  cat <<EOM
+  network 2001:DB8:${CAMPUS_B}::/48
+EOM
+fi
+
+if [ "$CAMPUS" -gt "4" ]
+then
+  cat <<EOM
+  network 2001:DB8:${CAMPUS_C}::/48
+EOM
+fi
+
+if [ "$CAMPUS" -gt "6" ]
+then
+  cat <<EOM
+  network 2001:DB8:${CAMPUS_D}::/48
+EOM
+fi
+
+if [ "$CAMPUS" -gt "8" ]
+then
+  cat <<EOM
+  network 2001:DB8:${CAMPUS_E}::/48
+EOM
+fi
+
+if [ "$CAMPUS" -gt "10" ]
+then
+  cat <<EOM
+  network 2001:DB8:${CAMPUS_F}::/48
+EOM
+fi
+
+if [ "$CAMPUS" -gt "12" ]
+then
+  cat <<EOM
+  network 2001:DB8:${CAMPUS_G}::/48
+EOM
+fi
+
+cat <<EOM
+  neighbor ${NREN_V6_SUBNET}:FF::25${OTHER_DEV} remote-as 65534
+  neighbor ${NREN_V6_SUBNET}:FF::25${OTHER_DEV} description iBGP with transit${OTHER_DEV}
+  neighbor ${NREN_V6_SUBNET}:FF::25${OTHER_DEV} update-source Loopback0
+  neighbor ${NREN_V6_SUBNET}:FF::25${OTHER_DEV} activate
+  neighbor ${NREN_V6_SUBNET}:FF::25${OTHER_DEV} next-hop-self
+  distance bgp 200 200 200
+  exit-address-family
+
+ip route 0.0.0.0 0.0.0.0 ${WS_V4_SUBNET}.254
+ip route 100.68.${CAMPUS_A}.0 255.255.255.0 ${NREN_V4_SUBNET}.$((${CAMPUS_A_V4_HOST} + 1))
+EOM
+
+if [ "$CAMPUS" -gt "2" ]
+then
+  cat <<EOM
+ip route 100.68.${CAMPUS_B}.0 255.255.255.0 ${NREN_V4_SUBNET}.$((${CAMPUS_B_V4_HOST} + 1))
+EOM
+fi
+
+if [ "$CAMPUS" -gt "4" ]
+then
+  cat <<EOM
+ip route 100.68.${CAMPUS_C}.0 255.255.255.0 ${NREN_V4_SUBNET}.$((${CAMPUS_C_V4_HOST} + 1))
+EOM
+fi
+
+if [ "$CAMPUS" -gt "6" ]
+then
+  cat <<EOM
+ip route 100.68.${CAMPUS_D}.0 255.255.255.0 ${NREN_V4_SUBNET}.$((${CAMPUS_D_V4_HOST} + 1))
+EOM
+fi
+
+if [ "$CAMPUS" -gt "8" ]
+then
+  cat <<EOM
+ip route 100.68.${CAMPUS_E}.0 255.255.255.0 ${NREN_V4_SUBNET}.$((${CAMPUS_E_V4_HOST} + 1))
+EOM
+fi
+
+if [ "$CAMPUS" -gt "10" ]
+then
+  cat <<EOM
+ip route 100.68.${CAMPUS_F}.0 255.255.255.0 ${NREN_V4_SUBNET}.$((${CAMPUS_F_V4_HOST} + 1))
+EOM
+fi
+
+if [ "$CAMPUS" -gt "12" ]
+then
+  cat <<EOM
+ip route 100.68.${CAMPUS_G}.0 255.255.255.0 ${NREN_V4_SUBNET}.$((${CAMPUS_G_V4_HOST} + 1))
+EOM
+fi
+
+cat <<EOM
+ipv6 route ::/0 ${NREN_V6_SUBNET}::241
+ipv6 route 2001:DB8:${CAMPUS_A}::/48 ${NREN_V6_SUBNET}:${CAMPUS_A}::1
+EOM
+
+if [ "$CAMPUS" -gt "2" ]
+then
+  cat <<EOM
+ipv6 route 2001:DB8:${CAMPUS_B}::/48 ${NREN_V6_SUBNET}:${CAMPUS_B}::1
+EOM
+fi
+
+if [ "$CAMPUS" -gt "4" ]
+then
+  cat <<EOM
+ipv6 route 2001:DB8:${CAMPUS_C}::/48 ${NREN_V6_SUBNET}:${CAMPUS_C}::1
+EOM
+fi
+
+if [ "$CAMPUS" -gt "6" ]
+then
+  cat <<EOM
+ipv6 route 2001:DB8:${CAMPUS_D}::/48 ${NREN_V6_SUBNET}:${CAMPUS_D}::1
+EOM
+fi
+
+if [ "$CAMPUS" -gt "8" ]
+then
+  cat <<EOM
+ipv6 route 2001:DB8:${CAMPUS_E}::/48 ${NREN_V6_SUBNET}:${CAMPUS_E}::1
+EOM
+fi
+
+if [ "$CAMPUS" -gt "10" ]
+then
+  cat <<EOM
+ipv6 route 2001:DB8:${CAMPUS_F}::/48 ${NREN_V6_SUBNET}:${CAMPUS_F}::1
+EOM
+fi
+
+if [ "$CAMPUS" -gt "12" ]
+then
+  cat <<EOM
+ipv6 route 2001:DB8:${CAMPUS_G}::/48 ${NREN_V6_SUBNET}:${CAMPUS_G}::1
+EOM
+fi
+
+cat <<EOM
+access-list 99 permit ${WS_V4_SUBNET}.0 0.0.0.255
+snmp-server community NetManage RO 99
+snmp-server ifindex persist
+
+line con 0
+ exec-timeout 0 0
+ transport preferred none
+ stopbits 1
+!
+line aux 0
+ exec-timeout 0 0
+ transport preferred none
+ stopbits 1
+line vty 0 4
+ exec-timeout 0 0
+ transport preferred none
+!
+end
+EOM
