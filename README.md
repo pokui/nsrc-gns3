@@ -4,6 +4,12 @@ Download `cndo.gns3project`.  This is a GNS3 "portable project" which you
 should be able to import using `File > Import Portable Project`.
 import into another GNS3 server.
 
+The topology is formed of 6 campuses, each with a border router, core
+router, 2 distribution switches, and 4 edge switches.  The border routers
+are connected to two NREN transit routers.
+
+![CNDO Topology](images/cndo-topology.png)
+
 # Images required
 
 ## IOSv
