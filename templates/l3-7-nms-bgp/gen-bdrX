@@ -4,7 +4,7 @@ CAMPUS=$2
 . ../address-mappings
 
 NREN_V4_HOST="$((4 * ${CAMPUS} - 2))"
-NREN_V4_NET="$((4 * ${CAMPUS} - 4))" 
+NREN_V4_NET="$((4 * ${CAMPUS} - 4))"
 
 cat <<EOM
 hostname bdr1.campus${CAMPUS}
@@ -35,7 +35,7 @@ interface Loopback 0
  ipv6 ospf 41 area 0
  no shutdown
 !
-interface FastEthernet0/0
+interface GigabitEthernet0/0
  description Link to NREN
  ip address ${NREN_V4_SUBNET}.${NREN_V4_HOST} 255.255.255.252
  ipv6 address ${NREN_V6_SUBNET}:${CAMPUS}::1/127
@@ -49,7 +49,7 @@ interface FastEthernet0/0
  ipv6 nd ra suppress all
  no shutdown
 !
-interface FastEthernet0/1
+interface GigabitEthernet0/1
  description Link to CAMPUS CORE
  ip address ${CAMPUS_CORE_V4_SUBNET}.1 255.255.255.240
  ip ospf 41 area 0
@@ -65,51 +65,51 @@ router ospf 41
  router-id ${CAMPUS_LOOP_V4_SUBNET}.241
  log-adjacency-changes
  passive-interface default
- no passive-interface FastEthernet0/1
+ no passive-interface GigabitEthernet0/1
  default-information originate
 !
 ipv6 router ospf 41
  router-id ${CAMPUS_LOOP_V4_SUBNET}.241
  log-adjacency-changes
  passive-interface default
- no passive-interface FastEthernet0/1
+ no passive-interface GigabitEthernet0/1
  default-information originate
 !
-router bgp ${CAMPUS}0  
- no bgp default ipv4-unicast  
- bgp deterministic-med  
+router bgp ${CAMPUS}0
+ no bgp default ipv4-unicast
+ bgp deterministic-med
  bgp router-id ${CAMPUS_LOOP_V4_SUBNET}.241
-!  
- address-family ipv4  
-  neighbor ${CAMPUS_LOOP_V4_SUBNET}.242 remote-as ${CAMPUS}0  
-  neighbor ${CAMPUS_LOOP_V4_SUBNET}.242 update-source loopback 0  
-  neighbor ${CAMPUS_LOOP_V4_SUBNET}.242 description iBGP with Core Router 
+!
+ address-family ipv4
+  neighbor ${CAMPUS_LOOP_V4_SUBNET}.242 remote-as ${CAMPUS}0
+  neighbor ${CAMPUS_LOOP_V4_SUBNET}.242 update-source loopback 0
+  neighbor ${CAMPUS_LOOP_V4_SUBNET}.242 description iBGP with Core Router
   neighbor ${CAMPUS_LOOP_V4_SUBNET}.242 activate
   neighbor ${NREN_V4_SUBNET}.$((${NREN_V4_HOST} - 1)) remote-as 65534
   neighbor ${NREN_V4_SUBNET}.$((${NREN_V4_HOST} - 1)) description eBGP with NREN
   neighbor ${NREN_V4_SUBNET}.$((${NREN_V4_HOST} - 1)) prefix-list NREN-in in
   neighbor ${NREN_V4_SUBNET}.$((${NREN_V4_HOST} - 1)) prefix-list Campus${CAMPUS}-out out
   neighbor ${NREN_V4_SUBNET}.$((${NREN_V4_HOST} - 1)) activate
-  distance bgp 200 200 200  
-!  
- address-family ipv6  
-  neighbor ${CAMPUS_LOOP_V6_SUBNET}::242 remote-as ${CAMPUS}0  
-  neighbor ${CAMPUS_LOOP_V6_SUBNET}::242 update-source loopback0  
-  neighbor ${CAMPUS_LOOP_V6_SUBNET}::242 description iBGP with Core Router  
+  distance bgp 200 200 200
+!
+ address-family ipv6
+  neighbor ${CAMPUS_LOOP_V6_SUBNET}::242 remote-as ${CAMPUS}0
+  neighbor ${CAMPUS_LOOP_V6_SUBNET}::242 update-source loopback0
+  neighbor ${CAMPUS_LOOP_V6_SUBNET}::242 description iBGP with Core Router
   neighbor ${CAMPUS_LOOP_V6_SUBNET}::242 activate
   neighbor ${NREN_V6_SUBNET}:${CAMPUS}::0 remote-as 65534
   neighbor ${NREN_V6_SUBNET}:${CAMPUS}::0 description eBGP with NREN
   neighbor ${NREN_V6_SUBNET}:${CAMPUS}::0 prefix-list NREN-v6in in
   neighbor ${NREN_V6_SUBNET}:${CAMPUS}::0 prefix-list Campus${CAMPUS}-v6out out
   neighbor ${NREN_V6_SUBNET}:${CAMPUS}::0 activate
-  distance bgp 200 200 200  
+  distance bgp 200 200 200
 !
-ip prefix-list NREN-in permit 0.0.0.0/0  
-!  
-ip prefix-list Campus${CAMPUS}-out permit ${CAMPUS_CORE_V4_SUBNET}.0/24  
-!  
-ipv6 prefix-list NREN-v6in permit ::/0  
-!  
+ip prefix-list NREN-in permit 0.0.0.0/0
+!
+ip prefix-list Campus${CAMPUS}-out permit ${CAMPUS_CORE_V4_SUBNET}.0/24
+!
+ipv6 prefix-list NREN-v6in permit ::/0
+!
 ipv6 prefix-list Campus${CAMPUS}-v6out permit ${CAMPUS_V6_BLOCK}::/48
 !
 ip nat pool campus${CAMPUS} ${CAMPUS_CORE_V4_SUBNET}.33 ${CAMPUS_CORE_V4_SUBNET}.46 prefix 28

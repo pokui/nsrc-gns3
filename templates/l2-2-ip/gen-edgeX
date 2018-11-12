@@ -31,7 +31,7 @@ interface Vlan 1
  ipv6 address ${IPV6_ADDRESS}/64
  load-interval 30
  no shut
-! 
+!
 line con 0
  exec-timeout 0 0
  transport preferred none

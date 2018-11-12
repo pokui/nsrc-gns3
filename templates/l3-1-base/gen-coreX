@@ -62,19 +62,19 @@ spanning-tree vlan 20 priority ${PRIORITY}
 spanning-tree vlan 21 priority ${PRIORITY}
 spanning-tree vlan 22 priority ${PRIORITY}
 !
-interface FastEthernet1/1
+interface GigabitEthernet0/1
  description Trunk Link to dist1-b1.campus${CAMPUS}
- switchport mode trunk
- switchport trunk encapsulation dot1q
  switchport trunk allowed vlan 1,2,10-12,1002-1005
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
  load-interval 30
  no shutdown
 !
-interface FastEthernet1/2
+interface GigabitEthernet0/2
  description Trunk Link to dist1-b2.campus${CAMPUS}
- switchport mode trunk
- switchport trunk encapsulation dot1q
  switchport trunk allowed vlan 1,2,20-22,1002-1005
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
  load-interval 30
  no shutdown
 !

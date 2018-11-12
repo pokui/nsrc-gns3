@@ -23,7 +23,7 @@ username cndlab secret lab-PW
 enable secret lab-EN
 service password-encryption
 !
-interface FastEthernet0/0
+interface GigabitEthernet0/0
  description Link to NREN
  ip address ${NREN_V4_SUBNET}.${NREN_V4_HOST} 255.255.255.252
  ipv6 address ${NREN_V6_SUBNET}:${CAMPUS}::1/127
@@ -32,7 +32,7 @@ interface FastEthernet0/0
  ipv6 nd ra suppress all
  no shutdown
 !
-interface FastEthernet0/1
+interface GigabitEthernet0/1
  description Link to CAMPUS CORE
  ip address ${CAMPUS_CORE_V4_SUBNET}.1 255.255.255.240
  ipv6 address ${CAMPUS_CORE_V6_SUBNET}::1/64
@@ -40,7 +40,7 @@ interface FastEthernet0/1
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
  no shutdown
-! 
+!
 ip route 0.0.0.0 0.0.0.0 ${NREN_V4_SUBNET}.$((${NREN_V4_HOST} - 1))
 ipv6 route ::/0 ${NREN_V6_SUBNET}:${CAMPUS}::0
 !

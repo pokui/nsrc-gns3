@@ -90,33 +90,33 @@ spanning-tree vlan 20 priority ${PRIORITY}
 spanning-tree vlan 21 priority ${PRIORITY}
 spanning-tree vlan 22 priority ${PRIORITY}
 !
-interface FastEthernet1/0
+interface GigabitEthernet0/0
  no switchport
  description CAMPUS CORE to BORDER
  ip address ${CAMPUS_CORE_V4_SUBNET}.2 255.255.255.240
  ipv6 address ${CAMPUS_CORE_V6_SUBNET}::2/64
  load-interval 30
  ipv6 nd prefix default no-advertise
- ipv6 nd ra suppress 
+ ipv6 nd ra suppress
  no shutdown
 !
-interface FastEthernet1/1
+interface GigabitEthernet0/1
  description Trunk Link to dist1-b1.campus${CAMPUS}
- switchport mode trunk
- switchport trunk encapsulation dot1q
  switchport trunk allowed vlan 1,2,10-12,1002-1005
- load-interval 30
- no shutdown
-!
-interface FastEthernet1/2
- description Trunk Link to dist1-b2.campus${CAMPUS}
- switchport mode trunk
  switchport trunk encapsulation dot1q
- switchport trunk allowed vlan 1,2,20-22,1002-1005
+ switchport mode trunk
  load-interval 30
  no shutdown
 !
-interface FastEthernet1/15
+interface GigabitEthernet0/2
+ description Trunk Link to dist1-b2.campus${CAMPUS}
+ switchport trunk allowed vlan 1,2,20-22,1002-1005
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ load-interval 30
+ no shutdown
+!
+interface GigabitEthernet0/3
  no switchport
  description Network Management and Monitoring
  ip address ${CAMPUS_SRVR_V4_SUBNET}.129 255.255.255.240

@@ -4,7 +4,7 @@ CAMPUS=$2
 . ../address-mappings
 
 NREN_V4_HOST="$((4 * ${CAMPUS} - 2))"
-NREN_V4_NET="$((4 * ${CAMPUS} - 4))" 
+NREN_V4_NET="$((4 * ${CAMPUS} - 4))"
 
 cat <<EOM
 hostname bdr1.campus${CAMPUS}
@@ -35,7 +35,7 @@ interface Loopback 0
  ipv6 ospf 41 area 0
  no shutdown
 !
-interface FastEthernet0/0
+interface GigabitEthernet0/0
  description Link to NREN
  ip address ${NREN_V4_SUBNET}.${NREN_V4_HOST} 255.255.255.252
  ipv6 address ${NREN_V6_SUBNET}:${CAMPUS}::1/127
@@ -49,7 +49,7 @@ interface FastEthernet0/0
  ipv6 nd ra suppress all
  no shutdown
 !
-interface FastEthernet0/1
+interface GigabitEthernet0/1
  description Link to CAMPUS CORE
  ip address ${CAMPUS_CORE_V4_SUBNET}.1 255.255.255.240
  ip ospf 41 area 0
@@ -65,14 +65,14 @@ router ospf 41
  router-id ${CAMPUS_LOOP_V4_SUBNET}.241
  log-adjacency-changes
  passive-interface default
- no passive-interface FastEthernet0/1
+ no passive-interface GigabitEthernet0/1
  default-information originate
 !
 ipv6 router ospf 41
  router-id ${CAMPUS_LOOP_V4_SUBNET}.241
  log-adjacency-changes
  passive-interface default
- no passive-interface FastEthernet0/1
+ no passive-interface GigabitEthernet0/1
  default-information originate
 !
 ip route 0.0.0.0 0.0.0.0 ${NREN_V4_SUBNET}.$((${NREN_V4_HOST} - 1))

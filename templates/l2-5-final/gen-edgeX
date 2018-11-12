@@ -61,7 +61,7 @@ spanning-tree vlan ${BUILDING}0 priority ${PRIORITY}
 spanning-tree vlan ${BUILDING}1 priority ${PRIORITY}
 spanning-tree vlan ${BUILDING}2 priority ${PRIORITY}
 !
-interface range Fast1/0 - 6
+interface range GigabitEthernet1/0 - 3
  description Access Port VLAN ${BUILDING}1 STAFF
  switchport mode access
  switchport access vlan ${BUILDING}1
@@ -69,7 +69,7 @@ interface range Fast1/0 - 6
  load-interval 30
  no shut
 !
-interface range Fast1/7 - 13
+interface range GigabitEthernet2/0 - 3
  description Access Port VLAN ${BUILDING}2 STUDENT
  switchport mode access
  switchport access vlan ${BUILDING}2
@@ -82,18 +82,18 @@ EOM
 case ${DEV} in
   1) cat <<EOM
 interface Port-channel1
- switchport mode trunk
- switchport trunk encapsulation dot1q
- switchport trunk allowed vlan 1,2,${BUILDING}0-${BUILDING}2,1002-1005
  description LAG to Distribution Switch
+ switchport trunk allowed vlan 1,2,${BUILDING}0-${BUILDING}2,1002-1005
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
  load-interval 30
  no shut
 !
-interface FastEthernet1/14
+interface GigabitEthernet0/1
  description Trunk Port to dist1-b${BUILDING}.campus${CAMPUS}
- switchport mode trunk
- switchport trunk encapsulation dot1q
  switchport trunk allowed vlan 1,2,${BUILDING}0-${BUILDING}2,1002-1005
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
  channel-group 1 mode on
  load-interval 30
  no shut
@@ -103,11 +103,11 @@ EOM
 esac
 
 cat <<EOM
-interface FastEthernet1/15
+interface GigabitEthernet0/0
  description Trunk Port to dist1-b${BUILDING}.campus${CAMPUS}
- switchport mode trunk
- switchport trunk encapsulation dot1q
  switchport trunk allowed vlan 1,2,${BUILDING}0-${BUILDING}2,1002-1005
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
  load-interval 30
 EOM
 case ${DEV} in

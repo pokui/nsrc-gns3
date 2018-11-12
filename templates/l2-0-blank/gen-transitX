@@ -60,57 +60,57 @@ interface Loopback 0
  ipv6 ospf 42 area 0
  no shutdown
 !
-interface FastEthernet0/0
+interface GigabitEthernet0/0
  description Workshop LAN
  ip address ${WS_V4_SUBNET}.${TR} 255.255.255.0
  ip ospf 42 area 0
  ipv6 address ${NREN_V6_SUBNET}:0::${TR}/64
  ipv6 ospf 42 area 0
- ipv6 nd prefix default no-advertise  
+ ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
  load 30
  no shutdown
 !
-interface FastEthernet0/1
+interface GigabitEthernet0/1
  description Campus ${CAMPUS_A}
  ip address ${NREN_V4_SUBNET}.${CAMPUS_A_V4_HOST} 255.255.255.252
  ipv6 address ${NREN_V6_SUBNET}:${CAMPUS_A}::0/127
  ip ospf 42 area 0
  ipv6 ospf 42 area 0
- ipv6 nd prefix default no-advertise  
+ ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
  load 30
  no shutdown
-! 
+!
 EOM
 
 if [ "$CAMPUS" -gt "2" ]
 then
   cat <<EOM
-interface FastEthernet1/0
+interface GigabitEthernet0/2
  description Campus ${CAMPUS_B}
  ip address ${NREN_V4_SUBNET}.${CAMPUS_B_V4_HOST} 255.255.255.252
  ipv6 address ${NREN_V6_SUBNET}:${CAMPUS_B}::0/127
  ip ospf 42 area 0
  ipv6 ospf 42 area 0
- ipv6 nd prefix default no-advertise  
+ ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
  load 30
  no shutdown
-! 
+!
 EOM
 fi
 
 if [ "$CAMPUS" -gt "4" ]
 then
   cat <<EOM
-interface FastEthernet1/1
+interface GigabitEthernet0/3
  description Campus ${CAMPUS_C}
  ip address ${NREN_V4_SUBNET}.${CAMPUS_C_V4_HOST} 255.255.255.252
  ipv6 address ${NREN_V6_SUBNET}:${CAMPUS_C}::0/127
  ip ospf 42 area 0
  ipv6 ospf 42 area 0
- ipv6 nd prefix default no-advertise  
+ ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
  load 30
  no shutdown
@@ -121,13 +121,13 @@ fi
 if [ "$CAMPUS" -gt "6" ]
 then
   cat <<EOM
-interface FastEthernet2/0
+interface GigabitEthernet0/4
  description Campus ${CAMPUS_D}
  ip address ${NREN_V4_SUBNET}.${CAMPUS_D_V4_HOST} 255.255.255.252
  ipv6 address ${NREN_V6_SUBNET}:${CAMPUS_D}::0/127
  ip ospf 42 area 0
  ipv6 ospf 42 area 0
- ipv6 nd prefix default no-advertise  
+ ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
  load 30
  no shutdown
@@ -138,7 +138,7 @@ fi
 if [ "$CAMPUS" -gt "8" ]
 then
   cat <<EOM
-interface FastEthernet2/1
+interface GigabitEthernet0/5
  description Campus ${CAMPUS_E}
  ip address ${NREN_V4_SUBNET}.${CAMPUS_E_V4_HOST} 255.255.255.252
  ipv6 address ${NREN_V6_SUBNET}:${CAMPUS_E}::0/127
@@ -155,7 +155,7 @@ fi
 if [ "$CAMPUS" -gt "10" ]
 then
   cat <<EOM
-interface FastEthernet3/0
+interface GigabitEthernet0/6
  description Campus ${CAMPUS_F}
  ip address ${NREN_V4_SUBNET}.${CAMPUS_F_V4_HOST} 255.255.255.252
  ipv6 address ${NREN_V6_SUBNET}:${CAMPUS_F}::0/127
@@ -172,7 +172,7 @@ fi
 if [ "$CAMPUS" -gt "12" ]
 then
   cat <<EOM
-interface FastEthernet3/1
+interface GigabitEthernet0/7
  description Campus ${CAMPUS_G}
  ip address ${NREN_V4_SUBNET}.${CAMPUS_G_V4_HOST} 255.255.255.252
  ipv6 address ${NREN_V6_SUBNET}:${CAMPUS_G}::0/127
@@ -190,12 +190,12 @@ cat <<EOM
 router ospf 42
  router-id ${NREN_V4_SUBNET}.25${DEV}
  passive-interface default
- no passive-interface FastEthernet0/0
+ no passive-interface GigabitEthernet0/0
 !
 ipv6 router ospf 42
  router-id ${NREN_V4_SUBNET}.25${DEV}
  passive-interface default
- no passive-interface FastEthernet0/0
+ no passive-interface GigabitEthernet0/0
 !
 router bgp 65534
  bgp router-id ${NREN_V4_SUBNET}.25${DEV}
