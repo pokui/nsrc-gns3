@@ -1,0 +1,14 @@
+[Unit]
+Description=GNS3 network simulator
+After=network-online.target
+Wants=network-online.target
+Conflicts=shutdown.target
+
+[Service]
+User=%i
+Restart=on-failure
+RestartSec=5
+ExecStart=/usr/bin/gns3server -A
+
+[Install]
+WantedBy=multi-user.target
