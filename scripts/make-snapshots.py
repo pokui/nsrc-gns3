@@ -17,7 +17,7 @@ for config in os.listdir("templates"):
         ts = os.stat(template).st_mtime
         if newest_template_ts < ts:
             newest_template_ts = ts
-    snaps = glob.glob("snapshots/%s_*_*.gns3project")
+    snaps = glob.glob("snapshots/%s_*.gns3project" % config)
     older = [1 for f in snaps if os.stat(f).st_mtime < newest_template_ts]
     # If there is an existing snapshot, and it's not older than the template, then keep it
     if snaps and not older:
