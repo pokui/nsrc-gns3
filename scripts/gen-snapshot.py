@@ -3,6 +3,10 @@
 """
 Make a snapshot zip file from a directory of configs.
 
+It would be much easier if the nvram/config could be stored in
+a separate disk, but that doesn't appear to be the case; we have
+to make qcow2 differencing files backed by the original image.
+
 TODO: parallelise the guestfish filesystem writes.
 http://libguestfs.org/guestfs-performance.1.html#parallel-appliances
 Right now it takes about 1 second per guest under Ubuntu 18.04
@@ -11,6 +15,7 @@ Right now it takes about 1 second per guest under Ubuntu 18.04
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 from zipfile import ZipFile, ZIP_DEFLATED
@@ -31,53 +36,67 @@ images_dir = "/home/nsrc/GNS3/images/QEMU"   # sadly we need the absolute path t
 project_file = "cndo/project.gns3"
 templates_dir = os.path.join("templates", config)
 zip_file = os.path.join("snapshots", "%s_%s.gns3project" % (config, label))
+tmp_dir = "/tmp/gen-snapshot"
+
+MAPPING = str.maketrans('0123456789','ABCDEFGHIJ')
 
 with open(project_file) as f:
     gns3 = json.load(f)
+
+# Generate all configs
+shutil.rmtree(tmp_dir)
+os.makedirs(tmp_dir)
+configs = []
+for i, node in enumerate(gns3["topology"]["nodes"]):
+    name = node["name"]
+    uuid = node["node_id"]
+    prop = node["properties"]
+    bits = re.split(r'(\d+)', name)
+    script = os.path.abspath(os.path.join(templates_dir, "gen-%sX" % bits[0]))
+    if not os.path.isfile(script):
+        print("Skipping: %s" % name)
+        continue
+    # e.g. edge1-b2-campus3 => [1, 2, 3]
+    rc = subprocess.run([script, *bits[1::2]], stdout=subprocess.PIPE, check=True,
+            cwd=templates_dir)
+    startup = rc.stdout
+    # Convert config to nvram format
+    nvram = nvram_import(None, startup, None, 512)
+    with open(os.path.join(tmp_dir, "%s.config" % name), "wb") as f:
+        f.write(startup)
+    with open(os.path.join(tmp_dir, "%s.nvram" % name), "wb") as f:
+        f.write(nvram)
+    label = ("%d" % i).translate(MAPPING)  # can only contain a-zA-Z
+    configs.append((name, uuid, prop, label))
+
+# Generate all qcow2 files
+gfcmd = [
+    "guestfish", "--",
+]
+for name, uuid, prop, label in configs:
+    qcowfile = os.path.join(tmp_dir, "%s.qcow2" % name)
+    base = os.path.join(images_dir, prop["hda_disk_image"])
+    gfcmd.extend([
+        "disk-create", qcowfile, "qcow2", "-1", "backingfile:%s" % base, "compat:1.1", ":",
+        "add", qcowfile, "label:%s" % label, ":",
+    ])
+gfcmd.extend([
+    "run", ":",
+])
+for name, uuid, prop, label in configs:
+    gfcmd.extend([
+        "mount", "/dev/disk/guestfs/%s1" % label, "/", ":",
+        "upload", os.path.join(tmp_dir, "%s.nvram" % name), "/nvram", ":",
+        "upload", os.path.join(tmp_dir, "%s.config" % name), "/ios_config.txt", ":",
+        "umount", "/", ":",
+    ])
+subprocess.run(gfcmd, check=True)
 
 with ZipFile(zip_file, "w", ZIP_DEFLATED) as zip:
     # Note: you must include the .gns3 file, otherwise it says
     # "Can't import topology the .gns3 is corrupted or missing"
     zip.write(project_file, "project.gns3")
 
-    for node in gns3["topology"]["nodes"]:
-        name = node["name"]
-        uuid = node["node_id"]
-        prop = node["properties"]
-        print(name)
-        bits = re.split(r'(\d+)', name)
-        script = os.path.abspath(os.path.join(templates_dir, "gen-%sX" % bits[0]))
-        if not os.path.isfile(script):
-            print("Skipping")
-            continue
-        # e.g. edge1-b2-campus3 => [1, 2, 3]
-        rc = subprocess.run([script, *bits[1::2]], stdout=subprocess.PIPE, check=True,
-                cwd=templates_dir)
-        startup = rc.stdout
-        # Convert config to nvram format
-        nvram = nvram_import(None, startup, None, 512)
-        nvram_file = "/tmp/nvram"  # name must end with /nvram for guestfish to work
-        config_file = "/tmp/ios_config.txt"
-        with open(nvram_file, "wb") as f:
-            f.write(nvram)
-        # TEMPORARY FRIG for IOSv routers:
-        with open(config_file, "wb") as f:
-            f.write(startup)
-        # Create empty qcow2 difference file
-        base = os.path.join(images_dir, prop["hda_disk_image"])
-        qcowfile = "/tmp/hda_disk.qcow2"
-        # Add the files to the image
-        subprocess.run([
-            "guestfish", "--",
-            "disk-create", qcowfile, "qcow2", "-1", "backingfile:%s" % base, "compat:1.1", ":",
-            "add", qcowfile, ":",
-            "run", ":",
-            "mount", "/dev/sda1", "/", ":",
-            "copy-in", nvram_file, "/", ":",
-            "copy-in", config_file, "/",
-        ], check=True)
-        # Add it to the zip file
+    for name, uuid, prop, label in configs:
+        qcowfile = os.path.join(tmp_dir, "%s.qcow2" % name)
         zip.write(qcowfile, os.path.join("project-files", "qemu", uuid, "hda_disk.qcow2"))
-        # Clean up
-        os.unlink(nvram_file)
-        os.unlink(config_file)
