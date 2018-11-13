@@ -9,7 +9,6 @@ hostname bdr1.campus${CAMPUS}
 aaa new-model
 aaa authentication login default local
 aaa authentication enable default enable
-aaa session-id common
 !
 !
 no logging console
