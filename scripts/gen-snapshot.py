@@ -7,9 +7,11 @@ It would be much easier if the nvram/config could be stored in
 a separate disk, but that doesn't appear to be the case; we have
 to make qcow2 differencing files backed by the original image.
 
-TODO: parallelise the guestfish filesystem writes.
+NOTE: to get good performance we still need to parallelise the
+guestfish filesystem writes.
 http://libguestfs.org/guestfs-performance.1.html#parallel-appliances
-Right now it takes about 1 second per guest under Ubuntu 18.04
+This is currently done by generating multiple snapshot sets in
+parallel by scripts/make-snapshots.py
 """
 
 import json
@@ -36,7 +38,7 @@ images_dir = "/home/nsrc/GNS3/images/QEMU"   # sadly we need the absolute path t
 project_file = "cndo/project.gns3"
 templates_dir = os.path.join("templates", config)
 zip_file = os.path.join("snapshots", "%s_%s.gns3project" % (config, label))
-tmp_dir = "/tmp/gen-snapshot"
+tmp_dir = "/tmp/gen-snapshot.%d" % os.getpid()
 
 MAPPING = str.maketrans('0123456789','ABCDEFGHIJ')
 
@@ -44,7 +46,8 @@ with open(project_file) as f:
     gns3 = json.load(f)
 
 # Generate all configs
-shutil.rmtree(tmp_dir)
+if os.path.exists(tmp_dir):
+    shutil.rmtree(tmp_dir)
 os.makedirs(tmp_dir)
 configs = []
 for i, node in enumerate(gns3["topology"]["nodes"]):
@@ -100,3 +103,6 @@ with ZipFile(zip_file, "w", ZIP_DEFLATED) as zip:
     for name, uuid, prop, label in configs:
         qcowfile = os.path.join(tmp_dir, "%s.qcow2" % name)
         zip.write(qcowfile, os.path.join("project-files", "qemu", uuid, "hda_disk.qcow2"))
+
+# Tidy up
+shutil.rmtree(tmp_dir)
