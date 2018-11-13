@@ -66,10 +66,13 @@ with ZipFile(zip_file, "w", ZIP_DEFLATED) as zip:
         # Create empty qcow2 difference file
         base = os.path.join(images_dir, prop["hda_disk_image"])
         qcowfile = "/tmp/hda_disk.qcow2"
-        subprocess.run(["qemu-img", "create", "-f", "qcow2", "-b", base, qcowfile], check=True)
         # Add the files to the image
         subprocess.run([
-            "guestfish", "--rw", "-a", qcowfile, "-m", "/dev/sda1:/",
+            "guestfish", "--",
+            "disk-create", qcowfile, "qcow2", "-1", "backingfile:%s" % base, "compat:1.1", ":",
+            "add", qcowfile, ":",
+            "run", ":",
+            "mount", "/dev/sda1", "/", ":",
             "copy-in", nvram_file, "/", ":",
             "copy-in", config_file, "/",
         ], check=True)
