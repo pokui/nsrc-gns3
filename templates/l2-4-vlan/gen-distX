@@ -35,7 +35,7 @@ username cndlab secret lab-PW
 enable secret lab-EN
 service password-encryption
 !
-vtp mode transparent
+vtp mode off
 !
 vlan ${BUILDING}0
  name MGMT${BUILDING}
