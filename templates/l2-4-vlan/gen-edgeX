@@ -3,7 +3,7 @@ DEV=$1
 BUILDING=$2
 CAMPUS=$3
 
-. ../address-mappings
+. address-mappings
 
 case ${BUILDING} in
   1)

@@ -36,7 +36,7 @@ if not config or not label:
 
 images_dir = "/home/nsrc/GNS3/images/QEMU"   # sadly we need the absolute path to qcow2 base files
 project_file = "cndo/project.gns3"
-templates_dir = os.path.join("templates", config)
+templates_dir = "templates"
 zip_file = os.path.join("snapshots", "%s_%s.gns3project" % (config, label))
 tmp_dir = "/tmp/gen-snapshot.%d" % os.getpid()
 
@@ -55,7 +55,7 @@ for i, node in enumerate(gns3["topology"]["nodes"]):
     uuid = node["node_id"]
     prop = node["properties"]
     bits = re.split(r'(\d+)', name)
-    script = os.path.abspath(os.path.join(templates_dir, "gen-%sX" % bits[0]))
+    script = os.path.abspath(os.path.join(templates_dir, config, "gen-%sX" % bits[0]))
     if not os.path.isfile(script):
         print("Skipping: %s" % name)
         continue

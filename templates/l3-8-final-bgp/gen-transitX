@@ -2,7 +2,7 @@
 DEV=$1
 CAMPUS=7
 
-. ../address-mappings
+. address-mappings
 
 CAMPUS_A="${DEV}"
 CAMPUS_B="$((${DEV} + 2))"

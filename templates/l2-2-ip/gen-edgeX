@@ -3,7 +3,7 @@ DEV=$1
 BUILDING=$2
 CAMPUS=$3
 
-. ../address-mappings
+. address-mappings
 
 IPV4_ADDRESS="${CAMPUS_V4_BLOCK}.0.$((3 * ${BUILDING} + ${DEV}))"
 IPV6_ADDRESS="${CAMPUS_V6_BLOCK}:1::$((3 * ${BUILDING} + ${DEV}))"
