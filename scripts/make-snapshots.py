@@ -17,6 +17,7 @@ for config in os.listdir("templates"):
     templates = glob.glob("templates/%s/gen-*X" % config)
     if not templates:
         continue
+    templates += glob.glob("templates/common*")
     newest_template_ts = 0
     for template in templates:
         ts = os.stat(template).st_mtime

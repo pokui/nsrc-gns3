@@ -1,6 +1,3 @@
 #!/bin/bash -eu
-CAMPUS=$2
-
-cat <<EOM
-end
-EOM
+. common
+return 2>/dev/null || render_unconfigured

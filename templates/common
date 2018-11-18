@@ -1,0 +1,122 @@
+# Error on failed commands and unset variables
+
+set -eu
+
+#
+# The overall configuration structure
+#
+
+conf_all () {
+$render_head
+$render_users
+$render_vlans
+$render_stp
+$render_interfaces
+$render_ospf
+$render_bgp
+$render_static
+$render_acl
+$render_snmp
+$render_tail
+}
+
+conf_null () {
+cat <<END
+!
+END
+}
+
+#
+# Head section
+#
+
+conf_head_default () {
+cat <<END
+hostname $HOSTNAME
+!
+aaa new-model
+aaa authentication login default local
+aaa authentication enable default enable
+!
+!
+no logging console
+logging buffered 8192 debugging
+ipv6 unicast-routing
+ipv6 cef
+no ip domain-lookup
+ip domain name ws.nsrc.org
+END
+}
+render_head=conf_head_default
+
+#
+# User login section
+#
+
+conf_users_default () {
+cat <<END
+!
+username cndlab secret lab-PW
+enable secret lab-EN
+service password-encryption
+END
+}
+render_users=conf_users_default
+
+#
+# Sections which need to be overwritten
+#
+
+render_vlans=conf_null
+render_stp=conf_null
+render_interfaces=conf_null
+render_ospf=conf_null
+render_bgp=conf_null
+render_static=conf_null
+render_acl=conf_null
+render_snmp=conf_null
+
+#
+# Tail section
+#
+
+conf_tail_default () {
+cat <<END
+!
+line con 0
+ exec-timeout 0 0
+ transport preferred none
+ stopbits 1
+!
+line aux 0
+ exec-timeout 0 0
+ transport preferred none
+ stopbits 1
+!
+line vty 0 4
+ exec-timeout 0 0
+ transport preferred none
+!
+end
+END
+}
+render_tail=conf_tail_default
+
+#
+# Devices with no startup config
+#
+
+render_unconfigured () {
+cat <<END
+end
+END
+}
+
+#
+# At the end of each template, put the following line.
+# This makes it render output if it is called directly,
+# but does nothing if it is sourced by another script
+# (i.e. a different template loading a previous one)
+#
+
+return 2>/dev/null || render "$@"

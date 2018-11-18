@@ -2,12 +2,6 @@
 # These macros get "sourced" in the "gen-*" scripts in the "l*" directories
 #
 
-WS_V4_SUBNET="10.10.0"
-WS_V6_SUBNET="2001:DB8:0:0"
-
-NREN_V4_SUBNET="100.68.0"
-NREN_V6_SUBNET="2001:DB8:100"
-
 CAMPUS_V4_BLOCK="172.$((${CAMPUS} + 20))"
 CAMPUS_V6_BLOCK="2001:DB8:${CAMPUS}"
 

@@ -1,0 +1,11 @@
+. common
+. address-base
+
+render () {
+    DEV="$1"
+    BUILDING="$2"
+    CAMPUS="$3"
+    HOSTNAME="edge${DEV}-b${BUILDING}.campus${CAMPUS}"
+    . address-mappings
+    conf_all
+}
