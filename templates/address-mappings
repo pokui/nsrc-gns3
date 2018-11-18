@@ -1,5 +1,3 @@
-#!/bin/sh
-
 #
 # These macros get "sourced" in the "gen-*" scripts in the "l*" directories
 #
