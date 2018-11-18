@@ -9,8 +9,8 @@ set -eu
 conf_all () {
 $render_head
 $render_users
-$render_vlans
 $render_stp
+$render_vlans
 $render_interfaces
 $render_ospf
 $render_bgp
