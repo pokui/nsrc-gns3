@@ -1,6 +1,7 @@
 #!/bin/bash -eu
 CAMPUS=$2
 
+. address-base
 . address-mappings
 
 NREN_V4_HOST="$((4 * ${CAMPUS} - 2))"

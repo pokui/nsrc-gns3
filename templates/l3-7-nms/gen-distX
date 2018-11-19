@@ -2,6 +2,7 @@
 BUILDING=$2
 CAMPUS=$3
 
+. address-base
 . address-mappings
 
 case ${BUILDING} in
