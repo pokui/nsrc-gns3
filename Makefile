@@ -12,6 +12,12 @@ import-cndo:
 snapshots:
 	scripts/make-snapshots.py
 
+.PHONY: cndo-snaps
+cndo-snaps: cndo-snaps.gns3project
+
+cndo-snaps.gns3project: cndo.gns3project cndo/snapshots
+	zip -r cndo-snaps.gns3project cndo
+
 iso: scripts/cloud-init-iso.sh
 	mkdir -p iso
 	git rm iso/srv1-campus*-init-????????????.iso || rm iso/srv1-campus*-init-????????????.iso || true

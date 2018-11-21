@@ -9,7 +9,7 @@ import os, glob, datetime, subprocess, sys
 MAX_JOBS = 25
 
 label = datetime.datetime.utcnow().strftime("%d%m%y_%H%M%S")
-os.makedirs("snapshots", exist_ok=True)
+os.makedirs("cndo/snapshots", exist_ok=True)
 final_rc = 0
 
 jobs = []
@@ -23,7 +23,7 @@ for config in os.listdir("templates"):
         ts = os.stat(template).st_mtime
         if newest_template_ts < ts:
             newest_template_ts = ts
-    snaps = glob.glob("snapshots/%s_*.gns3project" % config)
+    snaps = glob.glob("cndo/snapshots/%s_*.gns3project" % config)
     older = [1 for f in snaps if os.stat(f).st_mtime < newest_template_ts]
     # If there is an existing snapshot, and it's not older than the template, then keep it
     if snaps and not older:

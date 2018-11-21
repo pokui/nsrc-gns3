@@ -37,7 +37,7 @@ if not config or not label:
 images_dir = "/var/lib/GNS3/images/QEMU"   # sadly we need the absolute path to qcow2 base files
 project_file = "cndo/project.gns3"
 templates_dir = "templates"
-zip_file = os.path.join("snapshots", "%s_%s.gns3project" % (config, label))
+zip_file = os.path.join("cndo/snapshots", "%s_%s.gns3project" % (config, label))
 tmp_dir = "/tmp/gen-snapshot.%d" % os.getpid()
 
 MAPPING = str.maketrans('0123456789','ABCDEFGHIJ')
