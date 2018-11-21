@@ -171,19 +171,12 @@ END
 }
 render_bgp=conf_bgp_transit
 
-conf_acl_transit () {
-  cat <<END
-!
-!
-access-list 99 permit ${WS_V4_SUBNET}.0 0.0.0.255
-END
-}
-render_acl=conf_acl_transit
-
 conf_snmp_transit () {
   cat <<END
 !
-snmp-server community $SNMP_COMMUNITY RO 99
+access-list 99 permit ${WS_V4_SUBNET}.0 0.0.0.255
+!
+snmp-server community ${SNMP_COMMUNITY} RO 99
 snmp-server ifindex persist
 END
 }
