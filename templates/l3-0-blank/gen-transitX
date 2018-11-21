@@ -1,4 +1,3 @@
 #!/bin/bash -eu
 . common-transit
-CAMPUS_BGP=""
 return 2>/dev/null || render "$@"

@@ -1,0 +1,66 @@
+# Overrides for when transit to border is using BGP
+
+conf_static_transit_bgp () {
+  cat <<END
+!
+ip route 0.0.0.0 0.0.0.0 ${WS_V4_SUBNET}.1
+!
+ipv6 route ::/0 ${WS_V6_SUBNET}::1
+END
+}
+render_static=conf_static_transit_bgp
+
+conf_bgp_transit_bgp() {
+  PEER4="${NREN_V4_SUBNET}.$((253 - DEV))"
+  PEER6="${NREN_V6_SUBNET}:FF::$((253 - DEV))"
+  cat <<END
+!
+router bgp 65534
+ bgp router-id $LOOPBACK_V4
+ bgp log-neighbor-changes
+ no bgp default ipv4-unicast
+ !
+ address-family ipv4
+  neighbor $PEER4 remote-as 65534
+  neighbor $PEER4 description iBGP with transit$((3 - DEV))
+  neighbor $PEER4 update-source Loopback0
+  neighbor $PEER4 activate
+  neighbor $PEER4 next-hop-self
+END
+  for CAMPUS in $(seq "$NUM_CAMPUS"); do
+    LINKNET="$((CAMPUS + (DEV-1)*32))"
+    PEER="${NREN_V4_SUBNET}.$((4 * LINKNET - 2))"
+    cat <<END
+  neighbor $PEER remote-as $((CAMPUS * 10))
+  neighbor $PEER description Campus $CAMPUS
+  neighbor $PEER activate
+  neighbor $PEER default-originate
+END
+  done
+  cat <<END
+  distance bgp 200 200 200
+  exit-address-family
+ !
+ address-family ipv6
+  neighbor $PEER6 remote-as 65534
+  neighbor $PEER6 description iBGP with transit$((3 - DEV))
+  neighbor $PEER6 update-source Loopback0
+  neighbor $PEER6 activate
+  neighbor $PEER6 next-hop-self
+END
+  for CAMPUS in $(seq "$NUM_CAMPUS"); do
+    LINKNET="$((CAMPUS + (DEV-1)*32))"
+    PEER="${NREN_V6_SUBNET}:${LINKNET}::1"
+    cat <<END
+  neighbor $PEER remote-as $((CAMPUS * 10))
+  neighbor $PEER description Campus $CAMPUS
+  neighbor $PEER activate
+  neighbor $PEER default-originate
+END
+  done
+  cat <<END
+  distance bgp 200 200 200
+  exit-address-family
+END
+}
+render_bgp=conf_bgp_transit_bgp

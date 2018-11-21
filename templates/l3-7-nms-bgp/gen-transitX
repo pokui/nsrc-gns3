@@ -1,4 +1,4 @@
 #!/bin/bash -eu
-. l3-7-nms/gen-transitX
-CAMPUS_BGP="y"
+. common-transit
+. common-transit-bgp
 return 2>/dev/null || render "$@"

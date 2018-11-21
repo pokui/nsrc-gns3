@@ -65,20 +65,16 @@ render_interfaces=conf_interfaces_transit
 conf_static_transit () {
   echo "!"
   echo "ip route 0.0.0.0 0.0.0.0 ${WS_V4_SUBNET}.1"
-  if [ -z "$CAMPUS_BGP" ]; then
-    for CAMPUS in $(seq "$NUM_CAMPUS"); do
-      LINKNET="$((CAMPUS + (DEV-1)*32))"
-      echo "ip route 100.68.${CAMPUS}.0 255.255.255.0 ${NREN_V4_SUBNET}.$((4 * LINKNET - 2))"
-    done
-  fi
+  for CAMPUS in $(seq "$NUM_CAMPUS"); do
+    LINKNET="$((CAMPUS + (DEV-1)*32))"
+    echo "ip route 100.68.${CAMPUS}.0 255.255.255.0 ${NREN_V4_SUBNET}.$((4 * LINKNET - 2))"
+  done
   echo "!"
   echo "ipv6 route ::/0 ${WS_V6_SUBNET}::1"
-  if [ -z "$CAMPUS_BGP" ]; then
-    for CAMPUS in $(seq "$NUM_CAMPUS"); do
-      LINKNET="$((CAMPUS + (DEV-1)*32))"
-      echo "ipv6 route 2001:DB8:${CAMPUS}::/48 ${NREN_V6_SUBNET}:${LINKNET}::1"
-    done
-  fi
+  for CAMPUS in $(seq "$NUM_CAMPUS"); do
+    LINKNET="$((CAMPUS + (DEV-1)*32))"
+    echo "ipv6 route 2001:DB8:${CAMPUS}::/48 ${NREN_V6_SUBNET}:${LINKNET}::1"
+  done
 }
 render_static=conf_static_transit
 
@@ -99,6 +95,8 @@ END
 render_igp=conf_igp_transit
 
 conf_bgp_transit() {
+  PEER4="${NREN_V4_SUBNET}.$((253 - DEV))"
+  PEER6="${NREN_V6_SUBNET}:FF::$((253 - DEV))"
   cat <<END
 !
 router bgp 65534
@@ -108,63 +106,29 @@ router bgp 65534
  !
  address-family ipv4
 END
-  if [ -z "$CAMPUS_BGP" ]; then
-    for CAMPUS in $(seq "$NUM_CAMPUS"); do
-      echo "  network 100.68.${CAMPUS}.0 mask 255.255.255.0"
-    done
-  fi
-  PEER="${NREN_V4_SUBNET}.$((253 - DEV))"
+  for CAMPUS in $(seq "$NUM_CAMPUS"); do
+    echo "  network 100.68.${CAMPUS}.0 mask 255.255.255.0"
+  done
   cat <<END
-  neighbor $PEER remote-as 65534
-  neighbor $PEER description iBGP with transit$((3 - DEV))
-  neighbor $PEER update-source Loopback0
-  neighbor $PEER activate
-  neighbor $PEER next-hop-self
-END
-  if [ -n "$CAMPUS_BGP" ]; then
-    for CAMPUS in $(seq "$NUM_CAMPUS"); do
-      LINKNET="$((CAMPUS + (DEV-1)*32))"
-      PEER="${NREN_V4_SUBNET}.$((4 * LINKNET - 2))"
-      cat <<END
-  neighbor $PEER remote-as $((CAMPUS * 10))
-  neighbor $PEER description Campus $CAMPUS
-  neighbor $PEER activate
-  neighbor $PEER default-originate
-END
-    done
-  fi
-  cat <<END
+  neighbor $PEER4 remote-as 65534
+  neighbor $PEER4 description iBGP with transit$((3 - DEV))
+  neighbor $PEER4 update-source Loopback0
+  neighbor $PEER4 activate
+  neighbor $PEER4 next-hop-self
   distance bgp 200 200 200
   exit-address-family
  !
  address-family ipv6
 END
-  if [ -z "$CAMPUS_BGP" ]; then
-    for CAMPUS in $(seq "$NUM_CAMPUS"); do
-      echo "  network 2001:DB8:${CAMPUS}::/48"
-    done
-  fi
-  PEER="${NREN_V6_SUBNET}:FF::$((253 - DEV))"
+  for CAMPUS in $(seq "$NUM_CAMPUS"); do
+    echo "  network 2001:DB8:${CAMPUS}::/48"
+  done
   cat <<END
-  neighbor $PEER remote-as 65534
-  neighbor $PEER description iBGP with transit$((3 - DEV))
-  neighbor $PEER update-source Loopback0
-  neighbor $PEER activate
-  neighbor $PEER next-hop-self
-END
-  if [ -n "$CAMPUS_BGP" ]; then
-    for CAMPUS in $(seq "$NUM_CAMPUS"); do
-      LINKNET="$((CAMPUS + (DEV-1)*32))"
-      PEER="${NREN_V6_SUBNET}:${LINKNET}::1"
-      cat <<END
-  neighbor $PEER remote-as $((CAMPUS * 10))
-  neighbor $PEER description Campus $CAMPUS
-  neighbor $PEER activate
-  neighbor $PEER default-originate
-END
-    done
-  fi
-  cat <<END
+  neighbor $PEER6 remote-as 65534
+  neighbor $PEER6 description iBGP with transit$((3 - DEV))
+  neighbor $PEER6 update-source Loopback0
+  neighbor $PEER6 activate
+  neighbor $PEER6 next-hop-self
   distance bgp 200 200 200
   exit-address-family
 END
