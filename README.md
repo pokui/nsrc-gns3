@@ -33,9 +33,18 @@ use of apt-cacher on 192.168.122.1.
 
 # Snapshots
 
-In order to use the pre-built snapshots, your GNS3 `images` directory must
-point to `/var/lib/GNS3/images`.  This is because the snapshots contain qcow2
-difference files which link to backing files at a fixed location.
+GNS3 is currently [unable to import IOSv configs](https://github.com/GNS3/gns3-server/issues/1315).
+
+This repo contains scripts to generate snapshots, which take the form of zip files.
+Unfortunately, GNS3 changes the UUIDs of nodes when a portable project
+is imported - so you cannot import a project and then just copy the snapshot
+into place.  Right now this only works if you run the scripts on the machine
+where the project has already been imported; you can then copy the snapshots
+manually into `~/GNS3/projects/<uuid>/snapshots/`
+
+The scripts assume that your GNS3 `images` directory is
+`/var/lib/GNS3/images`, as it creates qcow2 difference files which point to
+backing files at an absolute directory.
 
 If you have already run GNS3 then move your existing images directory:
 
