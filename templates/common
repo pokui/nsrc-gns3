@@ -10,8 +10,8 @@ conf_all () {
 $render_head
 $render_netflow
 $render_users
-$render_stp
 $render_vlans
+$render_stp
 $render_interfaces
 $render_igp
 $render_bgp
@@ -114,6 +114,23 @@ render_tail=conf_tail_default
 render_unconfigured () {
 cat <<END
 end
+END
+}
+
+#
+# Helper functions
+#
+
+trunk () {
+  cat <<END
+!
+interface ${1}
+ description ${3}
+ switchport trunk allowed vlan ${2}
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ load-interval 30
+ no shutdown
 END
 }
 

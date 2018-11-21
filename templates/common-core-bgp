@@ -1,0 +1,40 @@
+# Overrides for when using BGP
+
+conf_bgp_core_bgp () {
+  cat <<END
+!
+router bgp ${CAMPUS}0
+ no bgp default ipv4-unicast
+ bgp deterministic-med
+ bgp router-id ${CAMPUS_LOOP_V4_SUBNET}.242
+!
+ address-family ipv4
+  neighbor ${CAMPUS_LOOP_V4_SUBNET}.241 remote-as ${CAMPUS}0
+  neighbor ${CAMPUS_LOOP_V4_SUBNET}.241 update-source loopback 0
+  neighbor ${CAMPUS_LOOP_V4_SUBNET}.241 description iBGP with Border Router
+  neighbor ${CAMPUS_LOOP_V4_SUBNET}.241 activate
+  network ${CAMPUS_CORE_V4_SUBNET}.0 mask 255.255.255.0
+  network ${CAMPUS_V4_BLOCK}.0.0 mask 255.255.0.0
+  distance bgp 200 200 200
+!
+ address-family ipv6
+  neighbor ${CAMPUS_LOOP_V6_SUBNET}::241 remote-as ${CAMPUS}0
+  neighbor ${CAMPUS_LOOP_V6_SUBNET}::241 update-source loopback0
+  neighbor ${CAMPUS_LOOP_V6_SUBNET}::241 description iBGP with Border Router
+  neighbor ${CAMPUS_LOOP_V6_SUBNET}::241 activate
+  network ${CAMPUS_V6_BLOCK}::/48
+  distance bgp 200 200 200
+END
+}
+render_bgp=conf_bgp_core_bgp
+
+conf_static_core_bgp () {
+  cat <<END
+!
+ip route ${CAMPUS_CORE_V4_SUBNET}.0 255.255.255.0 Null0
+ip route ${CAMPUS_V4_BLOCK}.0.0 255.255.0.0 Null0
+!
+ipv6 route ${CAMPUS_V6_BLOCK}::/48 Null0
+END
+}
+render_static=conf_static_core_bgp
