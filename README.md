@@ -30,3 +30,26 @@ The [iso/](iso) directory contains the ISO images which are attached to the
 CD-ROM drive on `srv1-campus{1..6}` when they boot up.  This assigns the
 correct static IP address, creates the `sysadm` account, and configures
 use of apt-cacher on 192.168.122.1.
+
+# Snapshots
+
+In order to use the pre-built snapshots, your GNS3 `images` directory must
+point to `/var/lib/GNS3/images`.  This is because the snapshots contain qcow2
+difference files which link to backing files at a fixed location.
+
+If you have already run GNS3 then move your existing images directory:
+
+```
+sudo mkdir /var/lib/GNS3
+sudo mv ~/GNS3/images /var/lib/GNS3/
+```
+
+Point to the new location by creating the [configuration file](https://docs.gns3.com/1f6uXq05vukccKdMCHhdki5MXFhV8vcwuGwiRvXMQvM0/)
+`~/.config/GNS3/gns3_server.conf` so that it contains:
+
+```
+[Server]
+images_path = /var/lib/GNS3/images
+```
+
+(Or you could instead make a symlink: `ln -s /var/lib/GNS3/images ~/GNS3/images`)

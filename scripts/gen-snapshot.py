@@ -34,7 +34,7 @@ label = sys.argv[2]
 if not config or not label:
     raise RuntimeError("Missing config name or label")
 
-images_dir = "/home/nsrc/GNS3/images/QEMU"   # sadly we need the absolute path to qcow2 base files
+images_dir = "/var/lib/GNS3/images/QEMU"   # sadly we need the absolute path to qcow2 base files
 project_file = "cndo/project.gns3"
 templates_dir = "templates"
 zip_file = os.path.join("snapshots", "%s_%s.gns3project" % (config, label))
