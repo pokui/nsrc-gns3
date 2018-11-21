@@ -8,6 +8,7 @@ set -eu
 
 conf_all () {
 $render_head
+$render_netflow
 $render_users
 $render_stp
 $render_vlans
@@ -15,7 +16,9 @@ $render_interfaces
 $render_igp
 $render_bgp
 $render_static
+$render_nat
 $render_acl
+$render_routemap
 $render_snmp
 $render_tail
 }
@@ -34,17 +37,18 @@ conf_head_default () {
 cat <<END
 hostname $HOSTNAME
 !
+no logging console
+logging buffered 8192 debugging
+!
 aaa new-model
 aaa authentication login default local
 aaa authentication enable default enable
 !
-!
-no logging console
-logging buffered 8192 debugging
+no ip domain lookup
+ip domain name ws.nsrc.org
+ip cef
 ipv6 unicast-routing
 ipv6 cef
-no ip domain-lookup
-ip domain name ws.nsrc.org
 END
 }
 render_head=conf_head_default
@@ -67,13 +71,16 @@ render_users=conf_users_default
 # Sections which need to be overwritten
 #
 
+render_netflow=conf_null
 render_vlans=conf_null
 render_stp=conf_null
 render_interfaces=conf_null
 render_igp=conf_null
 render_bgp=conf_null
 render_static=conf_null
+render_nat=conf_null
 render_acl=conf_null
+render_routemap=conf_null
 render_snmp=conf_null
 
 #
@@ -87,12 +94,10 @@ line con 0
  exec-timeout 0 0
  transport preferred none
  stopbits 1
-!
 line aux 0
  exec-timeout 0 0
  transport preferred none
  stopbits 1
-!
 line vty 0 4
  exec-timeout 0 0
  transport preferred none

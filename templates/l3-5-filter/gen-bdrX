@@ -1,101 +1,52 @@
 #!/bin/bash -eu
-CAMPUS=$2
+. l3-4-nat/gen-bdrX
 
-. address-base
-. address-mappings
-
-NREN_V4_HOST="$((4 * ${CAMPUS} - 2))"
-NREN_V4_NET="$((4 * ${CAMPUS} - 4))"
-
-cat <<EOM
-hostname bdr1.campus${CAMPUS}
+conf_interfaces_bdr_filter () {
+  cat <<END
 !
-aaa new-model
-aaa authentication login default local
-aaa authentication enable default enable
-!
-no logging console
-logging buffered 8192 debugging
-ipv6 unicast-routing
-ipv6 cef
-no ip domain-lookup
-ip domain name ws.nsrc.org
-!
-username cndlab secret lab-PW
-enable secret lab-EN
-service password-encryption
+interface Loopback0
+ description Loopback
+ ip address ${CAMPUS_LOOP_V4_SUBNET}.241 255.255.255.255
+ ip ospf 41 area 0
+ ipv6 address ${CAMPUS_LOOP_V6_SUBNET}::241/128
+ ipv6 ospf 41 area 0
+ no shutdown
 !
 interface Null0
  no ip unreachables
 !
-interface Loopback 0
- description Loopback
- ip address ${CAMPUS_LOOP_V4_SUBNET}.241 255.255.255.255
- ipv6 address ${CAMPUS_LOOP_V6_SUBNET}::241/128
- ip ospf 41 area 0
- ipv6 ospf 41 area 0
- no shutdown
-!
 interface GigabitEthernet0/0
  description Link to NREN
  ip address ${NREN_V4_SUBNET}.${NREN_V4_HOST} 255.255.255.252
- ipv6 address ${NREN_V6_SUBNET}:${CAMPUS}::1/127
- ip nat outside
- load-interval 30
  ip access-group from-nren in
  ip access-group to-nren out
- ipv6 traffic-filter from-nren-v6 in
- ipv6 traffic-filter to-nren-v6 out
+ ip nat outside
+ load-interval 30
+ ipv6 address ${NREN_V6_SUBNET}:${CAMPUS}::1/127
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
+ ipv6 traffic-filter from-nren-v6 in
+ ipv6 traffic-filter to-nren-v6 out
  no shutdown
 !
 interface GigabitEthernet0/1
  description Link to CAMPUS CORE
  ip address ${CAMPUS_CORE_V4_SUBNET}.1 255.255.255.240
- ip ospf 41 area 0
  ip nat inside
- ipv6 address ${CAMPUS_CORE_V6_SUBNET}::1/64
- ipv6 ospf 41 area 0
+ ip ospf 41 area 0
  load-interval 30
+ ipv6 address ${CAMPUS_CORE_V6_SUBNET}::1/64
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
+ ipv6 ospf 41 area 0
  no shutdown
-!
-router ospf 41
- router-id ${CAMPUS_LOOP_V4_SUBNET}.241
- log-adjacency-changes
- passive-interface default
- no passive-interface GigabitEthernet0/1
- default-information originate
-!
-ipv6 router ospf 41
- router-id ${CAMPUS_LOOP_V4_SUBNET}.241
- log-adjacency-changes
- passive-interface default
- no passive-interface GigabitEthernet0/1
- default-information originate
-!
-ip route 0.0.0.0 0.0.0.0 ${NREN_V4_SUBNET}.$((${NREN_V4_HOST} - 1))
-ipv6 route ::/0 ${NREN_V6_SUBNET}:${CAMPUS}::0
-!
-ip route ${CAMPUS_CORE_V4_SUBNET}.0 255.255.255.0 Null0
-ip route ${CAMPUS_V4_BLOCK}.0.0 255.255.0.0 Null0
-ipv6 route ${CAMPUS_V6_BLOCK}::/48 Null0
-!
-ip nat pool campus${CAMPUS} ${CAMPUS_CORE_V4_SUBNET}.33 ${CAMPUS_CORE_V4_SUBNET}.46 prefix 28
-ip nat inside source list NATplus pool campus${CAMPUS} overload
-!
-ip access-list extended NATplus
- remark Do not NAT NREN address space
- deny ip ${NREN_V4_SUBNET}.0 0.0.0.255 any
- remark Do not NAT our public addresses
- deny ip ${CAMPUS_CORE_V4_SUBNET}.0 0.0.0.255 any
- remark NAT traffic which goes to the Internet
- permit ip ${CAMPUS_V4_BLOCK}.0.0 0.0.255.255 any
- remark Do not NAT anything else
- deny ip any any
-!
+END
+}
+render_interfaces=conf_interfaces_bdr_filter
+
+conf_acl_bdr_filter () {
+  conf_acl_bdr_nat
+  cat <<END
 ip access-list extended from-nren
  deny   ip ${CAMPUS_CORE_V4_SUBNET}.0 0.0.0.255 any
  permit ip any any
@@ -118,18 +69,8 @@ ipv6 access-list to-nren-v6
  permit ipv6 ${CAMPUS_V6_BLOCK}::/48 any
  remark Deny any other sources
  deny ipv6 any any
-!
-line con 0
- exec-timeout 0 0
- transport preferred none
- stopbits 1
-line aux 0
- exec-timeout 0 0
- transport preferred none
- stopbits 1
-line vty 0 4
- exec-timeout 0 0
- transport preferred none
-!
-end
-EOM
+END
+}
+render_acl=conf_acl_bdr_filter
+
+return 2>/dev/null || render "$@"
