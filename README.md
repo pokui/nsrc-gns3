@@ -53,3 +53,35 @@ images_path = /var/lib/GNS3/images
 ```
 
 (Or you could instead make a symlink: `ln -s /var/lib/GNS3/images ~/GNS3/images`)
+
+# Host configuration
+
+The host needs a `virbr0` bridge on network 192.168.122.  This is most
+easily obtained by installing the `libvirt-bin` package.
+
+Once you have done this, use `virsh net-edit default` to edit the default
+DHCP range to use addresses only up to 192.168.122.199.  You can also add a
+static route.  After changes it looks like this:
+
+```
+<network>
+  <name>default</name>
+  <uuid>...</uuid>
+  <forward mode='nat'>
+    <nat>
+      <port start='1024' end='65535'/>
+    </nat>
+  </forward>
+  <bridge name='virbr0' stp='on' delay='0'/>
+  <mac address='...'/>
+  <ip address='192.168.122.1' netmask='255.255.255.0' localPtr='yes'>
+    <dhcp>
+      <range start='192.168.122.2' end='192.168.122.199'/>
+    </dhcp>
+  </ip>
+  <route address='100.64.0.0' prefix='10' gateway='192.168.122.254'/>
+</network>
+```
+
+TODO: fix routing.  May require updating from `nat` to `route` and adding
+manual forwarding and NAT rules.

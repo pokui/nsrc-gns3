@@ -34,6 +34,10 @@ interface Loopback0
 interface GigabitEthernet0/0
  description Workshop LAN
  ip address ${WS_V4_SUBNET}.$((200 + DEV)) 255.255.255.0
+END
+  # Add .254 alias as target for inbound static routes.  Maybe VRRP in future?
+  [ "$DEV" == "1" ] && echo " ip address ${WS_V4_SUBNET}.254 255.255.255.0 secondary"
+  cat <<END
  ip ospf 42 area 0
  ipv6 address ${WS_V6_SUBNET}::$((200 + DEV))/64
  ipv6 ospf 42 area 0
