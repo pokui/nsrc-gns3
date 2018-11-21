@@ -12,7 +12,7 @@ $render_users
 $render_stp
 $render_vlans
 $render_interfaces
-$render_ospf
+$render_igp
 $render_bgp
 $render_static
 $render_acl
@@ -70,7 +70,7 @@ render_users=conf_users_default
 render_vlans=conf_null
 render_stp=conf_null
 render_interfaces=conf_null
-render_ospf=conf_null
+render_igp=conf_null
 render_bgp=conf_null
 render_static=conf_null
 render_acl=conf_null

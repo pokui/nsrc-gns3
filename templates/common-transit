@@ -82,7 +82,7 @@ conf_static_transit () {
 }
 render_static=conf_static_transit
 
-conf_ospf_transit () {
+conf_igp_transit () {
   cat <<END
 !
 router ospf 42
@@ -96,7 +96,7 @@ ipv6 router ospf 42
  no passive-interface GigabitEthernet0/0
 END
 }
-render_ospf=conf_ospf_transit
+render_igp=conf_igp_transit
 
 conf_bgp_transit() {
   cat <<END
