@@ -55,7 +55,8 @@ interface GigabitEthernet0/1
  description Link to CAMPUS CORE
  ip address ${CAMPUS_CORE_V4_SUBNET}.1 255.255.255.240
  ip flow monitor FLOW-MONITOR-V4 input
- ip flow monitor FLOW-MONITOR-V4 output ip nat inside
+ ip flow monitor FLOW-MONITOR-V4 output
+ ip nat inside
  ip ospf 41 area 0
  load-interval 30
  ipv6 flow monitor FLOW-MONITOR-V6 input
