@@ -1,5 +1,5 @@
 {
-    "auto_close": true,
+    "auto_close": false,
     "auto_open": false,
     "auto_start": false,
     "grid_size": 75,
