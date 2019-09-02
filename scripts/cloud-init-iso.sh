@@ -9,6 +9,10 @@
 # https://cloudinit.readthedocs.io/en/latest/topics/network-config-format-v2.html
 # https://cloudinit.readthedocs.io/en/latest/topics/modules.html
 
+# NOTE: after attaching a new ISO, you can reinitialize an existing VM using
+#   sudo cloud-init clean     # (this also wipes ssh keys etc)
+#   sudo cloud-init init
+
 ETH0='ens3'
 ETH1='ens4'
 PASSWD='$6$XqBb4pf3$rTN75u32r30VDbY252DwLLJ0rAuxIMvZceX02YFXK/WjAJ0FVjrUCQSkdPWA7nW0DoSNJrdu9w.PGOLbZmWlb/'
