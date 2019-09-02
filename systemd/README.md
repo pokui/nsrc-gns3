@@ -12,3 +12,20 @@ systemctl enable gns3server@nsrc
 ```
 
 gns3server will then be started automatically when the machine boots.
+
+# Access controls
+
+Additional configuration can be made in
+`/home/nsrc/.config/GNS3/gns3_server.conf`.  In particular, you can bind to
+a local IP if you don't want access to be available from the WAN, and you
+can set a username/password to prevent students messing with the GNS3
+backend directly.
+
+```
+[Server]
+;host = 127.0.0.1
+images_path = /var/lib/GNS3/images
+auth = True
+user = nsrc
+password = XXXXXXXX
+```
