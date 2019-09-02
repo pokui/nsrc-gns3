@@ -9,7 +9,8 @@
 # https://cloudinit.readthedocs.io/en/latest/topics/network-config-format-v2.html
 # https://cloudinit.readthedocs.io/en/latest/topics/modules.html
 
-NIC='ens3'
+ETH0='ens3'
+ETH1='ens4'
 PASSWD='$6$XqBb4pf3$rTN75u32r30VDbY252DwLLJ0rAuxIMvZceX02YFXK/WjAJ0FVjrUCQSkdPWA7nW0DoSNJrdu9w.PGOLbZmWlb/'
 : "${TMPDIR:=/tmp}"
 DATETIME="$(date -u +%Y%m%d%H%M)"
@@ -17,7 +18,8 @@ DATETIME="$(date -u +%Y%m%d%H%M)"
 for i in $(seq 1 6); do
   FQDN="srv1.campus$i.ws.nsrc.org"
   IPV4="100.68.$i.130"
-  IPV6="2001:db8:$i:1::129"
+  IPV6="2001:db8:$i:1::130"
+  BACKDOOR="192.168.122.$((i+220))"
   cat <<EOS >"$TMPDIR/user-data"
 #cloud-config
 fqdn: $FQDN
@@ -70,34 +72,42 @@ write_files:
       # Disable assignment of SLAAC addresses
       net.ipv6.conf.all.autoconf = 0
       net.ipv6.conf.default.autoconf = 0
-      net.ipv6.conf.$NIC.autoconf = 0
+      net.ipv6.conf.$ETH0.autoconf = 0
+      net.ipv6.conf.$ETH1.autoconf = 0
       net.ipv6.conf.all.accept_ra_pinfo = 0
       net.ipv6.conf.default.accept_ra_pinfo = 0
-      net.ipv6.conf.$NIC.accept_ra_pinfo = 0
+      net.ipv6.conf.$ETH0.accept_ra_pinfo = 0
+      net.ipv6.conf.$ETH1.accept_ra_pinfo = 0
 
       # Disable picking up defrtr and other parameters via RAs
       net.ipv6.conf.all.accept_ra = 0
       net.ipv6.conf.default.accept_ra = 0
-      net.ipv6.conf.$NIC.accept_ra = 0
+      net.ipv6.conf.$ETH0.accept_ra = 0
+      net.ipv6.conf.$ETH1.accept_ra = 0
       net.ipv6.conf.all.accept_ra_defrtr = 0
       net.ipv6.conf.default.accept_ra_defrtr = 0
-      net.ipv6.conf.$NIC.accept_ra_defrtr = 0
+      net.ipv6.conf.$ETH0.accept_ra_defrtr = 0
+      net.ipv6.conf.$ETH1.accept_ra_defrtr = 0
       net.ipv6.conf.all.router_solicitations = 0
       net.ipv6.conf.default.router_solicitations = 0
-      net.ipv6.conf.$NIC.router_solicitations = 0
+      net.ipv6.conf.$ETH0.router_solicitations = 0
+      net.ipv6.conf.$ETH1.router_solicitations = 0
 
       # Disable use of privacy address (should only affect SLAAC but just in case)
       net.ipv6.conf.all.use_tempaddr = 0
       net.ipv6.conf.default.use_tempaddr = 0
-      net.ipv6.conf.$NIC.use_tempaddr = 0
+      net.ipv6.conf.$ETH0.use_tempaddr = 0
+      net.ipv6.conf.$ETH1.use_tempaddr = 0
 
       # Disable duplicate address detection
       net.ipv6.conf.all.accept_dad = 0
       net.ipv6.conf.default.accept_dad = 0
-      net.ipv6.conf.$NIC.accept_dad = 0
+      net.ipv6.conf.$ETH0.accept_dad = 0
+      net.ipv6.conf.$ETH1.accept_dad = 0
       net.ipv6.conf.all.dad_transmits = 0
       net.ipv6.conf.default.dad_transmits = 0
-      net.ipv6.conf.$NIC.dad_transmits = 0
+      net.ipv6.conf.$ETH0.dad_transmits = 0
+      net.ipv6.conf.$ETH1.dad_transmits = 0
 EOS
   # version 2 appears to be broken on Ubuntu 16.04: it doesn't add
   # dns-nameservers or dns-search to /etc/network/interfaces.d/50-cloud-init.cfg
@@ -105,14 +115,19 @@ EOS
 version: 1
 config:
   - type: physical
-    name: $NIC
+    name: $ETH0
     subnets:
       - type: static
         address: $IPV4/28
         gateway: 100.68.$i.129
-      - type: static6
+      - type: static
         address: $IPV6/64
         gateway: 2001:db8:$i:1::1
+  - type: physical
+    name: $ETH1
+    subnets:
+      - type: static
+        address: $BACKDOOR/24
   - type: nameserver
     address:
       - 192.168.122.1
