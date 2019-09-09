@@ -63,6 +63,18 @@ images_path = /var/lib/GNS3/images
 
 (Or you could instead make a symlink: `ln -s /var/lib/GNS3/images ~/GNS3/images`)
 
+If you see the following error:
+
+```
+libguestfs: error: /usr/bin/supermin exited with error status 1.
+```
+
+then this may just be a permissions problem which can be fixed by:
+
+```
+sudo chmod +r /boot/vmlinuz-*
+```
+
 # Host configuration
 
 The host needs a `virbr0` bridge on network 192.168.122.  This is most
