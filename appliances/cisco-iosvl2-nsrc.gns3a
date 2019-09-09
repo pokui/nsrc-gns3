@@ -1,0 +1,42 @@
+{
+    "name": "Cisco IOSvL2",
+    "category": "multilayer_switch",
+    "description": "Cisco Virtual IOS L2 allows user to run a IOS switching image on a standard computer.",
+    "vendor_name": "Cisco",
+    "vendor_url": "http://www.cisco.com/",
+    "product_name": "IOSvL2",
+    "product_url": "http://virl.cisco.com/",
+    "registry_version": 3,
+    "status": "stable",
+    "maintainer": "GNS3 Team",
+    "maintainer_email": "developers@gns3.net",
+    "usage": "There is no default password and enable password. There is no default configuration present.",
+    "port_name_format": "Gi{1}/{0}",
+    "port_segment_size": 4,
+    "qemu": {
+        "adapter_type": "e1000",
+        "adapters": 16,
+        "ram": 384,
+        "hda_disk_interface": "virtio",
+        "arch": "x86_64",
+        "console_type": "telnet",
+        "kvm": "require"
+    },
+    "images": [
+        {
+            "filename": "3017a0ae-c895-432b-9611-1325ef7828e3",
+            "version": "15.2.4063",
+            "md5sum": "c9d556c75a3aa510443014c5dea3dbdb",
+            "filesize": 96927744,
+            "download_url": "https://virl.mediuscorp.com/my-account/"
+        }
+    ],
+    "versions": [
+        {
+            "name": "15.2.4063",
+            "images": {
+                "hda_disk_image": "3017a0ae-c895-432b-9611-1325ef7828e3"
+            }
+        }
+    ]
+}
