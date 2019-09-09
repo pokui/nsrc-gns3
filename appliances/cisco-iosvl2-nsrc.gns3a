@@ -16,7 +16,7 @@
     "qemu": {
         "adapter_type": "e1000",
         "adapters": 16,
-        "ram": 384,
+        "ram": 512,
         "hda_disk_interface": "virtio",
         "arch": "x86_64",
         "console_type": "telnet",
@@ -24,18 +24,18 @@
     },
     "images": [
         {
-            "filename": "3017a0ae-c895-432b-9611-1325ef7828e3",
-            "version": "15.2.4063",
-            "md5sum": "c9d556c75a3aa510443014c5dea3dbdb",
-            "filesize": 96927744,
+            "filename": "vios_l2-adventerprisek9-m.SSA.high_iron_20180619.qcow2",
+            "version": "15.2.1",
+            "md5sum": "14b981002e40b660f2d7400401e04c14",
+            "filesize": 44938752,
             "download_url": "https://virl.mediuscorp.com/my-account/"
         }
     ],
     "versions": [
         {
-            "name": "15.2.4063",
+            "name": "15.2.1",
             "images": {
-                "hda_disk_image": "3017a0ae-c895-432b-9611-1325ef7828e3"
+                "hda_disk_image": "vios_l2-adventerprisek9-m.SSA.high_iron_20180619.qcow2"
             }
         }
     ]

@@ -15,7 +15,7 @@
     "qemu": {
         "adapter_type": "e1000",
         "adapters": 4,
-        "ram": 512,
+        "ram": 384,
         "hda_disk_interface": "virtio",
         "hdb_disk_interface": "virtio",
         "arch": "x86_64",
@@ -32,18 +32,18 @@
             "direct_download_url": "http://sourceforge.net/projects/gns-3/files/Qemu Appliances/IOSv_startup_config.img/download"
         },
         {
-            "filename": "8314f772-694f-486d-b1ae-76e578d7cf97",
-            "version": "15.6(2)T",
-            "md5sum": "4e94f3e63ad2771e5662f614921c8c62",
-            "filesize": 128581632,
+            "filename": "vios-adventerprisek9-m.vmdk.SPA.157-3.M3",
+            "version": "15.7(3)M3",
+            "md5sum": "37c148ffa14a82f418a6e9c2b049fafe",
+            "filesize": 134021120,
             "download_url": "https://virl.mediuscorp.com/my-account/"
         }
     ],
     "versions": [
         {
-            "name": "15.6(2)T",
+            "name": "15.7(3)M3",
             "images": {
-                "hda_disk_image": "8314f772-694f-486d-b1ae-76e578d7cf97",
+                "hda_disk_image": "vios-adventerprisek9-m.vmdk.SPA.157-3.M3",
                 "hdb_disk_image": "IOSv_startup_config.img"
             }
         }
