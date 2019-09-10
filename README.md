@@ -75,6 +75,15 @@ then this may just be a permissions problem which can be fixed by:
 sudo chmod +r /boot/vmlinuz-*
 ```
 
+Once snapshots are built, you can copy them into the project:
+
+```
+cp cndo/snapshots/<name>.gns3project ~/GNS3/projects/<uuid>/snapshots/
+```
+
+Restart the backend to pick them up, and then they should be visible in
+"Manage Snapshots" in the GUI, to restore from.
+
 # Host configuration
 
 The host needs a `virbr0` bridge on network 192.168.122.  This is most
