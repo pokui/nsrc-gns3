@@ -1,6 +1,6 @@
 #!/bin/bash -eu
 
-# Create the local data source ISOs for cloud-init to boot inside the GNS3 environment
+# Create the local data source for cloud-init to boot inside the GNS3 environment
 
 # Inspired by https://github.com/asenci/gns3-ubuntu-cloud-init-data/
 # See also:
@@ -9,7 +9,7 @@
 # https://cloudinit.readthedocs.io/en/latest/topics/network-config-format-v2.html
 # https://cloudinit.readthedocs.io/en/latest/topics/modules.html
 
-# NOTE: after attaching a new ISO, you can reinitialize an existing VM using
+# NOTE: after modifying config, you can reinitialize an existing VM using
 #   sudo cloud-init clean     # (this also wipes ssh keys etc)
 #   sudo cloud-init init
 
@@ -17,8 +17,9 @@ ETH0='ens3'
 ETH1='ens4'
 PASSWD='$6$XqBb4pf3$rTN75u32r30VDbY252DwLLJ0rAuxIMvZceX02YFXK/WjAJ0FVjrUCQSkdPWA7nW0DoSNJrdu9w.PGOLbZmWlb/'
 : "${TMPDIR:=/tmp}"
-DATETIME="$(date -u +%Y%m%d%H%M)"
+DATE="$(date -u +%Y%m%d)"
 
+mkdir -p cndo/nocloud
 for i in $(seq 1 6); do
   FQDN="srv1.campus$i.ws.nsrc.org"
   IPV4="100.68.$i.130"
@@ -32,9 +33,10 @@ ssh_pwauth: True
 users:
   - name: sysadm
     gecos: Student System Administrator
-    groups: [adm, audio, cdrom, dialout, dip, floppy, lpadmin, lxd, netdev, plugdev, sudo, video]
+    groups: [adm, audio, cdrom, dialout, dip, floppy, lxd, netdev, plugdev, sudo, video]
     lock_passwd: false
     passwd: $PASSWD
+    shell: /bin/bash
 write_files:
   - path: /etc/hosts
     content: |
@@ -49,6 +51,11 @@ write_files:
       ff02::1 ip6-allnodes
       ff02::2 ip6-allrouters
       ff02::3 ip6-allhosts
+  # Don't surprise me with updates mid-workshop
+  - path: /etc/apt/apt.conf.d/20auto-upgrades
+    content: |
+      APT::Periodic::Update-Package-Lists "0";
+      APT::Periodic::Unattended-Upgrade "0";
   # Assume classroom server has virbr0 on standard address and apt-cacher-ng is available
   - path: /etc/apt/apt.conf.d/99proxy
     content: |
@@ -120,6 +127,14 @@ version: 1
 config:
   - type: physical
     name: $ETH0
+  - type: bridge
+    name: br0
+    bridge_interfaces:
+      - $ETH0
+    params:
+      bridge_fd: 0
+      bridge_maxwait: 0
+      bridge_stp: 'off'
     subnets:
       - type: static
         address: $IPV4/28
@@ -139,8 +154,14 @@ config:
       - campus$i.ws.nsrc.org
       - ws.nsrc.org
 EOS
-  yamllint "$TMPDIR/user-data"
-  yamllint "$TMPDIR/network-config"
-  cloud-localds -H "$FQDN" -N "$TMPDIR/network-config" \
-      "iso/srv1-campus${i}-init-$DATETIME.iso" "$TMPDIR/user-data"
+  yamllint -d relaxed "$TMPDIR/user-data"
+  yamllint -d relaxed "$TMPDIR/network-config"
+  OUTFILE="cndo/nocloud/srv1-campus${i}-hdb.img"
+  rm -f "$OUTFILE"
+  cloud-localds -f vfat -d raw -H "$FQDN" -N "$TMPDIR/network-config" \
+      "$OUTFILE" "$TMPDIR/user-data"
+  ln "$OUTFILE" "cndo/nocloud/srv1-campus${i}-hdb-${DATE}-$(md5sum -b "$OUTFILE" | head -c8).img"
+  rm "$OUTFILE"
 done
+# TODO: user.network-config static IPs for host1..6
+# TODO: NOC

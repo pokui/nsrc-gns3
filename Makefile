@@ -1,4 +1,4 @@
-all: iso snapshots
+all: nocloud snapshots
 
 .PHONY: apt-depends
 apt-depends:
@@ -12,7 +12,5 @@ import-cndo:
 snapshots:
 	scripts/make-snapshots.py
 
-iso: scripts/cloud-init-iso.sh
-	git rm -f iso/srv1-campus*-init-????????????.iso || rm iso/srv1-campus*-init-????????????.iso || true
-	mkdir -p iso
-	scripts/cloud-init-iso.sh
+nocloud: scripts/gen-nocloud.sh
+	scripts/gen-nocloud.sh
