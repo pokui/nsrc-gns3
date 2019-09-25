@@ -51,38 +51,35 @@ write_files:
       ff02::1 ip6-allnodes
       ff02::2 ip6-allrouters
       ff02::3 ip6-allhosts
-  # Don't surprise me with updates mid-workshop
-  - path: /etc/apt/apt.conf.d/20auto-upgrades
-    content: |
-      APT::Periodic::Update-Package-Lists "0";
-      APT::Periodic::Unattended-Upgrade "0";
   # Assume classroom server has virbr0 on standard address and apt-cacher-ng is available
   - path: /etc/apt/apt.conf.d/99proxy
     content: |
       Acquire::http::Proxy "http://192.168.122.1:3142/";
-  # Prefer IPv4 over IPv6 except when accessing 2001:db8:: addresses
-  - path: /etc/gai.conf
-    content: |
-      # New label table with separate label for 2001:db8::/32.
-      # The RFC 3484 rules prefer the source and destination to have
-      # the same label. So if we have a 2001:db8 source address and are
-      # connecting to something on the public Internet which has both
-      # v4 and v6 addresses, we will prefer to use v4 (where the source
-      # and destination both have label "4") rather than v6.
-      label ::1/128       0
-      label ::/0          1
-      label 2002::/16     2
-      label ::/96         3
-      label ::ffff:0:0/96 4
-      label fec0::/10     5
-      label fc00::/7      6
-      label 2001:0::/32   7
-      label 2001:db8::/32 8
 runcmd:
-  # Clone and start host1-6 containers with correct static IPs
+  # Configure the host-master before we clone it
+  # Beware expansion of dollar sign in encrypted password!
+  - |
+    lxc config set host-master user.user-data "\$(cat <<'END')"
+    #cloud-config
+    chpasswd: { expire: False }
+    ssh_pwauth: True
+    users:
+      - name: sysadm
+        gecos: Student System Administrator
+        groups: [adm, audio, cdrom, dialout, dip, floppy, lxd, netdev, plugdev, sudo, video]
+        lock_passwd: false
+        passwd: $PASSWD
+        shell: /bin/bash
+    write_files:
+      # Assume classroom server has virbr0 on standard address and apt-cacher-ng is available
+      - path: /etc/apt/apt.conf.d/99proxy
+        content: |
+          Acquire::http::Proxy "http://192.168.122.1:3142/";
+    END
+  - lxc profile apply host-master br0
   - |
     for h in \$(seq 1 6); do
-      lxc copy gold-master host\$h -p br0 -c user.network-config="\$(cat <<END)"
+      lxc copy host-master host\$h -c user.network-config="\$(cat <<END)"
       version: 1
       config:
         - type: physical
