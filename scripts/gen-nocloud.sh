@@ -78,47 +78,32 @@ write_files:
       label fc00::/7      6
       label 2001:0::/32   7
       label 2001:db8::/32 8
-  - path: /etc/sysctl.d/00-ipv6-sanity.conf
-    content: |
-      # Disable assignment of SLAAC addresses
-      net.ipv6.conf.all.autoconf = 0
-      net.ipv6.conf.default.autoconf = 0
-      net.ipv6.conf.$ETH0.autoconf = 0
-      net.ipv6.conf.$ETH1.autoconf = 0
-      net.ipv6.conf.all.accept_ra_pinfo = 0
-      net.ipv6.conf.default.accept_ra_pinfo = 0
-      net.ipv6.conf.$ETH0.accept_ra_pinfo = 0
-      net.ipv6.conf.$ETH1.accept_ra_pinfo = 0
-
-      # Disable picking up defrtr and other parameters via RAs
-      net.ipv6.conf.all.accept_ra = 0
-      net.ipv6.conf.default.accept_ra = 0
-      net.ipv6.conf.$ETH0.accept_ra = 0
-      net.ipv6.conf.$ETH1.accept_ra = 0
-      net.ipv6.conf.all.accept_ra_defrtr = 0
-      net.ipv6.conf.default.accept_ra_defrtr = 0
-      net.ipv6.conf.$ETH0.accept_ra_defrtr = 0
-      net.ipv6.conf.$ETH1.accept_ra_defrtr = 0
-      net.ipv6.conf.all.router_solicitations = 0
-      net.ipv6.conf.default.router_solicitations = 0
-      net.ipv6.conf.$ETH0.router_solicitations = 0
-      net.ipv6.conf.$ETH1.router_solicitations = 0
-
-      # Disable use of privacy address (should only affect SLAAC but just in case)
-      net.ipv6.conf.all.use_tempaddr = 0
-      net.ipv6.conf.default.use_tempaddr = 0
-      net.ipv6.conf.$ETH0.use_tempaddr = 0
-      net.ipv6.conf.$ETH1.use_tempaddr = 0
-
-      # Disable duplicate address detection
-      net.ipv6.conf.all.accept_dad = 0
-      net.ipv6.conf.default.accept_dad = 0
-      net.ipv6.conf.$ETH0.accept_dad = 0
-      net.ipv6.conf.$ETH1.accept_dad = 0
-      net.ipv6.conf.all.dad_transmits = 0
-      net.ipv6.conf.default.dad_transmits = 0
-      net.ipv6.conf.$ETH0.dad_transmits = 0
-      net.ipv6.conf.$ETH1.dad_transmits = 0
+runcmd:
+  # Clone and start host1-6 containers with correct static IPs
+  - |
+    for h in \$(seq 1 6); do
+      lxc copy gold-master host\$h -p br0 -c user.network-config="\$(cat <<END)"
+      version: 1
+      config:
+        - type: physical
+          name: eth0
+          subnets:
+            - type: static
+              address: 100.68.$i.\$((130 + h))/28
+              gateway: 100.68.$i.129
+            - type: static
+              address: 2001:db8:$i:1::\$((130 + h))/64
+              gateway: 2001:db8:$i:1::1
+        - type: nameserver
+          address:
+            - 192.168.122.1
+          search:
+            - campus$i.ws.nsrc.org
+            - ws.nsrc.org
+    END
+      lxc start host\$h
+    done
+final_message: NSRC welcomes you to CNDO!
 EOS
   # version 2 appears to be broken on Ubuntu 16.04: it doesn't add
   # dns-nameservers or dns-search to /etc/network/interfaces.d/50-cloud-init.cfg
