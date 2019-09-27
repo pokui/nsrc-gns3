@@ -13,6 +13,9 @@
 #   sudo cloud-init clean     # (this also wipes ssh keys etc)
 #   sudo cloud-init init
 
+# Sadly, the network-config file does not support '## template:jinja' and therefore
+# we have to make separate cloud-init configs for each campus
+
 ETH0='ens3'
 ETH1='ens4'
 PASSWD='$6$XqBb4pf3$rTN75u32r30VDbY252DwLLJ0rAuxIMvZceX02YFXK/WjAJ0FVjrUCQSkdPWA7nW0DoSNJrdu9w.PGOLbZmWlb/'
@@ -56,10 +59,13 @@ write_files:
     content: |
       Acquire::http::Proxy "http://192.168.122.1:3142/";
 runcmd:
-  # Configure the host-master before we clone it
-  # Beware expansion of dollar sign in encrypted password!
+  - fix-hostname $FQDN
+  - lxc profile apply host-master br0
   - |
-    lxc config set host-master user.user-data "\$(cat <<'END')"
+    # Encrypted password contains dollar signs, so delay its evaluation
+    PASSWD='$PASSWD'
+    for h in \$(seq 1 6); do
+      lxc copy host-master host\$h -c user.user-data="\$(cat <<END1)" -c user.network-config="\$(cat <<END2)"
     #cloud-config
     chpasswd: { expire: False }
     ssh_pwauth: True
@@ -68,36 +74,34 @@ runcmd:
         gecos: Student System Administrator
         groups: [adm, audio, cdrom, dialout, dip, floppy, lxd, netdev, plugdev, sudo, video]
         lock_passwd: false
-        passwd: $PASSWD
+        passwd: \$PASSWD
         shell: /bin/bash
     write_files:
       # Assume classroom server has virbr0 on standard address and apt-cacher-ng is available
       - path: /etc/apt/apt.conf.d/99proxy
         content: |
           Acquire::http::Proxy "http://192.168.122.1:3142/";
-    END
-  - lxc profile apply host-master br0
-  - |
-    for h in \$(seq 1 6); do
-      lxc copy host-master host\$h -c user.network-config="\$(cat <<END)"
-      version: 1
-      config:
-        - type: physical
-          name: eth0
-          subnets:
-            - type: static
-              address: 100.68.$i.\$((130 + h))/28
-              gateway: 100.68.$i.129
-            - type: static
-              address: 2001:db8:$i:1::\$((130 + h))/64
-              gateway: 2001:db8:$i:1::1
-        - type: nameserver
-          address:
-            - 192.168.122.1
-          search:
-            - campus$i.ws.nsrc.org
-            - ws.nsrc.org
-    END
+    runcmd:
+      - fix-hostname host\$h.campus$i.ws.nsrc.org
+    END1
+    version: 1
+    config:
+      - type: physical
+        name: eth0
+        subnets:
+          - type: static
+            address: 100.68.$i.\$((130 + h))/28
+            gateway: 100.68.$i.129
+          - type: static
+            address: 2001:db8:$i:1::\$((130 + h))/64
+            gateway: 2001:db8:$i:1::1
+      - type: nameserver
+        address:
+          - 192.168.122.1
+        search:
+          - campus$i.ws.nsrc.org
+          - ws.nsrc.org
+    END2
       lxc start host\$h
     done
 final_message: NSRC welcomes you to CNDO!
@@ -145,5 +149,3 @@ EOS
   ln "$OUTFILE" "cndo/nocloud/srv1-campus${i}-hdb-${DATE}-$(md5sum -b "$OUTFILE" | head -c8).img"
   rm "$OUTFILE"
 done
-# TODO: user.network-config static IPs for host1..6
-# TODO: NOC
