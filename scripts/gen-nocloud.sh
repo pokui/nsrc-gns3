@@ -27,7 +27,7 @@ for i in $(seq 1 6); do
   FQDN="srv1.campus$i.ws.nsrc.org"
   IPV4="100.68.$i.130"
   IPV6="2001:db8:$i:1::130"
-  BACKDOOR="192.168.122.$((i+220))"
+  BACKDOOR="192.168.122.$((10*i))"
 
   ######## NETWORK CONFIG ########
   # Note: version 2 appears to be broken on Ubuntu 16.04: it doesn't add
@@ -54,6 +54,14 @@ config:
         gateway: 2001:db8:$i:1::1
   - type: physical
     name: $ETH1
+  - type: bridge
+    name: br1
+    bridge_interfaces:
+      - $ETH1
+    params:
+      bridge_fd: 0
+      bridge_maxwait: 0
+      bridge_stp: 'off'
     subnets:
       - type: static
         address: $BACKDOOR/24
@@ -67,7 +75,7 @@ EOS
 
   ######## USER DATA ########
   # This configures all other aspects of boot, including creating user/password.
-  # Script clones the hostN containers and configures *their* networking and users too.
+  # runcmd clones the hostN containers and configures *their* networking and user too.
   cat <<EOS >"$TMPDIR/user-data"
 #cloud-config
 fqdn: $FQDN
@@ -103,37 +111,51 @@ write_files:
     append: true
     content: |
       150	backdoor
-  # For ifupdown-based system
-  - path: /etc/network/if-up.d/backdoor
-    permissions: '0755'
-    content: |
-      #!/bin/bash
-      if [ "\$IFACE" = "$ETH1" ]; then
-        # Apply policy routing
-        ip rule add from $BACKDOOR table backdoor
-        ip route add default via 192.168.122.1 dev $ETH1 metric 100 table backdoor
-        ip route add 192.168.122.0/24 dev $ETH1  proto kernel  scope link  src $BACKDOOR  table backdoor
-        ip route flush cache
-      fi
-  # For netplan-based system
   - path: /etc/networkd-dispatcher/routable.d/50-backdoor
     permissions: '0755'
     content: |
       #!/bin/bash
-      if [ "\$IFACE" = "$ETH1" ]; then
+      if [ "\$IFACE" = "br1" ]; then
         # Apply policy routing
         ip rule add from $BACKDOOR table backdoor
-        ip route add default via 192.168.122.1 dev $ETH1 metric 100 table backdoor
-        ip route add 192.168.122.0/24 dev $ETH1  proto kernel  scope link  src $BACKDOOR  table backdoor
+        ip route add default via 192.168.122.1 dev br1 metric 100 table backdoor
+        ip route add 192.168.122.0/24 dev br1  proto kernel  scope link  src $BACKDOOR  table backdoor
         ip route flush cache
       fi
 runcmd:
   - fix-hostname $FQDN
-  - lxc profile apply host-master br0
+  - '[ -d /etc/network/if-up.d ] && ln -s /etc/networkd-dispatcher/routable.d/50-backdoor /etc/network/if-up.d/backdoor'
+  - IFACE=br1 /etc/networkd-dispatcher/routable.d/50-backdoor  #network already up
+  - lxc profile create bridged
+  - |
+    lxc profile edit bridged <<EOS
+    config:
+      environment.http_proxy: ""
+      user.network_mode: ""
+    description: Bridged external and out-of-band
+    devices:
+      eth0:
+        name: eth0
+        nictype: bridged
+        parent: br0
+        type: nic
+      eth1:
+        name: eth1
+        nictype: bridged
+        parent: br1
+        type: nic
+      root:
+        path: /
+        pool: default
+        type: disk
+    EOS
+  - lxc profile apply host-master bridged
   - |
     # Encrypted password contains dollar signs, so delay its evaluation
     PASSWD='$PASSWD'
     for h in \$(seq 1 6); do
+      HOST_FQDN="host\$h.campus$i.ws.nsrc.org"
+      HOST_BACKDOOR="192.168.122.\$((10*$i + h))"
       lxc copy host-master host\$h -c user.network-config="\$(cat <<END1)" -c user.user-data="\$(cat <<END2)"
     version: 1
     config:
@@ -146,6 +168,11 @@ runcmd:
           - type: static
             address: 2001:db8:$i:1::\$((130 + h))/64
             gateway: 2001:db8:$i:1::1
+      - type: physical
+        name: eth1
+        subnets:
+          - type: static
+            address: \$HOST_BACKDOOR/24
       - type: nameserver
         address:
           - 192.168.122.1
@@ -168,8 +195,26 @@ runcmd:
       - path: /etc/apt/apt.conf.d/99proxy
         content: |
           Acquire::http::Proxy "http://192.168.122.1:3142/";
+      # Policy routing so inbound traffic to 192.168.122.x always returns via same interface
+      - path: /etc/iproute2/rt_tables
+        append: true
+        content: |
+          150	backdoor
+      - path: /etc/networkd-dispatcher/routable.d/50-backdoor
+        permissions: '0755'
+        content: |
+          #!/bin/bash
+          if [ "\\\$IFACE" = "eth1" ]; then
+            # Apply policy routing
+            ip rule add from \$HOST_BACKDOOR table backdoor
+            ip route add default via 192.168.122.1 dev eth1 metric 100 table backdoor
+            ip route add 192.168.122.0/24 dev eth1  proto kernel  scope link  src \$HOST_BACKDOOR  table backdoor
+            ip route flush cache
+          fi
     runcmd:
-      - fix-hostname host\$h.campus$i.ws.nsrc.org
+      - fix-hostname \$HOST_FQDN
+      - '[ -d /etc/network/if-up.d ] && ln -s /etc/networkd-dispatcher/routable.d/50-backdoor /etc/network/if-up.d/backdoor'
+      - IFACE=eth1 /etc/networkd-dispatcher/routable.d/50-backdoor  #network already up
     END2
       lxc start host\$h
     done
