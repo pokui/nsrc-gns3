@@ -85,6 +85,8 @@ render_snmp=conf_null
 
 #
 # Tail section
+# Note that IOSv (but not IOSvL2) defaults to "transport input none" which
+# disables telnet and ssh, so we override that here.
 #
 
 conf_tail_default () {
@@ -101,6 +103,7 @@ line aux 0
 line vty 0 4
  exec-timeout 0 0
  transport preferred none
+ transport input telnet ssh
 !
 end
 END
