@@ -5,10 +5,10 @@ cat <<EOS
 
 # Devices on management network
 192.168.122.1		vtp.ws.nsrc.org apt.ws.nsrc.org gw.ws.nsrc.org
-192.168.122.201		gi0-0.transit1.nren.ws.nsrc.org transit1.nren.ws.nsrc.org
-2001:DB8:100::235	gi0-0.transit1.nren.ws.nsrc.org transit1.nren.ws.nsrc.org
-192.168.122.202		gi0-0.transit2.nren.ws.nsrc.org transit2.nren.ws.nsrc.org
-2001:DB8:100::236	gi0-0.transit2.nren.ws.nsrc.org transit2.nren.ws.nsrc.org
+192.168.122.2		gi0-0.transit1.nren.ws.nsrc.org transit1.nren.ws.nsrc.org
+2001:DB8:0:0::2		gi0-0.transit1.nren.ws.nsrc.org transit1.nren.ws.nsrc.org
+192.168.122.3		gi0-0.transit2.nren.ws.nsrc.org transit2.nren.ws.nsrc.org
+2001:DB8:0:0::3		gi0-0.transit2.nren.ws.nsrc.org transit2.nren.ws.nsrc.org
 EOS
 
 for campus in $(seq 1 6); do
@@ -24,10 +24,11 @@ done
 
 cat <<EOS
 
-192.168.122.250		unifi.ws.nsrc.org unifi
+192.168.122.250		noc.ws.nsrc.org noc unifi.ws.nsrc.org unifi
 192.168.122.251		ap1.ws.nsrc.org ap1
 192.168.122.252		ap2.ws.nsrc.org ap2
 192.168.122.253		sw.ws.nsrc.org sw
+192.168.122.254		transit.nren.ws.nsrc.org
 
 # Transit links
 EOS
