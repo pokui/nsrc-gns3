@@ -98,6 +98,35 @@ write_files:
   - path: /etc/apt/apt.conf.d/99proxy
     content: |
       Acquire::http::Proxy "http://192.168.122.1:3142/";
+  # Policy routing so inbound traffic to 192.168.122.x always returns via same interface
+  - path: /etc/iproute2/rt_tables
+    append: true
+    content: |
+      150	backdoor
+  # For ifupdown-based system
+  - path: /etc/network/if-up.d/backdoor
+    permissions: '0755'
+    content: |
+      #!/bin/bash
+      if [ "\$IFACE" = "$ETH1" ]; then
+        # Apply policy routing
+        ip rule add from $BACKDOOR table backdoor
+        ip route add default via 192.168.122.1 dev $ETH1 metric 100 table backdoor
+        ip route add 192.168.122.0/24 dev $ETH1  proto kernel  scope link  src $BACKDOOR  table backdoor
+        ip route flush cache
+      fi
+  # For netplan-based system
+  - path: /etc/networkd-dispatcher/routable.d/50-backdoor
+    permissions: '0755'
+    content: |
+      #!/bin/bash
+      if [ "\$IFACE" = "$ETH1" ]; then
+        # Apply policy routing
+        ip rule add from $BACKDOOR table backdoor
+        ip route add default via 192.168.122.1 dev $ETH1 metric 100 table backdoor
+        ip route add 192.168.122.0/24 dev $ETH1  proto kernel  scope link  src $BACKDOOR  table backdoor
+        ip route flush cache
+      fi
 runcmd:
   - fix-hostname $FQDN
   - lxc profile apply host-master br0
