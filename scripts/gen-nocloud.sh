@@ -28,6 +28,46 @@ for i in $(seq 1 6); do
   IPV4="100.68.$i.130"
   IPV6="2001:db8:$i:1::130"
   BACKDOOR="192.168.122.$((i+220))"
+
+  ######## NETWORK CONFIG ########
+  # Note: version 2 appears to be broken on Ubuntu 16.04: it doesn't add
+  # dns-nameservers or dns-search to /etc/network/interfaces.d/50-cloud-init.cfg
+  cat <<EOS >"$TMPDIR/network-config"
+version: 1
+config:
+  - type: physical
+    name: $ETH0
+  - type: bridge
+    name: br0
+    bridge_interfaces:
+      - $ETH0
+    params:
+      bridge_fd: 0
+      bridge_maxwait: 0
+      bridge_stp: 'off'
+    subnets:
+      - type: static
+        address: $IPV4/28
+        gateway: 100.68.$i.129
+      - type: static
+        address: $IPV6/64
+        gateway: 2001:db8:$i:1::1
+  - type: physical
+    name: $ETH1
+    subnets:
+      - type: static
+        address: $BACKDOOR/24
+  - type: nameserver
+    address:
+      - 192.168.122.1
+    search:
+      - campus$i.ws.nsrc.org
+      - ws.nsrc.org
+EOS
+
+  ######## USER DATA ########
+  # This configures all other aspects of boot, including creating user/password.
+  # Script clones the hostN containers and configures *their* networking and users too.
   cat <<EOS >"$TMPDIR/user-data"
 #cloud-config
 fqdn: $FQDN
@@ -65,25 +105,7 @@ runcmd:
     # Encrypted password contains dollar signs, so delay its evaluation
     PASSWD='$PASSWD'
     for h in \$(seq 1 6); do
-      lxc copy host-master host\$h -c user.user-data="\$(cat <<END1)" -c user.network-config="\$(cat <<END2)"
-    #cloud-config
-    chpasswd: { expire: False }
-    ssh_pwauth: True
-    users:
-      - name: sysadm
-        gecos: Student System Administrator
-        groups: [adm, audio, cdrom, dialout, dip, floppy, lxd, netdev, plugdev, sudo, video]
-        lock_passwd: false
-        passwd: \$PASSWD
-        shell: /bin/bash
-    write_files:
-      # Assume classroom server has virbr0 on standard address and apt-cacher-ng is available
-      - path: /etc/apt/apt.conf.d/99proxy
-        content: |
-          Acquire::http::Proxy "http://192.168.122.1:3142/";
-    runcmd:
-      - fix-hostname host\$h.campus$i.ws.nsrc.org
-    END1
+      lxc copy host-master host\$h -c user.network-config="\$(cat <<END1)" -c user.user-data="\$(cat <<END2)"
     version: 1
     config:
       - type: physical
@@ -101,44 +123,28 @@ runcmd:
         search:
           - campus$i.ws.nsrc.org
           - ws.nsrc.org
+    END1
+    #cloud-config
+    chpasswd: { expire: False }
+    ssh_pwauth: True
+    users:
+      - name: sysadm
+        gecos: Student System Administrator
+        groups: [adm, audio, cdrom, dialout, dip, floppy, lxd, netdev, plugdev, sudo, video]
+        lock_passwd: false
+        passwd: \$PASSWD
+        shell: /bin/bash
+    write_files:
+      # Assume classroom server has virbr0 on standard address and apt-cacher-ng is available
+      - path: /etc/apt/apt.conf.d/99proxy
+        content: |
+          Acquire::http::Proxy "http://192.168.122.1:3142/";
+    runcmd:
+      - fix-hostname host\$h.campus$i.ws.nsrc.org
     END2
       lxc start host\$h
     done
 final_message: NSRC welcomes you to CNDO!
-EOS
-  # version 2 appears to be broken on Ubuntu 16.04: it doesn't add
-  # dns-nameservers or dns-search to /etc/network/interfaces.d/50-cloud-init.cfg
-  cat <<EOS >"$TMPDIR/network-config"
-version: 1
-config:
-  - type: physical
-    name: $ETH0
-  - type: bridge
-    name: br0
-    bridge_interfaces:
-      - $ETH0
-    params:
-      bridge_fd: 0
-      bridge_maxwait: 0
-      bridge_stp: 'off'
-    subnets:
-      - type: static
-        address: $IPV4/28
-        gateway: 100.68.$i.129
-      - type: static
-        address: $IPV6/64
-        gateway: 2001:db8:$i:1::1
-  - type: physical
-    name: $ETH1
-    subnets:
-      - type: static
-        address: $BACKDOOR/24
-  - type: nameserver
-    address:
-      - 192.168.122.1
-    search:
-      - campus$i.ws.nsrc.org
-      - ws.nsrc.org
 EOS
   yamllint -d relaxed "$TMPDIR/user-data"
   yamllint -d relaxed "$TMPDIR/network-config"
