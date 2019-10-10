@@ -2,14 +2,14 @@
 
 # Iterate over all template directories.
 # Rebuild each snapshot if any of its templates have been updated.
-# Do the builds concurrently.
+# Do the builds concurrently, up to MAX_JOBS in parallel.
 
 import os, glob, datetime, subprocess, sys
 
 MAX_JOBS = 25
 
 label = datetime.datetime.utcnow().strftime("%d%m%y_%H%M%S")
-os.makedirs("cndo/snapshots", exist_ok=True)
+os.makedirs("snapshots", exist_ok=True)
 final_rc = 0
 
 jobs = []
@@ -18,12 +18,9 @@ for config in os.listdir("templates"):
     if not templates:
         continue
     templates += glob.glob("templates/common*")
-    newest_template_ts = 0
-    for template in templates + ["cndo/project.gns3", "cndo/README.txt"]:
-        ts = os.stat(template).st_mtime
-        if newest_template_ts < ts:
-            newest_template_ts = ts
-    snaps = glob.glob("cndo/snapshots/%s_*.gns3project" % config)
+    templates += ["project.gns3", "README.txt", "../scripts/gen-snapshot.py"]
+    newest_template_ts = max((os.stat(t).st_mtime for t in templates))
+    snaps = glob.glob("snapshots/%s_*.gns3project" % config)
     older = [1 for f in snaps if os.stat(f).st_mtime < newest_template_ts]
     # If there is an existing snapshot, and it's not older than the template, then keep it
     if snaps and not older:
@@ -40,7 +37,7 @@ for config in os.listdir("templates"):
             print("ERROR: %r: %r" % (rc, job))
             final_rc = final_rc or rc
     print("Generating %s" % config, file=sys.stderr)
-    jobs.append(subprocess.Popen(["scripts/gen-snapshot.py", config, label]))
+    jobs.append(subprocess.Popen(["../scripts/gen-snapshot.py", config, label]))
 
 for job in jobs:
     rc = job.wait()

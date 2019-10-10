@@ -22,7 +22,7 @@ PASSWD='$6$XqBb4pf3$rTN75u32r30VDbY252DwLLJ0rAuxIMvZceX02YFXK/WjAJ0FVjrUCQSkdPWA
 : "${TMPDIR:=/tmp}"
 DATE="$(date -u +%Y%m%d)"
 
-mkdir -p output
+mkdir -p nocloud
 for i in $(seq 1 6); do
   FQDN="srv1.campus$i.ws.nsrc.org"
   IPV4="100.68.$i.130"
@@ -113,12 +113,12 @@ final_message: NSRC welcomes you to CNDO!
 EOS
   yamllint -d relaxed "$TMPDIR/user-data"
   yamllint -d relaxed "$TMPDIR/network-config"
-  OUTFILE="output/cndo-srv1-campus${i}-hdb.img"
+  OUTFILE="nocloud/cndo-srv1-campus${i}-hdb.img"
   rm -f "$OUTFILE"
   cloud-localds -f vfat -d raw -H "$FQDN" -N "$TMPDIR/network-config" \
       "$OUTFILE" "$TMPDIR/user-data"
   md5sum -b "$OUTFILE" | head -c32 >"$OUTFILE.md5sum"
-  ln "$OUTFILE" "output/cndo-srv1-campus${i}-hdb-${DATE}-$(head -c8 "$OUTFILE.md5sum").img"
-  ln "$OUTFILE.md5sum" "output/cndo-srv1-campus${i}-hdb-${DATE}-$(head -c8 "$OUTFILE.md5sum").img.md5sum"
+  ln "$OUTFILE" "nocloud/cndo-srv1-campus${i}-hdb-${DATE}-$(head -c8 "$OUTFILE.md5sum").img"
+  ln "$OUTFILE.md5sum" "nocloud/cndo-srv1-campus${i}-hdb-${DATE}-$(head -c8 "$OUTFILE.md5sum").img.md5sum"
   rm "$OUTFILE" "$OUTFILE.md5sum"
 done

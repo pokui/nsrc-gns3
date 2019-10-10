@@ -1,7 +1,13 @@
 #!/usr/bin/python3
 
 """
-Make a snapshot zip file from a directory of configs.
+Make a snapshot zip file from a directory of configs.  Working
+directory needs to be set to a directory which contains:
+
+* projects.gns3
+* README.txt
+* templates/<config>/gen-<type>X
+* snapshots  # output is written here
 
 It would be much easier if the nvram/config could be stored in
 a separate disk, but that doesn't appear to be the case; we have
@@ -25,8 +31,8 @@ from zipfile import ZipFile, ZIP_DEFLATED
 try:
     from gns3server.compute.iou.utils.iou_import import nvram_import
 except ImportError:
-    sys.path.append("/usr/share/gns3/gns3-server/lib/python3.6/site-packages")
-    sys.path.append("/usr/share/gns3/gns3-server/lib/python3.5/site-packages")
+    import glob
+    sys.path.extend(glob.glob("/usr/share/gns3/gns3-server/lib/*/site-packages"))
     from gns3server.compute.iou.utils.iou_import import nvram_import
 
 config = sys.argv[1]
@@ -35,10 +41,10 @@ if not config or not label:
     raise RuntimeError("Missing config name or label")
 
 images_dir = "/var/lib/GNS3/images/QEMU"   # sadly we need the absolute path to qcow2 base files
-project_file = "cndo/project.gns3"
-readme_file = "cndo/README.txt"
+project_file = "project.gns3"
+readme_file = "README.txt"
 templates_dir = "templates"
-zip_file = os.path.join("cndo/snapshots", "%s_%s.gns3project" % (config, label))
+zip_file = os.path.join("snapshots", "%s_%s.gns3project" % (config, label))
 tmp_dir = "/tmp/gen-snapshot.%d" % os.getpid()
 
 MAPPING = str.maketrans('0123456789','ABCDEFGHIJ')
@@ -49,6 +55,7 @@ with open(project_file) as f:
 # Generate all configs
 if os.path.exists(tmp_dir):
     shutil.rmtree(tmp_dir)
+
 os.makedirs(tmp_dir)
 configs = []
 for i, node in enumerate(gns3["topology"]["nodes"]):

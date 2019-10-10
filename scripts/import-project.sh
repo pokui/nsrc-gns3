@@ -6,7 +6,7 @@
 # - reformat the JSON
 # This makes it store nicely in git and let us see differences.
 
-PROJECT="${1:-cndo}"
+PROJECT="${1}"
 PROJFILE="$PROJECT.gns3project"
 
 zip -d "$PROJFILE" 'project-files/*' 'snapshots/*' || true
