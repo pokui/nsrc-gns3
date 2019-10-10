@@ -19,7 +19,7 @@ for config in os.listdir("templates"):
         continue
     templates += glob.glob("templates/common*")
     newest_template_ts = 0
-    for template in templates:
+    for template in templates + ["cndo/project.gns3", "cndo/README.txt"]:
         ts = os.stat(template).st_mtime
         if newest_template_ts < ts:
             newest_template_ts = ts
