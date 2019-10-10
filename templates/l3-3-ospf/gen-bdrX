@@ -58,6 +58,10 @@ END
 }
 render_igp=conf_igp_bdr_ospf
 
+# Note: this originally had a pull-up route for v6:
+#    ipv6 route ${CAMPUS_V6_BLOCK}::/48 Null0
+# However, OSPFv3 doesn't work to core (IOSvL2 doesn't have OSPFv3).
+# So for now, static route the whole block down to the core.
 conf_static_bdr_ospf () {
   cat <<END
 !
@@ -66,7 +70,7 @@ ip route ${CAMPUS_CORE_V4_SUBNET}.0 255.255.255.0 Null0
 ip route ${CAMPUS_V4_BLOCK}.0.0 255.255.0.0 Null0
 !
 ipv6 route ::/0 ${NREN_V6_SUBNET}:${CAMPUS}::0
-ipv6 route ${CAMPUS_V6_BLOCK}::/48 Null0
+ipv6 route ${CAMPUS_V6_BLOCK}::/48 ${CAMPUS_CORE_V6_SUBNET}::2
 END
 }
 render_static=conf_static_bdr_ospf

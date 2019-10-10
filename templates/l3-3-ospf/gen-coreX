@@ -129,7 +129,18 @@ END
 }
 render_igp=conf_igp_core_ospf
 
-# No static routes
-render_static=conf_null
+## We should not need static routes...
+#render_static=conf_null
+
+# However, since IOSvL2 doesn't support OSPFv3, we still need them
+conf_static_core_ospf () {
+  cat <<END
+!
+ipv6 route ::/0 ${CAMPUS_CORE_V6_SUBNET}::1
+ipv6 route ${CAMPUS_V6_BLOCK}::/48 Null0
+ipv6 route ${CAMPUS_LOOP_V6_SUBNET}::241/128 ${CAMPUS_CORE_V6_SUBNET}::1
+END
+}
+render_static=conf_static_core_ospf
 
 return 2>/dev/null || render "$@"

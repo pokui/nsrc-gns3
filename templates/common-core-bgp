@@ -28,13 +28,16 @@ END
 }
 render_bgp=conf_bgp_core_bgp
 
+# IPv6 statics are included here because IOSvL2 doesn't support OSPFv3
 conf_static_core_bgp () {
   cat <<END
 !
 ip route ${CAMPUS_CORE_V4_SUBNET}.0 255.255.255.0 Null0
 ip route ${CAMPUS_V4_BLOCK}.0.0 255.255.0.0 Null0
 !
+ipv6 route ::/0 ${CAMPUS_CORE_V6_SUBNET}::1
 ipv6 route ${CAMPUS_V6_BLOCK}::/48 Null0
+ipv6 route ${CAMPUS_LOOP_V6_SUBNET}::241/128 ${CAMPUS_CORE_V6_SUBNET}::1
 END
 }
 render_static=conf_static_core_bgp
