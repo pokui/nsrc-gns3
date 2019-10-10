@@ -36,6 +36,7 @@ if not config or not label:
 
 images_dir = "/var/lib/GNS3/images/QEMU"   # sadly we need the absolute path to qcow2 base files
 project_file = "cndo/project.gns3"
+readme_file = "cndo/README.txt"
 templates_dir = "templates"
 zip_file = os.path.join("cndo/snapshots", "%s_%s.gns3project" % (config, label))
 tmp_dir = "/tmp/gen-snapshot.%d" % os.getpid()
@@ -99,6 +100,7 @@ with ZipFile(zip_file, "w", ZIP_DEFLATED) as zip:
     # Note: you must include the .gns3 file, otherwise it says
     # "Can't import topology the .gns3 is corrupted or missing"
     zip.write(project_file, "project.gns3")
+    zip.write(readme_file, "README.txt")
 
     for name, uuid, prop, label in configs:
         qcowfile = os.path.join(tmp_dir, "%s.qcow2" % name)
