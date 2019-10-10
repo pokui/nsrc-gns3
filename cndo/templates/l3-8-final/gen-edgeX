@@ -131,7 +131,7 @@ ipv6 route ::/0 ${IPV6_GW}
 access-list 99 permit ${CAMPUS_CORE_V4_SUBNET}.128 0.0.0.15
 access-list 99 permit ${WS_V4_SUBNET}.0 0.0.0.255
 !
-snmp-server community NetManage RO 99
+snmp-server community ${SNMP_COMMUNITY} RO 99
 snmp-server ifindex persist
 !
 line con 0
