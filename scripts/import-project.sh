@@ -9,7 +9,7 @@
 PROJECT="${1:-cndo}"
 PROJFILE="$PROJECT.gns3project"
 
-zip -d "$PROJFILE" 'project-files/*' || true
+zip -d "$PROJFILE" 'project-files/*' 'snapshots/*' || true
 unzip -d "$PROJECT" -o "$PROJFILE"
 python3 -m json.tool --sort-keys "$PROJECT/project.gns3" "$PROJECT/project.gns3.new"
 mv "$PROJECT/project.gns3.new" "$PROJECT/project.gns3"
