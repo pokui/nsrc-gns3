@@ -1,0 +1,74 @@
+#!/bin/bash -eu
+. common-bdr
+
+conf_interfaces_bdr_default () {
+  cat <<END
+!
+interface Loopback0
+ description Loopback
+ ip address ${CAMPUS_LOOP_V4_SUBNET}.241 255.255.255.255
+ ipv6 address ${CAMPUS_LOOP_V6_SUBNET}::241/128
+ no shutdown
+!
+interface GigabitEthernet0/0
+ description Link to NREN
+ ip address ${NREN_V4_SUBNET}.${NREN_V4_HOST} 255.255.255.252
+ ip nat outside
+ load-interval 30
+ ipv6 address ${NREN_V6_SUBNET}:${CAMPUS}::1/127
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+ no shutdown
+!
+interface GigabitEthernet0/1
+ description Link to CAMPUS CORE
+ ip address ${CAMPUS_CORE_V4_SUBNET}.1 255.255.255.240
+ ip nat inside
+ load-interval 30
+ ipv6 address ${CAMPUS_CORE_V6_SUBNET}::1/64
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+ no shutdown
+END
+}
+render_interfaces=conf_interfaces_bdr_default
+
+conf_nat_bdr_default () {
+  cat <<END
+!
+ip nat pool campus${CAMPUS} ${CAMPUS_CORE_V4_SUBNET}.33 ${CAMPUS_CORE_V4_SUBNET}.46 prefix 28
+ip nat inside source list NATplus pool campus${CAMPUS} overload
+END
+}
+render_nat=conf_nat_bdr_default
+
+conf_acl_bdr_default () {
+  cat <<END
+!
+ip access-list extended NATplus
+ remark Do not NAT NREN address space
+ deny ip ${NREN_V4_SUBNET}.0 0.0.0.255 any
+ remark Do not NAT our public addresses
+ deny ip ${CAMPUS_CORE_V4_SUBNET}.0 0.0.0.255 any
+ remark NAT traffic which goes to the Internet
+ permit ip ${CAMPUS_V4_BLOCK}.0.0 0.0.255.255 any
+ remark Do not NAT anything else
+ deny ip any any
+END
+}
+render_acl=conf_acl_bdr_default
+
+conf_static_bdr_default () {
+  cat <<END
+!
+ip route 0.0.0.0 0.0.0.0 ${NREN_V4_SUBNET}.$((${NREN_V4_HOST} - 1))
+ip route ${CAMPUS_CORE_V4_SUBNET}.0 255.255.255.0 ${CAMPUS_CORE_V4_SUBNET}.2
+ip route ${CAMPUS_V4_BLOCK}.0.0 255.255.0.0 ${CAMPUS_CORE_V4_SUBNET}.2
+!
+ipv6 route ::/0 ${NREN_V6_SUBNET}:${CAMPUS}::0
+ipv6 route ${CAMPUS_V6_BLOCK}::/48 ${CAMPUS_CORE_V6_SUBNET}::2
+END
+}
+render_static=conf_static_bdr_default
+
+return 2>/dev/null || render "$@"

@@ -1,0 +1,159 @@
+. common
+. address-base
+
+conf_head_transit () {
+  conf_head_default
+  cat <<END
+no ip source-route
+no ipv6 source-route
+END
+}
+render_head=conf_head_transit
+
+conf_users_transit () {
+  cat <<END
+!
+username nsrc secret lab-PW
+enable secret lab-EN
+service password-encryption
+END
+}
+render_users=conf_users_transit
+
+conf_interfaces_transit () {
+  cat <<END
+!
+interface Loopback0
+ description Loopback
+ ip address ${LOOPBACK_V4} 255.255.255.255
+ ip ospf 42 area 0
+ ipv6 address ${LOOPBACK_V6}/128
+ ipv6 ospf 42 area 0
+ no shutdown
+!
+interface GigabitEthernet0/0
+ description Workshop LAN
+ ip address ${WS_V4_SUBNET}.$((1 + DEV)) 255.255.255.0
+END
+  # Add .254 alias as target for inbound static routes.  Maybe VRRP in future?
+  [ "$DEV" == "1" ] && echo " ip address ${WS_V4_SUBNET}.254 255.255.255.0 secondary"
+  cat <<END
+ ip ospf 42 area 0
+ ipv6 address ${WS_V6_SUBNET}::$((1 + DEV))/64
+ ipv6 ospf 42 area 0
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+ load 30
+ no shutdown
+END
+
+for CAMPUS in $(seq "$NUM_CAMPUS"); do
+  LINKNET="$((CAMPUS + (DEV-1)*32))"
+  cat <<END
+!
+interface GigabitEthernet0/${CAMPUS}
+ description Campus ${CAMPUS}
+ ip address ${NREN_V4_SUBNET}.$((4 * LINKNET - 3)) 255.255.255.252
+ ipv6 address ${NREN_V6_SUBNET}:${LINKNET}::0/127
+ ip ospf 42 area 0
+ ipv6 ospf 42 area 0
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+ load 30
+ no shutdown
+END
+done
+}
+render_interfaces=conf_interfaces_transit
+
+conf_static_transit () {
+  echo "!"
+  echo "ip route 0.0.0.0 0.0.0.0 ${WS_V4_SUBNET}.1"
+  for CAMPUS in $(seq "$NUM_CAMPUS"); do
+    LINKNET="$((CAMPUS + (DEV-1)*32))"
+    echo "ip route 100.68.${CAMPUS}.0 255.255.255.0 ${NREN_V4_SUBNET}.$((4 * LINKNET - 2))"
+  done
+  echo "!"
+  echo "ipv6 route ::/0 ${WS_V6_SUBNET}::1"
+  for CAMPUS in $(seq "$NUM_CAMPUS"); do
+    LINKNET="$((CAMPUS + (DEV-1)*32))"
+    echo "ipv6 route 2001:DB8:${CAMPUS}::/48 ${NREN_V6_SUBNET}:${LINKNET}::1"
+  done
+}
+render_static=conf_static_transit
+
+conf_igp_transit () {
+  cat <<END
+!
+router ospf 42
+ router-id $LOOPBACK_V4
+ passive-interface default
+ no passive-interface GigabitEthernet0/0
+!
+ipv6 router ospf 42
+ router-id $LOOPBACK_V4
+ passive-interface default
+ no passive-interface GigabitEthernet0/0
+END
+}
+render_igp=conf_igp_transit
+
+conf_bgp_transit() {
+  PEER4="${NREN_V4_SUBNET}.$((253 - DEV))"
+  PEER6="${NREN_V6_SUBNET}:FF::$((253 - DEV))"
+  cat <<END
+!
+router bgp 65534
+ bgp router-id $LOOPBACK_V4
+ bgp log-neighbor-changes
+ no bgp default ipv4-unicast
+ !
+ address-family ipv4
+END
+  for CAMPUS in $(seq "$NUM_CAMPUS"); do
+    echo "  network 100.68.${CAMPUS}.0 mask 255.255.255.0"
+  done
+  cat <<END
+  neighbor $PEER4 remote-as 65534
+  neighbor $PEER4 description iBGP with transit$((3 - DEV))
+  neighbor $PEER4 update-source Loopback0
+  neighbor $PEER4 activate
+  neighbor $PEER4 next-hop-self
+  distance bgp 200 200 200
+  exit-address-family
+ !
+ address-family ipv6
+END
+  for CAMPUS in $(seq "$NUM_CAMPUS"); do
+    echo "  network 2001:DB8:${CAMPUS}::/48"
+  done
+  cat <<END
+  neighbor $PEER6 remote-as 65534
+  neighbor $PEER6 description iBGP with transit$((3 - DEV))
+  neighbor $PEER6 update-source Loopback0
+  neighbor $PEER6 activate
+  neighbor $PEER6 next-hop-self
+  distance bgp 200 200 200
+  exit-address-family
+END
+}
+render_bgp=conf_bgp_transit
+
+conf_snmp_transit () {
+  cat <<END
+!
+access-list 99 permit ${WS_V4_SUBNET}.0 0.0.0.255
+!
+snmp-server community ${SNMP_COMMUNITY} RO 99
+snmp-server ifindex persist
+END
+}
+render_snmp=conf_snmp_transit
+
+render () {
+    DEV="$1"
+    HOSTNAME="transit$DEV.nren"
+    LOOPBACK_V4="${NREN_V4_SUBNET}.$((250 + DEV))"
+    LOOPBACK_V6="${NREN_V6_SUBNET}:FF::$((250 + DEV))"
+    conf_all
+}

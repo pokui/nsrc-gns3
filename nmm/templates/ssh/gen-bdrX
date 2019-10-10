@@ -1,0 +1,6 @@
+#!/bin/bash -eu
+. default/gen-bdrX
+render_head=conf_head_ssh
+render_tail=conf_tail_ssh
+
+return 2>/dev/null || render "$@"

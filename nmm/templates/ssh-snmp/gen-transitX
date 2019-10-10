@@ -1,0 +1,3 @@
+#!/bin/bash -eu
+. common-transit
+return 2>/dev/null || render "$@"
