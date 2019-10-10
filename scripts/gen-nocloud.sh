@@ -123,7 +123,7 @@ write_files:
         ip route flush cache
       fi
 runcmd:
-  - fix-hostname $FQDN
+  - DEBIAN_FRONTEND=noninteractive fix-hostname $FQDN
   - '[ -d /etc/network/if-up.d ] && ln -s /etc/networkd-dispatcher/routable.d/50-backdoor /etc/network/if-up.d/backdoor'
   - IFACE=br1 /etc/networkd-dispatcher/routable.d/50-backdoor  #network already up
   - lxc profile create bridged
@@ -212,7 +212,7 @@ runcmd:
             ip route flush cache
           fi
     runcmd:
-      - fix-hostname \$HOST_FQDN
+      - DEBIAN_FRONTEND=noninteractive fix-hostname \$HOST_FQDN
       - '[ -d /etc/network/if-up.d ] && ln -s /etc/networkd-dispatcher/routable.d/50-backdoor /etc/network/if-up.d/backdoor'
       - IFACE=eth1 /etc/networkd-dispatcher/routable.d/50-backdoor  #network already up
     END2
