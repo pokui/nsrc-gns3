@@ -9,8 +9,15 @@ import-cndo:
 	scripts/import-project.sh cndo
 
 .PHONY: snapshots
-snapshots:
+snapshots: snapshots-cndo
+
+.PHONY: snapshots-cndo
+snapshots-cndo:
 	scripts/make-snapshots.py
 
-nocloud: scripts/gen-nocloud.sh
-	scripts/gen-nocloud.sh
+.PHONY: nocloud
+nocloud: nocloud-cndo
+
+.PHONY: nocloud-cndo
+nocloud-cndo: scripts/cndo-nocloud.sh
+	scripts/cndo-nocloud.sh
