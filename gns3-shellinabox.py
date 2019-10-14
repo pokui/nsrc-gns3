@@ -7,6 +7,7 @@ import os, sys
 import urllib.parse as parse
 
 GNS3_URL="http://localhost:3080"
+
 # HTTP authentication to API (if required)
 GNS3_USER="nsrc"
 GNS3_PASS="XXXXXXXX"
@@ -35,6 +36,7 @@ def make_url(**kwargs):
     return parse.urlunparse((url.scheme, url.netloc, url.path, url.params, qs, url.fragment))
 
 def dump_project(project_id):
+    # https://gns3-server.readthedocs.io/en/latest/api/v2/controller/node/projectsprojectidnodes.html#get-v2-projects-project-id-nodes
     r = request.urlopen(GNS3_URL+"/v2/projects/%s/nodes" % project_id)
     data = json.load(r)
     data = [d for d in data if d.get("name") and d.get("console") and d.get("status") == "started"]
@@ -64,6 +66,7 @@ if q.get("project_id"):
     sys.exit(0)
 
 # Iterate over all running projects
+# https://gns3-server.readthedocs.io/en/latest/api/v2/controller/project/projects.html#get-v2-projects
 r = request.urlopen(GNS3_URL+"/v2/projects")
 data = json.load(r)
 projs = [proj for proj in data
