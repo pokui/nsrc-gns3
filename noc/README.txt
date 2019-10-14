@@ -1,0 +1,1 @@
+Standalone NOC VM on 192.168.122.250

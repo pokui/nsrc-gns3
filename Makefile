@@ -34,3 +34,18 @@ nmm-snapshots:
 nmm-nocloud: nmm/nocloud.sh
 	cd nmm && ./nocloud.sh
 
+.PHONY: noc
+noc: noc-nocloud
+
+.PHONY: noc-import
+noc-import:
+	scripts/import-project.sh noc
+
+#.PHONY: noc-snapshots  # noc topology has no templated configs
+#noc-snapshots:
+#	cd noc && ../scripts/make-snapshots.py
+
+.PHONY: noc-nocloud
+noc-nocloud: noc/nocloud.sh
+	cd noc && ./nocloud.sh
+
