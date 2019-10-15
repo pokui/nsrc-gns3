@@ -1,0 +1,14 @@
+site_name: NSRC GNS3
+theme: readthedocs
+repo_url: https://github.com/nsrc-org/nsrc-gns3
+
+nav:
+  - 'Introduction': 'index.md'
+  - 'Hardware': 'hardware.md'
+  - 'OS Installation': 'os-installation.md'
+  - 'OS Configuration': 'os-configuration.md'
+  - 'Networking': 'networking.md'
+  - 'Host Tools': 'host-tools.md'
+  - 'GNS3 Server': 'gns3-server.md'
+  - 'GNS3 Client': 'gns3-client/index.md'
+  - 'Console access': 'console.md'
