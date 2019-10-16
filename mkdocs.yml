@@ -8,7 +8,7 @@ nav:
   - 'OS Installation': 'os-installation.md'
   - 'OS Configuration': 'os-configuration.md'
   - 'Networking': 'networking.md'
-  - 'Host Tools': 'host-tools.md'
+  - 'Host Tools': 'host-tools/index.md'
   - 'GNS3 Server': 'gns3-server.md'
   - 'GNS3 Client': 'gns3-client/index.md'
   - 'Lab Topologies':

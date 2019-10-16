@@ -135,6 +135,11 @@ KSM.
 performance of your platform in real time - CPU usage, RAM usage, disk I/O,
 and much more.
 
+![Netdata CPU overview](netdata-cpu.png)
+
+(Screenshot shows CPU load while NMM topology starts up and then settles
+down into steady state)
+
 To [install](https://github.com/netdata/netdata/tree/master/packaging/installer#linux-64bit-pre-built-static-binary)
 or upgrade it, run the following command:
 
