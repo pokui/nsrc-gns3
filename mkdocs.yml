@@ -11,4 +11,9 @@ nav:
   - 'Host Tools': 'host-tools.md'
   - 'GNS3 Server': 'gns3-server.md'
   - 'GNS3 Client': 'gns3-client/index.md'
-  - 'Console access': 'console.md'
+  - 'Lab Topologies':
+      'Overview': 'topology/index.md'
+      'NOC': 'topology/noc/index.md'
+      'CNDO': 'topology/cndo/index.md'
+      'NMM': 'topology/nmm/index.md'
+  - 'Console access': 'console/index.md'
