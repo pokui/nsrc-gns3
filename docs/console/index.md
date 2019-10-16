@@ -45,6 +45,6 @@ Point your web browser at <http://192.168.122.1:4200/> to test.  If the
 emulator is running, it should show clickable URLs for each of the console
 ports.
 
-![shellinabox showing console URLs](images/gns3-shellinabox.png)
+![shellinabox showing console URLs](gns3-shellinabox.png)
 
 Click on one to connect, then hit Enter to wake up the serial port.

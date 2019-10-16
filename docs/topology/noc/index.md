@@ -17,7 +17,7 @@ tools.
 NOC consists of a single virtual machine, noc.ws.nsrc.org (192.168.122.250). 
 It runs the same VM image as the NMM training course.
 
-![NOC topology](images/noc.png)
+![NOC topology](noc.png)
 
 The NAT "cloud" represents the connection to the `virbr0` bridge.
 
@@ -28,15 +28,17 @@ possible to run this project on a machine with as little as 4GB.
 
 You will need the following files:
 
-* `noc-<version>.gns3project` - the GNS3 project
-* `nsrc-nmm-<version>.qcow2` - the VM image with NMM tools pre-installed (large download: ~2GB)
-* `noc-hdb-<version>.img` - the cloud-init image which configures username/password and static IP
+File | Description
+:--- | :----------
+`noc-<version>.gns3project` | the GNS3 project
+`nsrc-nmm-<version>.qcow2` | the VM image with NMM tools pre-installed (large download: ~2GB)
+`noc-hdb-<version>.img` | the cloud-init image which configures username/password and static IP
 
 Note that this topology does *not* use the Cisco IOSv or IOSvL2 images. 
 This means that it is completely free to use, and can be freely
 shared.
 
-# Configuration
+# Credentials
 
 * ssh login: `sysadm` and `nsrc+ws` (the standard student login).  It's up to
   you whether you wish to keep this or change it.  One the one hand, you
@@ -47,7 +49,11 @@ shared.
 * RT login: `root` and `nsrc+ws`
 * mysql root password: `nsrc+ws`
 
-How you then configure the NMM tools is up to you.  You could:
+# Configuration
+
+The NMM tools are in an unconfigured state.  You can configure them
+following the NMM lab exercises, but ultimately how you configure them is up
+to you.  You could:
 
 * Monitor the classroom hardware (access point, switch)
 * Monitor external resources (e.g. smokeping DNS test to 8.8.8.8)
@@ -169,7 +175,7 @@ To make this even more useful, you can arrange that:
 
 These options are available under `File > Edit Project` in the GNS3 client.
 
-![GNS3 project options](images/noc-persistence.png)
+![GNS3 project options](noc-persistence.png)
 
 # Running the VM outside GNS3
 
@@ -177,6 +183,9 @@ The NOC/NMM VM does not have to be run inside GNS3 - it can run in other
 virtualisation environments too.  For example, you can run it in a cloud
 environment, or students should be able to run it directly in Virtualbox or
 VMWare Player.
+
+(TODO: There seems to be an issue with VirtualBox which prevents it
+detecting the qcow2 image as bootable)
 
 The image has no hard-coded login credentials, so you either need to run it
 in an environment which supports cloud-init natively, or you have to provide
@@ -186,15 +195,15 @@ find you have no way to login to it once it has started.
 We provide an alternate cloud-init image,
 `nsrc-nmm-nocloud-hdb-<version>.img`, which contains no network config so it
 will configure itself using DHCP.  This should work in most VM environments. 
-It still contains configuration to create the `sysadm` user account.
+It just contains configuration to create the `sysadm` user account.
 
 This image is a small MSDOS filesystem, which can be mounted easily on many
 types of system, or edited using `mtools` under Linux.
 
-We distribute a raw image because it's the easiest to mount and modify. 
-Note that VirtualBox doesn't support this format, so you will have to
-convert it first to some other format that it accepts: e.g.
+We distribute it as a raw image because it's the easiest to mount and
+modify.  Note that VirtualBox doesn't work with raw images, so you may have
+to convert it first to some other format that it accepts: e.g.
 
 ```
-qemu-img convert -O qcow2 nsrc-nmm-nocloud-hdb-20191016-d389944a.img nsrc-nmm-nocloud-hdb-20191016-d389944a.qcow2
+qemu-img convert -O vdi nsrc-nmm-nocloud-hdb-20191016-d389944a.img nsrc-nmm-nocloud-hdb-20191016-d389944a.vdi
 ```

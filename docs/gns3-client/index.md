@@ -21,7 +21,7 @@ Under "Remote main server" give the IP address 192.168.122.1, TCP port 3080,
 and the GNS3 server authentication username and password if you configured
 them.
 
-![GNS3 Preferences](images/gns3-preferences.png)
+![GNS3 Preferences](gns3-preferences.png)
 
 TODO: screenshots of the sequence of dialogs when you run GNS3 for the first
 time.
