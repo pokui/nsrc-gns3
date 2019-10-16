@@ -1,10 +1,15 @@
 #!/bin/bash -eu
 
 cat <<EOS
-# Install this file as /var/lib/libvirt/dnsmasq/default.addnhosts
+# Use this file to replace your /etc/hosts, or append it to the end
+
+127.0.0.1	localhost
+::1     localhost ip6-localhost ip6-loopback
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
 
 # Devices on management network
-192.168.122.1		vtp.ws.nsrc.org apt.ws.nsrc.org gw.ws.nsrc.org
+192.168.122.1		vtp.ws.nsrc.org apt.ws.nsrc.org gns3.ws.nsrc.org www.ws.nsrc.org gw.ws.nsrc.org
 192.168.122.2		gi0-0.transit1.nren.ws.nsrc.org transit1.nren.ws.nsrc.org
 2001:DB8:0:0::2		gi0-0.transit1.nren.ws.nsrc.org transit1.nren.ws.nsrc.org
 192.168.122.3		gi0-0.transit2.nren.ws.nsrc.org transit2.nren.ws.nsrc.org
@@ -24,7 +29,7 @@ done
 
 cat <<EOS
 
-192.168.122.250		noc.ws.nsrc.org noc unifi.ws.nsrc.org unifi
+192.168.122.250		noc.ws.nsrc.org librenms.ws.nsrc.org rt.ws.nsrc.org nfsen.ws.nsrc.org noc
 192.168.122.251		ap1.ws.nsrc.org ap1
 192.168.122.252		ap2.ws.nsrc.org ap2
 192.168.122.253		sw.ws.nsrc.org sw
