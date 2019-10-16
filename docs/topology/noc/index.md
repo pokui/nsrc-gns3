@@ -91,7 +91,7 @@ Next: for some reason php7.2 and php7.3 are both installed; apache is using
 7.2 but the cronjobs are using 7.3, which means that discovery doesn't work. 
 To fix:
 
-```
+```no-highlight
 sudo update-alternatives --set php /usr/bin/php7.2
 ```
 
@@ -111,7 +111,7 @@ access from `192.168.122.0/24`.
 Then return to the LibreNMS web interface and add "gw.ws.nsrc.org" as a
 device.  It will take up to 5 minutes for it to be discovered.
 
-# Softflowd
+# softflowd
 
 To generate netflow data for traffic going in and out of the class, login to
 your physical server (not the NOC VM!) and install softflowd.
@@ -184,12 +184,17 @@ it with a second disk drive image with cloud-init files.  Otherwise you'll
 find you have no way to login to it once it has started.
 
 We provide an alternate cloud-init image,
-`nsrc-nmm-nocloud-hdb-<version>.img`, which configures the VM to pick up its
-outside IP address via DHCP instead of static 192.168.122.250.  However, it
-does have a hard-coded assumption that the NIC will be called "ens3" which
-may not be true in all environments.
+`nsrc-nmm-nocloud-hdb-<version>.img`, which contains no network config so it
+will configure itself using DHCP.  This should work in most VM environments. 
+It still contains configuration to create the `sysadm` user account.
 
-TODO: Fix this by removing network-config entirely from the disk image.
-
-The disk image is a small MSDOS filesystem, so can be mounted easily on many
+This image is a small MSDOS filesystem, which can be mounted easily on many
 types of system, or edited using `mtools` under Linux.
+
+We distribute a raw image because it's the easiest to mount and modify. 
+Note that VirtualBox doesn't support this format, so you will have to
+convert it first to some other format that it accepts: e.g.
+
+```
+qemu-img convert -O qcow2 nsrc-nmm-nocloud-hdb-20191016-d389944a.img nsrc-nmm-nocloud-hdb-20191016-d389944a.qcow2
+```
