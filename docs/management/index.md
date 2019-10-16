@@ -46,14 +46,91 @@ for a more friendly way to do this - or we could make a script.
 
 # Restore individual device from snapshot
 
-TODO: manual solution
+This is rather difficult to do manually, but here's the process anyway and
+we'll have to turn it into a script.
+
+* Right-click on a device
+* Select "Stop"
+* Select "Show in File Manager"
+* Paste it somewhere.  It will look something like this:
+
+```
+/home/nsrc/GNS3/projects/538fd89a-e9f8-4f1c-bb2c-4988d7e9b29d/project-files/qemu/a1b1bac7-24d3-414c-88dd-09de24bb0204
+<-------------------- project path -------------------------> <-------------- node relative path ------------------->
+```
+
+```
+$ cd <project-path>
+$ ls snapshots
+# Pick the one you want, e.g. ssh-snmp_101019_165326.gns3project
+$ unzip -v snapshots/ssh-snmp_101019_165326.gns3project
+```
+
+This shows you the nodes in the snapshot.  Unfortunately they have different
+UUIDs than the ones on your system :-(
+
+So now you unpack the 'project.gns3' file within the snapshot, and look for
+the node ID of the device you want to retrieve:
+
+```
+$ unzip -d /tmp snapshots/ssh-snmp_101019_165326.gns3project project.gns3
+$ grep -1 core1-campus1 /tmp/project.gns3
+                    "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                    "text": "core1-campus1",
+                    "x": -19,
+--
+                "locked": true,
+                "name": "core1-campus1",
+                "node_id": "7c894529-2ba3-432f-8fd6-ab7d5b471c3b",
+```
+
+Now you need to extract that node, but put it in the right place.
+
+```
+$ unzip -oj snapshots/ssh-snmp_101019_165326.gns3project -d project-files/qemu/a1b1bac7-24d3-414c-88dd-09de24bb0204 \
+                                                            <-------------- node relative path ------------------->
+    'project-files/qemu/7c894529-2ba3-432f-8fd6-ab7d5b471c3b/*.qcow2'
+                        <------- snapshot node ID  -------->
+```
 
 There is a [feature request](https://github.com/GNS3/gns3-gui/issues/2870)
-for a more friendly way to do this - or we could make a script.
+for a more friendly way to do this.
 
 # Password recovery
 
 GNS3 currently does not have a way to
 [export and import IOSv/IOSvL2 configs](https://github.com/GNS3/gns3-server/issues/1315).
 
-TODO: manual solution
+It can be done manually, using guestfish to extract the nvram file and a
+script to convert it to text.  The steps are outlined here - they are the
+same for IOSv and IOSvL2.
+
+* STOP THE DEVICE.  This is important!
+* Use "Show in file manager", and cd to the node directory
+* Optional: examine the disk image using guestfish
+
+```
+virt-ls -l -a hda_disk.qcow2 -m /dev/sda1:/ /
+```
+
+* Extract and convert nvram file
+
+```
+virt-cat -a hda_disk.qcow2 -m /dev/sda1:/ /nvram >/tmp/nvram
+PYTHONPATH=$(echo /usr/share/gns3/gns3-server/lib/*/site-packages) python3 \
+    -m gns3server.compute.iou.utils.iou_export /tmp/nvram /tmp/config
+```
+
+This gives you the text config in `/tmp/config`. Edit it, e.g. to
+change the password or enable secret.
+
+Now you have to reverse the process to convert back to NVRAM and upload
+into the disk image:
+
+```
+PYTHONPATH=$(echo /usr/share/gns3/gns3-server/lib/*/site-packages) python3 \
+    -m gns3server.compute.iou.utils.iou_import -c 512 /tmp/nvram /tmp/config
+guestfish -a hda_disk.qcow2 -m /dev/sda1:/ -- upload /tmp/nvram /nvram
+```
+
+After this you can start the device again.
