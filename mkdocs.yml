@@ -17,3 +17,4 @@ nav:
       'CNDO': 'topology/cndo/index.md'
       'NMM': 'topology/nmm/index.md'
   - 'Console access': 'console/index.md'
+  - 'GNS3 Management': 'management/index.md'
