@@ -15,47 +15,48 @@ We recommend you edit the configuration file `/etc/apt-cacher-ng/acng.conf`
 and uncomment/set the following options:
 
 ```
-BindAddress: localhost 192.168.122.1
-
 ConnectProto: v4
+
+UseWrap: 1
 ```
 
-The first of these makes apt-cacher listen only on the internal interface,
-so it's not accessible on the WAN side (you don't want outside parties
-abusing your proxy).  The second says that even if your machine has picked
-up an IPv6 address, use IPv4 for outbound connections to package
-repositories.  Broken IPv6 networks have been observed as a source of
-problems before, so this avoids them.
+The first of these says that even if your machine has picked up an IPv6
+address, use IPv4 for outbound connections to package repositories.  Broken
+IPv6 networks have been observed as a source of problems before, so this
+avoids them.
 
-To activate:
+The second enables "TCP Wrappers" to configure access controls to your proxy
+(so that you can block outside parties from abusing your proxy).
+
+To activate these changes:
 
 ```
 sudo systemctl restart apt-cacher-ng
 ```
 
-## Optional: TCP wrappers
+## Securing apt-cacher-ng
 
-An alternative, more fine-grained way to secure your proxy is to set
-
-```
-UseWrap: 1
-```
-
-Then edit `/etc/hosts.allow`
+To limit which networks can access your proxy, edit `/etc/hosts.allow`:
 
 ```
 apt-cacher-ng: 127.0.0.1 10.0.0.0/8 192.168.0.0/16 [::1] [2001:db8::]/16
 ```
 
-and `/etc/hosts.deny`
+and `/etc/hosts.deny`:
 
 ```
 apt-cacher-ng: ALL
 ```
 
-This lets you decide explicitly what IP ranges to allow.
+!!! Note
+    Setting `BindAddress: localhost 192.168.122.1` ought to work too, but is
+    not a satisfactory solution because apt-cacher-ng can start before
+    libvirt has created the virbr0 network - meaning that it only listens on
+    the loopback interface.
 
 ## Optional: Fetch via your own proxy
+
+(Otherwise known as "eating your own dogfood")
 
 On your server, create `/etc/apt/apt.conf.d/99proxy` containing:
 
