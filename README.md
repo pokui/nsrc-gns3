@@ -44,8 +44,13 @@ and regenerate the IOSv snapshots (next two steps in this document).
 # Updating topology
 
 After changing the topology or device configurations in GNS3, export a
-portable project (without base images and without snapshots).  Copy it to
-the appropriate filename in the top level of this repository:
+portable project (without base images and without snapshots).
+
+> Note: before exporting, check under `File > Edit Project` that "Leave this
+> project running in the background when closing GNS3" is selected; the
+> zoom level is sensible; and all devices are "locked"
+
+Copy it to the appropriate filename in the top level of this repository:
 `noc.gns3project`, `cndo.gns3project` or `nmm.gns3project`.  Then:
 
 ```
