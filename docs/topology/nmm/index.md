@@ -1,6 +1,10 @@
 # Network Monitoring and Management (NMM)
 
-NMM is a trimmed version of the [CNDO](../cndo/) topology.
+This course teaches the principles of Network Monitoring and Management,
+illustrated by a variety of open-source tools which students themselves
+configure and use.
+
+The NMM lab is a trimmed version of the [CNDO](../cndo/) topology.
 
 ![NMM topology](nmm-complete.png)
 
@@ -153,7 +157,7 @@ the container, and reset the password.
 
 ```
 $ lxc exec host1 bash
-# passd sysadm
+# passwd sysadm
 # exit
 ```
 

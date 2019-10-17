@@ -1,8 +1,11 @@
 # Campus Network Design and Operations (CNDO)
 
-The CNDO topology creates a simulated campus network environment.  There are
-six virtual campuses, so the class is expected to be divided into six
-groups.
+The goal of the Campus Network Design and Operations course is to teach
+configuration of switching (layer 2) and routing (layer 3) according to
+campus best practices.
+
+The CNDO lab topology contains six virtual campuses, so the class is
+expected to be divided into six groups.
 
 ![CNDO topology](cndo-complete.png)
 
