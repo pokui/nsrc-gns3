@@ -25,17 +25,68 @@ workshops.
 
 # Syncthing
 
-TODO
+[Syncthing](https://syncthing.net) is a robust and secure file
+synchronization tool, which you can use to copy web content between your
+webserver, your laptop, and/or the central nsrc.org webserver.
+
+To install it on your server, use the [apt package repo](https://apt.syncthing.net):
+
+```
+curl -s https://syncthing.net/release-key.txt | sudo apt-key add -
+echo "deb https://apt.syncthing.net/ syncthing stable" | sudo tee /etc/apt/sources.list.d/syncthing.list
+sudo apt-get update
+sudo apt-get install syncthing
+```
+
+To enable it for the nsrc user:
+
+```
+systemctl start syncthing@nsrc
+systemctl enable syncthing@nsrc
+```
+
+The syncthing web interface is by default only available on 127.0.0.1
+(localhost).  To override this:
+
+```
+sudo systemctl edit syncthing@.service
+```
+
+Into the editor put:
+
+```
+[Service]
+ExecStart=
+ExecStart=/usr/bin/syncthing -no-browser -no-restart -logflags=0 -gui-address=[::]:8384
+```
+
+(Note that you have to explicitly clear `ExecStart` because it is an
+additive value, but can only have one value).  Save, and restart:
+
+```
+sudo systemctl restart syncthing@nsrc
+```
+
+The web interface will then be at <https://192.168.122.1:8384/>.  On first
+login you should set a GUI authentication username and password.
+
+Note that every instance of syncthing has a unique cryptographic ID: you can
+find yours using `Actions > Show ID` in the web interface.
+
+You can then configure remote devices to share with (each device will need
+to paste in the ID of the other) and then configure folders to share.  Since
+syncthing is running as user 'nsrc', these folders will also need to be
+owned by 'nsrc'.
 
 # Unifi controller
 
-If you are using Unifi access points, having an instance of the controller
-software will let you configure SSID, password etc.  You can also configure
-the access point(s) on static IP addresses (192.168.122.251 and .252 are
-reserved for this purpose) and enable SNMP.
+If you are using Unifi access points, the controller software will let you
+configure SSID, WPA password etc.  You can also configure the access
+point(s) on static IP addresses (192.168.122.251 and .252 are reserved for
+this purpose) and enable SNMP.
 
-Having the controller on the 192.168.122 network is the easiest way to get
-AP discovery to work.
+Having the controller present on the 192.168.122 network is the easiest way
+to get AP discovery to work.
 
 You can simply run the unifi controller on your laptop - it is available for
 Windows, Mac and Linux.
