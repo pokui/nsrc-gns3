@@ -75,7 +75,7 @@ to all the tools.  You can use [this sample](noc-index.html) as a base.
 
 (Should be fixed in a future release)
 
-!!! Note
+!!! Warning
     Do the following inside the NOC VM
 
     Login using `ssh sysadm@noc.ws.nsrc.org` (or `ssh sysadm@192.168.122.250`)
@@ -107,7 +107,7 @@ sudo update-alternatives --set php /usr/bin/php7.2
 To allow your physical host to be monitored by LibreNMS, install
 and configure snmpd.
 
-!!! Note
+!!! Warning
     Do this on your physical host, not inside the NOC VM
 
 ```
@@ -126,7 +126,7 @@ device.  It will take up to 5 minutes for it to be discovered.
 To generate netflow data for traffic going in and out of the class, install
 softflowd on your server.
 
-!!! Note
+!!! Warning
     Do this on your physical host, not inside the NOC VM
 
 ```
@@ -141,17 +141,44 @@ INTERFACE="virbr0"
 OPTIONS="-n 192.168.122.250:9996 -v 9 -t maxlife=5m"
 ```
 
-Restart after the change:
+Create `/etc/systemd/system/softflowd.service`
 
 ```
-sudo systemctl restart softflowd
+[Unit]
+Description=softflowd
+After=network-online.target
+Wants=network-online.target
+Conflicts=shutdown.target
+
+[Service]
+EnvironmentFile=/etc/default/softflowd
+ExecStart=/usr/sbin/softflowd -d -i $INTERFACE $OPTIONS
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Be careful to get uppercase and lowercase exactly correct.
+
+!!! Note
+    Although softflowd comes with an init script, we replace it
+    with a systemd service which auto-restarts it on failure.
+    This is because on bootup, the system tries to start softflowd
+    before libvirt has created the virbr0 interface.
+
+Now start softflowd:
+
+```
+sudo systemctl start softflowd
 sudo systemctl enable softflowd
 ```
 
 Then, login to the NOC VM.  You will need to start nfsen there, just like
 the students would have had to:
 
-!!! Note
+!!! Warning
     Do the following inside the NOC VM
 
 ```
@@ -160,15 +187,6 @@ sudo service nfsen start
 ```
 
 Data will become visible at <http://noc.ws.nsrc.org/nfsen/nfsen.php>
-
-TODO: You may find that softflowd does not start automatically when the
-machine is rebooted, and `systemctl status softflowd` says that `virbr0`
-does not exist.
-
-If so, you can start it by hand using `systemctl restart softflowd`.
-
-Long-term fix will be to create a systemd unit file or network hook so that
-softflowd is started *after* libvirt has created virbr0.
 
 # Auto-start
 
