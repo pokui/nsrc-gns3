@@ -177,33 +177,3 @@ These options are available under `File > Edit Project` in the GNS3 client.
 
 ![GNS3 project options](noc-persistence.png)
 
-# Running the VM outside GNS3
-
-The NOC/NMM VM does not have to be run inside GNS3 - it can run in other
-virtualisation environments too.  For example, you can run it in a cloud
-environment, or students should be able to run it directly in Virtualbox or
-VMWare Player.
-
-(TODO: There seems to be an issue with VirtualBox which prevents it
-detecting the qcow2 image as bootable)
-
-The image has no hard-coded login credentials, so you either need to run it
-in an environment which supports cloud-init natively, or you have to provide
-it with a second disk drive image with cloud-init files.  Otherwise you'll
-find you have no way to login to it once it has started.
-
-We provide an alternate cloud-init image,
-`nsrc-nmm-nocloud-hdb-<version>.img`, which contains no network config so it
-will configure itself using DHCP.  This should work in most VM environments. 
-It just contains configuration to create the `sysadm` user account.
-
-This image is a small MSDOS filesystem, which can be mounted easily on many
-types of system, or edited using `mtools` under Linux.
-
-We distribute it as a raw image because it's the easiest to mount and
-modify.  Note that VirtualBox doesn't work with raw images, so you may have
-to convert it first to some other format that it accepts: e.g.
-
-```
-qemu-img convert -O vdi nsrc-nmm-nocloud-hdb-20191016-d389944a.img nsrc-nmm-nocloud-hdb-20191016-d389944a.vdi
-```
