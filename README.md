@@ -14,27 +14,26 @@ The output is generated in a `site/` directory.
 
 # Renegerating the hosts file
 
-This is easy:
-
 ```
-cndo/hosts.sh >default.addnhosts
+cd cndo
+make hosts
 ```
 
 # Regenerating cloud-init (nocloud) images
 
 These are attached to the Linux VMs as second disk, to configure them on
 startup with correct static IP addresses, username/password, apt-cacher
-proxy config etc.  Hence there is a separate one for each instance of the VM
-within the topology.
+proxy config etc.  A separate disk image is create for each instance of the
+VM within the topology (since they have different IP addresses).
+
+Change directory into the relevant topology:
 
 ```
-make noc-nocloud   # OR:
-make cndo-nocloud  # OR:
-make nmm-nocloud
+cd [noc|cndo|nmm]
+make nocloud
 ```
 
-The output images are written to `noc/nocloud/`, `cndo/nocloud/` or
-`nmm/nocloud/` respectively.
+The output images are written to a `nocloud/` subdirectory.
 
 The filename intentionally includes part of the md5sum, to distinguish the
 different versions.  Therefore, if you ever change these, you will need to
@@ -47,12 +46,14 @@ and regenerate the IOSv snapshots (next two steps in this document).
 After changing the topology or device configurations in GNS3, export a
 portable project (without base images and without snapshots).  Copy it to
 the appropriate filename in the top level of this repository:
-`noc.gns3project`, `cndo.gns3project` or `nmm.gns3project`.
+`noc.gns3project`, `cndo.gns3project` or `nmm.gns3project`.  Then:
 
-Then run `make noc-import`, `make cndo-import` or `make nmm-import` as
-appropriate.
+```
+cd [noc|cndo|nmm]
+make import
+```
 
-This stores a copy of the project file in the repo (`<topo>/project.gns3`),
+This stores a pretty-printed copy of the JSON file (called `project.gns3`)
 which can be examined for diffs.  (All the node IDs and link IDs may change;
 this is fine)
 
@@ -60,6 +61,8 @@ This topology file is included in all the generated snapshots, so it's
 important that you import the topology *before* generating snapshots.
 Otherwise, your topology will be reset to the previous version whenever you
 restore from one of the snapshots.
+
+NOTE: there is no need to commit the top-level XXX.gns3project file.
 
 # Regenerating snapshots
 
@@ -70,15 +73,12 @@ However, configuration can be restored from snapshots of the VM disk state.
 This repo contains scripts to generate snapshots, which take the form of zip
 files.
 
-Build the snapshots:
-
 ```
-make cndo-snapshots
-# OR:
-make nmm-snapshots
+cd [cndo|nmm]
+make snapshots
 ```
 
-(NOC doesn't have any snapshots)
+(Note: NOC doesn't have any snapshots)
 
 Once snapshots are built, copy them into the project, e.g. for cndo:
 
@@ -100,7 +100,7 @@ that you publish.
 
 ## Images directory location
 
-The sscripts assume that your GNS3 `images` directory is
+The scripts assume that your GNS3 `images` directory is
 `/var/lib/GNS3/images`, as they create qcow2 difference files which point to
 backing files at an absolute directory.
 

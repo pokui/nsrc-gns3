@@ -1,15 +1,14 @@
 #!/bin/bash -eu
 
-# Given a new cndo.gns3project:
-# - remove all the qemu and dynamips differencing files
+# Given a new XXXX.gns3project:
+# - remove all the qemu and dynamips differencing files and any snapshots
 # - unpack the contents
 # - reformat the JSON
 # This makes it store nicely in git and let us see differences.
 
-PROJECT="${1}"
-PROJFILE="$PROJECT.gns3project"
+PROJFILE="${1}"
 
 zip -d "$PROJFILE" 'project-files/*' 'snapshots/*' || true
-unzip -d "$PROJECT" -o "$PROJFILE"
-python3 -m json.tool --sort-keys "$PROJECT/project.gns3" "$PROJECT/project.gns3.new"
-mv "$PROJECT/project.gns3.new" "$PROJECT/project.gns3"
+unzip -o "$PROJFILE"
+python3 -m json.tool --sort-keys "project.gns3" "project.gns3.new"
+mv "project.gns3.new" "project.gns3"
