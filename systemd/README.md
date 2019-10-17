@@ -1,14 +1,14 @@
-# systemd unit file for gns3server
+# systemd unit file for gns3-server
 
-Install the file [gns3server@.service](gns3server@.service) as `/etc/systemd/system/gns3server@.service`
+Install the file [gns3-server@.service](gns3-server@.service) as `/etc/systemd/system/gns3-server@.service`
 
 Run the following commands, assuming you want to run gns3server as the
 `nsrc` user:
 
 ```
 systemctl daemon-reload
-systemctl start gns3server@nsrc
-systemctl enable gns3server@nsrc
+systemctl start gns3-server@nsrc
+systemctl enable gns3-server@nsrc
 ```
 
 gns3server will then be started automatically when the machine boots.
@@ -16,7 +16,7 @@ gns3server will then be started automatically when the machine boots.
 # Access controls
 
 Additional configuration can be made in
-`/home/nsrc/.config/GNS3/gns3_server.conf`.  In particular, you can bind to
+`~/.config/GNS3/2.2/gns3_server.conf`.  In particular, you can bind to
 a local IP if you don't want access to be available from the WAN, and you
 can set a username/password to prevent students messing with the GNS3
 backend directly.
