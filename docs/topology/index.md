@@ -33,7 +33,7 @@ wget shell.nsrc.org/~brian/gns3/images/ubuntu-16.04-server-cloudimg-amd64-disk1-
 However, the files won't be noticed until you restart the GNS3 server, which
 is disruptive if you are currently running a topology.
 
-```no-highlight
+```shell
 sudo systemctl restart gns3-server@nsrc
 ```
 

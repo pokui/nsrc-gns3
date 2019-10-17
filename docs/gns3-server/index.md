@@ -1,6 +1,6 @@
 # Install gns3 server
 
-```
+```shell
 sudo add-apt-repository ppa:gns3/ppa
 sudo apt-get update
 sudo apt-get install gns3-server
@@ -13,7 +13,7 @@ Note that GNS3 only works if the front-end and back-end are the same
 version.  Therefore we recommend you 'hold' the gns3-server package so
 that it is not updated unless you explicitly ask for it:
 
-```
+```shell
 sudo apt-mark hold gns3-server
 ```
 
@@ -24,7 +24,7 @@ are ready to perform an upgrade.
 
 Add your unprivileged user into the "ubridge" group:
 
-```
+```shell
 sudo usermod -a -G ubridge nsrc
 ```
 
@@ -52,7 +52,7 @@ WantedBy=multi-user.target
 
 Start gns3 for the "nsrc" user like this:
 
-```no-highlight
+```shell
 sudo systemctl start gns3-server@nsrc
 sudo systemctl enable gns3-server@nsrc
 ```
@@ -83,13 +83,13 @@ sudo chown nsrc:nsrc /var/lib/GNS3/images
 
 Temporarily stop gns3:
 
-```no-highlight
+```shell
 sudo systemctl stop gns3-server@nsrc
 ```
 
 As the NSRC user, check that it has created a configuration file:
 
-```
+```shell
 cat /home/nsrc/.config/GNS3/2.2/gns3_server.conf
 ```
 
@@ -124,6 +124,6 @@ There is more documentation on this file
 
 Now restart the server:
 
-```no-highlight
+```shell
 sudo systemctl start gns3-server@nsrc
 ```

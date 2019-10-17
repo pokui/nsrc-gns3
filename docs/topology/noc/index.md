@@ -97,7 +97,7 @@ Next: for some reason php7.2 and php7.3 are both installed; apache is using
 7.2 but the cronjobs are using 7.3, which means that discovery doesn't work. 
 To fix:
 
-```no-highlight
+```shell
 sudo update-alternatives --set php /usr/bin/php7.2
 ```
 
