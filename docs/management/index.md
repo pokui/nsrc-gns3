@@ -103,22 +103,23 @@ GNS3 currently does not have a way to
 
 It can be done manually, using guestfish to extract the nvram file and a
 script to convert it to text.  The steps are outlined here - they are the
-same for IOSv and IOSvL2.
+same for IOSv and IOSvL2.  You will need to install package
+`libguestfs-tools`.
 
 * STOP THE DEVICE.  This is important!
 * Use "Show in file manager", and cd to the node directory
 * Optional: examine the disk image using guestfish
 
-```
+```no-highlight
 virt-ls -l -a hda_disk.qcow2 -m /dev/sda1:/ /
 ```
 
 * Extract and convert nvram file
 
-```
+```no-highlight
 virt-cat -a hda_disk.qcow2 -m /dev/sda1:/ /nvram >/tmp/nvram
 PYTHONPATH=$(echo /usr/share/gns3/gns3-server/lib/*/site-packages) python3 \
-    -m gns3server.compute.iou.utils.iou_export /tmp/nvram /tmp/config
+    -m gns3server.compute.iou.utils.iou_export /tmp/nvram /tmp/config /tmp/private
 ```
 
 This gives you the text config in `/tmp/config`. Edit it, e.g. to
@@ -127,9 +128,9 @@ change the password or enable secret.
 Now you have to reverse the process to convert back to NVRAM and upload
 into the disk image:
 
-```
+```no-highlight
 PYTHONPATH=$(echo /usr/share/gns3/gns3-server/lib/*/site-packages) python3 \
-    -m gns3server.compute.iou.utils.iou_import -c 512 /tmp/nvram /tmp/config
+    -m gns3server.compute.iou.utils.iou_import -c 512 /tmp/nvram /tmp/config /tmp/private
 guestfish -a hda_disk.qcow2 -m /dev/sda1:/ -- upload /tmp/nvram /nvram
 ```
 
