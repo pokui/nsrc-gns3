@@ -168,6 +168,43 @@ sudo chmod +x /etc/networkd-dispatcher/configuring.d/10-intel-fix
 
 (For Ubuntu 16.04, create this file as `/etc/network/if-pre-up.d/10-intel-fix` instead)
 
+## Reduce networking timeout
+
+If the external interface is not connected, the server will take a long time
+to boot (it will wait 2 to 5 minutes to try and pick up a DHCP address).
+It's a good idea to reduce this timeout as follows:
+
+```
+sudo systemctl edit systemd-networkd-wait-online
+```
+
+This will put you into an editor.  Enter the following:
+
+```
+[Service]
+ExecStart=
+ExecStart=/lib/systemd/systemd-networkd-wait-online --any --timeout=15
+```
+
+then exit and save.  Make sure the capitalization is exactly correct.
+
+This should allow the system to continue booting when any one interface
+comes up, or after 15 seconds.
+
+For [older systems](https://unix.stackexchange.com/questions/186162/how-to-change-timeout-in-systemctl)
+using "ifupdown" (e.g. Ubuntu 16.04) there's a different process:
+
+```
+sudo systemctl edit networking
+```
+
+and in the editor, write:
+
+```
+[Service]
+TimeoutStartSec=15
+```
+
 # Reboot and test
 
 After all these changes, reboot:

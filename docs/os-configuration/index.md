@@ -19,11 +19,19 @@ You should also set:
 
 ```
 GRUB_DISABLE_OS_PROBER=true
+
+GRUB_RECORDFAIL_TIMEOUT=2
 ```
 
-because of [this bug](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=788062)
-which can cause VM images to be corrupted, if the OS prober finds them.
-(This is unlikely to affect you unless you're using LVM volumes).
+The first is because of [this
+bug](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=788062) which can
+cause VM images to be corrupted, if the OS prober finds them.  (This is
+unlikely to affect you unless you're using LVM volumes).
+
+The second is helpful for a "headless" system.  There is a feature in Ubuntu
+whereby if a boot doesn't complete fully for any reason, then then ext boot
+hangs indefinitely at the grub menu waiting for a keypress.  We don't want
+this to happen when we don't have a keyboard and screen connected.
 
 Once the file is saved, run this command:
 
