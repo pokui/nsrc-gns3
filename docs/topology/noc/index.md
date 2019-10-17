@@ -68,8 +68,8 @@ to you.  You could:
 * Collect classroom netflow data in nfsen.  This can be extremely interesting
   to see which students are running torrents!
 
-You should also build a HTML page at `/var/www/html/index.html` which links
-to all the tools.
+You should also install a HTML page at `/var/www/html/index.html` which links
+to all the tools.  You can use [this sample](noc-index.html) as a base.
 
 # LibreNMS fixes
 
