@@ -2,6 +2,10 @@ site_name: NSRC GNS3 Training Platform
 theme: readthedocs
 repo_url: https://github.com/nsrc-org/nsrc-gns3
 
+markdown_extensions:
+  # https://squidfunk.github.io/mkdocs-material/extensions/admonition/
+  - admonition
+
 nav:
   - 'Introduction': 'index.md'
   - 'Hardware': 'hardware/index.md'
