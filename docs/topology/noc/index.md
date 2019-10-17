@@ -75,9 +75,10 @@ to all the tools.  You can use [this sample](noc-index.html) as a base.
 
 (Should be fixed in a future release)
 
-To make the LibreNMS URL work, you will need to login to the NOC VM (`ssh
-sysadm@noc.ws.nsrc.org` if you are on the class network with DNS setup, or
-`ssh sysadm@192.168.122.250` otherwise)
+!!! Note
+    Do the following inside the NOC VM
+
+    Login using `ssh sysadm@noc.ws.nsrc.org` (or `ssh sysadm@192.168.122.250`)
 
 Edit `/etc/apache2/sites-available/librenms.conf` and change
 
@@ -106,6 +107,9 @@ sudo update-alternatives --set php /usr/bin/php7.2
 To allow your physical host to be monitored by LibreNMS, install
 and configure snmpd.
 
+!!! Note
+    Do this on your physical host, not inside the NOC VM
+
 ```
 sudo apt-get install snmpd
 ```
@@ -119,8 +123,11 @@ device.  It will take up to 5 minutes for it to be discovered.
 
 # softflowd
 
-To generate netflow data for traffic going in and out of the class, login to
-your physical server (not the NOC VM!) and install softflowd.
+To generate netflow data for traffic going in and out of the class, install
+softflowd on your server.
+
+!!! Note
+    Do this on your physical host, not inside the NOC VM
 
 ```
 sudo apt-get install softflowd
@@ -143,6 +150,9 @@ sudo systemctl enable softflowd
 
 Then, login to the NOC VM.  You will need to start nfsen there, just like
 the students would have had to:
+
+!!! Note
+    Do the following inside the NOC VM
 
 ```
 sudo update-rc.d nfsen defaults 20
