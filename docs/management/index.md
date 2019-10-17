@@ -135,3 +135,19 @@ guestfish -a hda_disk.qcow2 -m /dev/sda1:/ -- upload /tmp/nvram /nvram
 ```
 
 After this you can start the device again.
+
+## libguestfs error
+
+If you see the following error:
+
+```
+libguestfs: error: /usr/bin/supermin exited with error status 1.
+```
+
+then this is likely just be a permissions problem which can be fixed by:
+
+```
+sudo chmod +r /boot/vmlinuz-*
+```
+
+(This has to be re-done each time you upgrade the kernel on your server)
