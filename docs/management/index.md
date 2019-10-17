@@ -87,8 +87,8 @@ $ grep -1 core1-campus1 /tmp/project.gns3
 Now you need to extract that node, but put it in the right place.
 
 ```
-$ unzip -oj snapshots/ssh-snmp_101019_165326.gns3project -d project-files/qemu/a1b1bac7-24d3-414c-88dd-09de24bb0204 \
-                                                            <-------------- node relative path ------------------->
+$ unzip -j snapshots/ssh-snmp_101019_165326.gns3project -d project-files/qemu/a1b1bac7-24d3-414c-88dd-09de24bb0204 \
+                                                           <-------------- node relative path ------------------->
     'project-files/qemu/7c894529-2ba3-432f-8fd6-ab7d5b471c3b/*.qcow2'
                         <------- snapshot node ID  -------->
 ```
