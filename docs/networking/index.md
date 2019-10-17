@@ -155,8 +155,8 @@ contents:
 ```
 #!/bin/sh
 # https://serverfault.com/questions/616485/e1000e-reset-adapter-unexpectedly-detected-hardware-unit-hang
-if [ "$IFACE" = "eno1" ]; then
-  /sbin/ethtool -K eno1 gso off gro off tso off
+if expr "$IFACE" : eno >/dev/null; then
+  /sbin/ethtool -K "$IFACE" gso off gro off tso off
 fi
 ```
 
