@@ -10,7 +10,3 @@ nocloud: nocloud.sh
 import:
 	../scripts/import-project.sh ~/projects/*/NOC.gns3
 	git diff project.gns3 | grep '^[+-]' | egrep -v '"(node_id|console|link_id)":'
-
-#.PHONY: snapshots
-#snapshots:
-#	../scripts/make-snapshots.py

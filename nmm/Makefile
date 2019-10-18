@@ -14,3 +14,7 @@ import:
 .PHONY: snapshots
 snapshots:
 	../scripts/make-snapshots.py
+
+.PHONY: install-snapshots
+install-snapshots:
+	../scripts/install-snapshots.sh ~/GNS3/projects/*/nmm.gns3
