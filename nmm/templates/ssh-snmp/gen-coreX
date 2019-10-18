@@ -1,18 +1,6 @@
 #!/bin/bash -eu
 . ssh/gen-coreX
 
-conf_snmp_core_nms () {
-  cat <<END
-!
-access-list 99 permit ${CAMPUS_CORE_V4_SUBNET}.128 0.0.0.15
-access-list 99 permit ${WS_V4_SUBNET}.0 0.0.0.255
-!
-snmp-server community ${SNMP_COMMUNITY} RO 99
-snmp-server group ReadGroup v3 auth access 99
-snmp-server user admin ReadGroup v3 auth sha ${SNMP_COMMUNITY}
-snmp-server ifindex persist
-END
-}
-render_snmp=conf_snmp_core_nms
+render_snmp=conf_snmp_campus
 
 return 2>/dev/null || render "$@"

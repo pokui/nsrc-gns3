@@ -1,11 +1,25 @@
 . common
 . address-base
 
-render () {
-    DEV="$1"
+render_routed () {
+    #ignored: DEV="$1"
     BUILDING="$2"
     CAMPUS="$3"
-    HOSTNAME="dist${DEV}-b${BUILDING}.campus${CAMPUS}"
+    HOSTNAME="dist1-b${BUILDING}.campus${CAMPUS}"
     . address-mappings
+    case ${BUILDING} in
+    1)
+        IPV4_ADDRESS="${CAMPUS_BLD1_V4_MGMT_SUBNET}.2"
+        IPV4_GW="${CAMPUS_BLD1_V4_MGMT_SUBNET}.1"
+        IPV6_ADDRESS="${CAMPUS_BLD1_V6_MGMT_SUBNET}::2"
+        IPV6_GW="${CAMPUS_BLD1_V6_MGMT_SUBNET}::1"
+    ;;
+    2)
+        IPV4_ADDRESS="${CAMPUS_BLD2_V4_MGMT_SUBNET}.2"
+        IPV4_GW="${CAMPUS_BLD2_V4_MGMT_SUBNET}.1"
+        IPV6_ADDRESS="${CAMPUS_BLD2_V6_MGMT_SUBNET}::2"
+        IPV6_GW="${CAMPUS_BLD2_V6_MGMT_SUBNET}::1"
+    ;;
+    esac
     conf_all
 }

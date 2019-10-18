@@ -178,6 +178,28 @@ interface ${1}
 END
 }
 
+conf_snmp_campus () {
+  cat <<END
+!
+access-list 99 permit ${CAMPUS_CORE_V4_SUBNET}.128 0.0.0.15
+access-list 99 permit ${WS_V4_SUBNET}.0 0.0.0.255
+!
+snmp-server community ${SNMP_COMMUNITY} RO 99
+snmp-server group ReadGroup v3 auth access 99
+snmp-server user admin ReadGroup v3 auth sha ${SNMP_COMMUNITY}
+snmp-server ifindex persist
+END
+}
+
+conf_static_dist_edge () {
+  cat <<END
+!
+ip route 0.0.0.0 0.0.0.0 ${IPV4_GW}
+!
+ipv6 route ::/0 ${IPV6_GW}
+END
+}
+
 #
 # At the end of each template, put the following line.
 # This makes it render output if it is called directly,
