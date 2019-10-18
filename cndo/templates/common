@@ -148,6 +148,15 @@ snmp-server ifindex persist
 END
 }
 
+conf_static_dist_edge () {
+  cat <<END
+!
+ip route 0.0.0.0 0.0.0.0 ${IPV4_GW}
+!
+ipv6 route ::/0 ${IPV6_GW}
+END
+}
+
 #
 # At the end of each template, put the following line.
 # This makes it render output if it is called directly,

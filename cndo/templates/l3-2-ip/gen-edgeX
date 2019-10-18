@@ -1,14 +1,6 @@
 #!/bin/bash -eu
 . l3-1-base/gen-edgeX
 
-conf_static_edge_l3ip () {
-  cat <<END
-!
-ip route 0.0.0.0 0.0.0.0 ${IPV4_GW}
-!
-ipv6 route ::/0 ${IPV6_GW}
-END
-}
-render_static=conf_static_edge_l3ip
+render_static=conf_static_dist_edge
 
 return 2>/dev/null || render_routed "$@"
