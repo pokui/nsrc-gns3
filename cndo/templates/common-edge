@@ -1,11 +1,36 @@
 . common
 . address-base
 
-render () {
+render_flat () {
     DEV="$1"
     BUILDING="$2"
     CAMPUS="$3"
     HOSTNAME="edge${DEV}-b${BUILDING}.campus${CAMPUS}"
     . address-mappings
+    IPV4_ADDRESS="${CAMPUS_V4_BLOCK}.0.$((3 * ${BUILDING} + ${DEV}))"
+    IPV6_ADDRESS="${CAMPUS_V6_BLOCK}:1::$((3 * ${BUILDING} + ${DEV}))"
+    conf_all
+}
+
+render_routed () {
+    DEV="$1"
+    BUILDING="$2"
+    CAMPUS="$3"
+    HOSTNAME="edge${DEV}-b${BUILDING}.campus${CAMPUS}"
+    . address-mappings
+    case ${BUILDING} in
+    1)
+        IPV4_ADDRESS="${CAMPUS_BLD1_V4_MGMT_SUBNET}.$((2 + ${DEV}))"
+        IPV4_GW="${CAMPUS_BLD1_V4_MGMT_SUBNET}.1"
+        IPV6_ADDRESS="${CAMPUS_BLD1_V6_MGMT_SUBNET}::$((2 + ${DEV}))"
+        IPV6_GW="${CAMPUS_BLD1_V6_MGMT_SUBNET}::1"
+    ;;
+    2)
+        IPV4_ADDRESS="${CAMPUS_BLD2_V4_MGMT_SUBNET}.$((2 + ${DEV}))"
+        IPV4_GW="${CAMPUS_BLD2_V4_MGMT_SUBNET}.1"
+        IPV6_ADDRESS="${CAMPUS_BLD2_V6_MGMT_SUBNET}::$((2 + ${DEV}))"
+        IPV6_GW="${CAMPUS_BLD2_V6_MGMT_SUBNET}::1"
+    ;;
+    esac
     conf_all
 }

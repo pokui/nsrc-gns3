@@ -35,7 +35,7 @@ END
 }
 render_stp=conf_stp_core_vlan
 
-conf_stp_interfaces_vlan () {
+conf_interfaces_core_vlan () {
   trunk GigabitEthernet0/1 1,2,10-12,1002-1005 "Trunk Link to dist1-b1.campus${CAMPUS}"
   trunk GigabitEthernet0/2 1,2,20-22,1002-1005 "Trunk Link to dist1-b2.campus${CAMPUS}"
   cat <<END
@@ -58,6 +58,6 @@ interface Vlan20
  no shutdown
 END
 }
-render_interfaces=conf_stp_interfaces_vlan
+render_interfaces=conf_interfaces_core_vlan
 
 return 2>/dev/null || render "$@"

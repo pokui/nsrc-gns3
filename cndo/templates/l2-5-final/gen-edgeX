@@ -1,49 +1,20 @@
 #!/bin/bash -eu
-DEV=$1
-BUILDING=$2
-CAMPUS=$3
+. l2-4-vlan/gen-edgeX
 
-. address-mappings
+conf_stp_edge_l2final () {
+cat <<END
+!
+spanning-tree portfast bpduguard
+!
+spanning-tree vlan ${BUILDING}0 priority ${PRIORITY}
+spanning-tree vlan ${BUILDING}1 priority ${PRIORITY}
+spanning-tree vlan ${BUILDING}2 priority ${PRIORITY}
+END
+}
+render_stp=conf_stp_edge_l2final
 
-case ${BUILDING} in
-  1)
-      IPV4_ADDRESS="${CAMPUS_BLD1_V4_MGMT_SUBNET}.$((2 + ${DEV}))"
-      IPV6_ADDRESS="${CAMPUS_BLD1_V6_MGMT_SUBNET}::$((2 + ${DEV}))"
-  ;;
-  2)
-      IPV4_ADDRESS="${CAMPUS_BLD2_V4_MGMT_SUBNET}.$((2 + ${DEV}))"
-      IPV6_ADDRESS="${CAMPUS_BLD2_V6_MGMT_SUBNET}::$((2 + ${DEV}))"
-  ;;
-esac
-
-PRIORITY=24576
-
-cat <<EOM
-hostname edge${DEV}-b${BUILDING}.campus${CAMPUS}
-!
-aaa new-model
-aaa authentication login default local
-aaa authentication enable default enable
-!
-no logging console
-logging buffered 8192 debugging
-ipv6 unicast-routing
-ipv6 cef
-no ip domain-lookup
-ip domain name ws.nsrc.org
-!
-username cndlab secret lab-PW
-enable secret lab-EN
-service password-encryption
-!
-vtp mode off
-!
-vlan ${BUILDING}0
- name MGMT${BUILDING}
-vlan ${BUILDING}1
- name STAFF${BUILDING}
-vlan ${BUILDING}2
- name STUDENT${BUILDING}
+conf_interfaces_edge_l2final() {
+  cat <<END
 !
 interface Vlan 1
  shutdown
@@ -54,12 +25,6 @@ interface Vlan${BUILDING}0
  ipv6 address ${IPV6_ADDRESS}/64
  load-interval 30
  no shut
-!
-spanning-tree portfast bpduguard
-!
-spanning-tree vlan ${BUILDING}0 priority ${PRIORITY}
-spanning-tree vlan ${BUILDING}1 priority ${PRIORITY}
-spanning-tree vlan ${BUILDING}2 priority ${PRIORITY}
 !
 interface range GigabitEthernet1/0 - 3
  description Access Port VLAN ${BUILDING}1 STAFF
@@ -76,11 +41,11 @@ interface range GigabitEthernet2/0 - 3
  spanning-tree portfast
  load-interval 30
  no shut
-!
-EOM
+END
 
-case ${DEV} in
+  case ${DEV} in
   1) cat <<EOM
+!
 interface Port-channel1
  description LAG to Distribution Switch
  switchport trunk allowed vlan 1,2,${BUILDING}0-${BUILDING}2,1002-1005
@@ -97,12 +62,12 @@ interface GigabitEthernet0/1
  channel-group 1 mode on
  load-interval 30
  no shut
-!
 EOM
   ;;
-esac
+  esac
 
-cat <<EOM
+  cat <<EOM
+!
 interface GigabitEthernet0/0
  description Trunk Port to dist1-b${BUILDING}.campus${CAMPUS}
  switchport trunk allowed vlan 1,2,${BUILDING}0-${BUILDING}2,1002-1005
@@ -110,27 +75,16 @@ interface GigabitEthernet0/0
  switchport mode trunk
  load-interval 30
 EOM
-case ${DEV} in
+  case ${DEV} in
   1) cat <<EOM
  channel-group 1 mode on
 EOM
   ;;
-esac
-
-cat <<EOM
+  esac
+  cat <<EOM
  no shut
-!
-line con 0
- exec-timeout 0 0
- transport preferred none
- stopbits 1
-line aux 0
- exec-timeout 0 0
- transport preferred none
- stopbits 1
-line vty 0 4
- exec-timeout 0 0
- transport preferred none
-!
-end
 EOM
+}
+render_interfaces=conf_interfaces_edge_l2final
+
+return 2>/dev/null || render_routed "$@"
