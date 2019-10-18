@@ -2,9 +2,9 @@
 . address-base
 
 render () {
-    DEV="$1"
+    #ignored: DEV="$1"
     CAMPUS="$2"
-    HOSTNAME="bdr${DEV}.campus${CAMPUS}"
+    HOSTNAME="bdr1.campus${CAMPUS}"
     . address-mappings
     NREN_V4_HOST="$((4 * ${CAMPUS} - 2))"
     NREN_V4_NET="$((4 * ${CAMPUS} - 4))"

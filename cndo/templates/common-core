@@ -2,9 +2,9 @@
 . address-base
 
 render () {
-    DEV="$1"
+    #ignored: DEV="$1"
     CAMPUS="$2"
-    HOSTNAME="core${DEV}.campus${CAMPUS}"
+    HOSTNAME="core1.campus${CAMPUS}"
     . address-mappings
     conf_all
 }
