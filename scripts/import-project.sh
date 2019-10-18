@@ -1,13 +1,14 @@
 #!/bin/bash -eu
 
-# Given a new XXXX.gns3project:
-# - remove all the qemu and dynamips differencing files and any snapshots
-# - unpack the contents
-# - reformat the JSON
+# Import a gns3 project file (in same way as a portable project would do)
+# and reformat the JSON.
 # This makes it store nicely in git and let us see differences.
 
-PROJFILE="${1}"
+GNS3FILE="${1}"
 
-unzip -o "$PROJFILE" -x 'project-files/*' 'snapshots/*'
-python3 -m json.tool --sort-keys "project.gns3" "project.gns3.new"
-mv "project.gns3.new" "project.gns3"
+if [ ! -f "$GNS3FILE" ]; then
+  echo "Missing file: $GNS3FILE"
+  exit 1
+fi
+python3 -m json.tool --sort-keys "$GNS3FILE" >project.gns3
+cp "$(dirname "$GNS3FILE")/README.txt" README.txt
