@@ -73,8 +73,6 @@ for i, node in enumerate(gns3["topology"]["nodes"]):
     startup = rc.stdout
     # Convert config to nvram format
     nvram = nvram_import(None, startup, None, 512)
-    with open(os.path.join(tmp_dir, "%s.config" % name), "wb") as f:
-        f.write(startup)
     with open(os.path.join(tmp_dir, "%s.nvram" % name), "wb") as f:
         f.write(nvram)
     label = ("%d" % i).translate(MAPPING)  # can only contain a-zA-Z
@@ -98,7 +96,6 @@ for name, uuid, prop, label in configs:
     gfcmd.extend([
         "mount", "/dev/disk/guestfs/%s1" % label, "/", ":",
         "upload", os.path.join(tmp_dir, "%s.nvram" % name), "/nvram", ":",
-        "upload", os.path.join(tmp_dir, "%s.config" % name), "/ios_config.txt", ":",
         "umount", "/", ":",
     ])
 subprocess.run(gfcmd, check=True)
