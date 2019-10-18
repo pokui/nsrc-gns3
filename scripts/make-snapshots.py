@@ -27,9 +27,7 @@ for config in os.listdir("templates"):
         continue
     # Delete old snapshots
     for snap in snaps:
-        rc = subprocess.run(["git", "rm", snap])
-        if rc.returncode != 0:
-            rc = subprocess.run(["rm", snap])
+        os.unlink(snap)
     # Generate new snapshot
     if len(jobs) >= MAX_JOBS:
         rc = jobs.pop(0).wait()
