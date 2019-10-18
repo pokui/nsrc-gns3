@@ -8,7 +8,6 @@
 
 PROJFILE="${1}"
 
-zip -d "$PROJFILE" 'project-files/*' 'snapshots/*' || true
-unzip -o "$PROJFILE"
+unzip -o "$PROJFILE" -x 'project-files/*' 'snapshots/*'
 python3 -m json.tool --sort-keys "project.gns3" "project.gns3.new"
 mv "project.gns3.new" "project.gns3"
