@@ -1,7 +1,7 @@
 # Install virsh/libvirt
 
-GNS3 networking requires the bridge "virbr0" set up by virsh/libvirt.  So
-install it:
+GNS3 networking requires the bridge "virbr0" set up by virsh/libvirt.
+Install it:
 
 ```
 sudo apt-get install virsh
@@ -84,7 +84,7 @@ following instructions as required.
 
 ## Identify your WAN interface
 
-Now plug in your USB3 adapter, and type `dmesg` or `ip link list` to
+Now plug in your USB3 adapter, and type `dmesg` and `ip link list` to
 identify it.  It will probably get a name with its MAC address embedded,
 like `enx00e04c063260`.  Copy this name: you'll need it shortly.
 
@@ -192,7 +192,7 @@ This should allow the system to continue booting when any one interface
 comes up, or after 15 seconds.
 
 For [older systems](https://unix.stackexchange.com/questions/186162/how-to-change-timeout-in-systemctl)
-using "ifupdown" (e.g. Ubuntu 16.04) there's a different process:
+using "ifupdown" (e.g. Ubuntu 16.04) there's a different file:
 
 ```
 sudo systemctl edit networking

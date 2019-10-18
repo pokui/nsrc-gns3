@@ -29,7 +29,7 @@ cause VM images to be corrupted, if the OS prober finds them.  (This is
 unlikely to affect you unless you're using LVM volumes).
 
 The second is helpful for a "headless" system.  There is a feature in Ubuntu
-whereby if a boot doesn't complete fully for any reason, then then ext boot
+whereby if a boot doesn't complete fully for any reason, then the next boot
 hangs indefinitely at the grub menu waiting for a keypress.  We don't want
 this to happen when we don't have a keyboard and screen connected.
 
@@ -62,8 +62,8 @@ PasswordAuthentication yes
 ```
 
 This means you'll be able to use password authentication when connecting on
-the local LAN, but access over the WAN will be restricted to public/private
-key authentication.
+the local LAN, but access from the Internet will be restricted to
+public/private key authentication.
 
 After this change, restart the ssh service:
 

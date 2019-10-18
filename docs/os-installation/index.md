@@ -9,13 +9,13 @@ Install Ubuntu Linux 18.04, server edition.
 
 Ubuntu 16.04 *might* work with these instructions, but has not been tested,
 and some changes may be required (e.g.  network configuration).  Earlier
-versions are unlikely to work.
+versions are unlikely to work and already end-of-life.
 
 Desktop edition will probably work, but since you are likely to be running
 "headless" with no keyboard and display attached, the GUI is unlikely to be
-of benefit.  It will consume additional resources, which may mean that you
-run out of RAM.  Furthermore, the GUI comes with NetworkManager by default,
-and this may interfere with your network configuration.
+of benefit.  It will consume additional resources, which means less RAM
+available for the labs.  Furthermore, the GUI comes with NetworkManager by
+default, and this may interfere with your network configuration.
 
 Don't use any non-LTS version, e.g. 19.04 or 19.10.  These have very short
 support lifetimes and you will need to reinstall them within 9 months.
