@@ -57,7 +57,7 @@ interface GigabitEthernet0/0
  load-interval 30
  no shut
 !
-interface GigabitEthernet1/0
+interface GigabitEthernet0/1
  description Trunk Link to edge1-b${BUILDING}.campus${CAMPUS}
  switchport trunk allowed vlan 1,2,${BUILDING}0-${BUILDING}2,1002-1005
  switchport trunk encapsulation dot1q
@@ -66,7 +66,7 @@ interface GigabitEthernet1/0
  load-interval 30
  no shut
 !
-interface GigabitEthernet1/1
+interface GigabitEthernet0/2
  description Trunk Link to edge1-b${BUILDING}.campus${CAMPUS}
  switchport trunk allowed vlan 1,2,${BUILDING}0-${BUILDING}2,1002-1005
  switchport trunk encapsulation dot1q
@@ -75,7 +75,7 @@ interface GigabitEthernet1/1
  load-interval 30
  no shut
 !
-interface GigabitEthernet2/0
+interface GigabitEthernet0/3
  description Trunk Link to edge2-b${BUILDING}.campus${CAMPUS}
  switchport trunk allowed vlan 1,2,${BUILDING}0-${BUILDING}2,1002-1005
  switchport trunk encapsulation dot1q
