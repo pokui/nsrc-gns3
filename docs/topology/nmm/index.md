@@ -13,6 +13,9 @@ RAM, sufficient to run multiple NMM tools.  The total memory usage is again 27GB
 
 ![NMM campus](nmm-campus.png)
 
+The core and distribution switches are configured with 4 interfaces, as
+opposed to 16 in CNDO.  This reduces the amount of work for LibreNMS to do.
+
 # Files
 
 You will need the following files:
