@@ -102,7 +102,7 @@ sudo apt-get install ca-certificates apt-transport-https
 echo 'deb http://www.ui.com/downloads/unifi/debian stable ubiquiti' | sudo tee /etc/apt/sources.list.d/100-ubnt-unifi.list
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv 06E85760C0A52C50
 sudo apt-get update
-sudo apt-get install unifi
+sudo apt-get install openjdk-8-jre-headless unifi
 ```
 
 You should then be able to access it at <https://noc.ws.nsrc.org:8443/>
