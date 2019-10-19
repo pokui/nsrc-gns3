@@ -83,7 +83,8 @@ won't work.
 
 Inside the labs, address space is taken from 100.64.0.0/10.  This "looks
 like" public IP space, but is actually reserved space from
-[RFC 6598](https://tools.ietf.org/html/rfc6598).
+[RFC 6598](https://tools.ietf.org/html/rfc6598).  IPv6 uses 2001:db8::/32,
+the documentation prefix.
 
 # Out-of-band management
 
