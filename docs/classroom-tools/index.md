@@ -101,7 +101,7 @@ Unifi under Ubuntu 16.04, ssh to noc.ws.nsrc.org and run:
 sudo apt-get install ca-certificates apt-transport-https
 echo 'deb http://www.ui.com/downloads/unifi/debian stable ubiquiti' | sudo tee /etc/apt/sources.list.d/100-ubnt-unifi.list
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv 06E85760C0A52C50
-sidp apt-get update
+sudo apt-get update
 sudo apt-get install unifi
 ```
 
