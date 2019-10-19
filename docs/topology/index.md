@@ -109,10 +109,8 @@ because of apt-cacher-ng.
 
 # Cloud-init
 
-In some topologies there are multiple small disk images to download.
-
-The reason for this is that the Ubuntu VMs (such as srv1 in the CNDO and NMM
-topologies) have two virtual disks attached.
+The Ubuntu VMs (such as srv1 in the CNDO and NMM topologies) have two
+virtual disks attached.
 
 The first is the VM image itself, which can be quite large, but is shared by
 all instances of the VM.
@@ -122,6 +120,6 @@ read when the VM first boots, and is responsible for configuring the VM's
 static IP address and creating the default username and password (which are
 not hard-coded in the image itself).
 
-If the VM appears multiple times in the same topology, this means a separate
-cloud-init image is needed for each instance to come up on the correct IP
-address.
+When the VM appears multiple times in the same topology, this means a
+separate cloud-init image is needed for each instance to come up on the
+correct IP address.
