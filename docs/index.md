@@ -4,16 +4,31 @@ This guide describes how to build and use NSRC's GNS3-based virtual training pla
 
 # Overview
 
-TODO
+This is a standalone environment providing "hands-on" lab exercises for a
+networking classroom, using virtualized routers, switches and servers
+running inside a single physical server.
+
+![Class Server](class-server.png)
+
+Different network topologies can be loaded to support the requirements of
+different training courses.
+
+The platform integrates with a wired or wireless access network, so students
+can directly access and interact with the resources inside the platform. 
+The platform is administered by the instructor and can be reset to a
+known-good state in preparation for each training course.
 
 # Dependencies
+
+A physical server is required, as described in the [hardware](hardware/)
+section.
 
 We recommend that the lab has an external Internet connection, as this will
 allow students to access the Internet when connected to the class network.
 
 However, the platform is designed so that if the external Internet connection
-is lost, the labs can continue unaffected.  The platform provides local DNS
-and routing.
+is lost, the labs can continue unaffected.  The platform provides local DNS,
+DHCP and routing for the class network.
 
 # Licensing
 
