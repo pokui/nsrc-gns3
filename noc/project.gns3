@@ -120,8 +120,8 @@
                     "cdrom_image_md5sum": null,
                     "cpu_throttling": 0,
                     "cpus": 4,
-                    "hda_disk_image": "nsrc-nmm-20191009-048ba8d5.qcow2",
-                    "hda_disk_image_md5sum": "048ba8d5d719a4ccc64e02b715767c10",
+                    "hda_disk_image": "nsrc-nmm-20191022-0a8a0d37.qcow2",
+                    "hda_disk_image_md5sum": "0a8a0d37760e277b82718501c907490b",
                     "hda_disk_interface": "virtio",
                     "hdb_disk_image": "noc-hdb-20191010-f926c0f8.img",
                     "hdb_disk_image_md5sum": "f926c0f80aa2d644e5dae002328ddfd0",
@@ -160,5 +160,5 @@
     "type": "topology",
     "variables": [],
     "version": "2.2.0",
-    "zoom": 100
+    "zoom": 142
 }
