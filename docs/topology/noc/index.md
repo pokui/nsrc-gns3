@@ -46,6 +46,7 @@ shared.
   hand, you might want to protect it from being damaged by students.
 * nagios login: `nagiosadmin` and `nsrc+ws`
 * LibreNMS login: <http://librenms.ws.nsrc.org/>, `admin` and `nsrc+ws`
+* cacti login: `admin` and `admin`, it then prompts for password change
 * RT login: `root` and `nsrc+ws`
 * mysql root password: `nsrc+ws`
 
