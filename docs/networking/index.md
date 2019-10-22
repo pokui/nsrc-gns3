@@ -101,9 +101,10 @@ ls
 Edit this file and *remove* all references to "eno1" (or your LAN adapter).
 They'll be configured by a script instead.
 
-*Add* a configuration for your new interface, with DHCP enabled.
+*Add* a configuration for your new interface, with DHCP enabled, and
+`optional: true` so that booting is not delayed if it's not plugged in.
 
-When you've finished, it should look like this:
+When you've finished, it should look something like this:
 
 ```
 network:
@@ -178,7 +179,7 @@ It's a good idea to reduce this timeout as follows:
 sudo systemctl edit systemd-networkd-wait-online
 ```
 
-This will put you into an editor.  Enter the following:
+This will put you into an editor.  Paste in the following:
 
 ```
 [Service]
@@ -186,7 +187,16 @@ ExecStart=
 ExecStart=/lib/systemd/systemd-networkd-wait-online --any --timeout=15
 ```
 
-then exit and save.  Make sure the capitalization is exactly correct.
+!!! Warning
+    Make sure the capitalization is exactly correct
+
+!!! Note
+    The line which clears `ExecStart` is required.  This is because it is an
+    [additive](https://askubuntu.com/questions/659267/how-do-i-override-or-configure-systemd-services)
+    setting, but multiple values are not permitted other than for
+    "OneShot" services
+
+Exit and save.
 
 This should allow the system to continue booting when any one interface
 comes up, or after 15 seconds.

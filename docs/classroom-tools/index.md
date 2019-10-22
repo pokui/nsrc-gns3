@@ -60,8 +60,7 @@ ExecStart=
 ExecStart=/usr/bin/syncthing -no-browser -no-restart -logflags=0 -gui-address=[::]:8384
 ```
 
-(Note that you have to explicitly clear `ExecStart` because it is an
-additive value, but can only have one value).  Save, and restart:
+Save, and restart:
 
 ```
 sudo systemctl restart syncthing@nsrc
