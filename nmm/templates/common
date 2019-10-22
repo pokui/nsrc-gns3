@@ -37,6 +37,7 @@ conf_head_default () {
 cat <<END
 hostname $HOSTNAME
 !
+logging userinfo
 no logging console
 logging buffered 8192 debugging
 !
@@ -54,6 +55,7 @@ conf_head_ssh () {
 cat <<END
 hostname $HOSTNAME
 !
+logging userinfo
 no logging console
 logging buffered 8192 debugging
 !

@@ -5,6 +5,8 @@ conf_static_transit_bgp () {
 !
 ip route 0.0.0.0 0.0.0.0 ${WS_V4_SUBNET}.1
 !
+logging facility local0
+logging host 192.168.122.250
 ipv6 route ::/0 ${WS_V6_SUBNET}::1
 END
 }

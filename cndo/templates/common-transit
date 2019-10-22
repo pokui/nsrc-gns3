@@ -74,6 +74,8 @@ conf_static_transit () {
     echo "ip route 100.68.${CAMPUS}.0 255.255.255.0 ${NREN_V4_SUBNET}.$((4 * LINKNET - 2))"
   done
   echo "!"
+  echo "logging facility local0"
+  echo "logging host 192.168.122.250"
   echo "ipv6 route ::/0 ${WS_V6_SUBNET}::1"
   for CAMPUS in $(seq "$NUM_CAMPUS"); do
     LINKNET="$((CAMPUS + (DEV-1)*32))"
