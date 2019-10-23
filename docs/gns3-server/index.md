@@ -87,13 +87,9 @@ Temporarily stop gns3:
 sudo systemctl stop gns3-server@nsrc
 ```
 
-As the NSRC user, check that it has created a configuration file:
-
-```shell
-cat /home/nsrc/.config/GNS3/2.2/gns3_server.conf
-```
-
-Edit this file.  You need to point it to the images directory you just made.
+As the "nsrc" user, create configuration file
+`/home/nsrc/.config/GNS3/2.2/gns3_server.conf` to tell GNS3 to use
+the directory you just made.
 
 ```
 [Server]
