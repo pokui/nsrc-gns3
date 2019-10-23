@@ -72,37 +72,6 @@ to you.  You could:
 You should also install a HTML page at `/var/www/html/index.html` which links
 to all the tools.  You can use [this sample](noc-index.html) as a base.
 
-# LibreNMS fixes
-
-(Should be fixed in a future release)
-
-!!! Warning
-    Do the following inside the NOC VM
-
-    Login using `ssh sysadm@noc.ws.nsrc.org` (or `ssh sysadm@192.168.122.250`)
-
-Edit `/etc/apache2/sites-available/librenms.conf` and change
-
-```
-  ServerAlias librenms.*.ws.nsrc.org
-```
-
-to
-
-```
-  ServerAlias librenms.*
-```
-
-followed by `sudo systemctl reload apache2`
-
-Next: for some reason php7.2 and php7.3 are both installed; apache is using
-7.2 but the cronjobs are using 7.3, which means that discovery doesn't work. 
-To fix:
-
-```shell
-sudo update-alternatives --set php /usr/bin/php7.2
-```
-
 # snmpd
 
 To allow your physical host to be monitored by LibreNMS, install
@@ -205,4 +174,3 @@ To make this even more useful, you can arrange that:
 These options are available under `File > Edit Project` in the GNS3 client.
 
 ![GNS3 project options](noc-persistence.png)
-
