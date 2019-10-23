@@ -87,7 +87,7 @@ like `enx00e04c063260`.  Copy this name: you'll need it shortly.
 ## Reconfigure netplan
 
 Find your netplan config file.  It may be called something like
-`/etc/netplan/1-netplan.yml`
+`/etc/netplan/1-netplan.yaml`
 
 ```
 cd /etc/netplan
@@ -180,7 +180,7 @@ This will put you into an editor.  Paste in the following:
 ```
 [Service]
 ExecStart=
-ExecStart=/lib/systemd/systemd-networkd-wait-online --any --timeout=15
+ExecStart=/lib/systemd/systemd-networkd-wait-online --timeout=15
 ```
 
 !!! Warning
@@ -193,9 +193,6 @@ ExecStart=/lib/systemd/systemd-networkd-wait-online --any --timeout=15
     "OneShot" services
 
 Exit and save.
-
-This should allow the system to continue booting when any one interface
-comes up, or after 15 seconds.
 
 For [older systems](https://unix.stackexchange.com/questions/186162/how-to-change-timeout-in-systemctl)
 using "ifupdown" (e.g. Ubuntu 16.04) there's a different file:
