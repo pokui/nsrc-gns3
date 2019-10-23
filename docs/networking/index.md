@@ -11,18 +11,18 @@ This should install a number of packages as dependencies, including
 bridge-utils, libvirt and qemu.
 
 Now logout and log back in again as the "nsrc" user.  Check that you are in
-the "kvm" and "libvirtd" groups using the `id` command:
+the "kvm" and "libvirt" groups using the `id` command:
 
 ```
 nsrc@brian-kit:~$ id
-uid=1000(nsrc) gid=1000(nsrc) groups=1000(nsrc), ... 117(kvm),118(libvirtd)
+uid=1000(nsrc) gid=1000(nsrc) groups=1000(nsrc), ... 117(kvm),118(libvirt)
 ```
 
 (the actual numbers may be different).  If not, then add yourself to these
 groups:
 
 ```
-sudo usermod -a -G kvm,libvirtd nsrc
+sudo usermod -a -G kvm,libvirt nsrc
 ```
 
 Logout and login again, and check with `id` again.
