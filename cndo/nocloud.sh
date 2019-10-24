@@ -111,6 +111,8 @@ write_files:
       # Loose reverse path filtering (traffic from 192.168.122 address may come in via $ETH0)
       net.ipv4.conf.all.rp_filter=2
 runcmd:
+  # YAML doesn't need escaping of backslash, but shell (cat <<END2) does
+  - sed -i'' -r -e 's#(\\\\h)([^.])#\\1.campus$i\\2#g' /etc/profile /etc/bash.bashrc /etc/skel/.bashrc /root/.bashrc /home/*/.bashrc
   - '[ -d /etc/network/if-up.d ] && ln -s /etc/networkd-dispatcher/routable.d/50-backdoor /etc/network/if-up.d/backdoor'
   - IFACE=$ETH1 /etc/networkd-dispatcher/routable.d/50-backdoor  #on first boot only
   - sysctl -p /etc/sysctl.d/90-rpf.conf

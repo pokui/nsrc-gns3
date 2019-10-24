@@ -127,6 +127,8 @@ write_files:
       # Loose reverse path filtering (traffic from 192.168.122 address may come in via br0)
       net.ipv4.conf.all.rp_filter=2
 runcmd:
+  # YAML doesn't need escaping of backslash, but shell (cat <<EOS) does
+  - sed -i'' -r -e 's#(\\\\h)([^.])#\\1.campus$i\\2#g' /etc/profile /etc/bash.bashrc /etc/skel/.bashrc /root/.bashrc /home/*/.bashrc
   - DEBIAN_FRONTEND=noninteractive fix-hostname $FQDN
   - '[ -d /etc/network/if-up.d ] && ln -s /etc/networkd-dispatcher/routable.d/50-backdoor /etc/network/if-up.d/backdoor'
   - IFACE=br1 /etc/networkd-dispatcher/routable.d/50-backdoor  #on first boot only
@@ -221,6 +223,8 @@ runcmd:
           # Loose reverse path filtering (traffic from 192.168.122 address may come in via eth0)
           net.ipv4.conf.all.rp_filter=2
     runcmd:
+      # Additional level of escaping required
+      - sed -i'' -r -e 's#(\\\\\\\\h)([^.])#\\\\1.campus$i\\\\2#g' /etc/profile /etc/bash.bashrc /etc/skel/.bashrc /root/.bashrc /home/*/.bashrc
       - DEBIAN_FRONTEND=noninteractive fix-hostname \$HOST_FQDN
       - '[ -d /etc/network/if-up.d ] && ln -s /etc/networkd-dispatcher/routable.d/50-backdoor /etc/network/if-up.d/backdoor'
       - IFACE=eth1 /etc/networkd-dispatcher/routable.d/50-backdoor  #on first boot only
