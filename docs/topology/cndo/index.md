@@ -34,7 +34,6 @@ File | Description
 `vios-adventerprisek9-m.vmdk.SPA.157-3.M3` | IOSv image
 `vios_l2-adventerprisek9-m.SSA.high_iron_20180619.qcow2` | IOSvL2 image
 `ubuntu-16.04-server-cloudimg-amd64-disk1-20191002.1.img` | Ubuntu Cloud image
-`IOSv_startup_config.img` | empty config disk for IOSv
 `cndo-srv1-campus<N>-hdb-<version>.img` (x 6) | cloud-init configs for srv1 in each campus
 
 # Device software

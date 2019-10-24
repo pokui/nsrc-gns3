@@ -26,7 +26,6 @@ File | Description
 `vios-adventerprisek9-m.vmdk.SPA.157-3.M3` | IOSv image - same as CNDO
 `vios_l2-adventerprisek9-m.SSA.high_iron_20180619.qcow2` | IOSvL2 image - same as CNDO
 `nsrc-nmm-<version>.qcow2` | the VM image with NMM tools pre-installed - same as NOC
-`IOSv_startup_config.img` | empty config disk for IOSv - same as CNDO
 `nmm-srv1-campus<N>-hdb-<version>.img` (x 6) | cloud-init configs for srv1 in each campus
 
 # lxd containers
