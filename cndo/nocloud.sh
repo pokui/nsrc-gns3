@@ -106,9 +106,14 @@ write_files:
         ip route add 192.168.122.0/24 dev $ETH1  proto kernel  scope link  src $BACKDOOR  table backdoor
         ip route flush cache
       fi
+  - path: /etc/sysctl.d/90-rpf.conf
+    content: |
+      # Loose reverse path filtering (traffic from 192.168.122 address may come in via $ETH0)
+      net.ipv4.conf.all.rp_filter=2
 runcmd:
   - '[ -d /etc/network/if-up.d ] && ln -s /etc/networkd-dispatcher/routable.d/50-backdoor /etc/network/if-up.d/backdoor'
   - IFACE=$ETH1 /etc/networkd-dispatcher/routable.d/50-backdoor  #on first boot only
+  - sysctl -p /etc/sysctl.d/90-rpf.conf
 final_message: NSRC welcomes you to CNDO!
 EOS
   yamllint -d relaxed "$TMPDIR/user-data"

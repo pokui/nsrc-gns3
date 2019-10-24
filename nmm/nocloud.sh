@@ -122,10 +122,15 @@ write_files:
         ip route add 192.168.122.0/24 dev br1  proto kernel  scope link  src $BACKDOOR  table backdoor
         ip route flush cache
       fi
+  - path: /etc/sysctl.d/90-rpf.conf
+    content: |
+      # Loose reverse path filtering (traffic from 192.168.122 address may come in via br0)
+      net.ipv4.conf.all.rp_filter=2
 runcmd:
   - DEBIAN_FRONTEND=noninteractive fix-hostname $FQDN
   - '[ -d /etc/network/if-up.d ] && ln -s /etc/networkd-dispatcher/routable.d/50-backdoor /etc/network/if-up.d/backdoor'
   - IFACE=br1 /etc/networkd-dispatcher/routable.d/50-backdoor  #on first boot only
+  - sysctl -p /etc/sysctl.d/90-rpf.conf
   - lxc profile create bridged
   - |
     lxc profile edit bridged <<EOS
@@ -211,10 +216,15 @@ runcmd:
             ip route add 192.168.122.0/24 dev eth1  proto kernel  scope link  src \$HOST_BACKDOOR  table backdoor
             ip route flush cache
           fi
+      - path: /etc/sysctl.d/90-rpf.conf
+        content: |
+          # Loose reverse path filtering (traffic from 192.168.122 address may come in via eth0)
+          net.ipv4.conf.all.rp_filter=2
     runcmd:
       - DEBIAN_FRONTEND=noninteractive fix-hostname \$HOST_FQDN
       - '[ -d /etc/network/if-up.d ] && ln -s /etc/networkd-dispatcher/routable.d/50-backdoor /etc/network/if-up.d/backdoor'
       - IFACE=eth1 /etc/networkd-dispatcher/routable.d/50-backdoor  #on first boot only
+      - sysctl -p /etc/sysctl.d/90-rpf.conf
     END2
       lxc start host\$h
     done
