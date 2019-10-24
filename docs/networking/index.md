@@ -126,7 +126,8 @@ if [ "$1" = "default" -a "$2" = "started" ]; then
   /sbin/brctl addif virbr0 eno1
   iptables -I FORWARD -j ACCEPT -s 100.64.0.0/10 -i virbr0
   iptables -I FORWARD -j ACCEPT -d 100.64.0.0/10 -o virbr0 -m conntrack --ctstate RELATED,ESTABLISHED
-  iptables -t nat -A POSTROUTING -j MASQUERADE -s 100.64.0.0/10 '!' -d 100.64.0.0/10
+  iptables -t nat -I POSTROUTING -j RETURN -o virbr0
+  iptables -t nat -A POSTROUTING -j MASQUERADE -s 100.64.0.0/10
 fi
 ```
 
