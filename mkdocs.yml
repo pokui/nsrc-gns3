@@ -23,4 +23,5 @@ nav:
   - 'Console access': 'console/index.md'
   - 'GNS3 Management': 'management/index.md'
   - 'Classroom Tools': 'classroom-tools/index.md'
+  - 'Technical Background': 'technical-background/index.md'
   - 'Unusual Configurations': 'unusual-configurations/index.md'

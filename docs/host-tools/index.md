@@ -1,6 +1,19 @@
 
 Some additional services are required on the host.
 
+# DNS
+
+DNS for the lab environment is handled by dnsmasq (which also provides the
+class DHCP service).
+
+To add the DNS entries needed by the labs, you install a "hosts" file.  DNS
+requests matching this file are intercepted by dnsmasq and served locally.
+
+The hosts file we provide is called `hosts-cndo-nmm`.  You can replace your
+server's existing `/etc/hosts` entirely with this file, or append it to the
+end if there's anything else you want to keep.  The contents are available
+to the students and VMs inside the labs, as well as to the host itself.
+
 # apt-cacher-ng
 
 All the student VMs are configured to fetch packages via a proxy on
