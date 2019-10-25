@@ -69,6 +69,17 @@ IP Address      | DNS Name
 
 See the training materials for the addressing plan used inside the network.
 
+# Credentials
+
+The student routers have username `cndlab`, password `lab-PW`, enable `lab-EN`
+(except in the initial state "l2-0-blank", when they are unconfigured)
+
+The transit routers have username `nsrc`, password `lab-PW`, enable
+`lab-EN`.
+
+The srv1 Ubuntu servers are initialized with username `sysadm`, password
+`nsrc+ws`
+
 # Snapshots
 
 There are pre-generated snapshots for many different stages of the lab. 
@@ -85,14 +96,3 @@ GNS3 client.  Beware that when you restore from a snapshot it will reset
 *all* of the devices - including the Linux servers - and you will also lose
 any changes you've made to the network topology itself.  This is useful if
 you've accidentally deleted a device!
-
-# Credentials
-
-The student routers have username `cndlab`, password `lab-PW`, enable `lab-EN`
-(except in the initial state "l2-0-blank", when they are unconfigured)
-
-The transit routers have username `nsrc`, password `lab-PW`, enable
-`lab-EN`.
-
-The srv1 Ubuntu servers are initialized with username `sysadm`, password
-`nsrc+ws`
