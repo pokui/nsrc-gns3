@@ -1,4 +1,4 @@
-# Install gns3 server
+# Install GNS3 server
 
 ```shell
 sudo add-apt-repository ppa:gns3/ppa

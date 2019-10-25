@@ -32,5 +32,4 @@ required.
     You may end up with multiple projects because of the failed ones -
     e.g. `nmm`, `nmm-1`, `nmm-2` etc.  You can delete the old ones by going
     to `File > Open Project` and selecting each of the previous ones and
-    clicking Delete.  The final one can be renamed using `File > Edit
-    Project`
+    clicking Delete.  The final one can be renamed using `File > Edit Project`
