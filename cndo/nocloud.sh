@@ -90,6 +90,15 @@ write_files:
   - path: /etc/apt/apt.conf.d/99proxy
     content: |
       Acquire::http::Proxy "http://192.168.122.1:3142/";
+  - path: /etc/network/if-pre-up.d/fix-v6-gateway
+    permissions: '0755'
+    content: |
+      #!/bin/sh
+      # Fix for v6 default gateway picked up from RA then vanishing after 30 minutes
+      if [ "\$IFACE" = "$ETH0" ]; then
+        sysctl net.ipv6.conf.$ETH0.accept_ra=0
+        ip -6 route delete ::/0 dev $ETH0 || true
+      fi
   # Policy routing so inbound traffic to 192.168.122.x always returns via same interface
   - path: /etc/iproute2/rt_tables
     append: true
@@ -114,7 +123,7 @@ runcmd:
   # YAML doesn't need escaping of backslash, but shell (cat <<END2) does
   - sed -i'' -r -e 's#(\\\\h)([^.])#\\1.campus$i\\2#g' /etc/profile /etc/bash.bashrc /etc/skel/.bashrc /root/.bashrc /home/*/.bashrc
   - '[ -d /etc/network/if-up.d ] && ln -s /etc/networkd-dispatcher/routable.d/50-backdoor /etc/network/if-up.d/backdoor'
-  - IFACE=$ETH1 /etc/networkd-dispatcher/routable.d/50-backdoor  #on first boot only
+  - IFACE=$ETH1 /etc/networkd-dispatcher/routable.d/50-backdoor
   - sysctl -p /etc/sysctl.d/90-rpf.conf
 final_message: NSRC welcomes you to CNDO!
 EOS

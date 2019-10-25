@@ -106,6 +106,15 @@ write_files:
   - path: /etc/apt/apt.conf.d/99proxy
     content: |
       Acquire::http::Proxy "http://192.168.122.1:3142/";
+  - path: /etc/network/if-pre-up.d/fix-v6-gateway
+    permissions: '0755'
+    content: |
+      #!/bin/sh
+      # Fix for v6 default gateway picked up from RA then vanishing after 30 minutes
+      if [ "\$IFACE" = "br0" ]; then
+        sysctl net.ipv6.conf.br0.accept_ra=0
+        ip -6 route delete ::/0 dev br0 || true
+      fi
   # Policy routing so inbound traffic to 192.168.122.x always returns via same interface
   - path: /etc/iproute2/rt_tables
     append: true
@@ -131,7 +140,7 @@ runcmd:
   - sed -i'' -r -e 's#(\\\\h)([^.])#\\1.campus$i\\2#g' /etc/profile /etc/bash.bashrc /etc/skel/.bashrc /root/.bashrc /home/*/.bashrc
   - DEBIAN_FRONTEND=noninteractive fix-hostname $FQDN
   - '[ -d /etc/network/if-up.d ] && ln -s /etc/networkd-dispatcher/routable.d/50-backdoor /etc/network/if-up.d/backdoor'
-  - IFACE=br1 /etc/networkd-dispatcher/routable.d/50-backdoor  #on first boot only
+  - IFACE=br1 /etc/networkd-dispatcher/routable.d/50-backdoor
   - sysctl -p /etc/sysctl.d/90-rpf.conf
   - lxc profile create bridged
   - |
@@ -202,6 +211,15 @@ runcmd:
       - path: /etc/apt/apt.conf.d/99proxy
         content: |
           Acquire::http::Proxy "http://192.168.122.1:3142/";
+      - path: /etc/network/if-pre-up.d/fix-v6-gateway
+        permissions: '0755'
+        content: |
+          #!/bin/sh
+          # Fix for v6 default gateway picked up from RA then vanishing after 30 minutes
+          if [ "\\\$IFACE" = "eth0" ]; then
+            sysctl net.ipv6.conf.eth0.accept_ra=0
+            ip -6 route delete ::/0 dev eth0 || true
+          fi
       # Policy routing so inbound traffic to 192.168.122.x always returns via same interface
       - path: /etc/iproute2/rt_tables
         append: true
@@ -227,7 +245,9 @@ runcmd:
       - sed -i'' -r -e 's#(\\\\\\\\h)([^.])#\\\\1.campus$i\\\\2#g' /etc/profile /etc/bash.bashrc /etc/skel/.bashrc /root/.bashrc /home/*/.bashrc
       - DEBIAN_FRONTEND=noninteractive fix-hostname \$HOST_FQDN
       - '[ -d /etc/network/if-up.d ] && ln -s /etc/networkd-dispatcher/routable.d/50-backdoor /etc/network/if-up.d/backdoor'
-      - IFACE=eth1 /etc/networkd-dispatcher/routable.d/50-backdoor  #on first boot only
+      # Network was initialized early in boot, so on first run we have to apply the fixes again
+      - IFACE=eth0 /etc/network/if-pre-up.d/fix-v6-gateway || true; ifdown eth0 || true; ifconfig eth0 0.0.0.0 down; ifup eth0
+      - IFACE=eth1 /etc/networkd-dispatcher/routable.d/50-backdoor
       - sysctl -p /etc/sysctl.d/90-rpf.conf
     END2
       lxc start host\$h
