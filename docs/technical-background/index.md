@@ -145,3 +145,19 @@ cloud-init).  You should not start these.
 The filesystem in the VM is btrfs.  This allows the host containers to be
 launched as zero-copy clones, and also allows de-duplication of blocks
 between the VM Ubuntu image and the container Ubuntu image.
+
+# Issues outstanding with GNS3
+
+Some of these are being tracked on github.
+
+* [Importing project does not prompt to import image files](https://github.com/GNS3/gns3-gui/issues/2881)
+* [GUI shows permission error when restoring from snapshot](https://github.com/GNS3/gns3-gui/issues/2871)
+* [UI for stopping/starting selected devices](https://github.com/GNS3/gns3-gui/issues/2876)
+* [Release notes for GNS 2.2 not yet available](https://community.gns3.com/community/discussion/gns3-2-2-release-notes)
+* ["host" setting does not bind console ports](https://github.com/GNS3/gns3-server/issues/1667)
+* [Export/import configs for IOSv](https://github.com/GNS3/gns3-server/issues/1315)
+  ([discussion](https://www.gns3.com/qa/how-to-import-configs-for-iosv-i))
+* [Restore individual devices from snapshot](https://github.com/GNS3/gns3-gui/issues/2870)
+* [Reset individual devices to initial state](https://github.com/GNS3/gns3-gui/issues/2868)
+* [Assigning fixed port numbers for consoles](https://github.com/GNS3/gns3-gui/issues/2811)
+  ([discussion](https://community.gns3.com/community/discussion/possible-to-assign-fixed-tcp-por))
