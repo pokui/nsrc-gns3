@@ -79,26 +79,6 @@ cat /mnt/network-config
 cat /mnt/user-data
 ```
 
-# Kernel Samepage Merging
-
-When you have many similar VMs running, [Kernel Samepage
-Merging](https://www.linux-kvm.org/page/KSM) can save RAM by identifying
-identical pages and keeping only one copy.
-
-This feature should be enabled automatically - if you want to check, the
-configuration is in `/etc/default/qemu-kvm`
-
-Once you have GNS3 up and running, you can check whether KSM is working by
-seeing how many pages are shared:
-
-```
-$ cat /sys/kernel/mm/ksm/pages_sharing
-53997
-```
-
-Multiply by 4 to get an estimate (in KB) of the amount of RAM being saved by
-KSM.
-
 # lxd containers
 
 lxd is a lightweight virtualization technology, which allows host1-6 to
@@ -163,6 +143,26 @@ cloud-init data passed in from the outer VM:
 lxc config get host1 user.network-config
 lxc config get host1 user.user-data
 ```
+
+# Kernel Samepage Merging
+
+When you have many similar VMs running, [Kernel Samepage
+Merging](https://www.linux-kvm.org/page/KSM) can save RAM by identifying
+identical pages and keeping only one copy.
+
+This feature should be enabled automatically - if you want to check, the
+configuration is in `/etc/default/qemu-kvm`
+
+Once you have GNS3 up and running, you can check whether KSM is working by
+seeing how many pages are shared:
+
+```
+$ cat /sys/kernel/mm/ksm/pages_sharing
+53997
+```
+
+Multiply by 4 to get an estimate (in KB) of the amount of RAM being saved by
+KSM.
 
 # Issues outstanding with GNS3
 
