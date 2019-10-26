@@ -54,10 +54,11 @@ The top-level VM (srv1) contains the larger and more resource-intensive
 tools:
 
 * LibreNMS
+* cacti
 * nfsen
 * RT
 * rancid
-* mysql (used by LibreNMS and RT)
+* mysql (used by LibreNMS, cacti and RT)
 
 This means that for exercises using these tools, students will have to work
 in their campus groups.
