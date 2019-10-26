@@ -48,7 +48,11 @@ Edit it so it looks like this (leave the sections marked `....` alone):
 <network>
   <name>default</name>
   <uuid>....</uuid>
-  <forward mode='nat'/>
+  <forward mode='nat'>
+    <nat>
+      <port start='1024' end='65535'/>
+    </nat>
+  </forward>
   <bridge name='virbr0' stp='off' delay='0'/>
   <mac address='....'/>
   <ip address='192.168.122.1' netmask='255.255.255.0' localPtr='yes'>
