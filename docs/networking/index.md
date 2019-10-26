@@ -4,11 +4,11 @@ GNS3 networking requires the bridge "virbr0" set up by virsh/libvirt.
 Install it:
 
 ```
-sudo apt-get install virsh
+sudo apt-get install libvirt-daemon-system bridge-utils
 ```
 
 This should install a number of packages as dependencies, including
-bridge-utils, libvirt and qemu.
+qemu-kvm.
 
 Now logout and log back in again as the "nsrc" user.  Check that you are in
 the "kvm" and "libvirt" groups using the `id` command:
@@ -86,21 +86,33 @@ like `enx00e04c063260`.  Copy this name: you'll need it shortly.
 
 ## Reconfigure netplan
 
-Find your netplan config file.  It may be called something like
-`/etc/netplan/1-netplan.yaml`
+Find your netplan config file.  It will be called
+`/etc/netplan/<something>.yaml`
 
 ```
 cd /etc/netplan
 ls
 ```
 
-Edit this file and *remove* all references to "eno1" (or your LAN adapter).
-They'll be configured by a script instead.
+Rename it so that it's no longer used, e.g.
 
-*Add* a configuration for your new interface, with DHCP enabled, and
-`optional: true` so that booting is not delayed if it's not plugged in.
+```
+mv 50-cloud-init.yaml 50-cloud-init.yaml.disabled
+```
 
-When you've finished, it should look something like this:
+If it *is* called `50-cloud-init.yaml` then also run the following command
+to prevent it being regenerated:
+
+```
+echo "network: {config: disabled}" >/etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
+```
+
+Create a new file `/etc/netplan/10-wan.yaml`.  Include a configuration for
+your new WAN interface, with DHCP enabled, and `optional: true` so that
+booting is not delayed if it's not plugged in.
+
+When you've finished, it should look like this, but with your WAN
+interface name in place of `enx086d41e68ba8`:
 
 ```
 network:
@@ -111,8 +123,15 @@ network:
       optional: true
 ```
 
+!!! Note
+    There should be *no* reference to "eno1" (or your LAN adapter) - that
+    will be configured by a script instead.
+
 If you need a static IP address on your WAN interface, see
 [netplan examples](https://netplan.io/examples).
+
+Normally you'd run `netplan generate; netplan apply` after changing the
+configuration, but you will be rebooting shortly so don't bother.
 
 ## Attach eno1 to virbr0
 
