@@ -18,7 +18,7 @@ can directly access and interact with the resources inside the platform.
 The platform is administered by the instructor and can be reset to a
 known-good state in preparation for each training course.
 
-# Dependencies
+# Components
 
 A physical server is required, as described in the [hardware](hardware/)
 section.
@@ -37,4 +37,4 @@ exception of the Cisco IOSv and IOSvL2 images.
 
 You can obtain these by purchasing a licence for
 [VIRL](http://virl.cisco.com/), which at the time of writing costs $199 per
-year.  After purchase, login with your Cisco account and download the images.
+year.

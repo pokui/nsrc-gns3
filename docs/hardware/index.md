@@ -22,7 +22,7 @@ devices:
 
 * [Intel NUC8i7BEH](https://www.intel.com/content/www/us/en/products/boards-kits/nuc/kits/nuc8i7beh.html)
   (formerly known as "Bean Canyon")
-    * Takes one M2 (NVMe) SSD module and one 2.5" (SATA) drive.
+    * Takes one M2 (NVMe) SSD module and/or one 2.5" (SATA) drive.
 * [Intel NUC6i7KYK](https://www.intel.com/content/www/us/en/products/boards-kits/nuc/kits/nuc6i7kyk.html)
   (formerly known as "Skull Canyon")
     * Older generation but still available
