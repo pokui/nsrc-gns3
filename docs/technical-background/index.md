@@ -69,6 +69,24 @@ not hard-coded in the image itself).
 When the VM appears multiple times in the same topology, this means a
 separate cloud-init image is needed for each instance to come up on the
 correct IP address.
+
+When logged into the srv1 VM, you can examine its cloud-init configuration:
+
+```
+sudo mount -r /dev/vdb /mnt
+ls /mnt
+cat /mnt/network-config
+cat /mnt/user-data
+```
+
+And from this VM you can also see the cloud-init configuration of each of
+the lxd containers:
+
+```
+lxc config get host1 user.network-config
+lxc config get host1 user.user-data
+```
+
 # Kernel Samepage Merging
 
 When you have many similar VMs running, [Kernel Samepage
