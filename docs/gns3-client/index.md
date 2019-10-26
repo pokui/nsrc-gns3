@@ -23,9 +23,6 @@ them.
 
 ![GNS3 Preferences](gns3-preferences.png)
 
-TODO: screenshots of the sequence of dialogs when you run GNS3 for the first
-time.
-
 At this point, you should now be able to create a test project in GNS3. 
 This confirms that communication between the front-end and the back-end is
 working.
