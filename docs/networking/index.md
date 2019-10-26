@@ -101,14 +101,14 @@ ls
 Rename it so that it's no longer used, e.g.
 
 ```
-mv 50-cloud-init.yaml 50-cloud-init.yaml.disabled
+sudo mv 50-cloud-init.yaml 50-cloud-init.yaml.disabled
 ```
 
 If it *is* called `50-cloud-init.yaml` then also run the following command
 to prevent it being regenerated:
 
 ```
-echo "network: {config: disabled}" >/etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
+echo "network: {config: disabled}" | sudo tee /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
 ```
 
 Create a new file `/etc/netplan/10-wan.yaml`.  Include a configuration for
