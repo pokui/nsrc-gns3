@@ -29,7 +29,7 @@ required.
     time the project was saved.
 
 !!! Note
-    You may end up with multiple projects because of the failed ones -
+    You may end up with multiple projects because of failed imports -
     e.g. `nmm`, `nmm-1`, `nmm-2` etc.  You can delete the old ones by going
     to `File > Open Project` and selecting each of the previous ones and
     clicking Delete.  The final one can be renamed using `File > Edit Project`
