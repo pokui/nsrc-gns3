@@ -79,14 +79,6 @@ cat /mnt/network-config
 cat /mnt/user-data
 ```
 
-And from this VM you can also see the cloud-init configuration of each of
-the lxd containers:
-
-```
-lxc config get host1 user.network-config
-lxc config get host1 user.user-data
-```
-
 # Kernel Samepage Merging
 
 When you have many similar VMs running, [Kernel Samepage
@@ -163,6 +155,14 @@ cloud-init).  You should not start these.
 The filesystem in the VM is btrfs.  This allows the host containers to be
 launched as zero-copy clones, and also allows de-duplication of blocks
 between the VM Ubuntu image and the container Ubuntu image.
+
+The containers are also configured using cloud-init.  You can see the
+cloud-init data passed in from the outer VM:
+
+```
+lxc config get host1 user.network-config
+lxc config get host1 user.user-data
+```
 
 # Issues outstanding with GNS3
 
