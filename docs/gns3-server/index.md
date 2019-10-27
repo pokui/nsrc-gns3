@@ -44,7 +44,7 @@ Conflicts=shutdown.target
 User=%i
 Restart=on-failure
 RestartSec=5
-ExecStart=/usr/bin/gns3server -A
+ExecStart=/usr/bin/gns3server
 
 [Install]
 WantedBy=multi-user.target
@@ -104,11 +104,8 @@ There are some additional, optional settings in here:
 
 * `host = 192.168.122.1` makes GNS3 listen only on the internal interface,
   for security.  If you want to access GNS3 over the Internet on a public
-  IP, comment out this line.  Note that even with this setting, the virtual
-  serial consoles
-  [still bind to all interfaces](https://github.com/GNS3/gns3-server/issues/1667).
-  If you are worried about this, then you can use iptables or ufw to
-  block inbound connections.
+  IP, comment out this line.  Note that if you do, the serial consoles
+  will be accessible remotely without any authentication.
 * `auth`, `user` and `password` configure the server to require
   authentication.  This will prevent students from connecting and taking
   over the emulator.  The password in this file is in cleartext, so do not
@@ -116,7 +113,8 @@ There are some additional, optional settings in here:
   match your system username and password.
 
 There is more documentation on this file
-[here](https://docs.gns3.com/1f6uXq05vukccKdMCHhdki5MXFhV8vcwuGwiRvXMQvM0/index.html).
+[here](https://docs.gns3.com/1f6uXq05vukccKdMCHhdki5MXFhV8vcwuGwiRvXMQvM0/index.html)
+and [here](https://github.com/GNS3/gns3-server/blob/master/conf/gns3_server.conf).
 
 Now restart the server:
 

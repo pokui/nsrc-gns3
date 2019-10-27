@@ -7,6 +7,7 @@ See [docs](docs/) directory for setup and user documentation.
 ```
 sudo apt-get install python3-pip --no-install-recommends
 sudo pip3 install mkdocs
+sudo pip3 install pymdown-extensions
 mkdocs build
 ```
 

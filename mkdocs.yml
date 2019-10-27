@@ -5,6 +5,7 @@ repo_url: https://github.com/nsrc-org/nsrc-gns3
 markdown_extensions:
   # https://squidfunk.github.io/mkdocs-material/extensions/admonition/
   - admonition
+  - pymdownx.tilde
 
 nav:
   - 'Introduction': 'index.md'
