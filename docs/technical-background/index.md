@@ -173,6 +173,7 @@ Some of these are being tracked on github.
 * [UI for stopping/starting selected devices](https://github.com/GNS3/gns3-gui/issues/2876)
 * [Release notes for GNS 2.2 not yet available](https://community.gns3.com/community/discussion/gns3-2-2-release-notes)
 * ~~["host" setting does not bind console ports](https://github.com/GNS3/gns3-server/issues/1667)~~
+* [Dual stack support](https://github.com/GNS3/gns3-server/issues/1673)
 * [Export/import configs for IOSv](https://github.com/GNS3/gns3-server/issues/1315)
   ([discussion](https://www.gns3.com/qa/how-to-import-configs-for-iosv-i))
 * [Restore individual devices from snapshot](https://github.com/GNS3/gns3-gui/issues/2870)
