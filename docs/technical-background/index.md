@@ -179,3 +179,4 @@ Some of these are being tracked on github.
 * [Reset individual devices to initial state](https://github.com/GNS3/gns3-gui/issues/2868)
 * [Assigning fixed port numbers for consoles](https://github.com/GNS3/gns3-gui/issues/2811)
   ([discussion](https://community.gns3.com/community/discussion/possible-to-assign-fixed-tcp-por))
+* [Websockets console access](https://github.com/GNS3/gns3-gui/issues/2883)
