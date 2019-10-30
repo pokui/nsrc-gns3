@@ -30,7 +30,7 @@ sudo usermod -a -G ubridge nsrc
 
 # Create a systemd unit file
 
-Create file `/etc/systemd/system/gns3-server@.service` - note that there is
+Create file `/etc/systemd/system/gns3@.service` - note that there is
 an `@` in the name.  This allows the service to be run for multiple users.
 
 ```
@@ -53,8 +53,8 @@ WantedBy=multi-user.target
 Start gns3 for the "nsrc" user like this:
 
 ```shell
-sudo systemctl start gns3-server@nsrc
-sudo systemctl enable gns3-server@nsrc
+sudo systemctl start gns3@nsrc
+sudo systemctl enable gns3@nsrc
 ```
 
 The second line means that it will be automatically started at system boot.
@@ -84,7 +84,7 @@ sudo chown nsrc:nsrc /var/lib/GNS3/images
 Temporarily stop gns3:
 
 ```shell
-sudo systemctl stop gns3-server@nsrc
+sudo systemctl stop gns3@nsrc
 ```
 
 As the "nsrc" user, create configuration file
@@ -119,5 +119,5 @@ and [here](https://github.com/GNS3/gns3-server/blob/master/conf/gns3_server.conf
 Now restart the server:
 
 ```shell
-sudo systemctl start gns3-server@nsrc
+sudo systemctl start gns3@nsrc
 ```
