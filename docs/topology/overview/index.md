@@ -1,6 +1,8 @@
 Each of the different lab topologies is built as a GNS3 project.  To load a
 project, you import the `.gns3project` file and any related images it needs.
 
+In the GNS3 Client, select `File > Import portable project`.
+
 # Importing disk images
 
 If a project references a disk image which hasn't already been imported, it
