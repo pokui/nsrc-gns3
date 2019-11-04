@@ -16,18 +16,27 @@ END
 }
 render_vlans=conf_vlans_edge_vlan
 
-conf_stp_edge_vlan () {
+conf_interfaces_edge_vlan () {
+  trunk GigabitEthernet0/0 ${BUILDING}0-${BUILDING}2 "Trunk Link to dist1-b${BUILDING}.campus${CAMPUS}"
+  case ${DEV} in
+  1) trunk GigabitEthernet0/1 ${BUILDING}0-${BUILDING}2 "Trunk Link to dist1-b${BUILDING}.campus${CAMPUS}"
+  ;;
+  esac
   cat <<END
 !
-spanning-tree vlan ${BUILDING}0 priority ${PRIORITY}
-spanning-tree vlan ${BUILDING}1 priority ${PRIORITY}
-spanning-tree vlan ${BUILDING}2 priority ${PRIORITY}
-END
-}
-render_stp=conf_stp_edge_vlan
-
-conf_interfaces_edge_vlan () {
-  cat <<END
+interface range GigabitEthernet1/0 - 3
+ description Access Port VLAN ${BUILDING}1 STAFF
+ switchport mode access
+ switchport access vlan ${BUILDING}1
+ load-interval 30
+ no shutdown
+!
+interface range GigabitEthernet2/0 - 3
+ description Access Port VLAN ${BUILDING}2 STUDENT
+ switchport mode access
+ switchport access vlan ${BUILDING}2
+ load-interval 30
+ no shutdown
 !
 interface Vlan 1
  shutdown
@@ -35,50 +44,10 @@ interface Vlan 1
 interface Vlan${BUILDING}0
  description Management VLAN Building ${BUILDING}
  ip address ${IPV4_ADDRESS} 255.255.255.0
+ load-interval 30
  ipv6 address ${IPV6_ADDRESS}/64
- load-interval 30
- no shut
-!
-interface range GigabitEthernet1/0 - 3
- description Access Port VLAN ${BUILDING}1 STAFF
- switchport mode access
- switchport access vlan ${BUILDING}1
- spanning-tree portfast
- load-interval 30
- no shut
-!
-interface range GigabitEthernet2/0 - 3
- description Access Port VLAN ${BUILDING}2 STUDENT
- switchport mode access
- switchport access vlan ${BUILDING}2
- spanning-tree portfast
- load-interval 30
- no shut
+ no shutdown
 END
-  case ${DEV} in
-  1) cat <<EOM
-!
-interface GigabitEthernet0/1
- description Trunk Port to dist1-b${BUILDING}.campus${CAMPUS}
- switchport trunk allowed vlan 1,2,${BUILDING}0-${BUILDING}2,1002-1005
- switchport trunk encapsulation dot1q
- switchport mode trunk
- load-interval 30
- no shut
-EOM
-  ;;
-  esac
-
-cat <<EOM
-!
-interface GigabitEthernet0/0
- description Trunk Link to dist1-b${BUILDING}.campus${CAMPUS}
- switchport trunk allowed vlan 1,2,${BUILDING}0-${BUILDING}2,1002-1005
- switchport trunk encapsulation dot1q
- switchport mode trunk
- load-interval 30
- no shut
-EOM
 }
 render_interfaces=conf_interfaces_edge_vlan
 

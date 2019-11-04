@@ -4,27 +4,30 @@
 conf_stp_edge_l2final () {
 cat <<END
 !
-spanning-tree portfast bpduguard
+ip dhcp snooping vlan ${BUILDING}1-${BUILDING}2
+ip dhcp snooping
 !
-spanning-tree vlan ${BUILDING}0 priority ${PRIORITY}
-spanning-tree vlan ${BUILDING}1 priority ${PRIORITY}
-spanning-tree vlan ${BUILDING}2 priority ${PRIORITY}
+spanning-tree mode mst
+spanning-tree portfast edge bpduguard default
+spanning-tree mst 0 priority ${PRIORITY}
 END
 }
 render_stp=conf_stp_edge_l2final
 
 conf_interfaces_edge_l2final() {
+  case ${DEV} in
+  1) trunk Port-channel1 ${BUILDING}0-${BUILDING}2 "Aggregate Link to dist1-b${BUILDING}.campus${CAMPUS}"
+     echo " ip dhcp snooping trust"
+     trunk GigabitEthernet0/0 ${BUILDING}0-${BUILDING}2 "Trunk Link to dist1-b${BUILDING}.campus${CAMPUS}"
+     echo " channel-group 1 mode active"
+     trunk GigabitEthernet0/1 ${BUILDING}0-${BUILDING}2 "Trunk Link to dist1-b${BUILDING}.campus${CAMPUS}"
+     echo " channel-group 1 mode active"
+  ;;
+  2) trunk GigabitEthernet0/0 ${BUILDING}0-${BUILDING}2 "Trunk Link to dist1-b${BUILDING}.campus${CAMPUS}"
+     echo " ip dhcp snooping trust"
+  ;;
+  esac
   cat <<END
-!
-interface Vlan 1
- shutdown
-!
-interface Vlan${BUILDING}0
- description Management VLAN Building ${BUILDING}
- ip address ${IPV4_ADDRESS} 255.255.255.0
- ipv6 address ${IPV6_ADDRESS}/64
- load-interval 30
- no shut
 !
 interface range GigabitEthernet1/0 - 3
  description Access Port VLAN ${BUILDING}1 STAFF
@@ -32,7 +35,7 @@ interface range GigabitEthernet1/0 - 3
  switchport access vlan ${BUILDING}1
  spanning-tree portfast
  load-interval 30
- no shut
+ no shutdown
 !
 interface range GigabitEthernet2/0 - 3
  description Access Port VLAN ${BUILDING}2 STUDENT
@@ -40,50 +43,18 @@ interface range GigabitEthernet2/0 - 3
  switchport access vlan ${BUILDING}2
  spanning-tree portfast
  load-interval 30
- no shut
+ no shutdown
+!
+interface Vlan 1
+ shutdown
+!
+interface Vlan${BUILDING}0
+ description Management VLAN Building ${BUILDING}
+ ip address ${IPV4_ADDRESS} 255.255.255.0
+ load-interval 30
+ ipv6 address ${IPV6_ADDRESS}/64
+ no shutdown
 END
-
-  case ${DEV} in
-  1) cat <<EOM
-!
-interface Port-channel1
- description LAG to Distribution Switch
- switchport trunk allowed vlan 1,2,${BUILDING}0-${BUILDING}2,1002-1005
- switchport trunk encapsulation dot1q
- switchport mode trunk
- load-interval 30
- no shut
-!
-interface GigabitEthernet0/1
- description Trunk Port to dist1-b${BUILDING}.campus${CAMPUS}
- switchport trunk allowed vlan 1,2,${BUILDING}0-${BUILDING}2,1002-1005
- switchport trunk encapsulation dot1q
- switchport mode trunk
- channel-group 1 mode on
- load-interval 30
- no shut
-EOM
-  ;;
-  esac
-
-  cat <<EOM
-!
-interface GigabitEthernet0/0
- description Trunk Port to dist1-b${BUILDING}.campus${CAMPUS}
- switchport trunk allowed vlan 1,2,${BUILDING}0-${BUILDING}2,1002-1005
- switchport trunk encapsulation dot1q
- switchport mode trunk
- load-interval 30
-EOM
-  case ${DEV} in
-  1) cat <<EOM
- channel-group 1 mode on
-EOM
-  ;;
-  esac
-  cat <<EOM
- no shut
-EOM
 }
 render_interfaces=conf_interfaces_edge_l2final
 

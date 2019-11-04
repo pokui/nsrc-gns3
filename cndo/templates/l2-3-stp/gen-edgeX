@@ -2,18 +2,11 @@
 . l2-2-ip/gen-edgeX
 PRIORITY=24576
 
-conf_vlans_edge_stp () {
-  cat <<END
-!
-vtp mode off
-END
-}
-render_vlans=conf_vlans_edge_stp
-
 conf_stp_edge_stp () {
 cat <<END
 !
-spanning-tree vlan 1 priority ${PRIORITY}
+spanning-tree mode mst
+spanning-tree mst 0 priority ${PRIORITY}
 END
 }
 render_stp=conf_stp_edge_stp

@@ -6,9 +6,9 @@ conf_interfaces_edge_l2ip () {
 !
 interface Vlan 1
  ip address $IPV4_ADDRESS 255.255.0.0
- ipv6 address $IPV6_ADDRESS/64
  load-interval 30
- no shut
+ ipv6 address $IPV6_ADDRESS/64
+ no shutdown
 END
 }
 render_interfaces=conf_interfaces_edge_l2ip

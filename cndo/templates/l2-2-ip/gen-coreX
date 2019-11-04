@@ -8,7 +8,7 @@ interface Vlan1
  ip address ${CAMPUS_V4_BLOCK}.0.2 255.255.0.0
  load-interval 30
  ipv6 address ${CAMPUS_V6_BLOCK}:1::2/64
- no shut
+ no shutdown
 END
 }
 render_interfaces=conf_interfaces_core_l2ip

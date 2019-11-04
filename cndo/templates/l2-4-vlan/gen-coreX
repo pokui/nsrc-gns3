@@ -22,22 +22,9 @@ END
 }
 render_vlans=conf_vlans_core_vlan
 
-conf_stp_core_vlan () {
-  cat <<END
-!
-spanning-tree vlan 10 priority ${PRIORITY}
-spanning-tree vlan 11 priority ${PRIORITY}
-spanning-tree vlan 12 priority ${PRIORITY}
-spanning-tree vlan 20 priority ${PRIORITY}
-spanning-tree vlan 21 priority ${PRIORITY}
-spanning-tree vlan 22 priority ${PRIORITY}
-END
-}
-render_stp=conf_stp_core_vlan
-
 conf_interfaces_core_vlan () {
-  trunk GigabitEthernet0/1 1,2,10-12,1002-1005 "Trunk Link to dist1-b1.campus${CAMPUS}"
-  trunk GigabitEthernet0/2 1,2,20-22,1002-1005 "Trunk Link to dist1-b2.campus${CAMPUS}"
+  trunk GigabitEthernet0/1 10-12 "Trunk Link to dist1-b1.campus${CAMPUS}"
+  trunk GigabitEthernet0/2 20-22 "Trunk Link to dist1-b2.campus${CAMPUS}"
   cat <<END
 !
 interface Vlan1
