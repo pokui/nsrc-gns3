@@ -169,9 +169,9 @@ conf_tail_management () {
 cat <<END
 !
 ip access-list extended ipv4-vty
- permit ip {CAMPUS_SRVR_V4_SUBNET}.128 0.0.0.15 any
- permit ip host {CAMPUS_SRVR_V4_SUBNET}.241 any
- permit ip host {CAMPUS_SRVR_V4_SUBNET}.242 any
+ permit ip ${CAMPUS_SRVR_V4_SUBNET}.128 0.0.0.15 any
+ permit ip host ${CAMPUS_SRVR_V4_SUBNET}.241 any
+ permit ip host ${CAMPUS_SRVR_V4_SUBNET}.242 any
  deny   ip any any log
 !
 ipv6 access-list ipv6-vty
