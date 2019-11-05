@@ -7,21 +7,22 @@ conf_interfaces_core_filter () {
 interface Loopback 0
  description Loopback
  ip address ${CAMPUS_LOOP_V4_SUBNET}.242 255.255.255.255
- ip ospf 41 area 0
  ipv6 address ${CAMPUS_LOOP_V6_SUBNET}::242/128
- ipv6 ospf 41 area 0
  no shutdown
 !
 interface GigabitEthernet0/0
  no switchport
  description CAMPUS CORE to BORDER
  ip address ${CAMPUS_CORE_V4_SUBNET}.2 255.255.255.240
- ip ospf 41 area 0
+ ip router isis
  load-interval 30
  ipv6 address ${CAMPUS_CORE_V6_SUBNET}::2/64
- ipv6 ospf 41 area 0
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
+ ipv6 router isis
+ isis network point-to-point
+ isis metric 2
+ isis ipv6 metric 2
  no shutdown
 END
   trunk GigabitEthernet0/1 10-12 "Trunk Link to dist1-b1.campus${CAMPUS}"
@@ -33,11 +34,9 @@ interface GigabitEthernet0/3
  description Network Management and Monitoring
  ip address ${CAMPUS_SRVR_V4_SUBNET}.129 255.255.255.240
  ip verify unicast reverse-path allow-self-ping
- ip ospf 41 area 0
  load-interval 30
  ipv6 address ${CAMPUS_SRVR_V6_SUBNET}::1/64
  ipv6 verify unicast reverse-path
- ipv6 ospf 41 area 0
  no shutdown
 !
 interface Vlan1
@@ -47,66 +46,54 @@ interface Vlan10
  description Management VLAN Building 1
  ip address ${CAMPUS_BLD1_V4_MGMT_SUBNET}.1 255.255.255.0
  ip verify unicast reverse-path allow-self-ping
- ip ospf 41 area 0
  load-interval 30
  ipv6 address ${CAMPUS_BLD1_V6_MGMT_SUBNET}::1/64
  ipv6 verify unicast reverse-path
- ipv6 ospf 41 area 0
  no shutdown
 !
 interface Vlan11
  description Staff VLAN Building 1
  ip address ${CAMPUS_BLD1_V4_STAFF_SUBNET}.1 255.255.255.0
  ip verify unicast reverse-path allow-self-ping
- ip ospf 41 area 0
  load-interval 30
  ipv6 address ${CAMPUS_BLD1_V6_STAFF_SUBNET}::1/64
  ipv6 verify unicast reverse-path
- ipv6 ospf 41 area 0
  no shutdown
 !
 interface Vlan12
  description Student VLAN Building 1
  ip address ${CAMPUS_BLD1_V4_STUDENT_SUBNET}.1 255.255.255.0
  ip verify unicast reverse-path allow-self-ping
- ip ospf 41 area 0
  load-interval 30
  ipv6 address ${CAMPUS_BLD1_V6_STUDENT_SUBNET}::1/64
  ipv6 verify unicast reverse-path
- ipv6 ospf 41 area 0
  no shutdown
 !
 interface Vlan20
  description Management VLAN Building 2
  ip address ${CAMPUS_BLD2_V4_MGMT_SUBNET}.1 255.255.255.0
  ip verify unicast reverse-path allow-self-ping
- ip ospf 41 area 0
  load-interval 30
  ipv6 address ${CAMPUS_BLD2_V6_MGMT_SUBNET}::1/64
  ipv6 verify unicast reverse-path
- ipv6 ospf 41 area 0
  no shutdown
 !
 interface Vlan21
  description Staff VLAN Building 2
  ip address ${CAMPUS_BLD2_V4_STAFF_SUBNET}.1 255.255.255.0
  ip verify unicast reverse-path allow-self-ping
- ip ospf 41 area 0
  load-interval 30
  ipv6 address ${CAMPUS_BLD2_V6_STAFF_SUBNET}::1/64
  ipv6 verify unicast reverse-path
- ipv6 ospf 41 area 0
  no shutdown
 !
 interface Vlan22
  description Student VLAN Building 2
  ip address ${CAMPUS_BLD2_V4_STUDENT_SUBNET}.1 255.255.255.0
  ip verify unicast reverse-path allow-self-ping
- ip ospf 41 area 0
  load-interval 30
  ipv6 address ${CAMPUS_BLD2_V6_STUDENT_SUBNET}::1/64
  ipv6 verify unicast reverse-path
- ipv6 ospf 41 area 0
  no shutdown
 !
 ip telnet source-interface Loopback0

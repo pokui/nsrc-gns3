@@ -1,19 +1,18 @@
 #!/bin/bash -eu
 . l3-2-ip/gen-bdrX
 
-conf_interfaces_bdr_ospf () {
+conf_interfaces_bdr_isis () {
   cat <<END
 !
 interface Loopback0
  description Loopback
  ip address ${CAMPUS_LOOP_V4_SUBNET}.241 255.255.255.255
- ip ospf 41 area 0
  ipv6 address ${CAMPUS_LOOP_V6_SUBNET}::241/128
- ipv6 ospf 41 area 0
  no shutdown
 !
 interface Null0
  no ip unreachables
+ no ipv6 unreachables
 !
 interface GigabitEthernet0/0
  description Link to NREN
@@ -27,52 +26,58 @@ interface GigabitEthernet0/0
 interface GigabitEthernet0/1
  description Link to CAMPUS CORE
  ip address ${CAMPUS_CORE_V4_SUBNET}.1 255.255.255.240
- ip ospf 41 area 0
+ ip router isis
  load-interval 30
  ipv6 address ${CAMPUS_CORE_V6_SUBNET}::1/64
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
- ipv6 ospf 41 area 0
+ ipv6 router isis
+ isis network point-to-point
+ isis metric 2
+ isis ipv6 metric 2
  no shutdown
 END
 }
-render_interfaces=conf_interfaces_bdr_ospf
+render_interfaces=conf_interfaces_bdr_isis
 
-conf_igp_bdr_ospf () {
+conf_igp_bdr_isis () {
   cat <<END
 !
-router ospf 41
- router-id ${CAMPUS_LOOP_V4_SUBNET}.241
- log-adjacency-changes
- passive-interface default
- no passive-interface GigabitEthernet0/1
- default-information originate
+key chain isis-key
+ key 1
+   key-string cndlab123
 !
-ipv6 router ospf 41
- router-id ${CAMPUS_LOOP_V4_SUBNET}.241
- log-adjacency-changes
- passive-interface default
- no passive-interface GigabitEthernet0/1
+router isis
+ net 49.0001.1000.6800.${CAMPUS}241.00
+ is-type level-2-only
+ authentication mode md5 level-2
+ authentication key-chain isis-key level-2
+ metric-style wide
+ log-adjacency-changes all
+ metric 100000
+ passive-interface Loopback0
  default-information originate
+ !
+ address-family ipv6
+  multi-topology
+  metric 100000
+  default-information originate
+ exit-address-family
 END
 }
-render_igp=conf_igp_bdr_ospf
+render_igp=conf_igp_bdr_isis
 
-# Note: this originally had a pull-up route for v6:
-#    ipv6 route ${CAMPUS_V6_BLOCK}::/48 Null0
-# However, OSPFv3 doesn't work to core (IOSvL2 doesn't have OSPFv3).
-# So for now, static route the whole block down to the core.
-conf_static_bdr_ospf () {
+conf_static_bdr_isis () {
   cat <<END
 !
 ip route 0.0.0.0 0.0.0.0 ${NREN_V4_SUBNET}.$((${NREN_V4_HOST} - 1))
 ip route ${CAMPUS_CORE_V4_SUBNET}.0 255.255.255.0 Null0
 ip route ${CAMPUS_V4_BLOCK}.0.0 255.255.0.0 Null0
 !
+ipv6 route ${CAMPUS_V6_BLOCK}::/48 Null0
 ipv6 route ::/0 ${NREN_V6_SUBNET}:${CAMPUS}::0
-ipv6 route ${CAMPUS_V6_BLOCK}::/48 ${CAMPUS_CORE_V6_SUBNET}::2
 END
 }
-render_static=conf_static_bdr_ospf
+render_static=conf_static_bdr_isis
 
 return 2>/dev/null || render "$@"

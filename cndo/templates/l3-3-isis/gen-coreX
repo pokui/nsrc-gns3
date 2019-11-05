@@ -1,27 +1,28 @@
 #!/bin/bash -eu
 . l3-2-ip/gen-coreX
 
-conf_interfaces_core_ospf () {
+conf_interfaces_core_isis () {
   cat <<END
 !
 interface Loopback 0
  description Loopback
  ip address ${CAMPUS_LOOP_V4_SUBNET}.242 255.255.255.255
- ip ospf 41 area 0
  ipv6 address ${CAMPUS_LOOP_V6_SUBNET}::242/128
- ipv6 ospf 41 area 0
  no shutdown
 !
 interface GigabitEthernet0/0
  no switchport
  description CAMPUS CORE to BORDER
  ip address ${CAMPUS_CORE_V4_SUBNET}.2 255.255.255.240
- ip ospf 41 area 0
+ ip router isis
  load-interval 30
  ipv6 address ${CAMPUS_CORE_V6_SUBNET}::2/64
- ipv6 ospf 41 area 0
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
+ ipv6 router isis
+ isis network point-to-point
+ isis metric 2
+ isis ipv6 metric 2
  no shutdown
 END
   trunk GigabitEthernet0/1 10-12 "Trunk Link to dist1-b1.campus${CAMPUS}"
@@ -32,10 +33,8 @@ interface GigabitEthernet0/3
  no switchport
  description Network Management and Monitoring
  ip address ${CAMPUS_SRVR_V4_SUBNET}.129 255.255.255.240
- ip ospf 41 area 0
  load-interval 30
  ipv6 address ${CAMPUS_SRVR_V6_SUBNET}::1/64
- ipv6 ospf 41 area 0
  no shutdown
 !
 interface Vlan1
@@ -44,90 +43,80 @@ interface Vlan1
 interface Vlan10
  description Management VLAN Building 1
  ip address ${CAMPUS_BLD1_V4_MGMT_SUBNET}.1 255.255.255.0
- ip ospf 41 area 0
  load-interval 30
  ipv6 address ${CAMPUS_BLD1_V6_MGMT_SUBNET}::1/64
- ipv6 ospf 41 area 0
  no shutdown
 !
 interface Vlan11
  description Staff VLAN Building 1
  ip address ${CAMPUS_BLD1_V4_STAFF_SUBNET}.1 255.255.255.0
- ip ospf 41 area 0
  load-interval 30
  ipv6 address ${CAMPUS_BLD1_V6_STAFF_SUBNET}::1/64
- ipv6 ospf 41 area 0
  no shutdown
 !
 interface Vlan12
  description Student VLAN Building 1
  ip address ${CAMPUS_BLD1_V4_STUDENT_SUBNET}.1 255.255.255.0
- ip ospf 41 area 0
  load-interval 30
  ipv6 address ${CAMPUS_BLD1_V6_STUDENT_SUBNET}::1/64
- ipv6 ospf 41 area 0
  no shutdown
 !
 interface Vlan20
  description Management VLAN Building 2
  ip address ${CAMPUS_BLD2_V4_MGMT_SUBNET}.1 255.255.255.0
- ip ospf 41 area 0
  load-interval 30
  ipv6 address ${CAMPUS_BLD2_V6_MGMT_SUBNET}::1/64
- ipv6 ospf 41 area 0
  no shutdown
 !
 interface Vlan21
  description Staff VLAN Building 2
  ip address ${CAMPUS_BLD2_V4_STAFF_SUBNET}.1 255.255.255.0
- ip ospf 41 area 0
  load-interval 30
  ipv6 address ${CAMPUS_BLD2_V6_STAFF_SUBNET}::1/64
- ipv6 ospf 41 area 0
  no shutdown
 !
 interface Vlan22
  description Student VLAN Building 2
  ip address ${CAMPUS_BLD2_V4_STUDENT_SUBNET}.1 255.255.255.0
- ip ospf 41 area 0
  load-interval 30
  ipv6 address ${CAMPUS_BLD2_V6_STUDENT_SUBNET}::1/64
- ipv6 ospf 41 area 0
  no shutdown
 END
 }
-render_interfaces=conf_interfaces_core_ospf
+render_interfaces=conf_interfaces_core_isis
 
-conf_igp_core_ospf () {
+conf_igp_core_isis () {
   cat <<END
 !
-router ospf 41
- router-id ${CAMPUS_LOOP_V4_SUBNET}.242
- log-adjacency-changes
- passive-interface default
- no passive-interface GigabitEthernet0/0
+key chain isis-key
+ key 1
+   key-string cndlab123
 !
-ipv6 router ospf 41
- router-id ${CAMPUS_LOOP_V4_SUBNET}.242
- log-adjacency-changes
- passive-interface default
- no passive-interface GigabitEthernet0/0
+router isis
+ net 49.0001.1000.6800.${CAMPUS}242.00
+ is-type level-2-only
+ authentication mode md5 level-2
+ authentication key-chain isis-key level-2
+ metric-style wide
+ log-adjacency-changes all
+ metric 100000
+ passive-interface GigabitEthernet0/3
+ passive-interface Loopback0
+ passive-interface Vlan10
+ passive-interface Vlan11
+ passive-interface Vlan12
+ passive-interface Vlan20
+ passive-interface Vlan21
+ passive-interface Vlan22
+ !
+ address-family ipv6
+  multi-topology
+  metric 100000
+ exit-address-family
 END
 }
-render_igp=conf_igp_core_ospf
+render_igp=conf_igp_core_isis
 
-## We should not need static routes...
-#render_static=conf_null
-
-# However, since IOSvL2 doesn't support OSPFv3, we still need them
-conf_static_core_ospf () {
-  cat <<END
-!
-ipv6 route ::/0 ${CAMPUS_CORE_V6_SUBNET}::1
-ipv6 route ${CAMPUS_V6_BLOCK}::/48 Null0
-ipv6 route ${CAMPUS_LOOP_V6_SUBNET}::241/128 ${CAMPUS_CORE_V6_SUBNET}::1
-END
-}
-render_static=conf_static_core_ospf
+render_static=conf_null
 
 return 2>/dev/null || render "$@"
