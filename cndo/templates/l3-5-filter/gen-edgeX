@@ -1,3 +1,6 @@
 #!/bin/bash -eu
 . l3-4-nat/gen-edgeX
+
+render_tail=conf_tail_management
+
 return 2>/dev/null || render_routed "$@"

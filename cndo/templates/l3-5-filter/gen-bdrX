@@ -40,6 +40,8 @@ interface GigabitEthernet0/1
  ipv6 nd ra suppress all
  ipv6 ospf 41 area 0
  no shutdown
+!
+ip telnet source-interface Loopback0
 END
 }
 render_interfaces=conf_interfaces_bdr_filter
@@ -47,6 +49,7 @@ render_interfaces=conf_interfaces_bdr_filter
 conf_acl_bdr_filter () {
   conf_acl_bdr_nat
   cat <<END
+!
 ip access-list extended from-nren
  deny   ip ${CAMPUS_CORE_V4_SUBNET}.0 0.0.0.255 any
  permit ip any any
@@ -72,5 +75,7 @@ ipv6 access-list to-nren-v6
 END
 }
 render_acl=conf_acl_bdr_filter
+
+render_tail=conf_tail_management
 
 return 2>/dev/null || render "$@"

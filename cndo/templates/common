@@ -154,12 +154,48 @@ snmp-server ifindex persist
 END
 }
 
+# Static routes on dist/edge
 conf_static_dist_edge () {
   cat <<END
 !
 ip route 0.0.0.0 0.0.0.0 ${IPV4_GW}
 !
 ipv6 route ::/0 ${IPV6_GW}
+END
+}
+
+# Tail with management ACL applied to vty
+conf_tail_management () {
+cat <<END
+!
+ip access-list extended ipv4-vty
+ permit ip {CAMPUS_SRVR_V4_SUBNET}.128 0.0.0.15 any
+ permit ip host {CAMPUS_SRVR_V4_SUBNET}.241 any
+ permit ip host {CAMPUS_SRVR_V4_SUBNET}.242 any
+ deny   ip any any log
+!
+ipv6 access-list ipv6-vty
+ permit ipv6 ${CAMPUS_SRVR_V6_SUBNET}::/64 any
+ permit ipv6 host ${CAMPUS_LOOP_V6_SUBNET}::241 any
+ permit ipv6 host ${CAMPUS_LOOP_V6_SUBNET}::242 any
+ deny   ipv6 any any log
+!
+line con 0
+ exec-timeout 0 0
+ transport preferred none
+ stopbits 1
+line aux 0
+ exec-timeout 0 0
+ transport preferred none
+ stopbits 1
+line vty 0 4
+ access-class ipv4-vty in
+ exec-timeout 0 0
+ ipv6 access-class ipv6-vty in
+ transport preferred none
+ transport input telnet ssh
+!
+end
 END
 }
 
