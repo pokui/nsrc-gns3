@@ -1,5 +1,5 @@
 #!/bin/bash -eu
-. l3-3-ospf/gen-bdrX
+. l3-3-isis/gen-bdrX
 
 conf_interfaces_bdr_nat () {
   cat <<END

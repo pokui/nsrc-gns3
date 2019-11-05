@@ -1,3 +1,3 @@
 #!/bin/bash -eu
-. l3-3-ospf/gen-coreX
+. l3-3-isis/gen-coreX
 return 2>/dev/null || render "$@"
