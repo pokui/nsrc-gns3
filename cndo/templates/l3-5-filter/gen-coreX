@@ -33,10 +33,10 @@ interface GigabitEthernet0/3
  no switchport
  description Network Management and Monitoring
  ip address ${CAMPUS_SRVR_V4_SUBNET}.129 255.255.255.240
- ip verify unicast reverse-path allow-self-ping
+ ip verify unicast source reachable-via rx allow-self-ping
  load-interval 30
  ipv6 address ${CAMPUS_SRVR_V6_SUBNET}::1/64
- ipv6 verify unicast reverse-path
+ ipv6 verify unicast source reachable-via rx
  no shutdown
 !
 interface Vlan1
@@ -45,55 +45,55 @@ interface Vlan1
 interface Vlan10
  description Management VLAN Building 1
  ip address ${CAMPUS_BLD1_V4_MGMT_SUBNET}.1 255.255.255.0
- ip verify unicast reverse-path allow-self-ping
+ ip verify unicast source reachable-via rx allow-self-ping
  load-interval 30
  ipv6 address ${CAMPUS_BLD1_V6_MGMT_SUBNET}::1/64
- ipv6 verify unicast reverse-path
+ ipv6 verify unicast source reachable-via rx
  no shutdown
 !
 interface Vlan11
  description Staff VLAN Building 1
  ip address ${CAMPUS_BLD1_V4_STAFF_SUBNET}.1 255.255.255.0
- ip verify unicast reverse-path allow-self-ping
+ ip verify unicast source reachable-via rx allow-self-ping
  load-interval 30
  ipv6 address ${CAMPUS_BLD1_V6_STAFF_SUBNET}::1/64
- ipv6 verify unicast reverse-path
+ ipv6 verify unicast source reachable-via rx
  no shutdown
 !
 interface Vlan12
  description Student VLAN Building 1
  ip address ${CAMPUS_BLD1_V4_STUDENT_SUBNET}.1 255.255.255.0
- ip verify unicast reverse-path allow-self-ping
+ ip verify unicast source reachable-via rx allow-self-ping
  load-interval 30
  ipv6 address ${CAMPUS_BLD1_V6_STUDENT_SUBNET}::1/64
- ipv6 verify unicast reverse-path
+ ipv6 verify unicast source reachable-via rx
  no shutdown
 !
 interface Vlan20
  description Management VLAN Building 2
  ip address ${CAMPUS_BLD2_V4_MGMT_SUBNET}.1 255.255.255.0
- ip verify unicast reverse-path allow-self-ping
+ ip verify unicast source reachable-via rx allow-self-ping
  load-interval 30
  ipv6 address ${CAMPUS_BLD2_V6_MGMT_SUBNET}::1/64
- ipv6 verify unicast reverse-path
+ ipv6 verify unicast source reachable-via rx
  no shutdown
 !
 interface Vlan21
  description Staff VLAN Building 2
  ip address ${CAMPUS_BLD2_V4_STAFF_SUBNET}.1 255.255.255.0
- ip verify unicast reverse-path allow-self-ping
+ ip verify unicast source reachable-via rx allow-self-ping
  load-interval 30
  ipv6 address ${CAMPUS_BLD2_V6_STAFF_SUBNET}::1/64
- ipv6 verify unicast reverse-path
+ ipv6 verify unicast source reachable-via rx
  no shutdown
 !
 interface Vlan22
  description Student VLAN Building 2
  ip address ${CAMPUS_BLD2_V4_STUDENT_SUBNET}.1 255.255.255.0
- ip verify unicast reverse-path allow-self-ping
+ ip verify unicast source reachable-via rx allow-self-ping
  load-interval 30
  ipv6 address ${CAMPUS_BLD2_V6_STUDENT_SUBNET}::1/64
- ipv6 verify unicast reverse-path
+ ipv6 verify unicast source reachable-via rx
  no shutdown
 !
 ip telnet source-interface Loopback0
