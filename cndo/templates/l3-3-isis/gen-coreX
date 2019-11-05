@@ -93,7 +93,7 @@ key chain isis-key
    key-string cndlab123
 !
 router isis campus${CAMPUS}
- net 49.0001.1000.6800.${CAMPUS}242.00
+ net 49.0001.000${CAMPUS}.0242.00
  is-type level-2-only
  authentication mode md5 level-2
  authentication key-chain isis-key level-2
