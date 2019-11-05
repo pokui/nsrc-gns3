@@ -14,12 +14,12 @@ interface GigabitEthernet0/0
  no switchport
  description CAMPUS CORE to BORDER
  ip address ${CAMPUS_CORE_V4_SUBNET}.2 255.255.255.240
- ip router isis
+ ip router isis campus${CAMPUS}
  load-interval 30
  ipv6 address ${CAMPUS_CORE_V6_SUBNET}::2/64
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
- ipv6 router isis
+ ipv6 router isis campus${CAMPUS}
  isis network point-to-point
  isis metric 2
  isis ipv6 metric 2
@@ -92,7 +92,7 @@ key chain isis-key
  key 1
    key-string cndlab123
 !
-router isis
+router isis campus${CAMPUS}
  net 49.0001.1000.6800.${CAMPUS}242.00
  is-type level-2-only
  authentication mode md5 level-2
