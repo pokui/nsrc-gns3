@@ -45,6 +45,9 @@ render_interfaces=conf_interfaces_bdr_nat
 conf_nat_bdr_nat () {
   cat <<END
 !
+ip nat translation udp-timeout 30
+ip nat translation dns-timeout 30
+ip nat translation icmp-timeout 30
 ip nat pool campus${CAMPUS} ${CAMPUS_CORE_V4_SUBNET}.33 ${CAMPUS_CORE_V4_SUBNET}.46 prefix 28
 ip nat inside source list NATplus pool campus${CAMPUS} overload
 END
