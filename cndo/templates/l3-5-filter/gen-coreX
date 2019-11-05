@@ -21,24 +21,12 @@ interface GigabitEthernet0/0
  ipv6 address ${CAMPUS_CORE_V6_SUBNET}::2/64
  ipv6 ospf 41 area 0
  ipv6 nd prefix default no-advertise
- ipv6 nd ra suppress
+ ipv6 nd ra suppress all
  no shutdown
-!
-interface GigabitEthernet0/1
- description Trunk Link to dist1-b1.campus${CAMPUS}
- switchport trunk allowed vlan 1,2,10-12,1002-1005
- switchport trunk encapsulation dot1q
- switchport mode trunk
- load-interval 30
- no shutdown
-!
-interface GigabitEthernet0/2
- description Trunk Link to dist1-b2.campus${CAMPUS}
- switchport trunk allowed vlan 1,2,20-22,1002-1005
- switchport trunk encapsulation dot1q
- switchport mode trunk
- load-interval 30
- no shutdown
+END
+  trunk GigabitEthernet0/1 10-12 "Trunk Link to dist1-b1.campus${CAMPUS}"
+  trunk GigabitEthernet0/2 20-22 "Trunk Link to dist1-b2.campus${CAMPUS}"
+cat <<END
 !
 interface GigabitEthernet0/3
  no switchport
@@ -110,7 +98,6 @@ interface Vlan22
  ipv6 address ${CAMPUS_BLD2_V6_STUDENT_SUBNET}::1/64
  ipv6 ospf 41 area 0
  no shutdown
-!
 END
 }
 render_interfaces=conf_interfaces_core_filter
