@@ -146,6 +146,8 @@ To get eno1 attached to virbr0, you'll need to create a script
 #!/bin/bash
 if [ "$1" = "default" -a "$2" = "started" ]; then
   /sbin/ip link set eno1 up
+  # https://serverfault.com/questions/616485/e1000e-reset-adapter-unexpectedly-detected-hardware-unit-hang
+  /sbin/ethtool -K eno1 gso off gro off tso off
   /sbin/brctl addif virbr0 eno1
   iptables -I FORWARD -j ACCEPT -s 100.64.0.0/10 -i virbr0
   iptables -I FORWARD -j ACCEPT -d 100.64.0.0/10 -o virbr0 -m conntrack --ctstate RELATED,ESTABLISHED
@@ -160,34 +162,13 @@ Ensure the script is executable:
 sudo chmod +x /etc/libvirt/hooks/network
 ```
 
-This script also enables NAT from the lab address space.
+This script also enables NAT from the lab address space, plus it has a
+workaround for [this problem](https://serverfault.com/questions/616485/e1000e-reset-adapter-unexpectedly-detected-hardware-unit-hang)
+which can cause Intel NICs to lock up intermittently under high load, by
+disabling TCP offloading.
 
-## Workaround for Intel NIC bug
-
-If you have an Intel LAN adapter, then it probably suffers from
-[this problem](https://serverfault.com/questions/616485/e1000e-reset-adapter-unexpectedly-detected-hardware-unit-hang)
-which causes it to lock up intermittently under high load.
-
-Newer kernels (5.0+) apparently don't have this problem, but until then you
-can workaround it by disabling checksum offloading.  Create a file
-`/etc/networkd-dispatcher/configuring.d/10-intel-fix` with the following
-contents:
-
-```
-#!/bin/sh
-# https://serverfault.com/questions/616485/e1000e-reset-adapter-unexpectedly-detected-hardware-unit-hang
-if expr "$IFACE" : eno >/dev/null; then
-  /sbin/ethtool -K "$IFACE" gso off gro off tso off
-fi
-```
-
-Again, make this executable:
-
-```
-sudo chmod +x /etc/networkd-dispatcher/configuring.d/10-intel-fix
-```
-
-(For Ubuntu 16.04, create this file as `/etc/network/if-pre-up.d/10-intel-fix` instead)
+Newer kernels (5.0+) apparently don't have this problem, in which case it
+may be safe to comment out the ethtool line for a small performance improvement.
 
 ## Reduce networking timeout
 

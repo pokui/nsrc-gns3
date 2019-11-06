@@ -108,6 +108,8 @@ To make this happen:
 #!/bin/bash
 if [ "$1" = "default" -a "$2" = "started" ]; then
   /sbin/ip link set eno1 up
+  # https://serverfault.com/questions/616485/e1000e-reset-adapter-unexpectedly-detected-hardware-unit-hang
+  /sbin/ethtool -K "$IFACE" gso off gro off tso off
   /sbin/brctl addif virbr0 eno1
   iptables -I FORWARD -j ACCEPT -s 100.64.0.0/10 -i virbr0
   iptables -I FORWARD -j ACCEPT -d 100.64.0.0/10 -o virbr0 -m conntrack --ctstate RELATED,ESTABLISHED
