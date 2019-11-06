@@ -1,5 +1,61 @@
 # Overrides for when transit to border is using BGP
 
+conf_head_transit_bgp () {
+  conf_head_transit
+  echo "fhrp version vrrp v3"
+}
+render_head=conf_head_transit_bgp
+
+# This version uses VRRP for uplink redundancy
+conf_interfaces_transit_bgp () {
+  cat <<END
+!
+interface Loopback0
+ description Loopback
+ ip address ${LOOPBACK_V4} 255.255.255.255
+ ipv6 address ${LOOPBACK_V6}/128
+ no shutdown
+!
+interface GigabitEthernet0/0
+ description Workshop LAN
+ ip address ${WS_V4_SUBNET}.$((1 + DEV)) 255.255.255.0
+ ip router isis as65534
+ load-interval 30
+ ipv6 address ${WS_V6_SUBNET}::$((1 + DEV))/64
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+ ipv6 router isis as65534
+ vrrp 1 address-family ipv4
+  priority $((150 - DEV*50))
+  address 192.168.122.254 primary
+  exit-vrrp
+ vrrp 2 address-family ipv6
+  priority $((150 - DEV*50))
+  address FE80::254 primary
+  address 2001:DB8::254/64
+  exit-vrrp
+ isis metric 2
+ isis ipv6 metric 2
+ no shutdown
+END
+
+for CAMPUS in $(seq "$NUM_CAMPUS"); do
+  LINKNET="$((CAMPUS + (DEV-1)*32))"
+  cat <<END
+!
+interface GigabitEthernet0/${CAMPUS}
+ description Campus ${CAMPUS}
+ ip address ${NREN_V4_SUBNET}.$((4 * LINKNET - 3)) 255.255.255.252
+ ipv6 address ${NREN_V6_SUBNET}:${LINKNET}::0/127
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+ load-interval 30
+ no shutdown
+END
+done
+}
+render_interfaces=conf_interfaces_transit_bgp
+
 conf_static_transit_bgp () {
   cat <<END
 !
