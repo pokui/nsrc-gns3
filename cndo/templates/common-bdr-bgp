@@ -35,19 +35,6 @@ END
 }
 render_bgp=conf_bgp_bdr_bgp
 
-# Pull-up routes for BGP: best practice to have these on border.
-# However, OSPFv3 doesn't work to core (IOSvL2 doesn't have OSPFv3).
-# So static route the whole IPv6 block down to the core instead.
-conf_static_bdr_bgp () {
-  cat <<END
-!
-ip route ${CAMPUS_CORE_V4_SUBNET}.0 255.255.255.0 Null0
-!
-ipv6 route ${CAMPUS_V6_BLOCK}::/48 ${CAMPUS_CORE_V6_SUBNET}::2
-END
-}
-render_static=conf_static_bdr_bgp
-
 conf_routemap_bdr_bgp () {
   cat <<END
 !
