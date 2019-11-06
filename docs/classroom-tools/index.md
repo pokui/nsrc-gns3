@@ -57,7 +57,7 @@ Into the editor put:
 ```
 [Service]
 ExecStart=
-ExecStart=/usr/bin/syncthing -no-browser -no-restart -logflags=0 -gui-address=[::]:8384
+ExecStart=/usr/bin/syncthing -no-browser -no-restart -logflags=0 -gui-address=192.168.122.1:8384
 ```
 
 Save, and restart:
