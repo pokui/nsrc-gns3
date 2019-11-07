@@ -175,9 +175,6 @@ workaround for [this problem](https://serverfault.com/questions/616485/e1000e-re
 which can cause Intel NICs to lock up intermittently under high load, by
 disabling TCP offloading.
 
-Newer kernels (5.0+) apparently don't have this problem, in which case it
-may be safe to comment out the ethtool line for a small performance improvement.
-
 ## Reduce networking timeout
 
 If the external interface is not connected, the server will take a long time
