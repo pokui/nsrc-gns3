@@ -1,26 +1,6 @@
 #!/bin/bash -eu
 . l3-7-nms/gen-bdrX
 
-conf_netflow_bdr_final () {
-  cat <<END
-!
-flow exporter EXPORTER-1
-  description Export to VM
-  destination ${CAMPUS_CORE_V4_SUBNET}.130
-  transport udp 9996
-  template data timeout 60
-!
-flow monitor FLOW-MONITOR-V4
-  exporter EXPORTER-1
-  cache timeout active 300
-  record netflow ipv4 original-input
-!
-flow monitor FLOW-MONITOR-V6
-  exporter EXPORTER-1
-  cache timeout active 300
-  record netflow ipv6 original-input
-END
-}
 render_netflow=conf_netflow_bdr_final
 
 conf_interfaces_bdr_final () {
@@ -68,6 +48,8 @@ interface GigabitEthernet0/1
  isis metric 2
  isis ipv6 metric 2
  no shutdown
+!
+ip telnet source-interface Loopback0
 END
 }
 render_interfaces=conf_interfaces_bdr_final

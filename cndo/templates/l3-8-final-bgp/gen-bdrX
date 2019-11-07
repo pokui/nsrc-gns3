@@ -1,4 +1,71 @@
 #!/bin/bash -eu
-. l3-8-final/gen-bdrX
-. common-bdr-bgp
+. l3-7-nms-bgp/gen-bdrX
+
+render_netflow=conf_netflow_bdr_final
+
+conf_interfaces_bdr_final_bgp () {
+  cat <<END
+!
+interface Loopback0
+ description Loopback
+ ip address ${CAMPUS_LOOP_V4_SUBNET}.241 255.255.255.255
+ ipv6 address ${CAMPUS_LOOP_V6_SUBNET}::241/128
+ no shutdown
+!
+interface Null0
+ no ip unreachables
+ no ipv6 unreachables
+!
+interface GigabitEthernet0/0
+ description Link to transit1.nren
+ ip address ${NREN_V4_SUBNET}.${NREN_V4_HOST} 255.255.255.252
+ ip access-group from-nren in
+ ip access-group to-nren out
+ ip nat outside
+ load-interval 30
+ ipv6 address ${NREN_V6_SUBNET}:${CAMPUS}::1/127
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+ ipv6 traffic-filter from-nren-v6 in
+ ipv6 traffic-filter to-nren-v6 out
+ no shutdown
+!
+interface GigabitEthernet0/1
+ description Link to CAMPUS CORE
+ ip address ${CAMPUS_CORE_V4_SUBNET}.1 255.255.255.240
+ ip flow monitor FLOW-MONITOR-V4 input
+ ip flow monitor FLOW-MONITOR-V4 output
+ ip nat inside
+ ip router isis campus${CAMPUS}
+ load-interval 30
+ ipv6 flow monitor FLOW-MONITOR-V6 input
+ ipv6 flow monitor FLOW-MONITOR-V6 output
+ ipv6 address ${CAMPUS_CORE_V6_SUBNET}::1/64
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+ ipv6 router isis campus${CAMPUS}
+ isis network point-to-point
+ isis metric 2
+ isis ipv6 metric 2
+ no shutdown
+!
+interface GigabitEthernet0/2
+ description Link to transit2.nren
+ ip address ${NREN_V4_SUBNET}.$((NREN_V4_HOST + 128)) 255.255.255.252
+ ip access-group from-nren in
+ ip access-group to-nren out
+ ip nat outside
+ load-interval 30
+ ipv6 address ${NREN_V6_SUBNET}:$((CAMPUS + 32))::1/127
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+ ipv6 traffic-filter from-nren-v6 in
+ ipv6 traffic-filter to-nren-v6 out
+ no shutdown
+!
+ip telnet source-interface Loopback0
+END
+}
+render_interfaces=conf_interfaces_bdr_final_bgp
+
 return 2>/dev/null || render "$@"

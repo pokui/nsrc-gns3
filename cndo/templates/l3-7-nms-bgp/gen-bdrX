@@ -1,4 +1,6 @@
 #!/bin/bash -eu
-. l3-7-nms/gen-bdrX
-. common-bdr-bgp
+. l3-6-bgp/gen-bdrX
+
+render_snmp=conf_snmp_campus
+
 return 2>/dev/null || render "$@"

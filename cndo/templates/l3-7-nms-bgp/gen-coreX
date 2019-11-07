@@ -1,4 +1,6 @@
 #!/bin/bash -eu
-. l3-7-nms/gen-coreX
-. common-core-bgp
+. l3-6-bgp/gen-coreX
+
+render_snmp=conf_snmp_campus
+
 return 2>/dev/null || render "$@"
