@@ -49,7 +49,7 @@ config:
         gateway: 192.168.122.1
       - type: static
         address: $IPV6/64
-        gateway: 2001:db8:0:0::2
+        gateway: 2001:db8:0:0::254
   - type: nameserver
     address:
       - 192.168.122.1
