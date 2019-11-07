@@ -142,15 +142,14 @@ To do this, you will need to ask your upstream network to assign you a /64
 prefix, and statically route it to your server's WAN IPv6 address.
 
 This approach gives the class users a true IPv6 network, and is the best
-option for permanent installations.  You can also give your NOC an IPv6
-address out of this range, if you wish.
+option for permanent installations.
 
 ## Use unique local addresses
 
 If you cannot get an IPv6 prefix routed to you, then you can assign an IPv6
-network using Unique Local Addresses, for example `fd21:4e52:5343::/64`.
-With the libvirt hook already in place, this will be NAT'd to your server's
-external IPv6 address.
+network using [Unique Local Addresses](https://en.wikipedia.org/wiki/Unique_local_address),
+for example `fd21:4e52:5343::/64`.  With the libvirt hook already in place,
+this will be NAT'd to your server's external IPv6 address.
 
 This is bad practice for a production network, but will allow laptops to be
 able to ping IPv6 addresses inside the emulation.
