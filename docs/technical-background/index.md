@@ -33,10 +33,10 @@ like" public IP space, but is actually reserved space from
 
 # Out-of-band management
 
-In the more complex topologies, the student VMs are connected both to the
-IOSv/IOSvL2 campus network and the 192.168.122 network.  Their default
-gateway points via the virtual campus network, but the 192.168.122
-connection functions as an "out-of-band management" network.
+The student VMs (srv1/hostN) are connected both to the IOSv/IOSvL2 campus
+network and the 192.168.122 network.  Their default gateway points via the
+virtual campus network, but the 192.168.122 connection functions as an
+"out-of-band management" network.
 
 When students connect to their VM on its 192.168.122 address, it bypasses
 the IOSv network.  This is important because IOSv has a throughput limit of
