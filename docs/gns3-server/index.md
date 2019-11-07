@@ -45,6 +45,7 @@ User=%i
 Restart=on-failure
 RestartSec=5
 ExecStart=/usr/bin/gns3server
+LimitNOFILE=16384
 
 [Install]
 WantedBy=multi-user.target
