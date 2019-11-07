@@ -158,6 +158,7 @@ if [ "$1" = "default" -a "$2" = "started" ]; then
   iptables -t nat -A POSTROUTING -j MASQUERADE -s 100.64.0.0/10
   ip6tables -I FORWARD -j ACCEPT -i virbr0
   ip6tables -I FORWARD -j ACCEPT -o virbr0 -m conntrack --ctstate RELATED,ESTABLISHED
+  ip6tables -t nat -I POSTROUTING -j RETURN -o virbr0
   ip6tables -t nat -A POSTROUTING -j MASQUERADE -s 2001:db8::/32
   ip6tables -t nat -A POSTROUTING -j MASQUERADE -s fc00::/7
 fi
