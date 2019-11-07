@@ -31,9 +31,16 @@ Inside the labs, address space is taken from `100.64.0.0/10`.  This "looks
 like" public IP space, but is actually reserved space from
 [RFC 6598](https://tools.ietf.org/html/rfc6598).
 
+# IPv6
+
 IPv6 uses `2001:db8::/32`, the documentation prefix, and works internally
 between the nodes in the emulation.  You do not require any external IPv6
 connectivity to your server to be able to use IPv6 in the exercises.
+
+The `srv1` VM has a customised `/etc/gai.conf` which prefers IPv4 over IPv6,
+except when talking to another `2001:db8::` address.  This reduces the risk
+of timeouts when talking to a machine on the public Internet which
+advertises a AAAA record, but no IPv6 connectivity is available.
 
 If your server *does* have an IPv6 address on its WAN interface, then
 outbound IPv6 traffic from the emulation will NAT to this address.  This
