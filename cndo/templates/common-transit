@@ -43,12 +43,14 @@ END
   1)
     # cannot configure two link-local addresses
     echo " ipv6 address FE80::254 link-local"
+    echo " ipv6 address ${WS_V6_SUBNET}::254/64"
   ;;
   *)
     echo " ipv6 address FE80::$((1 + DEV)) link-local"
   ;;
   esac
   cat <<END
+ ipv6 address ${WS_V6_SUBNET}::$((1 + DEV))/64
  ipv6 nd dad attempts 0
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
@@ -91,7 +93,7 @@ conf_static_transit () {
 !
 logging facility local0
 logging host 192.168.122.250
-ipv6 route GigabitEthernet0/0 FE80::1
+ipv6 route ::/0 GigabitEthernet0/0 FE80::1
 END
   case ${DEV} in
   1)
