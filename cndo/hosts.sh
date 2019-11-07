@@ -45,6 +45,14 @@ cat <<EOS
 2001:DB8:100:${campus}::1	gi0-0.bdr1.campus${campus}.ws.nsrc.org
 EOS
 done
+for campus in $(seq 1 6); do
+cat <<EOS
+100.68.0.$((campus*4-3+128))		gi0-${campus}.transit2.nren.ws.nsrc.org
+2001:DB8:100:${campus+32}::	gi0-${campus}.transit2.nren.ws.nsrc.org
+100.68.0.$((campus*4-2+128))		gi0-2.bdr1.campus${campus}.ws.nsrc.org
+2001:DB8:100:${campus+32}::1	gi0-2.bdr1.campus${campus}.ws.nsrc.org
+EOS
+done
 
 cat <<EOS
 100.68.0.251		lo0.transit1.nren.ws.nsrc.org

@@ -71,6 +71,7 @@ router bgp ${CAMPUS}0
  bgp router-id ${CAMPUS_LOOP_V4_SUBNET}.241
 !
  address-family ipv4
+  network ${CAMPUS_CORE_V4_SUBNET}.0 mask 255.255.255.0
   neighbor ${CAMPUS_LOOP_V4_SUBNET}.242 remote-as ${CAMPUS}0
   neighbor ${CAMPUS_LOOP_V4_SUBNET}.242 update-source loopback 0
   neighbor ${CAMPUS_LOOP_V4_SUBNET}.242 description iBGP with Core Router
@@ -88,6 +89,7 @@ router bgp ${CAMPUS}0
   distance bgp 200 200 200
 !
  address-family ipv6
+  network ${CAMPUS_V6_BLOCK}::/48
   neighbor ${CAMPUS_LOOP_V6_SUBNET}::242 remote-as ${CAMPUS}0
   neighbor ${CAMPUS_LOOP_V6_SUBNET}::242 update-source loopback0
   neighbor ${CAMPUS_LOOP_V6_SUBNET}::242 description iBGP with Core Router
@@ -120,5 +122,16 @@ ipv6 prefix-list Campus${CAMPUS}-v6out permit ${CAMPUS_V6_BLOCK}::/48
 END
 }
 render_routemap=conf_routemap_bdr_bgp
+
+conf_static_bdr_bgp () {
+  cat <<END
+!
+ip route ${CAMPUS_CORE_V4_SUBNET}.0 255.255.255.0 Null0
+ip route ${CAMPUS_V4_BLOCK}.0.0 255.255.0.0 Null0
+!
+ipv6 route ${CAMPUS_V6_BLOCK}::/48 Null0
+END
+}
+render_static=conf_static_bdr_bgp
 
 return 2>/dev/null || render "$@"
