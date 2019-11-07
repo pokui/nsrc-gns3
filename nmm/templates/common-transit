@@ -26,24 +26,35 @@ conf_interfaces_transit () {
 interface Loopback0
  description Loopback
  ip address ${LOOPBACK_V4} 255.255.255.255
- ip ospf 42 area 0
  ipv6 address ${LOOPBACK_V6}/128
- ipv6 ospf 42 area 0
  no shutdown
 !
 interface GigabitEthernet0/0
  description Workshop LAN
  ip address ${WS_V4_SUBNET}.$((1 + DEV)) 255.255.255.0
 END
-  # Add .254 alias as target for inbound static routes.  Maybe VRRP in future?
+  # Add .254 alias as target for inbound static routes.  Could be VRRP
   [ "$DEV" == "1" ] && echo " ip address ${WS_V4_SUBNET}.254 255.255.255.0 secondary"
   cat <<END
- ip ospf 42 area 0
- ipv6 address ${WS_V6_SUBNET}::$((1 + DEV))/64
- ipv6 ospf 42 area 0
+ ip router isis as65534
+ load-interval 30
+END
+  case ${DEV} in
+  1)
+    # cannot configure two link-local addresses
+    echo " ipv6 address FE80::254 link-local"
+  ;;
+  *)
+    echo " ipv6 address FE80::$((1 + DEV)) link-local"
+  ;;
+  esac
+  cat <<END
+ ipv6 nd dad attempts 0
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
- load 30
+ ipv6 router isis as65534
+ isis metric 2
+ isis ipv6 metric 2
  no shutdown
 END
 
@@ -54,12 +65,11 @@ for CAMPUS in $(seq "$NUM_CAMPUS"); do
 interface GigabitEthernet0/${CAMPUS}
  description Campus ${CAMPUS}
  ip address ${NREN_V4_SUBNET}.$((4 * LINKNET - 3)) 255.255.255.252
+ load-interval 30
  ipv6 address ${NREN_V6_SUBNET}:${LINKNET}::0/127
- ip ospf 42 area 0
- ipv6 ospf 42 area 0
+ ipv6 nd dad attempts 0
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
- load 30
  no shutdown
 END
 done
@@ -69,33 +79,52 @@ render_interfaces=conf_interfaces_transit
 conf_static_transit () {
   echo "!"
   echo "ip route 0.0.0.0 0.0.0.0 ${WS_V4_SUBNET}.1"
+  case ${DEV} in
+  1)
   for CAMPUS in $(seq "$NUM_CAMPUS"); do
     LINKNET="$((CAMPUS + (DEV-1)*32))"
     echo "ip route 100.68.${CAMPUS}.0 255.255.255.0 ${NREN_V4_SUBNET}.$((4 * LINKNET - 2))"
   done
-  echo "!"
-  echo "logging facility local0"
-  echo "logging host 192.168.122.250"
-  echo "ipv6 route ::/0 ${WS_V6_SUBNET}::1"
+  ;;
+  esac
+  cat <<END
+!
+logging facility local0
+logging host 192.168.122.250
+ipv6 route GigabitEthernet0/0 FE80::1
+END
+  case ${DEV} in
+  1)
   for CAMPUS in $(seq "$NUM_CAMPUS"); do
     LINKNET="$((CAMPUS + (DEV-1)*32))"
     echo "ipv6 route 2001:DB8:${CAMPUS}::/48 ${NREN_V6_SUBNET}:${LINKNET}::1"
   done
+  ;;
+  esac
 }
 render_static=conf_static_transit
 
 conf_igp_transit () {
   cat <<END
 !
-router ospf 42
- router-id $LOOPBACK_V4
- passive-interface default
- no passive-interface GigabitEthernet0/0
+key chain isis-key
+ key 1
+   key-string cndlab123
 !
-ipv6 router ospf 42
- router-id $LOOPBACK_V4
- passive-interface default
- no passive-interface GigabitEthernet0/0
+router isis as65534
+ net 49.0001.0000.025${DEV}.00
+ is-type level-2-only
+ authentication mode md5 level-2
+ authentication key-chain isis-key level-2
+ metric-style wide
+ log-adjacency-changes all
+ metric 100000
+ passive-interface Loopback0
+ !
+ address-family ipv6
+  multi-topology
+  metric 100000
+ exit-address-family
 END
 }
 render_igp=conf_igp_transit

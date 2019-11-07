@@ -60,7 +60,10 @@ Edit it so it looks like this (leave the sections marked `....` alone):
       <range start='192.168.122.100' end='192.168.122.249'/>
     </dhcp>
   </ip>
+  <ip family='ipv6' address='fe80::1' prefix='64'>
+  </ip>
   <route address='100.64.0.0' prefix='10' gateway='192.168.122.254'/>
+  <route family='ipv6' address='2001:db8::' prefix='32' gateway='fe80::254'/>
 </network>
 ```
 
