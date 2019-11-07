@@ -21,14 +21,20 @@ render_vlans=conf_vlans_dist_vlan
 conf_stp_dist_vlan () {
   cat <<END
 !
-spanning-tree vlan ${BUILDING}0 priority ${PRIORITY}
-spanning-tree vlan ${BUILDING}1 priority ${PRIORITY}
-spanning-tree vlan ${BUILDING}2 priority ${PRIORITY}
+spanning-tree mode mst
+spanning-tree mst 0 priority ${PRIORITY}
 END
 }
 render_stp=conf_stp_dist_vlan
 
 conf_interfaces_dist_l2final () {
+  trunk Port-channel1 ${BUILDING}0-${BUILDING}2 "Aggregate Link to edge1-b${BUILDING}.campus${CAMPUS}"
+  trunk GigabitEthernet0/0 ${BUILDING}0-${BUILDING}2 "Trunk Link to core1.campus${CAMPUS}"
+  trunk GigabitEthernet0/1 ${BUILDING}0-${BUILDING}2 "Trunk Link to edge1-b${BUILDING}.campus${CAMPUS}"
+  echo " channel-group 1 mode active"
+  trunk GigabitEthernet0/2 ${BUILDING}0-${BUILDING}2 "Trunk Link to edge1-b${BUILDING}.campus${CAMPUS}"
+  echo " channel-group 1 mode active"
+  trunk GigabitEthernet0/3 ${BUILDING}0-${BUILDING}2 "Trunk Link to edge2-b${BUILDING}.campus${CAMPUS}"
   cat <<END
 !
 interface Vlan 1
@@ -37,51 +43,9 @@ interface Vlan 1
 interface Vlan${BUILDING}0
  description Management VLAN Building ${BUILDING}
  ip address ${IPV4_ADDRESS} 255.255.255.0
+ load-interval 30
  ipv6 address ${IPV6_ADDRESS}/64
- load-interval 30
- no shut
-!
-interface Port-channel1
- description LAG to Edge Switch 1
- switchport trunk allowed vlan 1,2,${BUILDING}0-${BUILDING}2,1002-1005
- switchport trunk encapsulation dot1q
- switchport mode trunk
- load-interval 30
- no shut
-!
-interface GigabitEthernet0/0
- description Trunk Link to core1.campus${CAMPUS}
- switchport trunk allowed vlan 1,2,${BUILDING}0-${BUILDING}2,1002-1005
- switchport trunk encapsulation dot1q
- switchport mode trunk
- load-interval 30
- no shut
-!
-interface GigabitEthernet0/1
- description Trunk Link to edge1-b${BUILDING}.campus${CAMPUS}
- switchport trunk allowed vlan 1,2,${BUILDING}0-${BUILDING}2,1002-1005
- switchport trunk encapsulation dot1q
- switchport mode trunk
- channel-group 1 mode on
- load-interval 30
- no shut
-!
-interface GigabitEthernet0/2
- description Trunk Link to edge1-b${BUILDING}.campus${CAMPUS}
- switchport trunk allowed vlan 1,2,${BUILDING}0-${BUILDING}2,1002-1005
- switchport trunk encapsulation dot1q
- switchport mode trunk
- channel-group 1 mode on
- load-interval 30
- no shut
-!
-interface GigabitEthernet0/3
- description Trunk Link to edge2-b${BUILDING}.campus${CAMPUS}
- switchport trunk allowed vlan 1,2,${BUILDING}0-${BUILDING}2,1002-1005
- switchport trunk encapsulation dot1q
- switchport mode trunk
- load-interval 30
- no shut
+ no shutdown
 END
 }
 render_interfaces=conf_interfaces_dist_l2final

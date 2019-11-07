@@ -35,6 +35,8 @@ END
 
 conf_head_default () {
 cat <<END
+version 15.2
+!
 hostname $HOSTNAME
 !
 logging userinfo
