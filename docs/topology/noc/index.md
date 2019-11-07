@@ -141,6 +141,7 @@ Be careful to get uppercase and lowercase exactly correct.
 Now start softflowd:
 
 ```
+sudo systemctl daemon-reload
 sudo systemctl start softflowd
 sudo systemctl enable softflowd
 ```
