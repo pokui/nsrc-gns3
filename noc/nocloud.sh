@@ -90,6 +90,23 @@ write_files:
   - path: /etc/apt/apt.conf.d/99proxy
     content: |
       Acquire::http::Proxy "http://192.168.122.1:3142/";
+  - path: /etc/gai.conf
+    content: |
+      # New label table with separate label for 2001:db8::/32.
+      # The RFC 3484 rules prefer the source and destination to have
+      # the same label. So if we have a 2001:db8 source address and are
+      # connecting to something on the public Internet which has both
+      # v4 and v6 addresses, we will prefer to use v4 (where the source
+      # and destination both have label "4") rather than v6.
+      label ::1/128       0
+      label ::/0          1
+      label 2002::/16     2
+      label ::/96         3
+      label ::ffff:0:0/96 4
+      label fec0::/10     5
+      label fc00::/7      6
+      label 2001:0::/32   7
+      label 2001:db8::/32 6
 runcmd:
   - DEBIAN_FRONTEND=noninteractive fix-hostname $FQDN
   # Don't run any hostN containers, but prepare for cloning them in case they are desired.
