@@ -115,6 +115,10 @@ if [ "$1" = "default" -a "$2" = "started" ]; then
   iptables -I FORWARD -j ACCEPT -d 100.64.0.0/10 -o virbr0 -m conntrack --ctstate RELATED,ESTABLISHED
   iptables -t nat -I POSTROUTING -j RETURN -o virbr0
   iptables -t nat -A POSTROUTING -j MASQUERADE -s 100.64.0.0/10
+  ip6tables -I FORWARD -j ACCEPT -i virbr0
+  ip6tables -I FORWARD -j ACCEPT -o virbr0 -m conntrack --ctstate RELATED,ESTABLISHED
+  ip6tables -t nat -A POSTROUTING -j MASQUERADE -s 2001:db8::/32
+  ip6tables -t nat -A POSTROUTING -j MASQUERADE -s fc00::/7
   #### ADD: Accept inbound from trusted source
   iptables -I FORWARD -s 10.20.30.0/24 -j ACCEPT
 fi
@@ -122,6 +126,60 @@ fi
 
 This works as long as there is no intervening NAT.  However, users will not
 be able to resolve the entries in your DNS.
+
+# IPv6 on class network
+
+The class network intentionally does not have any global IPv6 address
+configured, so that student laptops will not attempt to use IPv6 when it is
+not available.
+
+If you do have IPv6 available in the upstream network, and you want to make
+IPv6 available on the classroom wifi, then you have two choices.
+
+## Use a real IPv6 prefix
+
+To do this, you will need to ask your upstream network to assign you a /64
+prefix, and statically route it to your server's WAN IPv6 address.
+
+This approach gives the class users a true IPv6 network, and is the best
+option for permanent installations.  You can also give your NOC an IPv6
+address out of this range, if you wish.
+
+## Use unique local addresses
+
+If you cannot get an IPv6 prefix routed to you, then you can assign an IPv6
+network using Unique Local Addresses, for example `fd21:4e52:5343::/64`.
+With the libvirt hook already in place, this will be NAT'd to your server's
+external IPv6 address.
+
+This is bad practice for a production network, but will allow laptops to be
+able to ping IPv6 addresses inside the emulation.
+
+Many hosts will prefer to use IPv4 rather than IPv6 ULA when connecting to a
+dual-stack destination on the Internet, but that isn't guaranteed.
+
+## Configuration
+
+Use `virsh net-edit default` to add the chosen IPv6 range to your class
+network, for example:
+
+```
+  ...
+  <ip family='ipv6' address='fe80::1' prefix='64'>
+  </ip>
+  <ip family='ipv6' address='fd21:4e52:5343::1' prefix='64'>
+    <dhcp>
+      <range start='fd21:4e52:5343::1000' end='fd21:4e52:5343::ffff'/>
+    </dhcp>
+  </ip>
+  ...
+```
+
+!!! Note
+    Do not remove your link-local IPv6 address (`fe80::1`) as this is used
+    to route traffic between the transit routers and virbr0
+
+Reboot to make this change active.
 
 # apt-cacher-ng SSL/TLS passthrough
 

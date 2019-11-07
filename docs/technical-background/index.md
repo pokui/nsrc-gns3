@@ -27,10 +27,22 @@ the same backbone addresses for transit routers and out-of-band management.
 This means that if you start both these topologies at the same time, it
 won't work.
 
-Inside the labs, address space is taken from 100.64.0.0/10.  This "looks
+Inside the labs, address space is taken from `100.64.0.0/10`.  This "looks
 like" public IP space, but is actually reserved space from
-[RFC 6598](https://tools.ietf.org/html/rfc6598).  IPv6 uses 2001:db8::/32,
-the documentation prefix.
+[RFC 6598](https://tools.ietf.org/html/rfc6598).
+
+IPv6 uses `2001:db8::/32`, the documentation prefix, and works internally
+between the nodes in the emulation.  You do not require any external IPv6
+connectivity to your server to be able to use IPv6 in the exercises.
+
+If your server *does* have an IPv6 address on its WAN interface, then
+outbound IPv6 traffic from the emulation will NAT to this address.  This
+means that `ping6` and `traceroute6` to the Internet will work as expected.
+
+The classroom wifi network intentionally does not have any IPv6, apart from
+link-local addresses, so as not to interfere with student Internet access.
+If you do want to deploy IPv6 on the classroom wifi, see
+[unusual configurations](../unusual-configurations/#ipv6-on-class-network).
 
 # Out-of-band management
 
