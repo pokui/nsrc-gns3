@@ -335,11 +335,11 @@ if action == "edit":
 <textarea class="config" name="config">%s</textarea>
 <input type="submit" value="Import">
 </form>
-<a href="?project_id=%s&node_id=%s">Cancel</a>
+<a href="?project_id=%s">Cancel</a>
 """ % (
         html.escape(name),
         html.escape(config.decode("UTF-8", errors="replace")),
-        form.getfirst("project_id"), form.getfirst("node_id"),
+        form.getfirst("project_id"),
     ))
     sys.exit(0)
 
