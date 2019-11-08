@@ -13,7 +13,72 @@ Devices are "locked" in position, so you can't accidentally move them around
 or delete them.  Should you wish to do so, then right-click and "Unlock
 Item"
 
-# Reset individual device
+# Configuration management web page
+
+The GNS3 GUI currently does not have a way to restore individual devices
+from snapshot, or export/import devices of individual IOSv devices (e.g. for
+password recovery)
+
+Until those features are added, we have written a small CGI tool to perform
+those functions.  It's important that the CGI runs as the `nsrc` user, in
+order to have permissions to change the disk image files, so a little work
+is required to make this happen.
+
+First, install the necessary packages:
+
+```
+sudo apt-get install python3-guestfs apache2-suexec-pristine unzip
+sudo a2enmod cgi suexec userdir
+sudo chmod +r /boot/vmlinuz-*
+```
+
+Create `/etc/apache2/conf-enabled/usercgi.conf` containing:
+
+```
+<Directory "/home/*/public_html/cgi-bin/">
+    Options ExecCGI
+    SetHandler cgi-script
+</Directory>
+```
+
+Restart apache:
+
+```
+sudo systemctl restart apache2
+```
+
+As the `nsrc` user, make the directory and install the script:
+
+```bash
+mkdir -p ~/public_html/cgi-bin
+cd ~/public_html/cgi-bin
+wget https://raw.githubusercontent.com/nsrc-org/nsrc-gns3/master/gns3man
+chmod 755 ~/public_html/cgi-bin ~/public_html/cgi-bin/gns3man
+```
+
+!!! Note
+    `suexec` is fussy about permissions, and will not allow scripts to
+    execute if the group-write bit is set on the script or its enclosing
+    directory.
+
+The CGI should now be available at <http://192.168.122.1/~nsrc/cgi-bin/gns3man>
+
+!!! Warning
+    Whenever you update the kernel, you will need to re-run the command:
+
+    ```
+    chmod +r /boot/vmlinuz-*
+    ```
+
+    This is because the CGI uses libguestfs to read and write the IOSv
+    NVRAM, and this in turn needs to read your kernel to start a temporary
+    virtual machine.
+
+# Manual configuration management
+
+For reference, here is how these tasks are implemented manually.
+
+## Reset individual device
 
 To reset an individual device to its vanilla, unconfigured state:
 
@@ -44,7 +109,7 @@ automatically.
 There is a [feature request](https://github.com/GNS3/gns3-gui/issues/2868)
 for a more friendly way to do this - or we could make a script.
 
-# Restore individual device from snapshot
+## Restore individual device from snapshot
 
 This is rather difficult to do manually, but here's the process anyway and
 we'll have to turn it into a script.
@@ -96,7 +161,7 @@ $ unzip -j snapshots/ssh-snmp_101019_165326.gns3project -d project-files/qemu/a1
 There is a [feature request](https://github.com/GNS3/gns3-gui/issues/2870)
 for a more friendly way to do this.
 
-# Password recovery
+## Password recovery
 
 GNS3 currently does not have a way to
 [export and import IOSv/IOSvL2 configs](https://github.com/GNS3/gns3-server/issues/1315).
@@ -136,7 +201,7 @@ guestfish -a hda_disk.qcow2 -m /dev/sda1:/ -- upload /tmp/nvram /nvram
 
 After this you can start the device again.
 
-## libguestfs error
+# libguestfs error
 
 If you see the following error:
 
