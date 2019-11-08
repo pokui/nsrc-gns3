@@ -2,13 +2,16 @@
 
 """
 CGI tool to manage configurations of IOSv devices in GNS3
+
+* Restore configurations from snapshots
+* Read and edit the config in NVRAM
 """
 
 GNS3_URL = "http://localhost:3080"
 EXCLUDE_PROJECTS = {
     "NOC",
 }
-DEBUG = False
+DEBUG = True
 
 import base64
 import cgi
@@ -47,6 +50,8 @@ def preamble(content_type="text/html"):
         print(CO)
         print()
         SENT_PREAMBLE = True
+        if DEBUG:
+            cgitb.enable()
 
 def redirect(url, status="302 Found"):
     print("Status: %s" % status)
@@ -72,6 +77,7 @@ form.login label { display: table-cell; padding: 0.3em 1em 0.3em 0em; }
 form.login input { display: table-cell; }
 table.nodes th { background-color: #ff8080; }
 table.nodes td { padding: 0em 0.5em 0em 0.5em; }
+textarea.config { white-space: pre; width: 100%%; height: 80%%; font-family: monospace; font-size: 110%%; }
 </style>
 </head>
 <body>
@@ -191,7 +197,7 @@ def restore(project_id, node_ids, snapshot_id):
         if node["status"] != "stopped":
             start_stop(project_id, node["node_id"], "stop")
             restart.append(node)
-        if ss_filename:
+        if node["name"] in snapshot_ids:
             cmd = ["unzip", "-jo", ss_filename,
                 "-d", node["node_directory"],
                 "project-files/*/%s/*" % snapshot_ids[node["name"]],
@@ -206,6 +212,54 @@ def restore(project_id, node_ids, snapshot_id):
     for node in restart:
         start_stop(project_id, node["node_id"], "start")
     return "Restore complete"
+
+def export_import_config(project_id, node_id, config=None):
+    """
+    If config is None: reads the config
+    if config is bytes: replaces the config
+    Returns: error, name, current_or_previous_config
+    """
+    sys.path.extend(glob.glob("/usr/share/gns3/gns3-server/lib/*/site-packages"))
+    from gns3server.compute.iou.utils.iou_export import nvram_export
+    from gns3server.compute.iou.utils.iou_import import nvram_import
+    import guestfs
+
+    if not project_id:
+        return ("No project selected", None, None)
+    if not node_id:
+        return ("No node selected", None, None)
+    node = api_get("/v2/projects/%s/nodes/%s" % (project_id, node_id))
+    name = node["name"]
+    if node["status"] == "started":
+        start_stop(project_id, node_id, "stop")
+
+    # virt-cat -a hda_disk.qcow2 -m /dev/sda1:/ /nvram >/tmp/nvram
+    #os.environ["LIBGUESTFS_DEBUG"]="1"
+    #os.environ["LIBGUESTFS_TRACE"]="1"
+    g = guestfs.GuestFS(python_return_dict=True)
+    g.add_drive_opts(node["node_directory"]+"/hda_disk.qcow2", format="qcow2", readonly=int(not bool(config)))
+    g.launch()
+    try:
+        g.mount("/dev/sda1", "/")
+        nvram = g.read_file("/nvram")
+        try:
+            startup, private = nvram_export(nvram)
+        except ValueError as e:
+            return ("nvram_export: %s" % e, name, None)
+
+        if config:
+            try:
+                nvram = nvram_import(nvram, config, private, 512)
+            except ValueError as e:
+                return ("nvram_import: %s" % e, name, startup)
+            try:
+                g.write("/nvram", bytes(nvram))
+            except RuntimeError as e:
+                return ("guestfs_write: %s" % e, name, startup)
+        return (None, name, startup)
+    finally:
+        g.shutdown()
+        g.close()
 
 ###### START HERE ######
 # Check for logout
@@ -252,18 +306,45 @@ project_id = form.getfirst("project_id")
 
 # Actions which generate a redirect
 if action in ["start", "stop"]:
-    flash(start_stop(project_id, form.getfirst("node_id"), action))
+    start_stop(project_id, form.getfirst("node_id"), action)
     redirect("?project_id=%s" % project_id)
 
 if action == "restore" and os.environ["REQUEST_METHOD"] == "POST":
     flash(restore(project_id, form.getlist("node_id"), form.getfirst("snapshot_id")))
     redirect("?project_id=%s" % project_id)
 
+if action == "edit":
+    config = (form.getfirst("config") or "").encode("UTF-8", errors="replace")
+    if os.environ["REQUEST_METHOD"] == "POST" and config:
+        err, name, prev_config = export_import_config(form.getfirst("project_id"), form.getfirst("node_id"), config)
+        if not err:
+            flash("Imported to %s" % name)
+            redirect("?project_id=%s" % project_id)
+        flash_message = err
+        # but fall through to redisplay same page
+    else:
+        err, name, config = export_import_config(form.getfirst("project_id"), form.getfirst("node_id"))
+        if err:
+            flash(err)
+            redirect("?project_id=%s" % project_id)
+
+    with layout():
+        print("""
+<h1>Config for %s</h1>
+<form method="post">
+<textarea class="config" name="config">%s</textarea>
+<input type="submit" value="Import">
+</form>
+<a href="?project_id=%s&node_id=%s">Cancel</a>
+""" % (
+        html.escape(name),
+        html.escape(config.decode("UTF-8", errors="replace")),
+        form.getfirst("project_id"), form.getfirst("node_id"),
+    ))
+    sys.exit(0)
+
 # All cookies set, we can now generate the HTTP response
 with layout():
-    if DEBUG:
-        cgitb.enable()
-
     #print(html.escape(repr(form)))
 
     # Project selector
@@ -315,8 +396,12 @@ with layout():
 
         attr = ""
         actions = [node["status"]]
-        #if iosv:
-        #    actions.append('<a href="?project_id=%s&node_id=%s&action=edit">Edit</a>' % (pid, nid))
+        if node["status"] == "stopped":
+            actions.append('<a href="?project_id=%s&node_id=%s&action=start">Start</a>' % (pid, nid))
+        else:
+            actions.append('<a href="?project_id=%s&node_id=%s&action=stop">Stop</a>' % (pid, nid))
+        if iosv:
+            actions.append('<a href="?project_id=%s&node_id=%s&action=edit">Edit</a>' % (pid, nid))
         print("""
 <tr>
     <td><input type="checkbox" name="node_id" id="%s" value="%s"%s></td>
