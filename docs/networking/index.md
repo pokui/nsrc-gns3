@@ -152,6 +152,8 @@ if [ "$1" = "default" -a "$2" = "started" ]; then
   # https://serverfault.com/questions/616485/e1000e-reset-adapter-unexpectedly-detected-hardware-unit-hang
   /sbin/ethtool -K eno1 gso off gro off tso off
   /sbin/brctl addif virbr0 eno1
+  sysctl net.ipv4.conf.virbr0.accept_redirects=0
+  sysctl net.ipv4.conf.virbr0.send_redirects=0
   iptables -I FORWARD -j ACCEPT -s 100.64.0.0/10 -i virbr0
   iptables -I FORWARD -j ACCEPT -d 100.64.0.0/10 -o virbr0 -m conntrack --ctstate RELATED,ESTABLISHED
   iptables -t nat -I POSTROUTING -j RETURN -o virbr0
