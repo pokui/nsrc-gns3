@@ -70,3 +70,19 @@ After this change, restart the ssh service:
 ```
 sudo systemctl restart ssh
 ```
+
+# Disable known hosts hashing (optional)
+
+In its default configuration, the ssh client writes obscured information in
+`~/.ssh/known_hosts`.  The idea is to make it harder for an intruder to
+learn the names of other hosts you have connected to.
+
+This is not a concern in a lab, so we suggest you edit `/etc/ssh/ssh_config`
+and set:
+
+```
+HashKnownHosts no
+```
+
+This is helpful when reinitializing the lab, as it makes it easier to find
+and delete entries from `known_hosts` selectively.
