@@ -206,6 +206,7 @@ ExecStart=/lib/systemd/systemd-networkd-wait-online --timeout=15
 
 Exit and save.
 
+<!--
 For [older systems](https://unix.stackexchange.com/questions/186162/how-to-change-timeout-in-systemctl)
 using "ifupdown" (e.g. Ubuntu 16.04) there's a different file:
 
@@ -219,6 +220,7 @@ and in the editor, write:
 [Service]
 TimeoutStartSec=15
 ```
+-->
 
 # Reboot and test
 
