@@ -6,6 +6,8 @@ conf_interfaces_core_l2ip () {
 !
 interface Vlan1
  ip address ${CAMPUS_V4_BLOCK}.0.2 255.255.0.0
+ no ip redirects
+ no ip proxy-arp
  load-interval 30
  ipv6 address ${CAMPUS_V6_BLOCK}:1::2/64
  no shutdown

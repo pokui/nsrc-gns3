@@ -33,6 +33,8 @@ interface Vlan1
 interface Vlan10
  description Management VLAN Building 1
  ip address ${CAMPUS_BLD1_V4_MGMT_SUBNET}.1 255.255.255.0
+ no ip redirects
+ no ip proxy-arp
  load-interval 30
  ipv6 address ${CAMPUS_BLD1_V6_MGMT_SUBNET}::1/64
  no shutdown
@@ -40,6 +42,8 @@ interface Vlan10
 interface Vlan20
  description Management VLAN Building 2
  ip address ${CAMPUS_BLD2_V4_MGMT_SUBNET}.1 255.255.255.0
+ no ip redirects
+ no ip proxy-arp
  load-interval 30
  ipv6 address ${CAMPUS_BLD2_V6_MGMT_SUBNET}::1/64
  no shutdown

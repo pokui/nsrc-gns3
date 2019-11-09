@@ -19,6 +19,8 @@ interface Null0
 interface GigabitEthernet0/0
  description Link to transit1.nren
  ip address ${NREN_V4_SUBNET}.${NREN_V4_HOST} 255.255.255.252
+ no ip redirects
+ no ip proxy-arp
  ip access-group from-nren in
  ip access-group to-nren out
  ip nat outside
@@ -33,6 +35,8 @@ interface GigabitEthernet0/0
 interface GigabitEthernet0/1
  description Link to CAMPUS CORE
  ip address ${CAMPUS_CORE_V4_SUBNET}.1 255.255.255.240
+ no ip redirects
+ no ip proxy-arp
  ip flow monitor FLOW-MONITOR-V4 input
  ip flow monitor FLOW-MONITOR-V4 output
  ip nat inside
@@ -52,6 +56,8 @@ interface GigabitEthernet0/1
 interface GigabitEthernet0/2
  description Link to transit2.nren
  ip address ${NREN_V4_SUBNET}.$((NREN_V4_HOST + 128)) 255.255.255.252
+ no ip redirects
+ no ip proxy-arp
  ip access-group from-nren in
  ip access-group to-nren out
  ip nat outside

@@ -13,6 +13,8 @@ interface Loopback0
 interface GigabitEthernet0/0
  description Link to NREN
  ip address ${NREN_V4_SUBNET}.${NREN_V4_HOST} 255.255.255.252
+ no ip redirects
+ no ip proxy-arp
  ip nat outside
  load-interval 30
  ipv6 address ${NREN_V6_SUBNET}:${CAMPUS}::1/127

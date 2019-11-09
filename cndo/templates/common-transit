@@ -36,6 +36,8 @@ END
   # Add .254 alias as target for inbound static routes.  Could be VRRP
   [ "$DEV" == "1" ] && echo " ip address ${WS_V4_SUBNET}.254 255.255.255.0 secondary"
   cat <<END
+ no ip redirects
+ no ip proxy-arp
  ip router isis as65534
  load-interval 30
 END
@@ -67,6 +69,8 @@ for CAMPUS in $(seq "$NUM_CAMPUS"); do
 interface GigabitEthernet0/${CAMPUS}
  description Campus ${CAMPUS}
  ip address ${NREN_V4_SUBNET}.$((4 * LINKNET - 3)) 255.255.255.252
+ no ip redirects
+ no ip proxy-arp
  load-interval 30
  ipv6 address ${NREN_V6_SUBNET}:${LINKNET}::0/127
  ipv6 nd dad attempts 0
