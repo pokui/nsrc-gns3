@@ -7,6 +7,10 @@ Having the training materials on a local webserver is strongly recommended:
 it makes them much faster to download, and means you are not dependent on
 functioning Internet.
 
+!!! Note
+    We recommend you do this on your physical server (rather than in a VM)
+    for simplicity
+
 ```shell
 sudo apt-get install apache2
 sudo chown -R nsrc:nsrc /var/www/html
