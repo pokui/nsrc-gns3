@@ -258,3 +258,15 @@ and your classroom network is up and running.
 You should configure your access point with WPA2 and a trivial password. 
 This is not so much for security, but to stop random passers-by from
 automatically connecting to your class network.
+
+To see all the active DHCP leases on your network:
+
+```
+virsh net-dhcp-leases default
+```
+
+Sorted by IP address:
+
+```
+virsh net-dhcp-leases default | sort -k4
+```
