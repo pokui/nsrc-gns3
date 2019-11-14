@@ -86,3 +86,24 @@ HashKnownHosts no
 
 This is helpful when reinitializing the lab, as it makes it easier to find
 and delete entries from `known_hosts` selectively.
+
+# Time sync
+
+Check time sync status with:
+
+```
+timedatectl status
+...
+       System clock synchronized: yes
+systemd-timesyncd.service active: yes
+```
+
+If `systemd-timesyncd.service` is not active then run
+
+```
+sudo timedatectl set-ntp on
+```
+
+!!! Note
+    You may not see `System clock synchronized` change to `yes` for a quite
+    a while; this is normal.
