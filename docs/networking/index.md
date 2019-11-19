@@ -104,10 +104,10 @@ ls
 Rename it so that it's no longer used, e.g.
 
 ```
-sudo mv 50-cloud-init.yaml 50-cloud-init.yaml.disabled
+sudo mv 01-netcfg.yaml 01-netcfg.yaml.disabled
 ```
 
-If it *is* called `50-cloud-init.yaml` then also run the following command
+If it was called `50-cloud-init.yaml` then also run the following command
 to prevent it being regenerated:
 
 ```
