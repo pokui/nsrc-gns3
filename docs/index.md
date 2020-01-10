@@ -1,4 +1,4 @@
-[![NSRC Logo](https://nsrc.org/sites/default/files/xnsrc-main-logo-transparent.png.pagespeed.ic.2CqLfgBW6V.webp)](https://nsrc.org/)
+[![NSRC Logo](https://nsrc.org/sites/default/files/nsrc-main-logo-transparent.png)](https://nsrc.org/)
 
 This guide describes how to build and use NSRC's GNS3-based virtual training platform.
 
