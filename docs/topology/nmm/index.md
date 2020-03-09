@@ -72,13 +72,13 @@ IP Address      | DNS Name
 :-------------- | :---------------------------
 192.168.122.2   | transit1-nren.ws.nsrc.org
 192.168.122.3   | transit2-nren.ws.nsrc.org
-192.168.122.10  | srv1-oob.campus1.ws.nsrc.org
-192.168.122.11  | host1-oob.campus1.ws.nsrc.org
-192.168.122.12  | host2-oob.campus1.ws.nsrc.org
-192.168.122.13  | host3-oob.campus1.ws.nsrc.org
-192.168.122.14  | host4-oob.campus1.ws.nsrc.org
-192.168.122.15  | host5-oob.campus1.ws.nsrc.org
-192.168.122.16  | host6-oob.campus1.ws.nsrc.org
+192.168.122.10  | srv1.campus1.ws.nsrc.org
+192.168.122.11  | host1.campus1.ws.nsrc.org
+192.168.122.12  | host2.campus1.ws.nsrc.org
+192.168.122.13  | host3.campus1.ws.nsrc.org
+192.168.122.14  | host4.campus1.ws.nsrc.org
+192.168.122.15  | host5.campus1.ws.nsrc.org
+192.168.122.16  | host6.campus1.ws.nsrc.org
 192.168.122.2x  | (ditto for campus2)
 192.168.122.3x  | (ditto for campus3)
 192.168.122.4x  | (ditto for campus4)

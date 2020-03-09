@@ -18,11 +18,11 @@ EOS
 
 for campus in $(seq 1 6); do
 cat <<EOS
-192.168.122.$((10*campus))		srv1-oob.campus${campus}.ws.nsrc.org librenms.campus${campus}.ws.nsrc.org rt.campus${campus}.ws.nsrc.org nfsen.campus${campus}.ws.nsrc.org srv1-campus${campus}
+192.168.122.$((10*campus))		eth1.srv1.campus${campus}.ws.nsrc.org srv1.campus${campus}.ws.nsrc.org librenms.campus${campus}.ws.nsrc.org rt.campus${campus}.ws.nsrc.org nfsen.campus${campus}.ws.nsrc.org srv1-campus${campus}
 EOS
 for i in $(seq 1 6); do
 cat <<EOS
-192.168.122.$((10*campus+i))		host${i}-oob.campus${campus}.ws.nsrc.org host${i}-campus${campus}
+192.168.122.$((10*campus+i))		eth1.host${i}.campus${campus}.ws.nsrc.org host${i}.campus${campus}.ws.nsrc.org host${i}-campus${campus}
 EOS
 done
 done
@@ -73,13 +73,13 @@ cat <<EOS
 
 100.68.${campus}.129		gi0-3.core1.campus${campus}.ws.nsrc.org
 2001:DB8:${campus}:1::1		gi0-3.core1.campus${campus}.ws.nsrc.org
-100.68.${campus}.130		srv1.campus${campus}.ws.nsrc.org
-2001:DB8:${campus}:1::130	srv1.campus${campus}.ws.nsrc.org
+100.68.${campus}.130		eth0.srv1.campus${campus}.ws.nsrc.org
+2001:DB8:${campus}:1::130	eth0.srv1.campus${campus}.ws.nsrc.org
 EOS
 for i in $(seq 1 6); do
 cat <<EOS
-100.68.${campus}.$((130+i))		host${i}.campus${campus}.ws.nsrc.org
-2001:DB8:${campus}:1::$((130+i))	host${i}.campus${campus}.ws.nsrc.org
+100.68.${campus}.$((130+i))		eth0.host${i}.campus${campus}.ws.nsrc.org
+2001:DB8:${campus}:1::$((130+i))	eth0.host${i}.campus${campus}.ws.nsrc.org
 EOS
 done
 
