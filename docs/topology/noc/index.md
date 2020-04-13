@@ -49,6 +49,8 @@ shared.
 * cacti login: `admin` and `admin`, it then prompts for password change
 * RT login: `root` and `nsrc+ws`
 * mysql root password: `nsrc+ws`
+* grafana initial login: `admin` and `admin` (but password change is forced)
+* VictoriaMetrics API: `admin` and `password123`
 
 # Configuration
 

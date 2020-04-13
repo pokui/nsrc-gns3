@@ -46,6 +46,7 @@ preinstalled:
 * smokeping
 * rsyslog
 * swatch
+* (node_exporter and promtail)
 
 This means that for exercises using these tools, you have 36 instances to
 play with, and each student can work on their own instance.
@@ -59,6 +60,9 @@ tools:
 * RT
 * rancid
 * mysql (used by LibreNMS, cacti and RT)
+* grafana
+* prometheus and related tools
+* loki
 
 This means that for exercises using these tools, students will have to work
 in their campus groups.
