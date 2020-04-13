@@ -6,7 +6,8 @@
 import os, sys
 import urllib.parse as parse
 
-GNS3_URL="http://localhost:3080"
+TARGET="192.168.122.1"
+GNS3_URL="http://" + TARGET + ":3080"
 
 # HTTP authentication to API (if required)
 GNS3_USER="nsrc"
@@ -25,7 +26,7 @@ if q.get("port"):
     port = int(q["port"][0])
     if port < 1024 or port > 65535:
         raise RuntimeError("Invalid port")
-    os.execlp("telnet", "telnet", "-E", "127.0.0.1", str(port))
+    os.execlp("telnet", "telnet", "-E", TARGET, str(port))
 
 import json
 import re
