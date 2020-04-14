@@ -95,6 +95,15 @@ render_snmp=conf_null
 conf_tail_default () {
 cat <<END
 !
+no ip http server
+no ip http secure-server
+!
+banner login ^
+Campus Network Design and Operations Workshop Lab
+          Network Startup Resource Center
+^
+no banner exec
+!
 line con 0
  exec-timeout 0 0
  transport preferred none
@@ -179,6 +188,15 @@ ipv6 access-list ipv6-vty
  permit ipv6 host ${CAMPUS_LOOP_V6_SUBNET}::241 any
  permit ipv6 host ${CAMPUS_LOOP_V6_SUBNET}::242 any
  deny   ipv6 any any log
+!
+no ip http server
+no ip http secure-server
+!
+banner login ^
+Campus Network Design and Operations Workshop Lab
+          Network Startup Resource Center
+^
+no banner exec
 !
 line con 0
  exec-timeout 0 0
