@@ -7,7 +7,7 @@ CGI tool to manage configurations of IOSv devices in GNS3
 * Read and edit the config in NVRAM
 """
 
-GNS3_URL = "http://localhost:3080"
+GNS3_URL = "http://192.168.122.1:3080"
 EXCLUDE_PROJECTS = {
     "NOC",
 }
