@@ -27,7 +27,7 @@ is required to make this happen.
 First, install the necessary packages:
 
 ```
-sudo apt-get install python3-guestfs apache2-suexec-pristine unzip
+sudo apt-get install python3-guestfs apache2 apache2-suexec-pristine unzip
 sudo a2enmod cgi suexec userdir
 sudo chmod +r /boot/vmlinuz-*
 ```
