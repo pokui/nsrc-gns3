@@ -42,7 +42,7 @@ Conflicts=shutdown.target
 
 [Service]
 User=%i
-Restart=on-failure
+Restart=always
 RestartSec=5
 ExecStart=/usr/bin/gns3server
 LimitNOFILE=16384
