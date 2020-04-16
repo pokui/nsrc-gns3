@@ -338,3 +338,5 @@ Some of these are being tracked on github.
 * [Assigning fixed port numbers for consoles](https://github.com/GNS3/gns3-gui/issues/2811)
   ([discussion](https://community.gns3.com/community/discussion/possible-to-assign-fixed-tcp-por))
 * [Websockets console access](https://github.com/GNS3/gns3-gui/issues/2883)
+* [GUI: Bend links](https://github.com/GNS3/gns3-gui/issues/2303)
+* [GUI: Duplicating multiple selected objects](https://github.com/GNS3/gns3-gui/issues/2966)
