@@ -39,6 +39,20 @@ Once the file is saved, run this command:
 sudo update-grub
 ```
 
+# Disable KVM halt polling
+
+Edit or create `/etc/modprobe.d/qemu-system-x86.conf` and add the following
+line:
+
+```
+options kvm halt_poll_ns=0
+```
+
+This disables a KVM
+[optimisation](https://www.kernel.org/doc/Documentation/virtual/kvm/halt-polling.txt)
+which [seriously affects CSR1000v performance](https://codingpackets.com/blog/kvm-host-high-cpu-fix),
+although it doesn't appear to make a noticeable difference on IOSv / IOSvL2.
+
 # Configure sshd security
 
 When your machine is connected on its WAN side, it may get a public IP
