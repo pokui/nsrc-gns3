@@ -1,0 +1,4 @@
+NUM_GROUPS=8
+
+WS_V4_SUBNET="192.168.122"
+WS_V6_SUBNET="2001:DB8:0:0"  # required for NOC to be able to use IPv6

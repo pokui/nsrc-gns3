@@ -1,0 +1,4 @@
+#!/bin/bash -eu
+DIR="$(dirname "$0")"
+DEV="$1"
+cat "$DIR/TR${DEV}.cfg"

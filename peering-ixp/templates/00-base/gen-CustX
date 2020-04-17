@@ -1,0 +1,3 @@
+#!/bin/bash -eu
+. common
+return 2>/dev/null || render_unconfigured

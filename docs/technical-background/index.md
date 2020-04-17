@@ -8,13 +8,17 @@ connectivity, there is a common addressing plan on the backbone.
 IP address          | DNS name            | Description
 :------------------ | :------------------ | :----------
 192.168.122.1       | gw.ws.nsrc.org      | The server itself (gateway to the external Internet)
-192.168.122.2-9     |                     | Transit routers
-192.168.122.10-19   |                     | Campus 1 out-of-band management
-192.168.122.20-29   |                     | Campus 2 out-of-band management
-192.168.122.30-39   |                     | Campus 3 out-of-band management
-192.168.122.40-49   |                     | Campus 4 out-of-band management
-192.168.122.50-59   |                     | Campus 5 out-of-band management
-192.168.122.60-69   |                     | Campus 6 out-of-band management
+192.168.122.2-4     |                     | Transit routers
+192.168.122.5-7     |                     | IXP route servers
+192.168.122.8-9     |                     | Reserved for second/third server
+192.168.122.10-19   |                     | Group 1 out-of-band management
+192.168.122.20-29   |                     | Group 2 out-of-band management
+192.168.122.30-39   |                     | Group 3 out-of-band management
+192.168.122.40-49   |                     | Group 4 out-of-band management
+192.168.122.50-59   |                     | Group 5 out-of-band management
+192.168.122.60-69   |                     | Group 6 out-of-band management
+192.168.122.70-79   |                     | Group 7 out-of-band management
+192.168.122.80-89   |                     | Group 8 out-of-band management
 192.168.122.100-249 |                     | DHCP (student laptops)
 192.168.122.250     | noc.ws.nsrc.org     | NOC VM
 192.168.122.251     | ap1.ws.nsrc.org     | Wireless access point
@@ -26,6 +30,11 @@ Some topologies use the same address space - in particular, CNDO and NMM use
 the same backbone addresses for transit routers and out-of-band management. 
 This means that if you start both these topologies at the same time, it
 won't work.
+
+IPv6 on the backbone uses `2001:DB8:0:0::/64` (e.g. for the transit routers
+to talk to each other, and for IPv6 to/from the NOC).  It also uses
+link-local addresses for router next hop, specifically `fe80::1` for the
+server and `fe80::254` for the inbound static route.
 
 Inside the labs, address space is taken from `100.64.0.0/10`.  This "looks
 like" public IP space, but is actually reserved space from
