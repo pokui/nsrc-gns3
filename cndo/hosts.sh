@@ -30,6 +30,7 @@ done
 cat <<EOS
 
 192.168.122.250		noc.ws.nsrc.org librenms.ws.nsrc.org rt.ws.nsrc.org nfsen.ws.nsrc.org noc
+2001:DB8:0:0::250	noc.ws.nsrc.org librenms.ws.nsrc.org rt.ws.nsrc.org nfsen.ws.nsrc.org noc
 192.168.122.251		ap1.ws.nsrc.org ap1
 192.168.122.252		ap2.ws.nsrc.org ap2
 192.168.122.253		sw.ws.nsrc.org sw
