@@ -1,0 +1,173 @@
+#!/bin/bash -eu
+GROUP="$1"
+cat <<EOS
+!
+version 15.7
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname B${GROUP}
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no logging console
+enable secret 5 \$1\$b3/k\$jNHoF35fzOxYKUTFO0Ef3/
+!
+aaa new-model
+!
+!
+aaa authentication login default local
+aaa authentication enable default enable
+!
+!
+!
+!
+!
+aaa session-id common
+!
+!
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+no ip source-route
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 source-route
+ipv6 unicast-routing
+ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+username isplab secret 5 \$1\$vPNP\$hA1Tq3C05ByW2G31WA0wh0
+!
+redundancy
+!
+!
+ip tcp path-mtu-discovery
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback on B${GROUP}
+ ip address 100.68.${GROUP}.1 255.255.255.255
+ ipv6 address 2001:DB8:${GROUP}::1/128
+!
+interface Null0
+ no ip unreachables
+ no ipv6 unreachables
+!
+interface GigabitEthernet0/0
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ description P2P Ethernet Link to C${GROUP}
+ ip address 100.68.${GROUP}.17 255.255.255.254
+ no ip redirects
+ no ip proxy-arp
+ duplex auto
+ speed auto
+ media-type rj45
+ ipv6 address 2001:DB8:${GROUP}:10::1/127
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+!
+interface GigabitEthernet0/2
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/3
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/4
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+ipv6 ioam timestamp
+!
+!
+!
+!
+!
+control-plane
+!
+no banner exec
+banner incoming ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner login ^C
+Campus Network Design and Operations Workshop Lab
+          Network Startup Resource Center
+^C
+!
+line con 0
+ exec-timeout 0 0
+ transport preferred none
+ stopbits 1
+line aux 0
+ exec-timeout 0 0
+ transport preferred none
+ stopbits 1
+line vty 0 4
+ exec-timeout 0 0
+ transport preferred none
+ transport input telnet ssh
+!
+no scheduler allocate
+!
+end
+EOS

@@ -1,0 +1,295 @@
+#!/bin/bash -eu
+GROUP="$1"
+cat <<EOS
+!
+version 15.7
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname C${GROUP}
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no logging console
+username isplab secret 5 \$1\$vPNP\$hA1Tq3C05ByW2G31WA0wh0
+!
+aaa new-model
+!
+!
+aaa authentication login default local
+aaa authentication enable default enable
+!
+!
+!
+key chain as${GROUP}0-key
+ key 1
+  key-string 7 0706325C42081B
+!
+!
+aaa session-id common
+!
+!
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+no ip source-route
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 source-route
+ipv6 unicast-routing
+ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+username isplab secret 5 \$1\$VFbR\$o6Sj84./m3wAjarXkd7nZ1
+!
+redundancy
+!
+!
+ip tcp path-mtu-discovery
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback on C${GROUP}
+ ip address 100.68.${GROUP}.2 255.255.255.255
+ ipv6 address 2001:DB8:${GROUP}::2/128
+!
+interface Null0
+ no ip unreachables
+ no ipv6 unreachables
+!
+interface GigabitEthernet0/0
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ description P2P Ethernet Link to B${GROUP}
+ ip address 100.68.${GROUP}.16 255.255.255.254
+ no ip redirects
+ no ip proxy-arp
+ ip router isis as${GROUP}0
+ duplex auto
+ speed auto
+ media-type rj45
+ ipv6 address 2001:DB8:${GROUP}:10::/127
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+ ipv6 router isis as${GROUP}0
+ isis network point-to-point
+ isis metric 2
+ isis ipv6 metric 2
+!
+interface GigabitEthernet0/2
+ description P2P Ethernet Link to P${GROUP}
+ ip address 100.68.${GROUP}.18 255.255.255.254
+ no ip redirects
+ no ip proxy-arp
+ ip router isis as${GROUP}0
+ duplex auto
+ speed auto
+ media-type rj45
+ ipv6 address 2001:DB8:${GROUP}:11::/127
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+ ipv6 router isis as${GROUP}0
+ isis network point-to-point
+ isis metric 2
+ isis ipv6 metric 2
+!
+interface GigabitEthernet0/3
+ description P2P Ethernet Link to A${GROUP}
+ ip address 100.68.${GROUP}.20 255.255.255.254
+ no ip redirects
+ no ip proxy-arp
+ ip router isis as${GROUP}0
+ duplex auto
+ speed auto
+ media-type rj45
+ ipv6 address 2001:DB8:${GROUP}:12::/127
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+ ipv6 router isis as${GROUP}0
+ isis network point-to-point
+ isis metric 2
+ isis ipv6 metric 2
+!
+interface GigabitEthernet0/4
+ description P2P Ethernet Link to SRV${GROUP}
+ ip address 100.68.${GROUP}.29 255.255.255.252
+ no ip redirects
+ no ip proxy-arp
+ duplex auto
+ speed auto
+ media-type rj45
+ ipv6 address 2001:DB8:${GROUP}:21::29/64
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+!
+router isis as${GROUP}0
+ net 49.0001.000${GROUP}.0002.00
+ is-type level-2-only
+ authentication mode md5 level-2
+ authentication key-chain as${GROUP}0-key level-2
+ metric-style wide
+ set-overload-bit on-startup wait-for-bgp
+ log-adjacency-changes all
+ metric 100000
+ passive-interface Loopback0
+ !
+ address-family ipv6
+  multi-topology
+  set-overload-bit on-startup wait-for-bgp
+  metric 100000
+ exit-address-family
+!
+router bgp ${GROUP}0
+ bgp log-neighbor-changes
+ bgp deterministic-med
+ no bgp default ipv4-unicast
+ neighbor ibgp-full peer-group
+ neighbor ibgp-full remote-as ${GROUP}0
+ neighbor ibgp-full description Full Routes
+ neighbor ibgp-full password 7 0529213F2D4D4C
+ neighbor ibgp-full update-source Loopback0
+ neighbor ibgpv6-full peer-group
+ neighbor ibgpv6-full remote-as ${GROUP}0
+ neighbor ibgpv6-full description Full Routes
+ neighbor ibgpv6-full password 7 03267C3B0A0E23
+ neighbor ibgpv6-full update-source Loopback0
+ neighbor ibgp-partial peer-group
+ neighbor ibgp-partial remote-as ${GROUP}0
+ neighbor ibgp-partial description Local Routes only
+ neighbor ibgp-partial password 7 0224236B07070D
+ neighbor ibgp-partial update-source Loopback0
+ neighbor ibgpv6-partial peer-group
+ neighbor ibgpv6-partial remote-as ${GROUP}0
+ neighbor ibgpv6-partial description Local Routes only
+ neighbor ibgpv6-partial password 7 106C2E29091610
+ neighbor ibgpv6-partial update-source Loopback0
+ neighbor 2001:DB8:${GROUP}::1 peer-group ibgpv6-full
+ neighbor 2001:DB8:${GROUP}::1 description iBGP with Border
+ neighbor 2001:DB8:${GROUP}::3 peer-group ibgpv6-partial
+ neighbor 2001:DB8:${GROUP}::3 description iBGP with Peering
+ neighbor 2001:DB8:${GROUP}::4 peer-group ibgpv6-partial
+ neighbor 2001:DB8:${GROUP}::4 description iBGP with Access
+ neighbor 100.68.${GROUP}.1 peer-group ibgp-full
+ neighbor 100.68.${GROUP}.1 description iBGP with Border
+ neighbor 100.68.${GROUP}.3 peer-group ibgp-partial
+ neighbor 100.68.${GROUP}.3 description iBGP with Peering
+ neighbor 100.68.${GROUP}.4 peer-group ibgp-partial
+ neighbor 100.68.${GROUP}.4 description iBGP with Access
+ !
+ address-family ipv4
+  network 100.68.${GROUP}.0 mask 255.255.255.0
+  network 100.68.${GROUP}.28 mask 255.255.255.252
+  neighbor ibgp-full send-community
+  neighbor ibgp-full route-reflector-client
+  neighbor ibgp-full next-hop-self
+  neighbor ibgp-partial send-community
+  neighbor ibgp-partial route-reflector-client
+  neighbor ibgp-partial next-hop-self
+  neighbor ibgp-partial filter-list 10 out
+  neighbor 100.68.${GROUP}.1 activate
+  neighbor 100.68.${GROUP}.3 activate
+  neighbor 100.68.${GROUP}.4 activate
+  distance bgp 200 200 200
+ exit-address-family
+ !
+ address-family ipv6
+  distance bgp 200 200 200
+  network 2001:DB8:${GROUP}::/48
+  network 2001:DB8:${GROUP}:21::/64
+  neighbor ibgpv6-full send-community
+  neighbor ibgpv6-full route-reflector-client
+  neighbor ibgpv6-full next-hop-self
+  neighbor ibgpv6-partial send-community
+  neighbor ibgpv6-partial route-reflector-client
+  neighbor ibgpv6-partial next-hop-self
+  neighbor ibgpv6-partial filter-list 10 out
+  neighbor 2001:DB8:${GROUP}::1 activate
+  neighbor 2001:DB8:${GROUP}::3 activate
+  neighbor 2001:DB8:${GROUP}::4 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+ip as-path access-list 10 permit ^$
+!
+no ip http server
+no ip http secure-server
+ip route 100.68.${GROUP}.0 255.255.255.0 Null0
+!
+ipv6 route 2001:DB8:${GROUP}::/48 Null0
+ipv6 ioam timestamp
+!
+!
+!
+!
+!
+control-plane
+!
+no banner exec
+banner incoming ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner login ^C
+Campus Network Design and Operations Workshop Lab
+          Network Startup Resource Center
+^C
+!
+line con 0
+ exec-timeout 0 0
+ transport preferred none
+ stopbits 1
+line aux 0
+ exec-timeout 0 0
+ transport preferred none
+ stopbits 1
+line vty 0 4
+ exec-timeout 0 0
+ transport preferred none
+ transport input telnet ssh
+!
+no scheduler allocate
+!
+end
+EOS
