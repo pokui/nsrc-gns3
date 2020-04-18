@@ -64,6 +64,7 @@ Edit it so it looks like this (leave the sections marked `....` alone):
   </ip>
   <route address='100.64.0.0' prefix='10' gateway='192.168.122.254'/>
   <route family='ipv6' address='2001:db8::' prefix='32' gateway='fe80::254'/>
+  <route family='ipv6' address='2001:10::' prefix='28' gateway='fe80::254'/>
 </network>
 ```
 
@@ -162,6 +163,7 @@ if [ "$1" = "default" -a "$2" = "started" ]; then
   ip6tables -I FORWARD -j ACCEPT -o virbr0 -m conntrack --ctstate RELATED,ESTABLISHED
   ip6tables -t nat -I POSTROUTING -j RETURN -o virbr0
   ip6tables -t nat -A POSTROUTING -j MASQUERADE -s 2001:db8::/32
+  ip6tables -t nat -A POSTROUTING -j MASQUERADE -s 2001:10::/28
   ip6tables -t nat -A POSTROUTING -j MASQUERADE -s fc00::/7
 fi
 ```

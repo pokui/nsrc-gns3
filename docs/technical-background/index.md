@@ -64,8 +64,11 @@ because of apt-cacher-ng.
 # IPv6
 
 IPv6 uses `2001:db8::/32`, the documentation prefix, and works internally
-between the nodes in the emulation.  You do not require any external IPv6
-connectivity to your server to be able to use IPv6 in the exercises.
+between the nodes in the emulation.  Some topologies also use `2001:10::/28`
+which comes out of the reserved prefix `2001::/23`.
+
+You do not require any external IPv6 connectivity to your server to be able
+to use IPv6 in the exercises.
 
 If your server *does* have an IPv6 address on its WAN interface, then
 outbound IPv6 traffic from the emulation will NAT to this address.  This

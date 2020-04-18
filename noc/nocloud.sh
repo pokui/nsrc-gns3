@@ -107,6 +107,7 @@ write_files:
       label fc00::/7      6
       label 2001:0::/32   7
       label 2001:db8::/32 6
+      label 2001:10::/28  6
 runcmd:
   - DEBIAN_FRONTEND=noninteractive fix-hostname $FQDN
   # Don't run any hostN containers, but prepare for cloning them in case they are desired.

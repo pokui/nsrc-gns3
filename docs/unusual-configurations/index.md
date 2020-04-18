@@ -120,6 +120,7 @@ if [ "$1" = "default" -a "$2" = "started" ]; then
   ip6tables -I FORWARD -j ACCEPT -i virbr0
   ip6tables -I FORWARD -j ACCEPT -o virbr0 -m conntrack --ctstate RELATED,ESTABLISHED
   ip6tables -t nat -A POSTROUTING -j MASQUERADE -s 2001:db8::/32
+  ip6tables -t nat -A POSTROUTING -j MASQUERADE -s 2001:10::/28
   ip6tables -t nat -A POSTROUTING -j MASQUERADE -s fc00::/7
   #### ADD: Accept inbound from trusted source
   iptables -I FORWARD -s 10.20.30.0/24 -j ACCEPT
