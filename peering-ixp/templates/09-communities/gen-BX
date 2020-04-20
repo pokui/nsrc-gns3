@@ -190,8 +190,8 @@ router bgp ${AS}
   neighbor 100.68.${GROUP}.2 activate
   neighbor 100.121.1.$((GROUP*2-2)) activate
   neighbor 100.121.1.$((GROUP*2-2)) prefix-list FULL-ROUTES in
-  neighbor 100.121.1.$((GROUP*2-2)) prefix-list AS${AS}-block out
   neighbor 100.121.1.$((GROUP*2-2)) route-map Transit-in in
+  neighbor 100.121.1.$((GROUP*2-2)) route-map Transit-out out
   distance bgp 200 200 200
  exit-address-family
  !
@@ -201,36 +201,44 @@ router bgp ${AS}
   neighbor ibgpv6-rr next-hop-self
   neighbor 2001:18:0:$((GROUP+9)):: activate
   neighbor 2001:18:0:$((GROUP+9)):: prefix-list FULL-v6ROUTES in
-  neighbor 2001:18:0:$((GROUP+9)):: prefix-list AS${AS}-v6block out
   neighbor 2001:18:0:$((GROUP+9)):: route-map Transitv6-in in
+  neighbor 2001:18:0:$((GROUP+9)):: route-map Transit-out out
   neighbor 2001:DB8:${GROUP}::2 activate
  exit-address-family
 !
 ip forward-protocol nd
 !
+ip bgp-community new-format
+ip community-list standard aggregate permit ${AS}:1000
+ip community-list standard subnets permit ${AS}:1001
+ip community-list standard customer-pi permit ${AS}:1005
+ip community-list standard private-peer permit ${AS}:1100
+ip community-list standard bilateral-peer permit ${AS}:1200
+ip community-list standard RS-peer permit ${AS}:1300
 !
 no ip http server
 no ip http secure-server
 !
 !
-ip prefix-list AS${AS}-block seq 5 permit 100.68.${GROUP}.0/24
-!
 ip prefix-list DEFAULT-ROUTE seq 5 permit 0.0.0.0/0
 !
-ip prefix-list FULL-ROUTES seq 5 permit 0.0.0.0/0 le 32
+ip prefix-list FULL-ROUTES seq 5 permit 0.0.0.0/0
 ipv6 ioam timestamp
 !
 !
-ipv6 prefix-list AS${AS}-v6block seq 5 permit 2001:DB8:${GROUP}::/48
-!
 ipv6 prefix-list DEFAULT-v6ROUTE seq 5 permit ::/0
 !
-ipv6 prefix-list FULL-v6ROUTES seq 5 permit ::/0 le 128
+ipv6 prefix-list FULL-v6ROUTES seq 5 permit ::/0
+route-map Transit-out permit 5
+ match community aggregate customer-pi
+!
 route-map Transitv6-in permit 10
  match ipv6 address prefix-list DEFAULT-v6ROUTE
  set community no-advertise
 !
 route-map Transitv6-in permit 20
+ description Local pref for Upstream routes
+ set local-preference 50
 !
 route-map DEFAULT-ORIGv6 permit 10
  match ipv6 address prefix-list DEFAULT-v6ROUTE
@@ -240,6 +248,8 @@ route-map Transit-in permit 10
  set community no-advertise
 !
 route-map Transit-in permit 20
+ description Local pref for Upstream routes
+ set local-preference 50
 !
 route-map DEFAULT-ORIG permit 10
  match ip address prefix-list DEFAULT-ROUTE

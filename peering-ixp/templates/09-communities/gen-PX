@@ -222,13 +222,13 @@ cat <<EOS
  address-family ipv4
   neighbor ibgp-rr send-community
   neighbor ibgp-rr next-hop-self
-  neighbor IXP-bilateral prefix-list AS${AS}-block out
   neighbor IXP-bilateral route-map IXP-bilateral-in in
+  neighbor IXP-bilateral route-map IXP-bilateral-out out
   neighbor 100.68.${GROUP}.2 activate
   neighbor ${PEER_REMOTE_V4} activate
   neighbor ${PEER_REMOTE_V4} prefix-list AS${PEER_AS}-block in
-  neighbor ${PEER_REMOTE_V4} prefix-list AS${AS}-block out
   neighbor ${PEER_REMOTE_V4} route-map private-peer-in in
+  neighbor ${PEER_REMOTE_V4} route-map private-peer-out out
 EOS
 for G in $(seq "$NGROUPS"); do
   [ "$G" -ne "$GROUP" ] && cat <<EOS
@@ -239,8 +239,8 @@ done
 cat <<EOS
   neighbor 100.127.1.254 activate
   neighbor 100.127.1.254 prefix-list IXP-RS in
-  neighbor 100.127.1.254 prefix-list AS${AS}-block out
   neighbor 100.127.1.254 route-map IXP-RS-in in
+  neighbor 100.127.1.254 route-map IXP-RS-out out
   distance bgp 200 200 200
  exit-address-family
  !
@@ -248,13 +248,13 @@ cat <<EOS
   distance bgp 200 200 200
   neighbor ibgpv6-rr send-community
   neighbor ibgpv6-rr next-hop-self
-  neighbor IXP-bilateralv6 prefix-list AS${AS}-v6block out
   neighbor IXP-bilateralv6 route-map IXP-bilateral-in in
+  neighbor IXP-bilateralv6 route-map IXP-bilateral-out out
   neighbor 2001:DB8:${GROUP}::2 activate
   neighbor ${PEER_REMOTE_V6} activate
   neighbor ${PEER_REMOTE_V6} prefix-list AS${PEER_AS}-v6block in
-  neighbor ${PEER_REMOTE_V6} prefix-list AS${AS}-v6block out
   neighbor ${PEER_REMOTE_V6} route-map private-peer-in in
+  neighbor ${PEER_REMOTE_V6} route-map private-peer-out out
 EOS
 for G in $(seq "$NGROUPS"); do
   [ "$G" -ne "$GROUP" ] && cat <<EOS
@@ -265,12 +265,19 @@ done
 cat <<EOS
   neighbor 2001:DB8:FFFF:1::FE activate
   neighbor 2001:DB8:FFFF:1::FE prefix-list IXP-v6RS in
-  neighbor 2001:DB8:FFFF:1::FE prefix-list AS${AS}-v6block out
   neighbor 2001:DB8:FFFF:1::FE route-map IXP-RS-in in
+  neighbor 2001:DB8:FFFF:1::FE route-map IXP-RS-out out
  exit-address-family
 !
 ip forward-protocol nd
 !
+ip bgp-community new-format
+ip community-list standard aggregate permit ${AS}:1000
+ip community-list standard subnets permit ${AS}:1001
+ip community-list standard customer-pi permit ${AS}:1005
+ip community-list standard private-peer permit ${AS}:1100
+ip community-list standard bilateral-peer permit ${AS}:1200
+ip community-list standard RS-peer permit ${AS}:1300
 !
 no ip http server
 no ip http secure-server
@@ -278,7 +285,7 @@ ip route 0.0.0.0 0.0.0.0 Null0
 !
 EOS
 for G in $(seq "$NGROUPS"); do
-  cat <<EOS # include our group
+  [ "$G" -ne "$GROUP" ] && cat <<EOS
 !
 ip prefix-list AS${G}0-block seq ${G}0 permit 100.68.${G}.0/24
 EOS
@@ -298,7 +305,7 @@ ipv6 ioam timestamp
 !
 EOS
 for G in $(seq "$NGROUPS"); do
-  cat <<EOS # include our group
+  [ "$G" -ne "$GROUP" ] && cat <<EOS
 !
 ipv6 prefix-list AS${G}0-v6block seq 5 permit 2001:DB8:${G}::/48
 EOS
@@ -313,17 +320,29 @@ ipv6 prefix-list IXP-v6RS seq ${G}0 permit 2001:DB8:${G}::/48
 EOS
 done
 cat <<EOS
+route-map private-peer-out permit 5
+ match community aggregate customer-pi
+!
 route-map IXP-bilateral-in permit 5
  description Local pref for IXP Bi-lateral Peer
  set local-preference 170
+ set community ${AS}:1200
+!
+route-map IXP-RS-out permit 5
+ match community aggregate customer-pi
 !
 route-map IXP-RS-in permit 5
  description Local pref for IXP RS Peers
  set local-preference 150
+ set community ${AS}:1300
+!
+route-map IXP-bilateral-out permit 5
+ match community aggregate customer-pi
 !
 route-map private-peer-in permit 5
  description Local pref for Private Peer
  set local-preference 200
+ set community ${AS}:1100
 !
 !
 !
