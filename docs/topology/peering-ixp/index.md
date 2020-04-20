@@ -1,4 +1,4 @@
-# Peering-IXP
+# Peering/IXP
 
 This is a technical workshop to teach the Interior Gateway Protocol (IGP)
 and Border Gateway Protocol (BGP) skills required for configuring
