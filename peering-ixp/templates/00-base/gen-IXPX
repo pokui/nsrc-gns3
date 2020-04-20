@@ -1,0 +1,168 @@
+#!/bin/bash -eu
+IXP="$1"
+if [ "$IXP" -eq 1 ]; then
+  HOSTNAME=IXP-South
+elif [ "$IXP" -eq 2 ]; then
+  HOSTNAME=IXP-North
+else
+  HOSTNAME="IXP-${IXP}"
+fi
+
+cat <<EOS
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname ${HOSTNAME}
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no logging console
+enable secret 5 \$1\$ZCOO\$vZTX3iEGGRRL2pjvcg/hR1
+!
+username isplab secret 5 \$1\$cu34\$XyyIkFaE6f9LLcnPxQEuy/
+aaa new-model
+!
+!
+aaa authentication login default local
+aaa authentication enable default enable
+!
+!
+!
+!
+!
+!
+aaa session-id common
+!
+!
+!
+!
+!
+vtp mode off
+no ip source-route
+!
+!
+!
+no ip domain-lookup
+ip domain-name ws.nsrc.org
+ip cef
+no ipv6 source-route
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+!
+spanning-tree mode mst
+spanning-tree extend system-id
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ negotiation auto
+!
+interface GigabitEthernet0/1
+ negotiation auto
+!
+interface GigabitEthernet0/2
+ negotiation auto
+!
+interface GigabitEthernet0/3
+ negotiation auto
+!
+interface GigabitEthernet1/0
+ negotiation auto
+!
+interface GigabitEthernet1/1
+ negotiation auto
+!
+interface GigabitEthernet1/2
+ negotiation auto
+!
+interface GigabitEthernet1/3
+ negotiation auto
+!
+interface GigabitEthernet2/0
+ negotiation auto
+!
+interface GigabitEthernet2/1
+ negotiation auto
+!
+interface GigabitEthernet2/2
+ negotiation auto
+!
+interface GigabitEthernet2/3
+ negotiation auto
+!
+interface GigabitEthernet3/0
+ negotiation auto
+!
+interface GigabitEthernet3/1
+ negotiation auto
+!
+interface GigabitEthernet3/2
+ negotiation auto
+!
+interface GigabitEthernet3/3
+ negotiation auto
+!
+ip forward-protocol nd
+!
+ip tcp path-mtu-discovery
+no ip http server
+!
+ip ssh server algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+ip ssh client algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+!
+!
+!
+!
+!
+snmp-server community NetManage RO
+snmp-server location NSRC Workshop
+snmp ifmib ifindex persist
+!
+!
+!
+control-plane
+!
+no banner exec
+banner incoming ^
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^
+banner login ^
+             BGP Peering/IXP Workshop
+          Network Startup Resource Center
+^
+!
+line con 0
+ transport preferred none
+line aux 0
+line vty 0 4
+ transport preferred none
+ transport input telnet ssh
+!
+!
+end
+EOS
