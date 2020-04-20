@@ -251,7 +251,7 @@ route-map DEFAULT-ORIG permit 10
 control-plane
 !
 no banner exec
-banner incoming ^C
+banner incoming ^
 **************************************************************************
 * IOSv is strictly limited to use for evaluation, demonstration and IOS  *
 * education. IOSv is provided as-is and is not supported by Cisco's      *
@@ -259,11 +259,11 @@ banner incoming ^C
 * of the IOSv Software or Documentation to any third party for any       *
 * purposes is expressly prohibited except as otherwise authorized by     *
 * Cisco in writing.                                                      *
-**************************************************************************^C
-banner login ^C
+**************************************************************************^
+banner login ^
              BGP Peering/IXP Workshop
           Network Startup Resource Center
-^C
+^
 !
 line con 0
  exec-timeout 0 0
