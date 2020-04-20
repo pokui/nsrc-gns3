@@ -47,6 +47,7 @@ no ip source-route
 !
 !
 no ip domain lookup
+ip domain name ws.nsrc.org
 ip cef
 no ipv6 source-route
 ipv6 unicast-routing
@@ -75,6 +76,11 @@ ip tcp path-mtu-discovery
 !
 !
 !
+!
+interface Loopback0
+ description Address anchor for Customer ${GROUP}
+ ip address 100.68.${GROUP}.64 255.255.255.255
+ ipv6 address 2001:DB8:${GROUP}:4000::/128
 !
 interface Null0
  no ip unreachables

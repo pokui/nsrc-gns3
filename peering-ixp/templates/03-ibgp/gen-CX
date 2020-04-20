@@ -14,7 +14,7 @@ boot-end-marker
 !
 !
 no logging console
-username isplab secret 5 \$1\$vPNP\$hA1Tq3C05ByW2G31WA0wh0
+enable secret 5 \$1\$b3/k\$jNHoF35fzOxYKUTFO0Ef3/
 !
 aaa new-model
 !
@@ -50,6 +50,7 @@ no ip source-route
 !
 !
 no ip domain lookup
+ip domain name ws.nsrc.org
 ip cef
 no ipv6 source-route
 ipv6 unicast-routing

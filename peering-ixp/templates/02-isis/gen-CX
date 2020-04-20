@@ -50,6 +50,7 @@ no ip source-route
 !
 !
 no ip domain lookup
+ip domain name ws.nsrc.org
 ip cef
 no ipv6 source-route
 ipv6 unicast-routing
