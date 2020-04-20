@@ -1,0 +1,2 @@
+#!/bin/bash -eu
+"04-ebgp/$(basename "$0")" "$@"

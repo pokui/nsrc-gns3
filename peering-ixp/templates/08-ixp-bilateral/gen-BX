@@ -1,0 +1,2 @@
+#!/bin/bash -eu
+"07-ixp-policy/$(basename "$0")" "$@"

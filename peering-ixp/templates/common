@@ -1,0 +1,6 @@
+set -eu
+set -o pipefail
+
+NGROUPS=8
+GROUP="${1}"
+AS="${GROUP}0"

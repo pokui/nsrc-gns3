@@ -115,18 +115,28 @@ interface GigabitEthernet0/1
  isis ipv6 metric 2
 !
 interface GigabitEthernet0/2
- no ip address
- shutdown
+ description Link to Group ${PEER_GROUP} Peering Router
+ ip address ${PEER_LOCAL_V4} 255.255.255.254
+ no ip redirects
+ no ip proxy-arp
  duplex auto
  speed auto
  media-type rj45
+ ipv6 address ${PEER_LOCAL_V6}::/127
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
 !
 interface GigabitEthernet0/3
- no ip address
- shutdown
+ description AS${AS} link to IXP
+ ip address 100.127.1.${GROUP} 255.255.255.0
+ no ip redirects
+ no ip proxy-arp
  duplex auto
  speed auto
  media-type rj45
+ ipv6 address 2001:DB8:FFFF:1::${GROUP}/64
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
 !
 interface GigabitEthernet0/4
  no ip address
@@ -144,6 +154,7 @@ router isis as${AS}
  set-overload-bit on-startup wait-for-bgp
  log-adjacency-changes all
  metric 100000
+ passive-interface GigabitEthernet0/3
  passive-interface Loopback0
  !
  address-family ipv6
@@ -153,6 +164,7 @@ router isis as${AS}
  exit-address-family
 !
 router bgp ${AS}
+ no bgp enforce-first-as
  bgp log-neighbor-changes
  bgp deterministic-med
  no bgp default ipv4-unicast
@@ -166,15 +178,69 @@ router bgp ${AS}
  neighbor ibgpv6-rr description iBGP with RR
  neighbor ibgpv6-rr password 7 04792C3603204E
  neighbor ibgpv6-rr update-source Loopback0
+ neighbor IXP-bilateral peer-group
+ neighbor IXP-bilateral description eBGP with bi-lateral peers at IXP
+ neighbor IXP-bilateral password 7 0529213F2D4D4C
+ neighbor IXP-bilateralv6 peer-group
+ neighbor IXP-bilateralv6 description eBGP with bi-lateral peers at IXP
+ neighbor IXP-bilateralv6 password 7 112B3E351B1309
  neighbor 2001:DB8:${GROUP}::2 peer-group ibgpv6-rr
  neighbor 2001:DB8:${GROUP}::2 description iBGP with Core
+ neighbor ${PEER_REMOTE_V6} remote-as ${PEER_AS}
+ neighbor ${PEER_REMOTE_V6} description eBGP with AS${PEER_AS}
+ neighbor ${PEER_REMOTE_V6} password 7 1435353B000528
+EOS
+for G in $(seq "$NGROUPS"); do
+  [ "$G" -ne "$GROUP" ] && cat <<EOS
+ neighbor 2001:DB8:FFFF:1::${G} remote-as ${G}0
+ neighbor 2001:DB8:FFFF:1::${G} peer-group IXP-bilateralv6
+ neighbor 2001:DB8:FFFF:1::${G} description eBGP with AS${G}0
+EOS
+done
+cat <<EOS
+ neighbor 2001:DB8:FFFF:1::FE remote-as 65534
+ neighbor 2001:DB8:FFFF:1::FE description eBGP with IXP RS
+ neighbor 2001:DB8:FFFF:1::FE password 7 0452131642335F
  neighbor 100.68.${GROUP}.2 peer-group ibgp-rr
  neighbor 100.68.${GROUP}.2 description iBGP with Core
+ neighbor ${PEER_REMOTE_V4} remote-as ${PEER_AS}
+ neighbor ${PEER_REMOTE_V4} description eBGP with AS${PEER_AS}
+ neighbor ${PEER_REMOTE_V4} password 7 1435353B000528
+EOS
+for G in $(seq "$NGROUPS"); do
+  [ "$G" -ne "$GROUP" ] && cat <<EOS
+ neighbor 100.127.1.${G} remote-as ${G}0
+ neighbor 100.127.1.${G} peer-group IXP-bilateral
+ neighbor 100.127.1.${G} description eBGP with AS${G}0
+EOS
+done
+cat <<EOS
+ neighbor 100.127.1.254 remote-as 65534
+ neighbor 100.127.1.254 description eBGP with IXP RS
+ neighbor 100.127.1.254 password 7 0452131642335F
  !
  address-family ipv4
   neighbor ibgp-rr send-community
   neighbor ibgp-rr next-hop-self
+  neighbor IXP-bilateral prefix-list AS${AS}-block out
+  neighbor IXP-bilateral route-map IXP-bilateral-in in
   neighbor 100.68.${GROUP}.2 activate
+  neighbor ${PEER_REMOTE_V4} activate
+  neighbor ${PEER_REMOTE_V4} prefix-list AS${PEER_AS}-block in
+  neighbor ${PEER_REMOTE_V4} prefix-list AS${AS}-block out
+  neighbor ${PEER_REMOTE_V4} route-map private-peer-in in
+EOS
+for G in $(seq "$NGROUPS"); do
+  [ "$G" -ne "$GROUP" ] && cat <<EOS
+  neighbor 100.127.1.${G} activate
+  neighbor 100.127.1.${G} prefix-list AS${G}0-block in
+EOS
+done
+cat <<EOS
+  neighbor 100.127.1.254 activate
+  neighbor 100.127.1.254 prefix-list IXP-RS in
+  neighbor 100.127.1.254 prefix-list AS${AS}-block out
+  neighbor 100.127.1.254 route-map IXP-RS-in in
   distance bgp 200 200 200
  exit-address-family
  !
@@ -182,7 +248,25 @@ router bgp ${AS}
   distance bgp 200 200 200
   neighbor ibgpv6-rr send-community
   neighbor ibgpv6-rr next-hop-self
+  neighbor IXP-bilateralv6 prefix-list AS${AS}-v6block out
+  neighbor IXP-bilateralv6 route-map IXP-bilateral-in in
   neighbor 2001:DB8:${GROUP}::2 activate
+  neighbor ${PEER_REMOTE_V6} activate
+  neighbor ${PEER_REMOTE_V6} prefix-list AS${PEER_AS}-v6block in
+  neighbor ${PEER_REMOTE_V6} prefix-list AS${AS}-v6block out
+  neighbor ${PEER_REMOTE_V6} route-map private-peer-in in
+EOS
+for G in $(seq "$NGROUPS"); do
+  [ "$G" -ne "$GROUP" ] && cat <<EOS
+  neighbor 2001:DB8:FFFF:1::${G} activate
+  neighbor 2001:DB8:FFFF:1::${G} prefix-list AS${G}0-v6block in
+EOS
+done
+cat <<EOS
+  neighbor 2001:DB8:FFFF:1::FE activate
+  neighbor 2001:DB8:FFFF:1::FE prefix-list IXP-v6RS in
+  neighbor 2001:DB8:FFFF:1::FE prefix-list AS${AS}-v6block out
+  neighbor 2001:DB8:FFFF:1::FE route-map IXP-RS-in in
  exit-address-family
 !
 ip forward-protocol nd
@@ -192,8 +276,54 @@ no ip http server
 no ip http secure-server
 ip route 0.0.0.0 0.0.0.0 Null0
 !
+EOS
+for G in $(seq "$NGROUPS"); do
+  cat <<EOS # include our group
+!
+ip prefix-list AS${G}0-block seq ${G}0 permit 100.68.${G}.0/24
+EOS
+done
+cat <<EOS
+!
+ip prefix-list IXP-RS description IPv4 prefixes from RouteServer
+EOS
+for G in $(seq "$NGROUPS"); do
+  [ "$G" -ne "$GROUP" ] && cat <<EOS
+ip prefix-list IXP-RS seq ${G}0 permit 100.68.${G}.0/24
+EOS
+done
+cat <<EOS
 ipv6 route ::/0 Null0
 ipv6 ioam timestamp
+!
+EOS
+for G in $(seq "$NGROUPS"); do
+  cat <<EOS # include our group
+!
+ipv6 prefix-list AS${G}0-v6block seq 5 permit 2001:DB8:${G}::/48
+EOS
+done
+cat <<EOS
+!
+ipv6 prefix-list IXP-v6RS description IPv6 prefixes from RouteServer
+EOS
+for G in $(seq "$NGROUPS"); do
+  [ "$G" -ne "$GROUP" ] && cat <<EOS
+ipv6 prefix-list IXP-v6RS seq ${G}0 permit 2001:DB8:${G}::/48
+EOS
+done
+cat <<EOS
+route-map private-peer-in permit 5
+ description Local pref for Private Peer
+ set local-preference 200
+!
+route-map IXP-bilateral-in permit 5
+ description Local pref for IXP Bi-lateral Peer
+ set local-preference 170
+!
+route-map IXP-RS-in permit 5
+ description Local pref for IXP RS Peers
+ set local-preference 150
 !
 !
 !

@@ -1,5 +1,5 @@
 #!/bin/bash -eu
-GROUP="$1"
+. common-Cust
 cat <<EOS
 !
 version 15.7

@@ -1,5 +1,5 @@
 #!/bin/bash -eu
-GROUP="$1"
+. common-C
 cat <<EOS
 !
 version 15.7
@@ -24,7 +24,7 @@ aaa authentication enable default enable
 !
 !
 !
-key chain as${GROUP}0-key
+key chain as${AS}-key
  key 1
   key-string 7 0706325C42081B
 !
@@ -101,14 +101,14 @@ interface GigabitEthernet0/1
  ip address 100.68.${GROUP}.16 255.255.255.254
  no ip redirects
  no ip proxy-arp
- ip router isis as${GROUP}0
+ ip router isis as${AS}
  duplex auto
  speed auto
  media-type rj45
  ipv6 address 2001:DB8:${GROUP}:10::/127
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
- ipv6 router isis as${GROUP}0
+ ipv6 router isis as${AS}
  isis network point-to-point
  isis metric 2
  isis ipv6 metric 2
@@ -118,14 +118,14 @@ interface GigabitEthernet0/2
  ip address 100.68.${GROUP}.18 255.255.255.254
  no ip redirects
  no ip proxy-arp
- ip router isis as${GROUP}0
+ ip router isis as${AS}
  duplex auto
  speed auto
  media-type rj45
  ipv6 address 2001:DB8:${GROUP}:11::/127
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
- ipv6 router isis as${GROUP}0
+ ipv6 router isis as${AS}
  isis network point-to-point
  isis metric 2
  isis ipv6 metric 2
@@ -135,14 +135,14 @@ interface GigabitEthernet0/3
  ip address 100.68.${GROUP}.20 255.255.255.254
  no ip redirects
  no ip proxy-arp
- ip router isis as${GROUP}0
+ ip router isis as${AS}
  duplex auto
  speed auto
  media-type rj45
  ipv6 address 2001:DB8:${GROUP}:12::/127
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
- ipv6 router isis as${GROUP}0
+ ipv6 router isis as${AS}
  isis network point-to-point
  isis metric 2
  isis ipv6 metric 2
@@ -159,11 +159,11 @@ interface GigabitEthernet0/4
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
 !
-router isis as${GROUP}0
+router isis as${AS}
  net 49.0001.000${GROUP}.0002.00
  is-type level-2-only
  authentication mode md5 level-2
- authentication key-chain as${GROUP}0-key level-2
+ authentication key-chain as${AS}-key level-2
  metric-style wide
  set-overload-bit on-startup wait-for-bgp
  log-adjacency-changes all
@@ -176,27 +176,27 @@ router isis as${GROUP}0
   metric 100000
  exit-address-family
 !
-router bgp ${GROUP}0
+router bgp ${AS}
  bgp log-neighbor-changes
  bgp deterministic-med
  no bgp default ipv4-unicast
  neighbor ibgp-full peer-group
- neighbor ibgp-full remote-as ${GROUP}0
+ neighbor ibgp-full remote-as ${AS}
  neighbor ibgp-full description Full Routes
  neighbor ibgp-full password 7 0529213F2D4D4C
  neighbor ibgp-full update-source Loopback0
  neighbor ibgpv6-full peer-group
- neighbor ibgpv6-full remote-as ${GROUP}0
+ neighbor ibgpv6-full remote-as ${AS}
  neighbor ibgpv6-full description Full Routes
  neighbor ibgpv6-full password 7 03267C3B0A0E23
  neighbor ibgpv6-full update-source Loopback0
  neighbor ibgp-partial peer-group
- neighbor ibgp-partial remote-as ${GROUP}0
+ neighbor ibgp-partial remote-as ${AS}
  neighbor ibgp-partial description Local Routes only
  neighbor ibgp-partial password 7 0224236B07070D
  neighbor ibgp-partial update-source Loopback0
  neighbor ibgpv6-partial peer-group
- neighbor ibgpv6-partial remote-as ${GROUP}0
+ neighbor ibgpv6-partial remote-as ${AS}
  neighbor ibgpv6-partial description Local Routes only
  neighbor ibgpv6-partial password 7 106C2E29091610
  neighbor ibgpv6-partial update-source Loopback0
