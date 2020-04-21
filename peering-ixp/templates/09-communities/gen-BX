@@ -36,14 +36,14 @@ interface GigabitEthernet0/1
  isis ipv6 metric 2
 !
 interface GigabitEthernet0/2
- description Link to Transit Provider AS121
- ip address 100.121.1.$((GROUP*2-1)) 255.255.255.254
+ description Link to Transit Provider AS${TRANSIT1_AS}
+ ip address ${TRANSIT1_LOCAL_V4} 255.255.255.254
  no ip redirects
  no ip proxy-arp
  duplex auto
  speed auto
  media-type rj45
- ipv6 address 2001:18:0:$((GROUP+9))::1/127
+ ipv6 address ${TRANSIT1_LOCAL_V6}/127
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
 !
@@ -94,25 +94,25 @@ router bgp ${AS}
  neighbor ibgpv6-rr description iBGP with RR
  neighbor ibgpv6-rr password 7 123B22271E0A0E
  neighbor ibgpv6-rr update-source Loopback0
- neighbor 2001:18:0:$((GROUP+9)):: remote-as 121
- neighbor 2001:18:0:$((GROUP+9)):: description eBGP with TRANSIT AS121
- neighbor 2001:18:0:$((GROUP+9)):: password 7 106C2E29091610
+ neighbor ${TRANSIT1_REMOTE_V6} remote-as ${TRANSIT1_AS}
+ neighbor ${TRANSIT1_REMOTE_V6} description eBGP with TRANSIT AS${TRANSIT1_AS}
+ neighbor ${TRANSIT1_REMOTE_V6} password 7 106C2E29091610
  neighbor 2001:DB8:${GROUP}::2 peer-group ibgpv6-rr
  neighbor 2001:DB8:${GROUP}::2 description iBGP with Core
  neighbor 100.68.${GROUP}.2 peer-group ibgp-rr
  neighbor 100.68.${GROUP}.2 description iBGP with Core
- neighbor 100.121.1.$((GROUP*2-2)) remote-as 121
- neighbor 100.121.1.$((GROUP*2-2)) description eBGP with TRANSIT AS121
- neighbor 100.121.1.$((GROUP*2-2)) password 7 04792C3603204E
+ neighbor ${TRANSIT1_REMOTE_V4} remote-as ${TRANSIT1_AS}
+ neighbor ${TRANSIT1_REMOTE_V4} description eBGP with TRANSIT AS${TRANSIT1_AS}
+ neighbor ${TRANSIT1_REMOTE_V4} password 7 04792C3603204E
  !
  address-family ipv4
   neighbor ibgp-rr send-community
   neighbor ibgp-rr next-hop-self
   neighbor 100.68.${GROUP}.2 activate
-  neighbor 100.121.1.$((GROUP*2-2)) activate
-  neighbor 100.121.1.$((GROUP*2-2)) prefix-list FULL-ROUTES in
-  neighbor 100.121.1.$((GROUP*2-2)) route-map Transit-in in
-  neighbor 100.121.1.$((GROUP*2-2)) route-map Transit-out out
+  neighbor ${TRANSIT1_REMOTE_V4} activate
+  neighbor ${TRANSIT1_REMOTE_V4} prefix-list FULL-ROUTES in
+  neighbor ${TRANSIT1_REMOTE_V4} route-map Transit-in in
+  neighbor ${TRANSIT1_REMOTE_V4} route-map Transit-out out
   distance bgp 200 200 200
  exit-address-family
  !
@@ -120,10 +120,10 @@ router bgp ${AS}
   distance bgp 200 200 200
   neighbor ibgpv6-rr send-community
   neighbor ibgpv6-rr next-hop-self
-  neighbor 2001:18:0:$((GROUP+9)):: activate
-  neighbor 2001:18:0:$((GROUP+9)):: prefix-list FULL-v6ROUTES in
-  neighbor 2001:18:0:$((GROUP+9)):: route-map Transitv6-in in
-  neighbor 2001:18:0:$((GROUP+9)):: route-map Transit-out out
+  neighbor ${TRANSIT1_REMOTE_V6} activate
+  neighbor ${TRANSIT1_REMOTE_V6} prefix-list FULL-v6ROUTES in
+  neighbor ${TRANSIT1_REMOTE_V6} route-map Transitv6-in in
+  neighbor ${TRANSIT1_REMOTE_V6} route-map Transit-out out
   neighbor 2001:DB8:${GROUP}::2 activate
  exit-address-family
 !
