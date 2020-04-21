@@ -1,4 +1,5 @@
 . common
+HOSTNAME="P${GROUP}"
 
 # Peer AS (for direct peering)
 PEER_GROUP="$(( ((GROUP - 1) ^ 1) + 1 ))"
