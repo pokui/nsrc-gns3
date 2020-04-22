@@ -141,7 +141,8 @@ snmp ifmib ifindex persist
 !
 control-plane
 !
-no banner exec
+banner exec ^
+^
 banner incoming ^
 **************************************************************************
 * IOSv is strictly limited to use for evaluation, demonstration and IOS  *
