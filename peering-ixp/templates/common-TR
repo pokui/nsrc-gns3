@@ -1,0 +1,31 @@
+. common
+DEV="${1}"
+OTHER="$(( ((DEV-1)^1) + 1 ))"
+AS="$((DEV+120))"
+V6="$((DEV+17))"
+
+if (( DEV == 1 )); then
+  VRRP_PRIORITY=""
+else
+  VRRP_PRIORITY=$'\n  priority 50'
+fi
+
+PEER_AS="$((OTHER+120))"
+
+PEER_LO_V4="100.121.0.0"
+PEER_HI_V4="100.121.0.1"
+
+PEER_LO_V6="2001:18::"
+PEER_HI_V6="2001:18::1"
+
+if (( (DEV & 1) == 1 )); then
+  PEER_LOCAL_V4="$PEER_LO_V4"
+  PEER_REMOTE_V4="$PEER_HI_V4"
+  PEER_LOCAL_V6="$PEER_LO_V6"
+  PEER_REMOTE_V6="$PEER_HI_V6"
+else
+  PEER_LOCAL_V4="$PEER_HI_V4"
+  PEER_REMOTE_V4="$PEER_LO_V4"
+  PEER_LOCAL_V6="$PEER_HI_V6"
+  PEER_REMOTE_V6="$PEER_LO_V6"
+fi
