@@ -201,7 +201,7 @@ EOS
 for G in $(seq "$NGROUPS"); do
   cat <<EOS # include our group
 !
-ip prefix-list AS${G}0-block seq ${G}0 permit 100.68.${G}.0/24
+ip prefix-list AS${G}0-block seq 5 permit 100.68.${G}.0/24
 EOS
 done
 cat <<EOS
