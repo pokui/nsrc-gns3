@@ -1,3 +1,5 @@
+GNS3_PROJECT ?= nmm
+
 .PHONY: help
 help:
 	@echo "make (nocloud|import|snapshots)"
@@ -8,7 +10,7 @@ nocloud: nocloud.sh
 
 .PHONY: import
 import:
-	../scripts/import-project.sh ~/GNS3/projects/*/nmm.gns3
+	../scripts/import-project.sh ~/GNS3/projects/*/$(GNS3_PROJECT).gns3
 	git diff project.gns3 | grep '^[+-]' | egrep -v '"(node_id|console|link_id)":'
 
 .PHONY: snapshots
@@ -17,4 +19,4 @@ snapshots:
 
 .PHONY: install-snapshots
 install-snapshots:
-	../scripts/install-snapshots.sh ~/GNS3/projects/*/nmm.gns3
+	../scripts/install-snapshots.sh ~/GNS3/projects/*/$(GNS3_PROJECT).gns3
