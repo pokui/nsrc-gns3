@@ -1,0 +1,15 @@
+. common
+
+DEV="${1}"
+if [ "$DEV" = "1" ]; then
+  HOSTNAME="IXP-South"
+elif [ "$DEV" = "2" ]; then
+  HOSTNAME="IXP-North"
+else
+  HOSTNAME="IXP-${DEV}"
+fi
+
+V6DEC="$(( 65536 - DEV ))"
+V6BLOCK="2001:DB8:`printf "%04X" "$V6DEC"`"
+V4SRV="100.127.$(( (DEV-1)*2 ))"
+V4IXP="100.127.$(( (DEV-1)*2+1 ))"

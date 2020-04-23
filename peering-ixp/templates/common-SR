@@ -1,0 +1,17 @@
+. common
+DEV="${1}"
+
+AS="$((DEV+130))"
+RS_AS="$(( 65535 - DEV ))"
+V6DEC="$(( 65536 - DEV ))"
+V6BLOCK="2001:DB8:`printf "%04X" "$V6DEC"`"
+V4SRV="100.127.$(( (DEV-1)*2 ))"
+V4IXP="100.127.$(( (DEV-1)*2+1 ))"
+
+# The upstream TR
+TR_AS="$((DEV+120))"
+
+TR_REMOTE_V4="100.${TR_AS}.1.16"
+TR_LOCAL_V4="100.${TR_AS}.1.17"
+TR_REMOTE_V6="2001:$((DEV+17)):0:$((NGROUPS+10))::"
+TR_LOCAL_V6="${TR_REMOTE_V6}1"

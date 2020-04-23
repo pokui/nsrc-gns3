@@ -10,6 +10,7 @@ else
   VRRP_PRIORITY=$'\n  priority 50'
 fi
 
+# The "other" transit router
 PEER_AS="$((OTHER+120))"
 
 PEER_LO_V4="100.121.0.0"
@@ -29,3 +30,11 @@ else
   PEER_LOCAL_V6="$PEER_HI_V6"
   PEER_REMOTE_V6="$PEER_LO_V6"
 fi
+
+# The IXP that we provide transit to
+IXP_AS="$((DEV+130))"
+
+IXP_LOCAL_V4="100.${AS}.1.16"
+IXP_REMOTE_V4="100.${AS}.1.17"
+IXP_LOCAL_V6="2001:${V6}:0:$((NGROUPS+10))::"
+IXP_REMOTE_V6="${IXP_LOCAL_V6}1"
