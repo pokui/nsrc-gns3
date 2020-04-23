@@ -9,6 +9,10 @@
 # https://cloudinit.readthedocs.io/en/latest/topics/network-config-format-v2.html
 # https://cloudinit.readthedocs.io/en/latest/topics/modules.html
 
+# The "accept-ra" extension is important because we must not pick up
+# RA's from classroom backbone (virbr0) if they are in use.  It's undocumented:
+# https://git.launchpad.net/cloud-init/commit/?id=62bbc262c3c7f633eac1d09ec78c055eef05166a
+
 # NOTE: after modifying config, you can reinitialize an existing VM using
 #   sudo cloud-init clean     # (this also wipes ssh keys etc)
 #   sudo cloud-init init
@@ -26,32 +30,31 @@ mkdir -p nocloud
 for i in $(seq 1 8); do
   FQDN="srv$i.ws.nsrc.org"
   IPV4="100.68.$i.30"
+  GWV4="100.68.$i.29"
   IPV6="2001:db8:$i:21::30"
+  GWV6="2001:db8:$i:21::29"
   BACKDOOR="192.168.122.$((10*i))"
 
   ######## NETWORK CONFIG ########
   cat <<EOS >"$TMPDIR/network-config"
-version: 1
-config:
-  - type: physical
-    name: $ETH0
-    subnets:
-      - type: static
-        address: $IPV4/30
-        gateway: 100.68.$i.29
-      - type: static
-        address: $IPV6/64
-        gateway: 2001:db8:$i:1::29
-  - type: physical
-    name: $ETH1
-    subnets:
-      - type: static
-        address: $BACKDOOR/24
-  - type: nameserver
-    address:
-      - 192.168.122.1
-    search:
-      - ws.nsrc.org
+version: 2
+ethernets:
+  $ETH0:
+    accept-ra: false
+    addresses:
+      - $IPV4/30
+      - $IPV6/64
+    gateway4: $GWV4
+    gateway6: $GWV6
+  $ETH1:
+    accept-ra: false
+    addresses:
+      - $BACKDOOR/24
+    nameservers:
+      addresses:
+        - 192.168.122.1
+      search:
+        - ws.nsrc.org
 EOS
 
   ######## USER DATA ########
@@ -104,15 +107,6 @@ write_files:
       label 2001:0::/32   7
       label 2001:db8::/32 6
       label 2001:10::/28  6
-  - path: /etc/network/if-pre-up.d/fix-v6-gateway
-    permissions: '0755'
-    content: |
-      #!/bin/sh
-      # Fix for v6 default gateway picked up from RA then vanishing after 30 minutes
-      if [ "\$IFACE" = "$ETH0" ]; then
-        sysctl net.ipv6.conf.$ETH0.accept_ra=0
-        ip -6 route delete ::/0 dev $ETH0 || true
-      fi
   # Policy routing so inbound traffic to 192.168.122.x always returns via same interface
   - path: /etc/iproute2/rt_tables
     append: true
@@ -153,44 +147,41 @@ done
 # RSx
 for i in $(seq 1 2); do
   FQDN="rs$i.ws.nsrc.org"
+  V6DEC="$(( 65536 - i ))"
+  V6BLOCK="2001:DB8:`printf "%04X" "$V6DEC"`"
   IPV4="100.127.$(( (i-1)*2 )).10"
   GWV4="100.127.$(( (i-1)*2 )).9"
-  IPV6="2001:DB8:FFFF:$(( (i-1)*2 ))::10"
-  GWV6="2001:DB8:FFFF:$(( (i-1)*2 ))::9"
+  IPV6="${V6BLOCK}:2::10"
+  GWV6="${V6BLOCK}:2::9"
   IPV4_IXP="100.127.$(( (i-1)*2+1 )).254"
-  IPV6_IXP="2001:DB8:FFFF:$(( (i-1)*2+1 ))::FE"
+  IPV6_IXP="${V6BLOCK}:1::FE"
   BACKDOOR="192.168.122.$((i+4))"
 
   ######## NETWORK CONFIG ########
   cat <<EOS >"$TMPDIR/network-config"
-version: 1
-config:
-  - type: physical
-    name: $ETH0
-    subnets:
-      - type: static
-        address: $IPV4/29
-        gateway: $GWV4
-      - type: static
-        address: $IPV6/64
-        gateway: $GWV6
-  - type: physical
-    name: $ETH1
-    subnets:
-      - type: static
-        address: $IPV4_IXP/24
-      - type: static
-        address: $IPV6_IXP/64
-  - type: physical
-    name: $ETH2
-    subnets:
-      - type: static
-        address: $BACKDOOR/24
-  - type: nameserver
-    address:
-      - 192.168.122.1
-    search:
-      - ws.nsrc.org
+version: 2
+ethernets:
+  $ETH0:
+    accept-ra: false
+    addresses:
+      - $IPV4/29
+      - $IPV6/64
+    gateway4: $GWV4
+    gateway6: $GWV6
+  $ETH1:
+    accept-ra: false
+    addresses:
+      - $IPV4_IXP/24
+      - $IPV6_IXP/64
+  $ETH2:
+    accept-ra: false
+    addresses:
+      - $BACKDOOR/24
+    nameservers:
+      addresses:
+        - 192.168.122.1
+      search:
+        - ws.nsrc.org
 EOS
 
   ######## USER DATA ########
@@ -243,15 +234,6 @@ write_files:
       label 2001:0::/32   7
       label 2001:db8::/32 6
       label 2001:10::/28  6
-  - path: /etc/network/if-pre-up.d/fix-v6-gateway
-    permissions: '0755'
-    content: |
-      #!/bin/sh
-      # Fix for v6 default gateway picked up from RA then vanishing after 30 minutes
-      if [ "\$IFACE" = "$ETH0" ]; then
-        sysctl net.ipv6.conf.$ETH0.accept_ra=0
-        ip -6 route delete ::/0 dev $ETH0 || true
-      fi
   # Policy routing so inbound traffic to 192.168.122.x always returns via same interface
   - path: /etc/iproute2/rt_tables
     append: true
