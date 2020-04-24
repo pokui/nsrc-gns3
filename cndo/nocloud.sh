@@ -9,6 +9,10 @@
 # https://cloudinit.readthedocs.io/en/latest/topics/network-config-format-v2.html
 # https://cloudinit.readthedocs.io/en/latest/topics/modules.html
 
+# The "accept-ra" extension is important because we must not pick up
+# RA's from classroom backbone (virbr0) if they are in use.  It's undocumented:
+# https://git.launchpad.net/cloud-init/commit/?id=62bbc262c3c7f633eac1d09ec78c055eef05166a
+
 # NOTE: after modifying config, you can reinitialize an existing VM using
 #   sudo cloud-init clean     # (this also wipes ssh keys etc)
 #   sudo cloud-init init
@@ -38,6 +42,7 @@ version: 1
 config:
   - type: physical
     name: $ETH0
+    accept-ra: false
     subnets:
       - type: static
         address: $IPV4/28
@@ -47,6 +52,7 @@ config:
         gateway: 2001:db8:$i:1::1
   - type: physical
     name: $ETH1
+    accept-ra: false
     subnets:
       - type: static
         address: $BACKDOOR/24
@@ -107,15 +113,7 @@ write_files:
       label fc00::/7      6
       label 2001:0::/32   7
       label 2001:db8::/32 6
-  - path: /etc/network/if-pre-up.d/fix-v6-gateway
-    permissions: '0755'
-    content: |
-      #!/bin/sh
-      # Fix for v6 default gateway picked up from RA then vanishing after 30 minutes
-      if [ "\$IFACE" = "$ETH0" ]; then
-        sysctl net.ipv6.conf.$ETH0.accept_ra=0
-        ip -6 route delete ::/0 dev $ETH0 || true
-      fi
+      label 2001:10::/28  6
   # Policy routing so inbound traffic to 192.168.122.x always returns via same interface
   - path: /etc/iproute2/rt_tables
     append: true
@@ -139,7 +137,6 @@ write_files:
 runcmd:
   # YAML doesn't need escaping of backslash, but shell (cat <<END2) does
   - sed -i'' -r -e 's#(\\\\h)([^.])#\\1.campus$i\\2#g' /etc/profile /etc/bash.bashrc /etc/skel/.bashrc /root/.bashrc /home/*/.bashrc
-  - '[ -d /etc/network/if-up.d ] && ln -s /etc/networkd-dispatcher/routable.d/50-backdoor /etc/network/if-up.d/backdoor'
   - IFACE=$ETH1 /etc/networkd-dispatcher/routable.d/50-backdoor
   - sysctl -p /etc/sysctl.d/90-rpf.conf
 final_message: NSRC welcomes you to CNDO!

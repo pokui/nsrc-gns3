@@ -9,6 +9,10 @@
 # https://cloudinit.readthedocs.io/en/latest/topics/network-config-format-v2.html
 # https://cloudinit.readthedocs.io/en/latest/topics/modules.html
 
+# The "accept-ra" extension is important because we must not pick up
+# RA's from classroom backbone (virbr0) if they are in use.  It's undocumented:
+# https://git.launchpad.net/cloud-init/commit/?id=62bbc262c3c7f633eac1d09ec78c055eef05166a
+
 # NOTE: after modifying config, you can reinitialize an existing VM using
 #   sudo cloud-init clean     # (this also wipes ssh keys etc)
 #   sudo cloud-init init
@@ -45,6 +49,7 @@ config:
       bridge_fd: 0
       bridge_maxwait: 0
       bridge_stp: 'off'
+    accept-ra: false
     subnets:
       - type: static
         address: $IPV4/28
@@ -62,6 +67,7 @@ config:
       bridge_fd: 0
       bridge_maxwait: 0
       bridge_stp: 'off'
+    accept-ra: false
     subnets:
       - type: static
         address: $BACKDOOR/24
@@ -106,15 +112,24 @@ write_files:
   - path: /etc/apt/apt.conf.d/99proxy
     content: |
       Acquire::http::Proxy "http://192.168.122.1:3142/";
-  - path: /etc/network/if-pre-up.d/fix-v6-gateway
-    permissions: '0755'
+  - path: /etc/gai.conf
     content: |
-      #!/bin/sh
-      # Fix for v6 default gateway picked up from RA then vanishing after 30 minutes
-      if [ "\$IFACE" = "br0" ]; then
-        sysctl net.ipv6.conf.br0.accept_ra=0
-        ip -6 route delete ::/0 dev br0 || true
-      fi
+      # New label table with separate label for 2001:db8::/32.
+      # The RFC 3484 rules prefer the source and destination to have
+      # the same label. So if we have a 2001:db8 source address and are
+      # connecting to something on the public Internet which has both
+      # v4 and v6 addresses, we will prefer to use v4 (where the source
+      # and destination both have label "4") rather than v6.
+      label ::1/128       0
+      label ::/0          1
+      label 2002::/16     2
+      label ::/96         3
+      label ::ffff:0:0/96 4
+      label fec0::/10     5
+      label fc00::/7      6
+      label 2001:0::/32   7
+      label 2001:db8::/32 6
+      label 2001:10::/28  6
   # Policy routing so inbound traffic to 192.168.122.x always returns via same interface
   - path: /etc/iproute2/rt_tables
     append: true
@@ -139,7 +154,6 @@ runcmd:
   # YAML doesn't need escaping of backslash, but shell (cat <<EOS) does
   - sed -i'' -r -e 's#(\\\\h)([^.])#\\1.campus$i\\2#g' /etc/profile /etc/bash.bashrc /etc/skel/.bashrc /root/.bashrc /home/*/.bashrc
   - DEBIAN_FRONTEND=noninteractive fix-hostname $FQDN
-  - '[ -d /etc/network/if-up.d ] && ln -s /etc/networkd-dispatcher/routable.d/50-backdoor /etc/network/if-up.d/backdoor'
   - IFACE=br1 /etc/networkd-dispatcher/routable.d/50-backdoor
   - sysctl -p /etc/sysctl.d/90-rpf.conf
   - lxc profile create bridged
@@ -177,6 +191,7 @@ runcmd:
     config:
       - type: physical
         name: eth0
+        accept-ra: false
         subnets:
           - type: static
             address: 100.68.$i.\$((130 + h))/28
@@ -186,6 +201,7 @@ runcmd:
             gateway: 2001:db8:$i:1::1
       - type: physical
         name: eth1
+        accept-ra: false
         subnets:
           - type: static
             address: \$HOST_BACKDOOR/24
@@ -211,15 +227,24 @@ runcmd:
       - path: /etc/apt/apt.conf.d/99proxy
         content: |
           Acquire::http::Proxy "http://192.168.122.1:3142/";
-      - path: /etc/network/if-pre-up.d/fix-v6-gateway
-        permissions: '0755'
+      - path: /etc/gai.conf
         content: |
-          #!/bin/sh
-          # Fix for v6 default gateway picked up from RA then vanishing after 30 minutes
-          if [ "\\\$IFACE" = "eth0" ]; then
-            sysctl net.ipv6.conf.eth0.accept_ra=0
-            ip -6 route delete ::/0 dev eth0 || true
-          fi
+          # New label table with separate label for 2001:db8::/32.
+          # The RFC 3484 rules prefer the source and destination to have
+          # the same label. So if we have a 2001:db8 source address and are
+          # connecting to something on the public Internet which has both
+          # v4 and v6 addresses, we will prefer to use v4 (where the source
+          # and destination both have label "4") rather than v6.
+          label ::1/128       0
+          label ::/0          1
+          label 2002::/16     2
+          label ::/96         3
+          label ::ffff:0:0/96 4
+          label fec0::/10     5
+          label fc00::/7      6
+          label 2001:0::/32   7
+          label 2001:db8::/32 6
+          label 2001:10::/28  6
       # Policy routing so inbound traffic to 192.168.122.x always returns via same interface
       - path: /etc/iproute2/rt_tables
         append: true
@@ -244,9 +269,6 @@ runcmd:
       # Additional level of escaping required
       - sed -i'' -r -e 's#(\\\\\\\\h)([^.])#\\\\1.campus$i\\\\2#g' /etc/profile /etc/bash.bashrc /etc/skel/.bashrc /root/.bashrc /home/*/.bashrc
       - DEBIAN_FRONTEND=noninteractive fix-hostname \$HOST_FQDN
-      - '[ -d /etc/network/if-up.d ] && ln -s /etc/networkd-dispatcher/routable.d/50-backdoor /etc/network/if-up.d/backdoor'
-      # Network was initialized early in boot, so on first run we have to apply the fixes again
-      - IFACE=eth0 /etc/network/if-pre-up.d/fix-v6-gateway || true; ifdown eth0 || true; ifconfig eth0 0.0.0.0 down; ifup eth0
       - IFACE=eth1 /etc/networkd-dispatcher/routable.d/50-backdoor
       - sysctl -p /etc/sysctl.d/90-rpf.conf
     END2

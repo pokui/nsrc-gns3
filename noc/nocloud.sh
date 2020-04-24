@@ -43,6 +43,7 @@ config:
       bridge_fd: 0
       bridge_maxwait: 0
       bridge_stp: 'off'
+    accept-ra: false
     subnets:
       - type: static
         address: $IPV4/28
