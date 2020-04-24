@@ -1,2 +1,4 @@
 #!/bin/bash -eu
-00-base/gen-SRX "$@"
+. common-SR
+UPLINK_SHUTDOWN=$'\n shutdown'
+render

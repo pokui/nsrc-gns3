@@ -1,2 +1,3 @@
 #!/bin/bash -eu
-00-base/gen-SRX "$@"
+. common-SR
+render
