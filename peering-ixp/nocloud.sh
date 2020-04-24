@@ -147,13 +147,16 @@ done
 # RSx
 for i in $(seq 1 2); do
   FQDN="rs$i.ws.nsrc.org"
+  SR_AS="$(( 130 + i ))"
   V6DEC="$(( 65536 - i ))"
   V6BLOCK="2001:DB8:`printf "%04X" "$V6DEC"`"
-  IPV4="100.127.$(( (i-1)*2 )).10"
-  GWV4="100.127.$(( (i-1)*2 )).9"
+  V4SRV="100.127.$(( (i-1)*2 ))"
+  V4IXP="100.127.$(( (i-1)*2+1 ))"
+  IPV4="${V4SRV}.10"
+  GWV4="${V4SRV}.9"
   IPV6="${V6BLOCK}:2::10"
   GWV6="${V6BLOCK}:2::9"
-  IPV4_IXP="100.127.$(( (i-1)*2+1 )).254"
+  IPV4_IXP="${V4IXP}.254"
   IPV6_IXP="${V6BLOCK}:1::FE"
   BACKDOOR="192.168.122.$((i+4))"
 
@@ -186,7 +189,8 @@ EOS
 
   ######## USER DATA ########
   # This configures all other aspects of boot, including creating user/password.
-  cat <<EOS >"$TMPDIR/user-data"
+  (
+  cat <<EOS
 #cloud-config
 fqdn: $FQDN
 chpasswd: { expire: False }
@@ -254,14 +258,152 @@ write_files:
     content: |
       # Loose reverse path filtering (traffic from 192.168.122 address may come in via $ETH0/$ETH1)
       net.ipv4.conf.all.rp_filter=2
+  - path: /etc/bird/bird.conf
+    owner: bird:bird
+    permissions: '0640'
+    content: |
+      # This configuration based on:
+      # https://gitlab.labs.nic.cz/labs/bird/-/wikis/Simple_route_server
+      # https://gitlab.labs.nic.cz/labs/bird/-/wikis/transition-notes-to-bird-2
+      #
+      # For more options see:
+      # /usr/share/doc/bird2/examples/bird.conf
+      # https://bird.network.cz/?get_doc&f=bird.html&v=20
+
+      log "/var/log/bird/bird.log" all;
+      #log syslog all;
+
+      router id ${V4IXP}.254;
+      define myas = $(( 65535 - i ));
+
+      protocol device { }
+
+      ### The following function excludes weird networks such as
+      ### rfc1918, class D, class E, and too long and too short prefixes
+
+      function avoid_martians()
+      prefix set martians;
+      {
+        martians = [ 169.254.0.0/16+, 172.16.0.0/12+, 192.168.0.0/16+, 10.0.0.0/8+,
+                     224.0.0.0/4+, 240.0.0.0/4+, 0.0.0.0/32-, 0.0.0.0/0{25,32}, 0.0.0.0/0{0,7} ];
+
+        ### Avoid RFC1918 and similar networks
+        if net ~ martians then return false;
+
+        return true;
+      }
+
+      ####
+      # Protocol template
+
+      template bgp PEERS {
+        local as myas;
+        rs client;
+      }
+
+
+      ####
+      # Configuration of BGP peer follows
+
+      ###
+      filter bgp_in_AS${SR_AS}
+      prefix set allnet;
+      int set allas;
+      {
+        if ! (avoid_martians()) then reject;
+        if (bgp_path.first != ${SR_AS} ) then reject;
+
+        allas = [ ${SR_AS} ];
+        if ! (bgp_path.last ~ allas) then reject;
+
+        allnet = [ ${V4SRV}.0/24, ${V6BLOCK}::/48 ];
+        if ! (net ~ allnet) then reject;
+
+        accept;
+      }
+
+      protocol bgp SR${i}v4 from PEERS {
+        description "SR${i} - IPv4";
+        neighbor ${V4IXP}.253 as ${SR_AS};
+        password "ixp-rs";
+        ipv4 {
+          import filter bgp_in_AS${SR_AS};
+          import limit 10000 action restart;
+          export all;
+        };
+      }
+
+      protocol bgp SR${i}v6 from PEERS {
+        description "SR${i} - IPv6";
+        neighbor ${V6BLOCK}:1::FD as ${SR_AS};
+        password "ixp-rs";
+        ipv6 {
+          import filter bgp_in_AS${SR_AS};
+          import limit 10000 action restart;
+          export all;
+        };
+      }
+
+EOS
+  for GROUP in $(seq 1 8); do
+    AS=$((GROUP*10))
+    OTHER=$(( ((GROUP-1)^1)+1 ))
+    cat <<EOS
+
+      ### AS${AS} - Group ${GROUP}
+      filter bgp_in_AS${AS}
+      prefix set allnet;
+      int set allas;
+      {
+        if ! (avoid_martians()) then reject;
+        if (bgp_path.first != ${AS} ) then reject;
+
+        allas = [ ${AS}, $(( GROUP*10 + 100000 )), $(( OTHER*10 + 100000 )) ];
+        if ! (bgp_path.last ~ allas) then reject;
+
+        allnet = [ 100.68.${GROUP}.0/24, 100.68.$(( GROUP+100 )).0/24, 100.68.$(( OTHER+100 )).0/24,
+                   2001:DB8:${GROUP}::/48, 2001:DB8:$(( GROUP+100 ))::/48, 2001:DB8:$(( OTHER+100 ))::/48 ];
+        if ! (net ~ allnet) then reject;
+
+        accept;
+      }
+
+      protocol bgp R${AS}v4 from PEERS {
+        description "Group ${GROUP} - IPv4";
+        neighbor ${V4IXP}.${GROUP} as ${AS};
+        password "ixp-rs";
+        ipv4 {
+          import filter bgp_in_AS${AS};
+          import limit 10000 action restart;
+          export all;
+        };
+      }
+
+      protocol bgp R${AS}v6 from PEERS {
+        description "Group ${GROUP} - IPv6";
+        neighbor ${V6BLOCK}:1::${GROUP} as ${AS};
+        password "ixp-rs";
+        ipv6 {
+          import filter bgp_in_AS${AS};
+          import limit 10000 action restart;
+          export all;
+        };
+      }
+
+EOS
+  done
+  cat <<EOS
 runcmd:
   - IFACE=$ETH2 /etc/networkd-dispatcher/routable.d/50-backdoor
   - sysctl -p /etc/sysctl.d/90-rpf.conf
-  # TODO: bird configuration
+  - mkdir -p /var/log/bird
+  # Workaround for http://trubka.network.cz/pipermail/bird-users/2020-April/014509.html
+  - touch /var/log/bird/bird.log; chown bird:bird /var/log/bird/bird.log
   - systemctl enable bird
   - systemctl start bird
 final_message: NSRC welcomes you to Peering/IXP!
 EOS
+  ) >"$TMPDIR/user-data"
   yamllint "$TMPDIR/user-data"
   yamllint "$TMPDIR/network-config"
   OUTFILE="nocloud/peering-ixp-rs${i}-hdb.img"
