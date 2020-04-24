@@ -11,11 +11,16 @@ It runs with up to 8 groups.  Each group has:
 * A peering router (PX)
 * A core router (CX)
 * An access router (AX)
-* A customer router (CustX)
 * A server (srvX)
+* A customer router (CustX)
 
-In addition, there are two "transit" routers which provide the uplinks,
-two IXPs, and a route server (Ubuntu/BIRD) at each IXP.
+![Group topology](peering-group.png)
+
+In addition, there are two "transit" routers which provide the uplinks, and
+two IXPs each with a switch (IXP), a services router (SR), and an Ubuntu
+BIRD router server (RS).
+
+![IXP topology](peering-ixp.png)
 
 # Files
 
@@ -26,25 +31,44 @@ File | Description
 `peering-ixp-<version>.gns3project` | the GNS3 project
 `vios-adventerprisek9-m.vmdk.SPA.157-3.M3` | IOSv image
 `vios_l2-adventerprisek9-m.SSA.high_iron_20180619.qcow2` | IOSvL2 image
+`nsrc-rs-<version>.qcow2` | VM image with bird preinstalled, for RS and SRV instances
+`peering-ixp-rs<N>-hdb-<version>.img` | cloud-init configs for RS
+`peering-ixp-srv<N>-hdb-<version>.img` | cloud-init configs for SRV in each group
 
-The total memory allocation of all the devices is 26GB. There should still
+The total memory allocation of all the devices is 27GB. There should still
 be enough RAM to run the NOC on a 32GB machine.
 
 # Backbone addressing plan
 
 IP Address      | DNS Name
 :-------------- | :---------------------------
-192.168.122.2   | TR1
-192.168.122.3   | TR2
-192.168.122.5   | RS1
-192.168.122.6   | RS2
+192.168.122.2   | tr1.ws.nsrc.org
+192.168.122.3   | tr2.ws.nsrc.org
+192.168.122.5   | rs1.ws.nsrc.org
+192.168.122.6   | rs2.ws.nsrc.org
+192.168.122.10  | srv1.ws.nsrc.org
+192.168.122.20  | srv2.ws.nsrc.org
+192.168.122.30  | srv3.ws.nsrc.org
+192.168.122.40  | srv4.ws.nsrc.org
+192.168.122.50  | srv5.ws.nsrc.org
+192.168.122.60  | srv6.ws.nsrc.org
+192.168.122.70  | srv7.ws.nsrc.org
+192.168.122.80  | srv8.ws.nsrc.org
 
 See the training materials for the addressing plan used inside the network.
 
 # Credentials
 
-The transit routers have username `isplab`, password `nsrc-PW`, enable
-`nsrc-EN`.
+The student routers have username `isplab`, password `lab-PW`, enable `lab-EN`
+(except in the initial state "00-blank", when they are unconfigured)
+
+The SRV Ubuntu servers are initialized with username `sysadm`, password
+`nsrc+ws`
+
+The transit routers (TR), switch (IXP) and services router (SR) have
+username `isplab`, password `nsrc-PW`, enable `nsrc-EN`.
+
+The route servers (RS) have username `nsrc`, password `nsrc-PW`
 
 # Snapshots
 
@@ -52,7 +76,9 @@ There are pre-generated snapshots for many different stages of the lab.
 
 Normally this class starts with the routers and switches completely
 unconfigured.  You can reset to this state using the "00-base" snapshot
-(note that the transit routers *are* configured in this snapshot)
+(note that the transit routers *are* configured in this snapshot).  The
+uplinks from the IXP services router (SR) are shut down, so that the IXP
+services subnets do not appear in the initial BGP routing table.
 
 You can restore to any given snapshot using `Edit > Manage Snapshots` in the
 GNS3 client.  Beware that when you restore from a snapshot it will reset

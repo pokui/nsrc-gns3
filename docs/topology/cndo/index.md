@@ -41,9 +41,8 @@ File | Description
 The border routers and the NREN transit routers run IOSv with 384MB RAM. 
 The remaining switches run IOSvL2 with 512MB RAM.
 
-Note that IOSvL2 currently does not support OSPFv3, so IPv6 dynamic routing
-between the core and the border will not work (unless you change the
-exercises to use IS-IS)
+Note that IOSvL2 currently does not support OSPFv3, so the exercises are
+now using IS-IS instead.
 
 srv1 is a completely vanilla Ubuntu Cloud image, with no extra software
 installed, and configured to use 512MB of RAM.  It may be useful as a
