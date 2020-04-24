@@ -67,49 +67,94 @@ spanning-tree extend system-id
 !
 !
 interface GigabitEthernet0/0
+ description P1
+ switchport mode access
  negotiation auto
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
 !
 interface GigabitEthernet0/1
+ description P2
+ switchport mode access
  negotiation auto
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
 !
 interface GigabitEthernet0/2
+ description P3
+ switchport mode access
  negotiation auto
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
 !
 interface GigabitEthernet0/3
+ description P4
+ switchport mode access
  negotiation auto
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
 !
 interface GigabitEthernet1/0
+ description P5
+ switchport mode access
  negotiation auto
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
 !
 interface GigabitEthernet1/1
+ description P6
+ switchport mode access
  negotiation auto
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
 !
 interface GigabitEthernet1/2
+ description P7
+ switchport mode access
  negotiation auto
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
 !
 interface GigabitEthernet1/3
+ description P8
+ switchport mode access
  negotiation auto
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
 !
 interface GigabitEthernet2/0
+ shutdown
  negotiation auto
 !
 interface GigabitEthernet2/1
+ shutdown
  negotiation auto
 !
 interface GigabitEthernet2/2
+ shutdown
  negotiation auto
 !
 interface GigabitEthernet2/3
+ shutdown
  negotiation auto
 !
 interface GigabitEthernet3/0
+ shutdown
  negotiation auto
 !
 interface GigabitEthernet3/1
+ description Route server RS${DEV}
+ switchport mode access
  negotiation auto
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
 !
 interface GigabitEthernet3/2
+ description Service router SR${DEV}
+ switchport mode access
  negotiation auto
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
 !
 interface GigabitEthernet3/3
  description Management interface

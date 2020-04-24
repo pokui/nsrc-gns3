@@ -195,7 +195,6 @@ no ip http secure-server
 ip route ${V4SRV}.0 255.255.255.0 Null0
 !
 ip access-list extended OUTSIDE_IN_V4
- deny   ip any ${V4SRV}.0 0.0.0.7
  deny   ip any ${V4IXP}.0 0.0.0.255
  permit ip any any
 !
@@ -232,7 +231,6 @@ snmp-server location NSRC Workshop
 !
 !
 ipv6 access-list OUTSIDE_IN_V6
- deny ipv6 any ${V6BLOCK}::/64
  deny ipv6 any ${V6BLOCK}:1::/64
  permit ipv6 any any
 EOS

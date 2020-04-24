@@ -221,6 +221,7 @@ ip prefix-list IXP-RS seq ${G}0 permit 100.68.${G}.0/24
 EOS
 done
 cat <<EOS
+ip prefix-list IXP-RS seq 85 permit 100.127.0.0/24
 ipv6 route ::/0 Null0
 ipv6 ioam timestamp
 !
@@ -241,6 +242,7 @@ ipv6 prefix-list IXP-v6RS seq ${G}0 permit 2001:DB8:${G}::/48
 EOS
 done
 cat <<EOS
+ipv6 prefix-list IXP-v6RS seq 85 permit 2001:DB8:FFFF::/48
 route-map private-peer-out permit 5
  match community aggregate customer-pi
 !
