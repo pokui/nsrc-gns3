@@ -44,8 +44,14 @@ and regenerate the IOSv snapshots (next two steps in this document).
 
 # Updating topology
 
-After changing the topology or device configurations in GNS3, update the
-repo from the running copy:
+After changing the topology or device configurations in GNS3, select the
+following options:
+
+* `File > Edit Project`, and ensure that "Leave this project running in the
+  background when closing GNS3" is checked
+* `View > Zoom reset`
+
+Then update the repo from the running copy:
 
 ```
 cd [noc|cndo|nmm]
