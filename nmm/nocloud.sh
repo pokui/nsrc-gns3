@@ -34,49 +34,39 @@ for i in $(seq 1 6); do
   BACKDOOR="192.168.122.$((10*i))"
 
   ######## NETWORK CONFIG ########
-  # Note: version 2 appears to be broken on Ubuntu 16.04: it doesn't add
-  # dns-nameservers or dns-search to /etc/network/interfaces.d/50-cloud-init.cfg
   cat <<EOS >"$TMPDIR/network-config"
-version: 1
-config:
-  - type: physical
-    name: $ETH0
-  - type: bridge
-    name: br0
-    bridge_interfaces:
+version: 2
+ethernets:
+  $ETH0:
+    accept-ra: false
+  $ETH1:
+    accept-ra: false
+bridges:
+  br0:
+    interfaces:
       - $ETH0
-    params:
-      bridge_fd: 0
-      bridge_maxwait: 0
-      bridge_stp: 'off'
+    forward-delay: 0
+    stp: false
     accept-ra: false
-    subnets:
-      - type: static
-        address: $IPV4/28
-        gateway: 100.68.$i.129
-      - type: static
-        address: $IPV6/64
-        gateway: 2001:db8:$i:1::1
-  - type: physical
-    name: $ETH1
-  - type: bridge
-    name: br1
-    bridge_interfaces:
+    addresses:
+      - $IPV4/28
+      - $IPV6/64
+    gateway4: 100.68.$i.129
+    gateway6: 2001:db8:$i:1::1
+  br1:
+    interfaces:
       - $ETH1
-    params:
-      bridge_fd: 0
-      bridge_maxwait: 0
-      bridge_stp: 'off'
+    forward-delay: 0
+    stp: false
     accept-ra: false
-    subnets:
-      - type: static
-        address: $BACKDOOR/24
-  - type: nameserver
-    address:
-      - 192.168.122.1
-    search:
-      - campus$i.ws.nsrc.org
-      - ws.nsrc.org
+    addresses:
+      - $BACKDOOR/24
+    nameservers:
+      addresses:
+        - 192.168.122.1
+      search:
+        - campus$i.ws.nsrc.org
+        - ws.nsrc.org
 EOS
 
   ######## USER DATA ########
@@ -187,30 +177,25 @@ runcmd:
       HOST_FQDN="host\$h.campus$i.ws.nsrc.org"
       HOST_BACKDOOR="192.168.122.\$((10*$i + h))"
       lxc copy host-master host\$h -c user.network-config="\$(cat <<END1)" -c user.user-data="\$(cat <<END2)"
-    version: 1
-    config:
-      - type: physical
-        name: eth0
+    version: 2
+    ethernets:
+      $ETH0:
         accept-ra: false
-        subnets:
-          - type: static
-            address: 100.68.$i.\$((130 + h))/28
-            gateway: 100.68.$i.129
-          - type: static
-            address: 2001:db8:$i:1::\$((130 + h))/64
-            gateway: 2001:db8:$i:1::1
-      - type: physical
-        name: eth1
+        addresses:
+          - 100.68.$i.\$((130 + h))/28
+          - 2001:db8:$i:1::\$((130 + h))/64
+        gateway4: 100.68.$i.129
+        gateway6: 2001:db8:$i:1::1
+      $ETH1:
         accept-ra: false
-        subnets:
-          - type: static
-            address: \$HOST_BACKDOOR/24
-      - type: nameserver
-        address:
-          - 192.168.122.1
-        search:
-          - campus$i.ws.nsrc.org
-          - ws.nsrc.org
+        addresses:
+          - \$HOST_BACKDOOR/24
+        nameservers:
+          addresses:
+            - 192.168.122.1
+          search:
+            - campus$i.ws.nsrc.org
+            - ws.nsrc.org
     END1
     #cloud-config
     chpasswd: { expire: False }

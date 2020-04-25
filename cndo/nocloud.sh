@@ -34,34 +34,27 @@ for i in $(seq 1 6); do
   BACKDOOR="192.168.122.$((10*i))"
 
   ######## NETWORK CONFIG ########
-  # Note: version 2 appears to be broken on Ubuntu 16.04: it doesn't add
-  # dns-nameservers or dns-search to /etc/network/interfaces.d/50-cloud-init.cfg
-  # Also note: stock ubuntu-cloud image does not have bridge-utils
+  # Note: stock ubuntu-cloud image does not have bridge-utils
   cat <<EOS >"$TMPDIR/network-config"
-version: 1
-config:
-  - type: physical
-    name: $ETH0
+version: 2
+ethernets:
+  $ETH0:
     accept-ra: false
-    subnets:
-      - type: static
-        address: $IPV4/28
-        gateway: 100.68.$i.129
-      - type: static
-        address: $IPV6/64
-        gateway: 2001:db8:$i:1::1
-  - type: physical
-    name: $ETH1
+    addresses:
+      - $IPV4/28
+      - $IPV6/64
+    gateway4: 100.68.$i.129
+    gateway6: 2001:db8:$i:1::1
+  $ETH1:
     accept-ra: false
-    subnets:
-      - type: static
-        address: $BACKDOOR/24
-  - type: nameserver
-    address:
-      - 192.168.122.1
-    search:
-      - campus$i.ws.nsrc.org
-      - ws.nsrc.org
+    addresses:
+      - $BACKDOOR/24
+    nameservers:
+      addresses:
+        - 192.168.122.1
+      search:
+        - campus$i.ws.nsrc.org
+        - ws.nsrc.org
 EOS
 
   ######## USER DATA ########

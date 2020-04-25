@@ -28,34 +28,28 @@ IPV4="192.168.122.250"
 IPV6="2001:db8:0:0::250"
 
 ######## NETWORK CONFIG ########
-# Note: version 2 appears to be broken on Ubuntu 16.04: it doesn't add
-# dns-nameservers or dns-search to /etc/network/interfaces.d/50-cloud-init.cfg
 cat <<EOS >"$TMPDIR/network-config"
-version: 1
-config:
-  - type: physical
-    name: $ETH0
-  - type: bridge
-    name: br0
-    bridge_interfaces:
-      - $ETH0
-    params:
-      bridge_fd: 0
-      bridge_maxwait: 0
-      bridge_stp: 'off'
+version: 2
+ethernets:
+  $ETH0:
     accept-ra: false
-    subnets:
-      - type: static
-        address: $IPV4/28
-        gateway: 192.168.122.1
-      - type: static
-        address: $IPV6/64
-        gateway: 2001:db8:0:0::254
-  - type: nameserver
-    address:
-      - 192.168.122.1
-    search:
-      - ws.nsrc.org
+bridges:
+  br0:
+    interfaces:
+      - $ETH0
+    forward-delay: 0
+    stp: false
+    accept-ra: false
+    addresses:
+      - $IPV4/28
+      - $IPV6/64
+    gateway4: 192.168.122.1
+    gateway6: 2001:db8:0:0::254
+    nameservers:
+      addresses:
+        - 192.168.122.1
+      search:
+        - ws.nsrc.org
 EOS
 
 ######## USER DATA ########
