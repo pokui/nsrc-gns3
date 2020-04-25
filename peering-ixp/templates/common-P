@@ -6,7 +6,7 @@ PEER_GROUP="$(( ((GROUP - 1) ^ 1) + 1 ))"
 PEER_AS="${PEER_GROUP}0"
 
 # Which group's address space used for direct peering
-LINK_GROUP="$(( ((GROUP - 1) >> 1) + 1 ))"
+LINK_GROUP="$(( ((GROUP - 1) & -2) + 1 ))"
 
 PEER_LO_V4="100.68.${LINK_GROUP}.32"
 PEER_HI_V4="100.68.${LINK_GROUP}.33"
