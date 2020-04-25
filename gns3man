@@ -78,12 +78,13 @@ form.login input { display: table-cell; }
 table.nodes th { background-color: #ff8080; }
 table.nodes td { padding: 0em 0.5em 0em 0.5em; }
 textarea.config { white-space: pre; width: 100%%; height: 80%%; font-family: monospace; font-size: 110%%; }
+.flash { background-color: #ffaaaa; border: 2px solid red; padding: 10px; margin-bottom: 10px; }
 </style>
 </head>
 <body>
 """ % html.escape(title))
     if flash_message:
-        print("<strong class='flash'>%s</strong>" % html.escape(flash_message))
+        print("<div class='flash'>%s</div>" % html.escape(flash_message))
     yield
     print("""
 </body>
@@ -372,10 +373,24 @@ with layout():
     project = sel[0]
     pid = project["project_id"]
 
+    print('<form method="post" onsubmit="return confirm(\'Are you sure? This will wipe the config of the selected devices!\');">')
+
+    # Snapshot actions
+    snapshots = api_get("/v2/projects/%s/snapshots" % pid)
+    snapshots.sort(key=lambda s: s["name"])
+    print("<hr>")
+    print('<p>Reset selected devices from snapshot')
+    print('<select name="snapshot_id">')
+    print('<option></option>')
+    print('<option value="None">&lt;Empty&gt;</option>')
+    for s in snapshots:
+        print('<option value="%s">%s</option>' % (s["snapshot_id"], html.escape(s["name"])))
+    print('</select>')
+    print('<button type="submit" name="action" value="restore">Restore</button>')
+    print('</p>')
 
     # List nodes
     print("<hr>")
-    print('<form method="post" onsubmit="return confirm(\'Are you sure? This will wipe the config of the selected devices!\');">')
     print('<table class="nodes">')
     print("""
 <thead>
@@ -412,20 +427,8 @@ with layout():
 
     print("</table>")
 
-    # Snapshot actions
-    snapshots = api_get("/v2/projects/%s/snapshots" % pid)
-    snapshots.sort(key=lambda s: s["name"])
-    print('<p>Reset selected from snapshot')
-    print('<select name="snapshot_id">')
-    print('<option></option>')
-    print('<option value="None">&lt;Empty&gt;</option>')
-    for s in snapshots:
-        print('<option value="%s">%s</option>' % (s["snapshot_id"], html.escape(s["name"])))
-    print('</select>')
-    print('<button type="submit" name="action" value="restore">Restore</button>')
-    print('</p>')
-
     print("</form>")
 
     # Logout link
+    print("<hr>")
     print('<a href="?action=logout">Logout</a>')
