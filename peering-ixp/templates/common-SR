@@ -191,6 +191,8 @@ router bgp ${AS}
  address-family ipv4
   network ${V4SRV}.0 mask 255.255.255.0
   neighbor ${TR_REMOTE_V4} activate
+  neighbor ${TR_REMOTE_V4} prefix-list FULL-ROUTES in
+  neighbor ${TR_REMOTE_V4} prefix-list AS${AS}-block out
   neighbor ${V4IXP}.254 activate
   neighbor ${V4IXP}.254 prefix-list IXP-RS in
   neighbor ${V4IXP}.254 prefix-list AS${AS}-block out
@@ -199,6 +201,8 @@ router bgp ${AS}
  address-family ipv6
   network ${V6BLOCK}::/48
   neighbor ${TR_REMOTE_V6} activate
+  neighbor ${TR_REMOTE_V6} prefix-list FULL-v6ROUTES in
+  neighbor ${TR_REMOTE_V6} prefix-list AS${AS}-v6block out
   neighbor ${V6BLOCK}:1::FE activate
   neighbor ${V6BLOCK}:1::FE prefix-list IXP-v6RS in
   neighbor ${V6BLOCK}:1::FE prefix-list AS${AS}-v6block out
@@ -218,6 +222,8 @@ ip access-list extended OUTSIDE_IN_V4
 !
 ip prefix-list AS${AS}-block seq 5 permit ${V4SRV}.0/24
 !
+ip prefix-list FULL-ROUTES seq 5 permit 0.0.0.0/0 le 32
+!
 ip prefix-list IXP-RS description IPv4 prefixes from RouteServer
 EOS
 for G in $(seq "$NGROUPS"); do
@@ -231,6 +237,8 @@ ipv6 ioam timestamp
 !
 !
 ipv6 prefix-list AS${AS}-v6block seq 5 permit ${V6BLOCK}::/48
+!
+ipv6 prefix-list FULL-v6ROUTES seq 5 permit ::/0 le 128
 !
 ipv6 prefix-list IXP-v6RS description IPv6 prefixes from RouteServer
 EOS
