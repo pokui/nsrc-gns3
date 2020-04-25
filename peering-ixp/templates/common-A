@@ -1,2 +1,5 @@
 . common
 HOSTNAME="A${GROUP}"
+
+CUST_AS="$(( GROUP*10 + 100000 ))"
+OTHER_AS="$(( OTHER*10 + 100000 ))"

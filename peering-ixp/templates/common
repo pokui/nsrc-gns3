@@ -3,7 +3,8 @@ set -o pipefail
 
 NGROUPS=8
 GROUP="${1}"
-AS="${GROUP}0"
+OTHER="$(( ((GROUP-1)^1) + 1 ))"
+AS="$(( GROUP*10 ))"
 
 preamble_iosv () {
   ISIS_ENABLE="${1:-Y}"

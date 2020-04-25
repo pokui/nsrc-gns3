@@ -1,2 +1,6 @@
 . common
 HOSTNAME="Cust${GROUP}"
+
+AS="$(( GROUP*10 + 100000 ))"
+ISPA_AS="$(( GROUP*10 ))"
+ISPB_AS="$(( OTHER*10 ))"
