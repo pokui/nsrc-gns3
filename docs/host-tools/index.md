@@ -9,7 +9,8 @@ class DHCP service).
 To add the DNS entries needed by the labs, you install a "hosts" file.  DNS
 requests matching this file are intercepted by dnsmasq and served locally.
 
-The hosts file we provide is called `hosts-cndo-nmm`.  You can replace your
+The hosts file we provide depends on the topology you wish to run, e.g.
+`hosts-cndo-nmm` or `hosts-peering-ixp`. You can replace your
 server's existing `/etc/hosts` entirely with this file, or append it to the
 end if there's anything else you want to keep.  The contents are available
 to the students and VMs inside the labs, as well as to the host itself.

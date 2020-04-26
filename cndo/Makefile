@@ -5,10 +5,10 @@ help:
 	@echo "make (hosts|nocloud|import|snapshots)"
 
 .PHONY: hosts
-hosts: default.addnhosts
+hosts: hosts-cndo-nmm
 
-default.addnhosts: hosts.sh
-	./hosts.sh >default.addnhosts
+hosts-cndo-nmm: hosts.sh
+	./hosts.sh >hosts-cndo-nmm
 
 .PHONY: nocloud
 nocloud: nocloud.sh
