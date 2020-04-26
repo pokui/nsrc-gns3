@@ -265,6 +265,7 @@ write_files:
       # This configuration based on:
       # https://gitlab.labs.nic.cz/labs/bird/-/wikis/Simple_route_server
       # https://gitlab.labs.nic.cz/labs/bird/-/wikis/transition-notes-to-bird-2
+      # https://github.com/pierky/arouteserver/blob/master/examples/default/bird_v2.conf
       #
       # For more options see:
       # /usr/share/doc/bird2/examples/bird.conf
@@ -278,19 +279,120 @@ write_files:
 
       protocol device { }
 
-      ### The following function excludes weird networks such as
-      ### rfc1918, class D, class E, and too long and too short prefixes
+      # This function returns True if 'net' is a bogon prefix
+      # or falls within a bogon prefix.
 
-      function avoid_martians()
-      prefix set martians;
+      function prefix_is_bogon()
+      prefix set bogons_4;
+      prefix set bogons_6;
       {
-        martians = [ 169.254.0.0/16+, 172.16.0.0/12+, 192.168.0.0/16+, 10.0.0.0/8+,
-                     224.0.0.0/4+, 240.0.0.0/4+, 0.0.0.0/32-, 0.0.0.0/0{25,32}, 0.0.0.0/0{0,7} ];
+              bogons_4 = [
+                      # Default route
+                      0.0.0.0/0,
 
-        ### Avoid RFC1918 and similar networks
-        if net ~ martians then return false;
+                      # IANA - Local Identification
+                      0.0.0.0/8{8,32},
 
-        return true;
+                      # RFC 1918 - Private Use
+                      10.0.0.0/8{8,32},
+
+                      # IANA - Loopback
+                      127.0.0.0/8{8,32},
+
+                      # RFC 6598 - Shared Address Space
+                      # NSRC: commented out as we use this
+                      # 100.64.0.0/10{10,32},
+
+                      # RFC 3927 - Link Local
+                      169.254.0.0/16{16,32},
+
+                      # RFC 1918 - Private Use
+                      172.16.0.0/12{12,32},
+
+                      # RFC 5737 - TEST-NET-1
+                      192.0.2.0/24{24,32},
+
+                      # RFC 3068 - 6to4 prefix
+                      192.88.99.0/24{24,32},
+
+                      # RFC 1918 - Private Use
+                      192.168.0.0/16{16,32},
+
+                      # RFC 2544 - Network Interconnect Device Benchmark Testing
+                      198.18.0.0/15{15,32},
+
+                      # RFC 5737 - TEST-NET-2
+                      198.51.100.0/24{24,32},
+
+                      # RFC 5737 - TEST-NET-3
+                      203.0.113.0/24{24,32},
+
+                      # RFC 5771 - Multicast (formerly Class D) and Class E
+                      224.0.0.0/3{3,32}
+              ];
+              bogons_6 = [
+                      # Default route
+                      ::/0,
+
+                      # loopback, unspecified, v4-mapped
+                      ::/8{8,128},
+
+                      # RFC 6052 - IPv4-IPv6 Translation
+                      64:ff9b::/96{96,128},
+
+                      # RFC 6666 - reserved for Discard-Only Address Block
+                      100::/8{8,128},
+
+                      # RFC 4048 - Reserved by IETF
+                      200::/7{7,128},
+
+                      # RFC 4291 - Reserved by IETF
+                      400::/6{6,128},
+
+                      # RFC 4291 - Reserved by IETF
+                      800::/5{5,128},
+
+                      # RFC 4291 - Reserved by IETF
+                      1000::/4{4,128},
+
+                      # RFC 4380 - Teredo prefix
+                      2001::/32{32,128},
+
+                      # RFC 5180 - Benchmarking
+                      2001:2::/48{48,128},
+
+                      # RFC 7450 - Automatic Multicast Tunneling
+                      2001:3::/32{32,128},
+
+                      # RFC 4843 - Deprecated ORCHID
+                      # NSRC: commented out as we use 2001:18::/31
+                      # 2001:10::/28{28,128},
+
+                      # RFC 7343 - ORCHIDv2
+                      2001:20::/28{28,128},
+
+                      # RFC 3849 - NON-ROUTABLE range to be used for documentation purpose
+                      # NSRC: commented out as we use it
+                      # 2001:db8::/32{32,128},
+
+                      # RFC 3068 - 6to4 prefix
+                      2002::/16{16,128},
+
+                      # RFC 5156 - used for the 6bone but was returned
+                      3ffe::/16{16,128},
+
+                      # RFC 4291 - Reserved by IETF
+                      4000::/2{2,128},
+
+                      # RFC 4291 - Reserved by IETF
+                      8000::/1{1,128}
+              ];
+
+              if net.type = NET_IP4 then
+                      if net ~ bogons_4 then return true;
+              if net.type = NET_IP6 then
+                      if net ~ bogons_6 then return true;
+              return false;
       }
 
       ####
@@ -310,7 +412,7 @@ write_files:
       prefix set allnet;
       int set allas;
       {
-        if ! (avoid_martians()) then reject;
+        if (prefix_is_bogon()) then reject;
         if (bgp_path.first != ${SR_AS} ) then reject;
 
         allas = [ ${SR_AS} ];
@@ -355,7 +457,7 @@ EOS
       prefix set allnet;
       int set allas;
       {
-        if ! (avoid_martians()) then reject;
+        if (prefix_is_bogon()) then reject;
         if (bgp_path.first != ${AS} ) then reject;
 
         allas = [ ${AS}, $(( GROUP*10 + 100000 )), $(( OTHER*10 + 100000 )) ];
