@@ -48,11 +48,16 @@ interface GigabitEthernet0/2
  ipv6 nd ra suppress all
 !
 interface GigabitEthernet0/3
- no ip address
- shutdown
+ description Link to Transit Provider AS${ISP2_AS}
+ ip address ${ISP2_LOCAL_V4} 255.255.255.254
+ no ip redirects
+ no ip proxy-arp
  duplex auto
  speed auto
  media-type rj45
+ ipv6 address ${ISP2_LOCAL_V6}/127
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
 !
 interface GigabitEthernet0/4
  no ip address
@@ -94,25 +99,35 @@ router bgp ${AS}
  neighbor ibgpv6-rr description iBGP with RR
  neighbor ibgpv6-rr password 7 123B22271E0A0E
  neighbor ibgpv6-rr update-source Loopback0
- neighbor ${ISP1_REMOTE_V6} remote-as ${ISP1_AS}
- neighbor ${ISP1_REMOTE_V6} description eBGP with TRANSIT AS${ISP1_AS}
- neighbor ${ISP1_REMOTE_V6} password 7 106C2E29091610
+ neighbor ${TR1_REMOTE_V6} remote-as ${TR1_AS}
+ neighbor ${TR1_REMOTE_V6} description eBGP with TRANSIT AS${TR1_AS}
+ neighbor ${TR1_REMOTE_V6} password 7 106C2E29091610
+ neighbor ${TR2_REMOTE_V6} remote-as ${TR2_AS}
+ neighbor ${TR2_REMOTE_V6} description eBGP with TRANSIT AS${TR2_AS}
+ neighbor ${TR2_REMOTE_V6} password 7 106C2E29091610
  neighbor 2001:DB8:${GROUP}::2 peer-group ibgpv6-rr
  neighbor 2001:DB8:${GROUP}::2 description iBGP with Core
  neighbor 100.68.${GROUP}.2 peer-group ibgp-rr
  neighbor 100.68.${GROUP}.2 description iBGP with Core
- neighbor ${ISP1_REMOTE_V4} remote-as ${ISP1_AS}
- neighbor ${ISP1_REMOTE_V4} description eBGP with TRANSIT AS${ISP1_AS}
- neighbor ${ISP1_REMOTE_V4} password 7 04792C3603204E
+ neighbor ${TR1_REMOTE_V4} remote-as ${TR1_AS}
+ neighbor ${TR1_REMOTE_V4} description eBGP with TRANSIT AS${TR1_AS}
+ neighbor ${TR1_REMOTE_V4} password 7 04792C3603204E
+ neighbor ${TR2_REMOTE_V4} remote-as ${TR2_AS}
+ neighbor ${TR2_REMOTE_V4} description eBGP with TRANSIT AS${TR2_AS}
+ neighbor ${TR2_REMOTE_V4} password 7 04792C3603204E
  !
  address-family ipv4
   neighbor ibgp-rr send-community
   neighbor ibgp-rr next-hop-self
   neighbor 100.68.${GROUP}.2 activate
-  neighbor ${ISP1_REMOTE_V4} activate
-  neighbor ${ISP1_REMOTE_V4} prefix-list FULL-ROUTES in
-  neighbor ${ISP1_REMOTE_V4} prefix-list AS${AS}-block out
-  neighbor ${ISP1_REMOTE_V4} route-map Transit-in in
+  neighbor ${TR1_REMOTE_V4} activate
+  neighbor ${TR1_REMOTE_V4} prefix-list FULL-ROUTES in
+  neighbor ${TR1_REMOTE_V4} route-map Transit-in in
+  neighbor ${TR1_REMOTE_V4} route-map Transit-out out
+  neighbor ${TR2_REMOTE_V4} activate
+  neighbor ${TR2_REMOTE_V4} prefix-list FULL-ROUTES in
+  neighbor ${TR2_REMOTE_V4} route-map Transit-in in
+  neighbor ${TR2_REMOTE_V4} route-map Transit-out out
   distance bgp 200 200 200
  exit-address-family
  !
@@ -120,21 +135,30 @@ router bgp ${AS}
   distance bgp 200 200 200
   neighbor ibgpv6-rr send-community
   neighbor ibgpv6-rr next-hop-self
-  neighbor ${ISP1_REMOTE_V6} activate
-  neighbor ${ISP1_REMOTE_V6} prefix-list FULL-v6ROUTES in
-  neighbor ${ISP1_REMOTE_V6} prefix-list AS${AS}-v6block out
-  neighbor ${ISP1_REMOTE_V6} route-map Transitv6-in in
+  neighbor ${TR1_REMOTE_V6} activate
+  neighbor ${TR1_REMOTE_V6} prefix-list FULL-v6ROUTES in
+  neighbor ${TR1_REMOTE_V6} route-map Transitv6-in in
+  neighbor ${TR1_REMOTE_V6} route-map Transit-out out
+  neighbor ${TR2_REMOTE_V6} activate
+  neighbor ${TR2_REMOTE_V6} prefix-list FULL-v6ROUTES in
+  neighbor ${TR2_REMOTE_V6} route-map Transitv6-in in
+  neighbor ${TR2_REMOTE_V6} route-map Transit-out out
   neighbor 2001:DB8:${GROUP}::2 activate
  exit-address-family
 !
 ip forward-protocol nd
 !
+ip bgp-community new-format
+ip community-list standard aggregate permit ${AS}:1000
+ip community-list standard subnets permit ${AS}:1001
+ip community-list standard customer-pi permit ${AS}:1005
+ip community-list standard private-peer permit ${AS}:1100
+ip community-list standard bilateral-peer permit ${AS}:1200
+ip community-list standard RS-peer permit ${AS}:1300
 !
 no ip http server
 no ip http secure-server
 !
-!
-ip prefix-list AS${AS}-block permit 100.68.${GROUP}.0/24
 !
 ip prefix-list DEFAULT-ROUTE permit 0.0.0.0/0
 !
@@ -142,11 +166,12 @@ ip prefix-list FULL-ROUTES permit 0.0.0.0/0 le 32
 ipv6 ioam timestamp
 !
 !
-ipv6 prefix-list AS${AS}-v6block permit 2001:DB8:${GROUP}::/48
-!
 ipv6 prefix-list DEFAULT-v6ROUTE permit ::/0
 !
 ipv6 prefix-list FULL-v6ROUTES permit ::/0 le 128
+route-map Transit-out permit 5
+ match community aggregate customer-pi
+!
 route-map Transitv6-in permit 10
  match ipv6 address prefix-list DEFAULT-v6ROUTE
  set community no-advertise
