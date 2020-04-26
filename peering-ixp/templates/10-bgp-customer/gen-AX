@@ -155,16 +155,16 @@ no ip http secure-server
 ip route 100.68.${GROUP}.64 255.255.255.192 100.68.${GROUP}.35
 !
 !
-ip prefix-list Cust${GROUP}-in seq 5 permit 100.68.$(( GROUP+100 )).0/24
+ip prefix-list Cust${GROUP}-in permit 100.68.$(( GROUP+100 )).0/24
 !
-ip prefix-list Cust${OTHER}-in seq 5 permit 100.68.$(( OTHER+100 )).0/24
+ip prefix-list Cust${OTHER}-in permit 100.68.$(( OTHER+100 )).0/24
 ipv6 route 2001:DB8:${GROUP}:4000::/52 2001:DB8:${GROUP}:31::1
 ipv6 ioam timestamp
 !
 !
-ipv6 prefix-list Cust${GROUP}-v6in seq 5 permit 2001:DB8:$(( GROUP+100 ))::/48
+ipv6 prefix-list Cust${GROUP}-v6in permit 2001:DB8:$(( GROUP+100 ))::/48
 !
-ipv6 prefix-list Cust${OTHER}-v6in seq 5 permit 2001:DB8:$(( OTHER+100 ))::/48
+ipv6 prefix-list Cust${OTHER}-v6in permit 2001:DB8:$(( OTHER+100 ))::/48
 route-map set-pi-community permit 5
  description Set community on Provider Independent prefix
  set local-preference 250

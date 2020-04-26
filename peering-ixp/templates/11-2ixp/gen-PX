@@ -294,9 +294,9 @@ for G in $(seq "$NGROUPS"); do
   HI="$(( ((G - 1) & -2) + 2 ))"
   [ "$G" -ne "$GROUP" ] && cat <<EOS
 !
-ip prefix-list AS${G}0-block seq 5 permit 100.68.${G}.0/24
-ip prefix-list AS${G}0-block seq 10 permit 100.68.$(( LO+100 )).0/24
-ip prefix-list AS${G}0-block seq 15 permit 100.68.$(( HI+100 )).0/24
+ip prefix-list AS${G}0-block permit 100.68.${G}.0/24
+ip prefix-list AS${G}0-block permit 100.68.$(( LO+100 )).0/24
+ip prefix-list AS${G}0-block permit 100.68.$(( HI+100 )).0/24
 EOS
 done
 cat <<EOS
@@ -305,17 +305,17 @@ ip prefix-list IXP-RS description IPv4 prefixes from RouteServer
 EOS
 for G in $(seq "$NGROUPS"); do
   [ "$G" -ne "$GROUP" ] && cat <<EOS
-ip prefix-list IXP-RS seq ${G}0 permit 100.68.${G}.0/24
+ip prefix-list IXP-RS permit 100.68.${G}.0/24
 EOS
 done
 for G in $(seq "$NGROUPS"); do
   cat <<EOS
-ip prefix-list IXP-RS seq $(( G*10 + 100 )) permit 100.68.$(( G+100 )).0/24
+ip prefix-list IXP-RS permit 100.68.$(( G+100 )).0/24
 EOS
 done
 cat <<EOS
-ip prefix-list IXP-RS seq 85 permit 100.127.0.0/24
-ip prefix-list IXP-RS seq 90 permit 100.127.2.0/24
+ip prefix-list IXP-RS permit 100.127.0.0/24
+ip prefix-list IXP-RS permit 100.127.2.0/24
 ipv6 route ::/0 Null0
 ipv6 ioam timestamp
 !
@@ -325,9 +325,9 @@ for G in $(seq "$NGROUPS"); do
   HI="$(( ((G - 1) & -2) + 2 ))"
   [ "$G" -ne "$GROUP" ] && cat <<EOS
 !
-ipv6 prefix-list AS${G}0-v6block seq 5 permit 2001:DB8:${G}::/48
-ipv6 prefix-list AS${G}0-v6block seq 10 permit 2001:DB8:$(( LO + 100 ))::/48
-ipv6 prefix-list AS${G}0-v6block seq 15 permit 2001:DB8:$(( HI + 100 ))::/48
+ipv6 prefix-list AS${G}0-v6block permit 2001:DB8:${G}::/48
+ipv6 prefix-list AS${G}0-v6block permit 2001:DB8:$(( LO + 100 ))::/48
+ipv6 prefix-list AS${G}0-v6block permit 2001:DB8:$(( HI + 100 ))::/48
 EOS
 done
 cat <<EOS
@@ -336,17 +336,17 @@ ipv6 prefix-list IXP-v6RS description IPv6 prefixes from RouteServer
 EOS
 for G in $(seq "$NGROUPS"); do
   [ "$G" -ne "$GROUP" ] && cat <<EOS
-ipv6 prefix-list IXP-v6RS seq ${G}0 permit 2001:DB8:${G}::/48
+ipv6 prefix-list IXP-v6RS permit 2001:DB8:${G}::/48
 EOS
 done
 for G in $(seq "$NGROUPS"); do
   cat <<EOS
-ipv6 prefix-list IXP-v6RS seq $(( G*10 + 100 )) permit 2001:DB8:$(( G+100 ))::/48
+ipv6 prefix-list IXP-v6RS permit 2001:DB8:$(( G+100 ))::/48
 EOS
 done
 cat <<EOS
-ipv6 prefix-list IXP-v6RS seq 85 permit 2001:DB8:FFFF::/48
-ipv6 prefix-list IXP-v6RS seq 90 permit 2001:DB8:FFFE::/48
+ipv6 prefix-list IXP-v6RS permit 2001:DB8:FFFF::/48
+ipv6 prefix-list IXP-v6RS permit 2001:DB8:FFFE::/48
 route-map private-peer-out permit 5
  match community aggregate customer-pi
 !

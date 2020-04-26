@@ -94,28 +94,28 @@ ip route 100.68.${GROUP}.64 255.255.255.192 Null0
 ip route 100.68.$(( GROUP+100 )).0 255.255.255.0 Null0
 !
 !
-ip prefix-list Cust${GROUP}-out seq 5 permit 100.68.$(( GROUP+100 )).0/24
+ip prefix-list Cust${GROUP}-out permit 100.68.$(( GROUP+100 )).0/24
 !
-ip prefix-list Group${GROUP}-in seq 5 permit 0.0.0.0/0
-ip prefix-list Group${GROUP}-in seq 10 permit 100.68.${GROUP}.0/24
-ip prefix-list Group${GROUP}-in seq 15 permit 100.68.$(( OTHER+100 )).0/24
+ip prefix-list Group${GROUP}-in permit 0.0.0.0/0
+ip prefix-list Group${GROUP}-in permit 100.68.${GROUP}.0/24
+ip prefix-list Group${GROUP}-in permit 100.68.$(( OTHER+100 )).0/24
 !
-ip prefix-list Group${OTHER}-in seq 5 permit 0.0.0.0/0
-ip prefix-list Group${OTHER}-in seq 10 permit 100.68.${OTHER}.0/24
-ip prefix-list Group${OTHER}-in seq 15 permit 100.68.$(( OTHER+100 )).0/24
+ip prefix-list Group${OTHER}-in permit 0.0.0.0/0
+ip prefix-list Group${OTHER}-in permit 100.68.${OTHER}.0/24
+ip prefix-list Group${OTHER}-in permit 100.68.$(( OTHER+100 )).0/24
 ipv6 route 2001:DB8:${GROUP}:4000::/52 Null0
 ipv6 route 2001:DB8:$(( GROUP+100 ))::/48 Null0
 ipv6 ioam timestamp
 !
 !
-ipv6 prefix-list Cust${GROUP}-v6out seq 5 permit 2001:DB8:$(( GROUP+100 ))::/48
+ipv6 prefix-list Cust${GROUP}-v6out permit 2001:DB8:$(( GROUP+100 ))::/48
 !
-ipv6 prefix-list Group${GROUP}v6-in seq 5 permit ::/0
-ipv6 prefix-list Group${GROUP}v6-in seq 10 permit 2001:DB8:${GROUP}::/48
-ipv6 prefix-list Group${GROUP}v6-in seq 15 permit 2001:DB8:$(( OTHER+100 ))::/48
+ipv6 prefix-list Group${GROUP}v6-in permit ::/0
+ipv6 prefix-list Group${GROUP}v6-in permit 2001:DB8:${GROUP}::/48
+ipv6 prefix-list Group${GROUP}v6-in permit 2001:DB8:$(( OTHER+100 ))::/48
 !
-ipv6 prefix-list Group${OTHER}v6-in seq 5 permit ::/0
-ipv6 prefix-list Group${OTHER}v6-in seq 10 permit 2001:DB8:${OTHER}::/48
-ipv6 prefix-list Group${OTHER}v6-in seq 15 permit 2001:DB8:$(( OTHER+100 ))::/48
+ipv6 prefix-list Group${OTHER}v6-in permit ::/0
+ipv6 prefix-list Group${OTHER}v6-in permit 2001:DB8:${OTHER}::/48
+ipv6 prefix-list Group${OTHER}v6-in permit 2001:DB8:$(( OTHER+100 ))::/48
 EOS
 postamble_iosv

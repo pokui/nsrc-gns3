@@ -150,31 +150,31 @@ no ip http secure-server
 ip route 0.0.0.0 0.0.0.0 Null0
 !
 !
-ip prefix-list AS${AS}-block seq 5 permit 100.68.${GROUP}.0/24
+ip prefix-list AS${AS}-block permit 100.68.${GROUP}.0/24
 !
-ip prefix-list AS${PEER_AS}-block seq 5 permit 100.68.${PEER_GROUP}.0/24
+ip prefix-list AS${PEER_AS}-block permit 100.68.${PEER_GROUP}.0/24
 !
 ip prefix-list IXP-RS description IPv4 prefixes from RouteServer
 EOS
 for G in $(seq "$NGROUPS"); do
-  [ "$G" -ne "$GROUP" ] && echo "ip prefix-list IXP-RS seq ${G}0 permit 100.68.${G}.0/24"
+  [ "$G" -ne "$GROUP" ] && echo "ip prefix-list IXP-RS permit 100.68.${G}.0/24"
 done
 cat <<EOS
-ip prefix-list IXP-RS seq 85 permit 100.127.0.0/24
+ip prefix-list IXP-RS permit 100.127.0.0/24
 ipv6 route ::/0 Null0
 ipv6 ioam timestamp
 !
 !
-ipv6 prefix-list AS${AS}-v6block seq 5 permit 2001:DB8:${GROUP}::/48
+ipv6 prefix-list AS${AS}-v6block permit 2001:DB8:${GROUP}::/48
 !
-ipv6 prefix-list AS${PEER_AS}-v6block seq 5 permit 2001:DB8:${PEER_GROUP}::/48
+ipv6 prefix-list AS${PEER_AS}-v6block permit 2001:DB8:${PEER_GROUP}::/48
 !
 ipv6 prefix-list IXP-v6RS description IPv6 prefixes from RouteServer
 EOS
 for G in $(seq "$NGROUPS"); do
-  [ "$G" -ne "$GROUP" ] && echo "ipv6 prefix-list IXP-v6RS seq ${G}0 permit 2001:DB8:${G}::/48"
+  [ "$G" -ne "$GROUP" ] && echo "ipv6 prefix-list IXP-v6RS permit 2001:DB8:${G}::/48"
 done
 cat <<EOS
-ipv6 prefix-list IXP-v6RS seq 85 permit 2001:DB8:FFFF::/48
+ipv6 prefix-list IXP-v6RS permit 2001:DB8:FFFF::/48
 EOS
 postamble_iosv

@@ -220,15 +220,15 @@ ip access-list extended OUTSIDE_IN_V4
  permit ip any any
 !
 !
-ip prefix-list AS${AS}-block seq 5 permit ${V4SRV}.0/24
+ip prefix-list AS${AS}-block permit ${V4SRV}.0/24
 !
-ip prefix-list FULL-ROUTES seq 5 permit 0.0.0.0/0 le 32
+ip prefix-list FULL-ROUTES permit 0.0.0.0/0 le 32
 !
 ip prefix-list IXP-RS description IPv4 prefixes from RouteServer
 EOS
 for G in $(seq "$NGROUPS"); do
   cat <<EOS
-ip prefix-list IXP-RS seq ${G}0 permit 100.68.${G}.0/24
+ip prefix-list IXP-RS permit 100.68.${G}.0/24
 EOS
 done
 cat <<EOS
@@ -236,15 +236,15 @@ ipv6 route ${V6BLOCK}::/48 Null0
 ipv6 ioam timestamp
 !
 !
-ipv6 prefix-list AS${AS}-v6block seq 5 permit ${V6BLOCK}::/48
+ipv6 prefix-list AS${AS}-v6block permit ${V6BLOCK}::/48
 !
-ipv6 prefix-list FULL-v6ROUTES seq 5 permit ::/0 le 128
+ipv6 prefix-list FULL-v6ROUTES permit ::/0 le 128
 !
 ipv6 prefix-list IXP-v6RS description IPv6 prefixes from RouteServer
 EOS
 for G in $(seq "$NGROUPS"); do
   cat <<EOS
-ipv6 prefix-list IXP-v6RS seq ${G}0 permit 2001:DB8:${G}::/48
+ipv6 prefix-list IXP-v6RS permit 2001:DB8:${G}::/48
 EOS
 done
 cat <<EOS

@@ -141,15 +141,15 @@ no ip http server
 no ip http secure-server
 !
 !
-ip prefix-list DEFAULT-ROUTE seq 5 permit 0.0.0.0/0
+ip prefix-list DEFAULT-ROUTE permit 0.0.0.0/0
 !
-ip prefix-list FULL-ROUTES seq 5 permit 0.0.0.0/0 le 32
+ip prefix-list FULL-ROUTES permit 0.0.0.0/0 le 32
 ipv6 ioam timestamp
 !
 !
-ipv6 prefix-list DEFAULT-v6ROUTE seq 5 permit ::/0
+ipv6 prefix-list DEFAULT-v6ROUTE permit ::/0
 !
-ipv6 prefix-list FULL-v6ROUTES seq 5 permit ::/0 le 128
+ipv6 prefix-list FULL-v6ROUTES permit ::/0 le 128
 route-map Transit-out permit 5
  match community aggregate customer-pi
 !

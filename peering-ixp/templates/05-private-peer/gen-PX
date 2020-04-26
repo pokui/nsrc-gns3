@@ -131,15 +131,15 @@ no ip http secure-server
 ip route 0.0.0.0 0.0.0.0 Null0
 !
 !
-ip prefix-list AS${AS}-block seq 5 permit 100.68.${GROUP}.0/24
+ip prefix-list AS${AS}-block permit 100.68.${GROUP}.0/24
 !
-ip prefix-list AS${PEER_AS}-block seq 5 permit 100.68.${PEER_GROUP}.0/24
+ip prefix-list AS${PEER_AS}-block permit 100.68.${PEER_GROUP}.0/24
 ipv6 route ::/0 Null0
 ipv6 ioam timestamp
 !
 !
-ipv6 prefix-list AS${AS}-v6block seq 5 permit 2001:DB8:${GROUP}::/48
+ipv6 prefix-list AS${AS}-v6block permit 2001:DB8:${GROUP}::/48
 !
-ipv6 prefix-list AS${PEER_AS}-v6block seq 5 permit 2001:DB8:${PEER_GROUP}::/48
+ipv6 prefix-list AS${PEER_AS}-v6block permit 2001:DB8:${PEER_GROUP}::/48
 EOS
 postamble_iosv

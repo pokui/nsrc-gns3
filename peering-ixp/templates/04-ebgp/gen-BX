@@ -134,19 +134,19 @@ no ip http server
 no ip http secure-server
 !
 !
-ip prefix-list AS${AS}-block seq 5 permit 100.68.${GROUP}.0/24
+ip prefix-list AS${AS}-block permit 100.68.${GROUP}.0/24
 !
-ip prefix-list DEFAULT-ROUTE seq 5 permit 0.0.0.0/0
+ip prefix-list DEFAULT-ROUTE permit 0.0.0.0/0
 !
-ip prefix-list FULL-ROUTES seq 5 permit 0.0.0.0/0 le 32
+ip prefix-list FULL-ROUTES permit 0.0.0.0/0 le 32
 ipv6 ioam timestamp
 !
 !
-ipv6 prefix-list AS${AS}-v6block seq 5 permit 2001:DB8:${GROUP}::/48
+ipv6 prefix-list AS${AS}-v6block permit 2001:DB8:${GROUP}::/48
 !
-ipv6 prefix-list DEFAULT-v6ROUTE seq 5 permit ::/0
+ipv6 prefix-list DEFAULT-v6ROUTE permit ::/0
 !
-ipv6 prefix-list FULL-v6ROUTES seq 5 permit ::/0 le 128
+ipv6 prefix-list FULL-v6ROUTES permit ::/0 le 128
 route-map Transitv6-in permit 10
  match ipv6 address prefix-list DEFAULT-v6ROUTE
  set community no-advertise
