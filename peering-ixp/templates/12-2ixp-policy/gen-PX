@@ -1,0 +1,391 @@
+#!/bin/bash -eu
+. common-P
+preamble_iosv
+cat <<EOS
+interface Loopback0
+ description Loopback on P${GROUP}
+ ip address 100.68.${GROUP}.3 255.255.255.255
+ ipv6 address 2001:DB8:${GROUP}::3/128
+!
+interface Null0
+ no ip unreachables
+ no ipv6 unreachables
+!
+interface GigabitEthernet0/0
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ description P2P Ethernet Link to C${GROUP}
+ ip address 100.68.${GROUP}.19 255.255.255.254
+ no ip redirects
+ no ip proxy-arp
+ ip router isis as${AS}
+ duplex auto
+ speed auto
+ media-type rj45
+ ipv6 address 2001:DB8:${GROUP}:11::1/127
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+ ipv6 router isis as${AS}
+ isis network point-to-point
+ isis metric 2
+ isis ipv6 metric 2
+!
+interface GigabitEthernet0/2
+ description Link to Group ${PEER_GROUP} Peering Router
+ ip address ${PEER_LOCAL_V4} 255.255.255.254
+ no ip redirects
+ no ip proxy-arp
+ duplex auto
+ speed auto
+ media-type rj45
+ ipv6 address ${PEER_LOCAL_V6}/127
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+!
+interface GigabitEthernet0/3
+ description AS${AS} link to IXP 1
+ ip address 100.127.1.${GROUP} 255.255.255.0
+ no ip redirects
+ no ip proxy-arp
+ duplex auto
+ speed auto
+ media-type rj45
+ ipv6 address 2001:DB8:FFFF:1::${GROUP}/64
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+!
+interface GigabitEthernet0/4
+ description AS${AS} link to IXP 2
+ ip address 100.127.3.${GROUP} 255.255.255.0
+ no ip redirects
+ no ip proxy-arp
+ duplex auto
+ speed auto
+ media-type rj45
+ ipv6 address 2001:DB8:FFFE:1::${GROUP}/64
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+!
+router isis as${AS}
+ net 49.0001.000${GROUP}.0003.00
+ is-type level-2-only
+ authentication mode md5 level-2
+ authentication key-chain as${AS}-key level-2
+ metric-style wide
+ set-overload-bit on-startup wait-for-bgp
+ log-adjacency-changes all
+ metric 100000
+ passive-interface GigabitEthernet0/3
+ passive-interface GigabitEthernet0/4
+ passive-interface Loopback0
+ !
+ address-family ipv6
+  multi-topology
+  set-overload-bit on-startup wait-for-bgp
+  metric 100000
+ exit-address-family
+!
+router bgp ${AS}
+ no bgp enforce-first-as
+ bgp log-neighbor-changes
+ bgp deterministic-med
+ no bgp default ipv4-unicast
+ neighbor ibgp-rr peer-group
+ neighbor ibgp-rr remote-as ${AS}
+ neighbor ibgp-rr description iBGP with RR
+ neighbor ibgp-rr password 7 01312134570A04
+ neighbor ibgp-rr update-source Loopback0
+ neighbor ibgpv6-rr peer-group
+ neighbor ibgpv6-rr remote-as ${AS}
+ neighbor ibgpv6-rr description iBGP with RR
+ neighbor ibgpv6-rr password 7 04792C3603204E
+ neighbor ibgpv6-rr update-source Loopback0
+ neighbor IXP-policyA peer-group
+ neighbor IXP-policyA description Policy Group A - high LocalPref
+ neighbor IXP-policyA password 7 0529213F2D4D4C
+ neighbor IXP-policyB peer-group
+ neighbor IXP-policyB description Policy Group B - high MED
+ neighbor IXP-policyB password 7 112B3E351B1309
+ neighbor IXP-v6policyA peer-group
+ neighbor IXP-v6policyA description Policy Group A - high LocalPref
+ neighbor IXP-v6policyA password 7 0529213F2D4D4C
+ neighbor IXP-v6policyB peer-group
+ neighbor IXP-v6policyB description Policy Group B - high MED
+ neighbor IXP-v6policyB password 7 112B3E351B1309
+ neighbor 2001:DB8:${GROUP}::2 peer-group ibgpv6-rr
+ neighbor 2001:DB8:${GROUP}::2 description iBGP with Core
+ neighbor ${PEER_REMOTE_V6} remote-as ${PEER_AS}
+ neighbor ${PEER_REMOTE_V6} description eBGP with AS${PEER_AS}
+ neighbor ${PEER_REMOTE_V6} password 7 1435353B000528
+EOS
+# IXP 2
+for G in $(seq "$NGROUPS"); do
+  (( (G & 1) == 1 )) && POL="B" || POL="A"
+  [ "$G" -ne "$GROUP" ] && cat <<EOS
+ neighbor 2001:DB8:FFFE:1::${G} remote-as ${G}0
+ neighbor 2001:DB8:FFFE:1::${G} peer-group IXP-v6policy${POL}
+ neighbor 2001:DB8:FFFE:1::${G} description eBGP with AS${G}0
+EOS
+done
+cat <<EOS
+ neighbor 2001:DB8:FFFE:1::FE remote-as 65533
+ neighbor 2001:DB8:FFFE:1::FE description eBGP with IXP 2 RS
+ neighbor 2001:DB8:FFFE:1::FE password 7 0452131642335F
+EOS
+# IXP 1
+for G in $(seq "$NGROUPS"); do
+  (( (G & 1) == 1 )) && POL="A" || POL="B"
+  [ "$G" -ne "$GROUP" ] && cat <<EOS
+ neighbor 2001:DB8:FFFF:1::${G} remote-as ${G}0
+ neighbor 2001:DB8:FFFF:1::${G} peer-group IXP-v6policy${POL}
+ neighbor 2001:DB8:FFFF:1::${G} description eBGP with AS${G}0
+EOS
+done
+cat <<EOS
+ neighbor 2001:DB8:FFFF:1::FE remote-as 65534
+ neighbor 2001:DB8:FFFF:1::FE description eBGP with IXP 1 RS
+ neighbor 2001:DB8:FFFF:1::FE password 7 0452131642335F
+EOS
+#
+cat <<EOS
+ neighbor 100.68.${GROUP}.2 peer-group ibgp-rr
+ neighbor 100.68.${GROUP}.2 description iBGP with Core
+ neighbor ${PEER_REMOTE_V4} remote-as ${PEER_AS}
+ neighbor ${PEER_REMOTE_V4} description eBGP with AS${PEER_AS}
+ neighbor ${PEER_REMOTE_V4} password 7 1435353B000528
+EOS
+# IXP 1
+for G in $(seq "$NGROUPS"); do
+  (( (G & 1) == 1 )) && POL="A" || POL="B"
+  [ "$G" -ne "$GROUP" ] && cat <<EOS
+ neighbor 100.127.1.${G} remote-as ${G}0
+ neighbor 100.127.1.${G} peer-group IXP-policy${POL}
+ neighbor 100.127.1.${G} description eBGP with AS${G}0
+EOS
+done
+cat <<EOS
+ neighbor 100.127.1.254 remote-as 65534
+ neighbor 100.127.1.254 description eBGP with IXP 1 RS
+ neighbor 100.127.1.254 password 7 0452131642335F
+EOS
+# IXP 2
+for G in $(seq "$NGROUPS"); do
+  (( (G & 1) == 1 )) && POL="B" || POL="A"
+  [ "$G" -ne "$GROUP" ] && cat <<EOS
+ neighbor 100.127.3.${G} remote-as ${G}0
+ neighbor 100.127.3.${G} peer-group IXP-policy${POL}
+ neighbor 100.127.3.${G} description eBGP with AS${G}0
+EOS
+done
+cat <<EOS
+ neighbor 100.127.3.254 remote-as 65533
+ neighbor 100.127.3.254 description eBGP with IXP 2 RS
+ neighbor 100.127.3.254 password 7 0452131642335F
+EOS
+#
+cat <<EOS
+ !
+ address-family ipv4
+  neighbor ibgp-rr send-community
+  neighbor ibgp-rr next-hop-self
+  neighbor IXP-policyA route-map IXP-bilateral1-in in
+  neighbor IXP-policyA route-map IXP-bilateral1-out out
+  neighbor IXP-policyB route-map IXP-bilateral2-in in
+  neighbor IXP-policyB route-map IXP-bilateral2-out out
+  neighbor 100.68.${GROUP}.2 activate
+  neighbor ${PEER_REMOTE_V4} activate
+  neighbor ${PEER_REMOTE_V4} prefix-list AS${PEER_AS}-block in
+  neighbor ${PEER_REMOTE_V4} route-map private-peer-in in
+  neighbor ${PEER_REMOTE_V4} route-map private-peer-out out
+EOS
+# IXP 1
+for G in $(seq "$NGROUPS"); do
+  [ "$G" -ne "$GROUP" ] && cat <<EOS
+  neighbor 100.127.1.${G} activate
+  neighbor 100.127.1.${G} prefix-list AS${G}0-block in
+EOS
+done
+cat <<EOS
+  neighbor 100.127.1.254 activate
+  neighbor 100.127.1.254 prefix-list IXP-RS in
+  neighbor 100.127.1.254 route-map IXP-RS-in in
+  neighbor 100.127.1.254 route-map IXP-RS-out out
+EOS
+# IXP 2
+for G in $(seq "$NGROUPS"); do
+  [ "$G" -ne "$GROUP" ] && cat <<EOS
+  neighbor 100.127.3.${G} activate
+  neighbor 100.127.3.${G} prefix-list AS${G}0-block in
+EOS
+done
+cat <<EOS
+  neighbor 100.127.3.254 activate
+  neighbor 100.127.3.254 prefix-list IXP-RS in
+  neighbor 100.127.3.254 route-map IXP-RS-in in
+  neighbor 100.127.3.254 route-map IXP-RS-out out
+EOS
+#
+cat <<EOS
+  distance bgp 200 200 200
+ exit-address-family
+ !
+ address-family ipv6
+  distance bgp 200 200 200
+  neighbor ibgpv6-rr send-community
+  neighbor ibgpv6-rr next-hop-self
+  neighbor IXP-v6policyA route-map IXP-bilateral1-in in
+  neighbor IXP-v6policyA route-map IXP-bilateral1-out out
+  neighbor IXP-v6policyB route-map IXP-bilateral2-in in
+  neighbor IXP-v6policyB route-map IXP-bilateral2-out out
+  neighbor 2001:DB8:${GROUP}::2 activate
+  neighbor ${PEER_REMOTE_V6} activate
+  neighbor ${PEER_REMOTE_V6} prefix-list AS${PEER_AS}-v6block in
+  neighbor ${PEER_REMOTE_V6} route-map private-peer-in in
+  neighbor ${PEER_REMOTE_V6} route-map private-peer-out out
+EOS
+# IXP 2
+for G in $(seq "$NGROUPS"); do
+  [ "$G" -ne "$GROUP" ] && cat <<EOS
+  neighbor 2001:DB8:FFFE:1::${G} activate
+  neighbor 2001:DB8:FFFE:1::${G} prefix-list AS${G}0-v6block in
+EOS
+done
+cat <<EOS
+  neighbor 2001:DB8:FFFE:1::FE activate
+  neighbor 2001:DB8:FFFE:1::FE prefix-list IXP-v6RS in
+  neighbor 2001:DB8:FFFE:1::FE route-map IXP-RS-in in
+  neighbor 2001:DB8:FFFE:1::FE route-map IXP-RS-out out
+EOS
+# IXP 1
+for G in $(seq "$NGROUPS"); do
+  [ "$G" -ne "$GROUP" ] && cat <<EOS
+  neighbor 2001:DB8:FFFF:1::${G} activate
+  neighbor 2001:DB8:FFFF:1::${G} prefix-list AS${G}0-v6block in
+EOS
+done
+cat <<EOS
+  neighbor 2001:DB8:FFFF:1::FE activate
+  neighbor 2001:DB8:FFFF:1::FE prefix-list IXP-v6RS in
+  neighbor 2001:DB8:FFFF:1::FE route-map IXP-RS-in in
+  neighbor 2001:DB8:FFFF:1::FE route-map IXP-RS-out out
+EOS
+#
+cat <<EOS
+ exit-address-family
+!
+ip forward-protocol nd
+!
+ip bgp-community new-format
+ip community-list standard aggregate permit ${AS}:1000
+ip community-list standard subnets permit ${AS}:1001
+ip community-list standard customer-pi permit ${AS}:1005
+ip community-list standard private-peer permit ${AS}:1100
+ip community-list standard bilateral-peer permit ${AS}:1200
+ip community-list standard RS-peer permit ${AS}:1300
+!
+no ip http server
+no ip http secure-server
+ip route 0.0.0.0 0.0.0.0 Null0
+!
+EOS
+for G in $(seq "$NGROUPS"); do
+  LO="$(( ((G - 1) & -2) + 1 ))"
+  HI="$(( ((G - 1) & -2) + 2 ))"
+  [ "$G" -ne "$GROUP" ] && cat <<EOS
+!
+ip prefix-list AS${G}0-block permit 100.68.${G}.0/24
+ip prefix-list AS${G}0-block permit 100.68.$(( LO+100 )).0/24
+ip prefix-list AS${G}0-block permit 100.68.$(( HI+100 )).0/24
+EOS
+done
+cat <<EOS
+!
+ip prefix-list IXP-RS description IPv4 prefixes from RouteServer
+EOS
+for G in $(seq "$NGROUPS"); do
+  [ "$G" -ne "$GROUP" ] && cat <<EOS
+ip prefix-list IXP-RS permit 100.68.${G}.0/24
+EOS
+done
+for G in $(seq "$NGROUPS"); do
+  cat <<EOS
+ip prefix-list IXP-RS permit 100.68.$(( G+100 )).0/24
+EOS
+done
+cat <<EOS
+ip prefix-list IXP-RS permit 100.127.0.0/24
+ip prefix-list IXP-RS permit 100.127.2.0/24
+ipv6 route ::/0 Null0
+ipv6 ioam timestamp
+!
+EOS
+for G in $(seq "$NGROUPS"); do
+  LO="$(( ((G - 1) & -2) + 1 ))"
+  HI="$(( ((G - 1) & -2) + 2 ))"
+  [ "$G" -ne "$GROUP" ] && cat <<EOS
+!
+ipv6 prefix-list AS${G}0-v6block permit 2001:DB8:${G}::/48
+ipv6 prefix-list AS${G}0-v6block permit 2001:DB8:$(( LO + 100 ))::/48
+ipv6 prefix-list AS${G}0-v6block permit 2001:DB8:$(( HI + 100 ))::/48
+EOS
+done
+cat <<EOS
+!
+ipv6 prefix-list IXP-v6RS description IPv6 prefixes from RouteServer
+EOS
+for G in $(seq "$NGROUPS"); do
+  [ "$G" -ne "$GROUP" ] && cat <<EOS
+ipv6 prefix-list IXP-v6RS permit 2001:DB8:${G}::/48
+EOS
+done
+for G in $(seq "$NGROUPS"); do
+  cat <<EOS
+ipv6 prefix-list IXP-v6RS permit 2001:DB8:$(( G+100 ))::/48
+EOS
+done
+cat <<EOS
+ipv6 prefix-list IXP-v6RS permit 2001:DB8:FFFF::/48
+ipv6 prefix-list IXP-v6RS permit 2001:DB8:FFFE::/48
+route-map private-peer-out permit 5
+ match community aggregate customer-pi
+!
+route-map IXP-bilateral2-in permit 5
+ description Local pref for IXP backup Bi-lateral Peer
+ set local-preference 160
+ set community ${AS}:1200
+!
+route-map IXP-bilateral1-in permit 5
+ description Local pref for IXP primary Bi-lateral Peer
+ set local-preference 170
+ set community ${AS}:1200
+!
+route-map IXP-RS-out permit 5
+ match community aggregate customer-pi
+!
+route-map IXP-RS-in permit 5
+ description Local pref for IXP RS Peers
+ set local-preference 150
+ set community ${AS}:1300
+!
+route-map private-peer-in permit 5
+ description Local pref for Private Peer
+ set local-preference 200
+ set community ${AS}:1100
+!
+route-map IXP-bilateral2-out permit 5
+ description MED for IXP backup Bi-lateral Peer
+ match community aggregate customer-pi
+ set metric 20
+!
+route-map IXP-bilateral1-out permit 5
+ description MED for IXP primary Bi-lateral Peer
+ match community aggregate customer-pi
+ set metric 0
+!
+EOS
+postamble_iosv
