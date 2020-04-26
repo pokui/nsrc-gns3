@@ -231,6 +231,11 @@ for G in $(seq "$NGROUPS"); do
 ip prefix-list IXP-RS permit 100.68.${G}.0/24
 EOS
 done
+for G in $(seq "$NGROUPS"); do
+  cat <<EOS
+ip prefix-list IXP-RS permit 100.68.$(( G+100 )).0/24
+EOS
+done
 cat <<EOS
 ipv6 route ${V6BLOCK}::/48 Null0
 ipv6 ioam timestamp
@@ -245,6 +250,11 @@ EOS
 for G in $(seq "$NGROUPS"); do
   cat <<EOS
 ipv6 prefix-list IXP-v6RS permit 2001:DB8:${G}::/48
+EOS
+done
+for G in $(seq "$NGROUPS"); do
+  cat <<EOS
+ipv6 prefix-list IXP-v6RS permit 2001:DB8:$(( G+100 ))::/48
 EOS
 done
 cat <<EOS
