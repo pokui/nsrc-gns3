@@ -11,12 +11,12 @@ It runs with up to 8 groups.  Each group has:
 * A peering router (PX)
 * A core router (CX)
 * An access router (AX)
-* A server (srvX)
 * A customer router (CustX)
+* A server (srvX)
 
 ![Group topology](peering-group.png)
 
-In addition, there are two "transit" routers which provide the uplinks, and
+In addition, there are two "transit" routers which provide the uplinks; and
 two IXPs each with a switch (IXP), a services router (SR), and an Ubuntu
 BIRD router server (RS).
 
@@ -59,16 +59,28 @@ See the training materials for the addressing plan used inside the network.
 
 # Credentials
 
-The student routers have username `isplab`, password `lab-PW`, enable `lab-EN`
-(except in the initial state "00-blank", when they are unconfigured)
+These passwords are shared with the students:
 
-The SRV Ubuntu servers are initialized with username `sysadm`, password
-`nsrc+ws`
+Device          | Username | Password | Enable
+:-------------- | :------- | :------- | :-------
+Student routers | `isplab` | `lab-PW` | `lab-EN`
+Student SRV     | `isplab` | `lab-PW` |
 
-The transit routers (TR), switch (IXP) and services router (SR) have
-username `isplab`, password `nsrc-PW`, enable `nsrc-EN`.
+(In the initial state "00-blank", the student routers are unconfigured)
 
-The route servers (RS) have username `nsrc`, password `nsrc-PW`
+The instructor logins are not shared with the students:
+
+Device          | Username | Password  | Enable
+:-------------- | :------- | :-------- | :--------
+TRx, SRx, IXPx  | `nsrc`   | `nsrc-PW` | `nsrc-EN`
+RSx             | `nsrc`   | `nsrc-PW` | 
+
+The `isplab` / `lab-PW` login also works on these devices, so that students
+can inspect the state of the infrastructure, e.g. show BGP status, although
+they will not know the enable password.
+
+On the route servers, the `isplab` account is not able to `sudo` - but it is
+in group `bird` so they can read `bird.conf` and interact using `birdc`.
 
 # Snapshots
 
@@ -84,3 +96,6 @@ You can restore to any given snapshot using `Edit > Manage Snapshots` in the
 GNS3 client.  Beware that when you restore from a snapshot it will reset
 *all* of the devices - including the Linux servers - and you will also lose
 any changes you've made to the network topology itself.
+
+Use the `gns3man` tool if you want to restore the configuration of an
+individual device.

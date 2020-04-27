@@ -95,3 +95,6 @@ GNS3 client.  Beware that when you restore from a snapshot it will reset
 *all* of the devices - including the Linux servers - and you will also lose
 any changes you've made to the network topology itself.  This is useful if
 you've accidentally deleted a device!
+
+Use the `gns3man` tool if you want to restore the configuration of an
+individual device.

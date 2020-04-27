@@ -16,7 +16,8 @@ boot-end-marker
 no logging console
 enable secret 5 \$1\$ZCOO\$vZTX3iEGGRRL2pjvcg/hR1
 !
-username isplab secret 5 \$1\$cu34\$XyyIkFaE6f9LLcnPxQEuy/
+username isplab secret 5 \$1\$vPNP\$hA1Tq3C05ByW2G31WA0wh0
+username nsrc secret 5 \$1\$cu34\$XyyIkFaE6f9LLcnPxQEuy/
 aaa new-model
 !
 !

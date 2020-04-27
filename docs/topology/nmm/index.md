@@ -122,3 +122,6 @@ Beware that resetting to any of these snapshots will also reset all srv1 and
 host1-6 to their default states - any work that students have done will be
 erased!  Therefore you almost certainly only want to do this once, before the
 course starts.
+
+Use the `gns3man` tool if you want to restore the configuration of an
+individual device.

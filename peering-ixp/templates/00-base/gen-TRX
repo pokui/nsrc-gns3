@@ -60,7 +60,8 @@ multilink bundle-name authenticated
 !
 !
 !
-username isplab secret 5 \$1\$wSfF\$s801CqE7JfglfXMGJmbR7/
+username isplab secret 5 \$1\$vPNP\$hA1Tq3C05ByW2G31WA0wh0
+username nsrc secret 5 \$1\$wSfF\$s801CqE7JfglfXMGJmbR7/
 !
 redundancy
 !

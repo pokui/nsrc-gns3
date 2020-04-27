@@ -20,7 +20,7 @@
 ETH0='ens3'
 ETH1='ens4'
 ETH2='ens5'
-PASSWD='$6$XqBb4pf3$rTN75u32r30VDbY252DwLLJ0rAuxIMvZceX02YFXK/WjAJ0FVjrUCQSkdPWA7nW0DoSNJrdu9w.PGOLbZmWlb/'
+PASSWD='$6$e5ItKycG$AKYaEL8pZgSaedbBd4xJ1f0rTr9rDumjduQmo3qlOKWcLx/3WpojiyrWIulVXD1M3ImYMT5LSYnga94zlXPrG/'
 PASSWD_INST='$6$znULAkk5$bkvmUKKtfX2h9vYxlUjbj2JRlRYkqQfiA7qoQGq7Tjy4MQeW4ewd2k5Ist.QFZmtzZkAxKZfuFQT3r.49U19W.'
 : "${TMPDIR:=/tmp}"
 DATE="$(date -u +%Y%m%d)"
@@ -65,8 +65,8 @@ fqdn: $FQDN
 chpasswd: { expire: False }
 ssh_pwauth: True
 users:
-  - name: sysadm
-    gecos: Student System Administrator
+  - name: isplab
+    gecos: Student
     groups: [adm, audio, cdrom, dialout, dip, floppy, lxd, netdev, plugdev, sudo, video]
     lock_passwd: false
     passwd: $PASSWD
@@ -196,9 +196,15 @@ fqdn: $FQDN
 chpasswd: { expire: False }
 ssh_pwauth: True
 users:
+  - name: isplab
+    gecos: Student
+    groups: [bird]
+    lock_passwd: false
+    passwd: $PASSWD
+    shell: /bin/bash
   - name: nsrc
-    gecos: Student System Administrator
-    groups: [adm, audio, cdrom, dialout, dip, floppy, lxd, netdev, plugdev, sudo, video]
+    gecos: Instructor
+    groups: [adm, audio, bird, cdrom, dialout, dip, floppy, lxd, netdev, plugdev, sudo, video]
     lock_passwd: false
     passwd: $PASSWD_INST
     shell: /bin/bash
@@ -495,6 +501,13 @@ EOS
 EOS
   done
   cat <<EOS
+  # Quick hack to reduce student interference
+  - path: /home/isplab/.bash_aliases
+    owner: 'isplab:isplab'
+    permissions: '0644'
+    content: |
+      alias birdc="/usr/sbin/birdc -r"
+      alias birdcl="/usr/sbin/birdcl -r"
 runcmd:
   - IFACE=$ETH2 /etc/networkd-dispatcher/routable.d/50-backdoor
   - sysctl -p /etc/sysctl.d/90-rpf.conf
