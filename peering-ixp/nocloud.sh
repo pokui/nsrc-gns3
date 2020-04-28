@@ -502,12 +502,14 @@ EOS
   done
   cat <<EOS
   # Quick hack to reduce student interference
-  - path: /home/isplab/.bash_aliases
-    owner: 'isplab:isplab'
-    permissions: '0644'
+  # Beware that write_files and runcmd take place before users are created:
+  # https://bugs.launchpad.net/cloud-init/+bug/1486113
+  - path: /etc/profile.d/bird.sh
     content: |
-      alias birdc="/usr/sbin/birdc -r"
-      alias birdcl="/usr/sbin/birdcl -r"
+      if ! expr "\$(groups)" : '.*sudo' >/dev/null; then
+        alias birdc="/usr/sbin/birdc -r"
+        alias birdcl="/usr/sbin/birdcl -r"
+      fi
 runcmd:
   - IFACE=$ETH2 /etc/networkd-dispatcher/routable.d/50-backdoor
   - sysctl -p /etc/sysctl.d/90-rpf.conf
