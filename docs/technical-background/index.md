@@ -179,10 +179,8 @@ lxc config get host1 user.user-data
 
 When you have many similar VMs running, [Kernel Samepage
 Merging](https://www.linux-kvm.org/page/KSM) can save RAM by identifying
-identical pages and keeping only one copy.
-
-This feature should be enabled automatically - if you want to check, the
-configuration is in `/etc/default/qemu-kvm`
+identical pages and keeping only one copy.  This means more RAM is then
+free for other purposes, e.g. disk cache.
 
 Once you have GNS3 up and running, you can check whether KSM is working by
 seeing how many pages are shared:
@@ -193,7 +191,21 @@ $ cat /sys/kernel/mm/ksm/pages_sharing
 ```
 
 Multiply by 4 to get an estimate (in KB) of the amount of RAM being saved by
-KSM.
+KSM.  You can also look in Netdata graphs under `Memory > deduper (ksm)` to
+monitor deduping as it occurs over time.
+
+`ksmd` runs in the background and its rate of operation is limited to avoid
+consuming all CPU.  Experimentation shows it can take several hours to
+complete deduping the memory of a running lab.  You can make this more
+aggressive by:
+
+```
+echo 10 > /sys/kernel/mm/ksm/sleep_millisecs    # default is 200
+```
+
+You will see `ksmd` using more CPU, but the memory is deduped more quickly.
+If you want to make this change permanent, you can edit the setting
+`SLEEP_MILLISECS` in `/etc/default/qemu-kvm`
 
 # GNS3 manual configuration management
 
