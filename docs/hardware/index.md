@@ -35,11 +35,15 @@ devices:
     * RAM is upgradable to 64GB
     * On-board SSD is *not* upgradable: best to buy with 500GB for
       future-proofing
+    * 10G NIC option at purchase time
 
 The Intel NUCs prior to NUC10 officially only take 32GB RAM, but are widely reported (
 [1](https://www.virtuallyghetto.com/2019/03/64gb-memory-on-the-intel-nucs.html),
 [2](https://www.reddit.com/r/intelnuc/comments/b99oy7/longterm_experience_with_64_gb_ram_in_skull_canyon/)
-) as working with 64GB.  It is possible that you will need to
+) as working with 64GB.  We have successfully deployed two
+[Samsung 32GB DDR4-2666 SO-DIMM unbuffered non-ECC 1.2V](https://www.scan.co.uk/products/32gb-1x32gb-samsung-ddr4-so-dimm-laptop-sff-memory-pc4-21300-2666-non-ecc-unbuffered-cas-19-19-19-12)
+in a Skull Canyon with BIOS revision KY0063.  With an older device it is
+possible that you will need to
 [upgrade the BIOS](https://kacangisnuts.com/2019/04/yes-intel-nuc-8i5beh-accepts-64-gb-ram/).
 
 If buying an SSD for the Bean Canyon or Frost Canyon then you'll get better performance from
