@@ -1,0 +1,5 @@
+#!/bin/bash -eu
+cat <<EOS
+version 15.7
+end
+EOS

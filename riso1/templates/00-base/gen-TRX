@@ -1,0 +1,218 @@
+#!/bin/bash -eu
+. common-TR
+cat <<EOS
+!
+version 15.7
+service timestamps debug datetime msec localtime show-timezone year
+service timestamps log datetime msec localtime show-timezone year
+service password-encryption
+!
+hostname TR${DEV}
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no logging console
+enable secret 5 \$1\$D1SG\$A.RX6EM0i.8jY90/Pj.sy1
+!
+aaa new-model
+!
+!
+aaa authentication login default local
+aaa authentication enable default enable
+!
+!
+!
+!
+!
+aaa session-id common
+!
+!
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+fhrp version vrrp v3
+no ip source-route
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ip domain name ws.nsrc.org
+ip name-server 192.168.122.1
+ip cef
+no ipv6 source-route
+ipv6 unicast-routing
+ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+username isplab secret 5 \$1\$vPNP\$hA1Tq3C05ByW2G31WA0wh0
+username nsrc secret 5 \$1\$wSfF\$s801CqE7JfglfXMGJmbR7/
+!
+redundancy
+!
+!
+ip tcp path-mtu-discovery
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ description Link to TR${OTHER} (and to the world)
+ ip address ${PEER_LOCAL_V4} 255.255.255.254 secondary
+ ip address 192.168.122.$((DEV+1)) 255.255.255.0
+ no ip redirects
+ no ip proxy-arp
+ duplex auto
+ speed auto
+ media-type rj45
+ ipv6 address FE80::$((DEV+1)) link-local
+ ipv6 address ${PEER_LOCAL_V6}/127
+ ipv6 address 2001:DB8::$((DEV+1))/64
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+ vrrp 1 address-family ipv4${VRRP_PRIORITY}
+  address 192.168.122.254 primary
+  exit-vrrp
+ vrrp 2 address-family ipv6${VRRP_PRIORITY}
+  address FE80::254 primary
+  address 2001:DB8::254/64
+  exit-vrrp
+EOS
+for G in $(seq "$NGROUPS"); do
+  cat <<EOS
+!
+interface GigabitEthernet0/${G}
+ description Link to AS$(( G+GROUP_OFFSET ))0
+ ip address 100.${AS}.1.$((G*2-2)) 255.255.255.254
+ no ip redirects
+ no ip proxy-arp
+ duplex auto
+ speed auto
+ media-type rj45
+ ipv6 address 2001:${V6}:0:$((G+9))::/127
+EOS
+done
+cat <<EOS
+!
+interface GigabitEthernet0/$((NGROUPS + 1))
+ description Link to SR${DEV}
+ ip address ${IXP_LOCAL_V4} 255.255.255.254
+ no ip redirects
+ no ip proxy-arp
+ duplex auto
+ speed auto
+ media-type rj45
+ ipv6 address ${IXP_LOCAL_V6}/127
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+!
+router bgp ${AS}
+ bgp log-neighbor-changes
+ bgp deterministic-med
+ no bgp default ipv4-unicast
+ neighbor ${PEER_REMOTE_V6} remote-as ${PEER_AS}
+ neighbor ${PEER_REMOTE_V6} description eBGP with TR${OTHER}
+ neighbor ${PEER_REMOTE_V6} ttl-security hops 1
+ neighbor ${PEER_REMOTE_V6} password 7 112B3E351B1309
+EOS
+for G in $(seq "$NGROUPS"); do
+  cat <<EOS
+ neighbor 2001:${V6}:0:$((G+9))::1 remote-as $(( G+GROUP_OFFSET ))0
+ neighbor 2001:${V6}:0:$((G+9))::1 password 7 106C2E29091610
+EOS
+done
+cat <<EOS
+ neighbor ${IXP_REMOTE_V6} remote-as ${IXP_AS}
+ neighbor ${IXP_REMOTE_V6} description eBGP with SR${DEV}
+ neighbor ${IXP_REMOTE_V6} ttl-security hops 1
+ neighbor ${IXP_REMOTE_V6} password 7 112B3E351B1309
+ neighbor ${PEER_REMOTE_V4} remote-as ${PEER_AS}
+ neighbor ${PEER_REMOTE_V4} description eBGP with TR${OTHER}
+ neighbor ${PEER_REMOTE_V4} ttl-security hops 1
+ neighbor ${PEER_REMOTE_V4} password 7 08036B7E051807
+EOS
+for G in $(seq "$NGROUPS"); do
+  cat <<EOS
+ neighbor 100.${AS}.1.$((G*2-1)) remote-as $(( G+GROUP_OFFSET ))0
+ neighbor 100.${AS}.1.$((G*2-1)) password 7 096E6939150415
+EOS
+done
+cat <<EOS
+ neighbor ${IXP_REMOTE_V4} remote-as ${IXP_AS}
+ neighbor ${IXP_REMOTE_V4} description eBGP with SR${DEV}
+ neighbor ${IXP_REMOTE_V4} ttl-security hops 1
+ neighbor ${IXP_REMOTE_V4} password 7 096E6939150415
+ !
+ address-family ipv4
+  network 100.${AS}.0.0 mask 255.255.0.0
+  neighbor ${PEER_REMOTE_V4} activate
+EOS
+for G in $(seq "$NGROUPS"); do
+  cat <<EOS
+  neighbor 100.${AS}.1.$((G*2-1)) activate
+  neighbor 100.${AS}.1.$((G*2-1)) default-originate
+EOS
+done
+cat <<EOS
+  neighbor ${IXP_REMOTE_V4} activate
+  neighbor ${IXP_REMOTE_V4} default-originate
+  distance bgp 200 200 200
+ exit-address-family
+ !
+ address-family ipv6
+  distance bgp 200 200 200
+  network 2001:${V6}::/32
+  neighbor ${PEER_REMOTE_V6} activate
+EOS
+for G in $(seq "$NGROUPS"); do
+  cat <<EOS
+  neighbor 2001:${V6}:0:$((G+9))::1 activate
+  neighbor 2001:${V6}:0:$((G+9))::1 default-originate
+EOS
+done
+cat <<EOS
+  neighbor ${IXP_REMOTE_V6} activate
+  neighbor ${IXP_REMOTE_V6} default-originate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip route 0.0.0.0 0.0.0.0 192.168.122.1
+ip route 100.${AS}.0.0 255.255.0.0 Null0
+!
+ipv6 route 2001:${V6}::/32 Null0
+ipv6 route ::/0 GigabitEthernet0/0 FE80::1
+ipv6 ioam timestamp
+!
+snmp-server community NetManage RO
+snmp-server ifindex persist
+snmp-server location NSRC Workshop
+EOS
+postamble_iosv
