@@ -1,0 +1,56 @@
+#!/bin/bash -eu
+. common-Cust
+preamble_iosv N
+cat <<EOS
+interface Loopback0
+ description Address anchor for Customer ${GROUP}
+ ip address 100.68.${GROUP}.64 255.255.255.255
+ ipv6 address 2001:DB8:${GROUP}:4000::/128
+!
+interface Null0
+ no ip unreachables
+ no ipv6 unreachables
+!
+interface GigabitEthernet0/0
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ description P2P Ethernet Link to A${GROUP}
+ ip address 100.68.${GROUP}.35 255.255.255.254
+ no ip redirects
+ no ip proxy-arp
+ duplex auto
+ speed auto
+ media-type rj45
+ ipv6 address 2001:DB8:${GROUP}:31::1/127
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+!
+interface GigabitEthernet0/2
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/3
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+ipv6 ioam timestamp
+!
+EOS
+postamble_iosv

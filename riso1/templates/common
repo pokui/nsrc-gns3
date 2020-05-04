@@ -6,6 +6,8 @@ GROUP="${1}"
 OTHER="$(( ((GROUP-1)^1) + 1 ))"
 AS="$(( GROUP*10 ))"
 
+##### IOSV #####
+
 preamble_iosv () {
   ISIS_ENABLE="${1:-Y}"
   cat <<EOS
@@ -134,6 +136,176 @@ line vty 0 4
  transport input telnet ssh
 !
 no scheduler allocate
+!
+end
+EOS
+}
+
+##### CSR1000V #####
+
+preamble_csrv () {
+  ISIS_ENABLE="${1:-Y}"
+  cat <<EOS
+!
+version 16.6
+service timestamps debug datetime msec localtime show-timezone year
+service timestamps log datetime msec localtime show-timezone year
+service password-encryption
+platform qfp utilization monitor load 80
+no platform punt-keepalive disable-kernel-core
+platform console serial
+!
+hostname ${HOSTNAME}
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no logging console
+enable secret 5 \$1\$b3/k\$jNHoF35fzOxYKUTFO0Ef3/
+!
+aaa new-model
+!
+!
+aaa authentication login default local
+aaa authentication enable default enable
+!
+!
+!
+!
+!
+aaa session-id common
+no ip source-route
+!
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ip domain name ws.nsrc.org
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+!
+!
+!
+!
+!
+no ipv6 source-route
+ipv6 unicast-routing
+!
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+EOS
+  [ "${ISIS_ENABLE}" = "Y" ] && cat <<EOS
+key chain as${AS}-key
+ key 1
+  key-string 7 0706325C42081B
+!
+EOS
+  cat <<EOS
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+diagnostic bootup level minimal
+spanning-tree extend system-id
+!
+!
+!
+username isplab secret 5 \$1\$vPNP\$hA1Tq3C05ByW2G31WA0wh0
+!
+redundancy
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+EOS
+}
+
+postamble_csrv () {
+  cat <<EOS
+!
+!
+virtual-service csr_mgmt
+!
+ip forward-protocol nd
+ip tcp path-mtu-discovery
+no ip http server
+ip http authentication local
+no ip http secure-server
+!
+ip ssh server algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+ip ssh client algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+!
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+line con 0
+ exec-timeout 0 0
+ transport preferred none
+ stopbits 1
+line vty 0 4
+ exec-timeout 0 0
+ transport preferred none
+ transport input telnet ssh
+!
+!
+!
+!
+!
 !
 end
 EOS
