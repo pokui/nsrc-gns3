@@ -1,1 +1,1 @@
-Peering/IXP topology with 8 groups, 2 transit, 2 IXP
+Routing Infrastructure and Security Operations workshop: groups 1-4
