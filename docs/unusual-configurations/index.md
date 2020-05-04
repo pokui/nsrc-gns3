@@ -188,7 +188,8 @@ Reboot to make this change active.
 The student VMs are configured to make all requests via the apt-cacher-ng
 proxy.  If any of them try to access repositories with `https` URLs, the
 proxy will not permit it.  Note that this will only affect you if you've
-asked students to add custom package repositories.
+asked students to add custom package repositories *and* they have `https`
+URLs.
 
 There are various [workarounds](https://blog.packagecloud.io/eng/2015/05/05/using-apt-cacher-ng-with-ssl-tls/#caching-objects):
 
@@ -214,7 +215,7 @@ PassThroughPattern: ^(packagecloud\.io|packagecloud-repositories\.s3\.dualstack\
 Similar, and slightly more secure as you can control which repos can be
 reached - but packages are still not cached.
 
-(3) Students configure special-form URLs
+(3) Students configure special-form URLs in their apt sources:
 
 ```
 # Instead of: deb https://download.docker.com/linux/ubuntu xenial stable
@@ -222,4 +223,8 @@ reached - but packages are still not cached.
 deb http://HTTPS///download.docker.com/linux/ubuntu xenial stable
 ```
 
-This should be a better solution, as it allows the packages to be cached.
+This is the most efficient solution, as it allows the packages to be cached,
+but the URLs look a bit weird.
+
+In all cases, students still need to install the package signing key for the
+repository.
