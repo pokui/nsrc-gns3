@@ -72,7 +72,7 @@ for i, node in enumerate(gns3["topology"]["nodes"]):
             cwd=templates_dir)
     startup = rc.stdout
     src = os.path.join(tmp_dir, "%s.nvram" % name)
-    if prop.get("hda_disk_image")[0:4] == "iosv":  # Is there a better way to decide this?
+    if prop.get("hda_disk_image")[0:4] == "vios":  # Is there a better way to decide this?
         # Convert config to nvram format
         data = nvram_import(None, startup, None, 512)
         dst = "/nvram"
