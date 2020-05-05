@@ -1,5 +1,5 @@
 {
-    "auto_close": true,
+    "auto_close": false,
     "auto_open": false,
     "auto_start": false,
     "drawing_grid_size": 25,
@@ -3869,5 +3869,5 @@
     "type": "topology",
     "variables": [],
     "version": "2.2.7",
-    "zoom": 99
+    "zoom": 100
 }
