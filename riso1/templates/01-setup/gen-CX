@@ -50,9 +50,5 @@ interface GigabitEthernet4
  ipv6 address 2001:DB8:${GROUP}:21::29/64
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
-!
-interface GigabitEthernet5
- no ip address
- shutdown
 EOS
 postamble_csrv
