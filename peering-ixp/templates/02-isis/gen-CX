@@ -1,5 +1,6 @@
 #!/bin/bash -eu
 . common-C
+preamble_iosv
 cat <<EOS
 interface Loopback0
  description Loopback on C${GROUP}
