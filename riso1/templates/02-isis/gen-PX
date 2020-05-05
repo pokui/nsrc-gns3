@@ -1,4 +1,5 @@
 #!/bin/bash -eu
+: "${LAME:=Y}"
 . common-P
 preamble_csrv
 cat <<EOS

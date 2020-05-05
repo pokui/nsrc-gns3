@@ -1,2 +1,3 @@
 #!/bin/bash -eu
+LAME="N"
 . "01-setup/$(basename "$0")" "$@"

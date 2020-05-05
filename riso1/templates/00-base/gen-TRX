@@ -159,4 +159,4 @@ snmp-server community NetManage RO
 snmp-server ifindex persist
 snmp-server location NSRC Workshop
 EOS
-postamble_iosv
+postamble_iosv_generic

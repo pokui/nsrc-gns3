@@ -1,0 +1,3 @@
+#!/bin/bash -eu
+LAME="N"
+. "02-isis/$(basename "$0")" "$@"

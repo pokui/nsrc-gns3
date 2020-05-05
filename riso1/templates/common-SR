@@ -191,5 +191,5 @@ ipv6 access-list OUTSIDE_IN_V6
  deny ipv6 any ${V6BLOCK}:1::/64
  permit ipv6 any any
 EOS
-postamble_iosv
+postamble_iosv_generic
 }
