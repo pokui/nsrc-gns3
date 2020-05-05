@@ -9,43 +9,16 @@ service password-encryption
 !
 hostname TR${DEV}
 !
-boot-start-marker
-boot-end-marker
-!
-!
 no logging console
 enable secret 5 \$1\$D1SG\$A.RX6EM0i.8jY90/Pj.sy1
 !
 aaa new-model
 !
-!
 aaa authentication login default local
 aaa authentication enable default enable
 !
-!
-!
-!
-!
-aaa session-id common
-!
-!
-!
-mmi polling-interval 60
-no mmi auto-configure
-no mmi pvc
-mmi snmp-timeout 180
-!
-!
-!
-!
-!
 fhrp version vrrp v3
 no ip source-route
-!
-!
-!
-!
-!
 !
 no ip domain lookup
 ip domain name ws.nsrc.org
@@ -55,30 +28,10 @@ no ipv6 source-route
 ipv6 unicast-routing
 ipv6 cef
 !
-multilink bundle-name authenticated
-!
-!
-!
-!
 username isplab secret 5 \$1\$vPNP\$hA1Tq3C05ByW2G31WA0wh0
 username nsrc secret 5 \$1\$wSfF\$s801CqE7JfglfXMGJmbR7/
 !
-redundancy
-!
-!
 ip tcp path-mtu-discovery
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
 !
 interface GigabitEthernet0/0
  description Link to TR${OTHER} (and to the world)

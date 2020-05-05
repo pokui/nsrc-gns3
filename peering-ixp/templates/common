@@ -17,42 +17,15 @@ service password-encryption
 !
 hostname ${HOSTNAME}
 !
-boot-start-marker
-boot-end-marker
-!
-!
 no logging console
 enable secret 5 \$1\$b3/k\$jNHoF35fzOxYKUTFO0Ef3/
 !
 aaa new-model
 !
-!
 aaa authentication login default local
 aaa authentication enable default enable
 !
-!
-!
-!
-!
-aaa session-id common
-!
-!
-!
-mmi polling-interval 60
-no mmi auto-configure
-no mmi pvc
-mmi snmp-timeout 180
-!
-!
-!
-!
-!
 no ip source-route
-!
-!
-!
-!
-!
 !
 no ip domain lookup
 ip domain name ws.nsrc.org
@@ -60,10 +33,6 @@ ip cef
 no ipv6 source-route
 ipv6 unicast-routing
 ipv6 cef
-!
-multilink bundle-name authenticated
-!
-!
 !
 EOS
   [ "${ISIS_ENABLE}" = "Y" ] && cat <<EOS
@@ -76,33 +45,13 @@ EOS
 !
 username isplab secret 5 \$1\$vPNP\$hA1Tq3C05ByW2G31WA0wh0
 !
-redundancy
-!
-!
 ip tcp path-mtu-discovery
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
 !
 EOS
 }
 
 postamble_iosv () {
   cat <<EOS
-!
-!
-!
-!
-control-plane
 !
 banner exec ^
 ^
@@ -123,17 +72,13 @@ banner login ^
 line con 0
  exec-timeout 0 0
  transport preferred none
- stopbits 1
 line aux 0
  exec-timeout 0 0
  transport preferred none
- stopbits 1
 line vty 0 4
  exec-timeout 0 0
  transport preferred none
  transport input telnet ssh
-!
-no scheduler allocate
 !
 end
 EOS

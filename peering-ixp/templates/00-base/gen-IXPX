@@ -9,10 +9,6 @@ no service password-encryption
 !
 hostname ${HOSTNAME}
 !
-boot-start-marker
-boot-end-marker
-!
-!
 no logging console
 enable secret 5 \$1\$ZCOO\$vZTX3iEGGRRL2pjvcg/hR1
 !
@@ -20,26 +16,12 @@ username isplab secret 5 \$1\$vPNP\$hA1Tq3C05ByW2G31WA0wh0
 username nsrc secret 5 \$1\$cu34\$XyyIkFaE6f9LLcnPxQEuy/
 aaa new-model
 !
-!
 aaa authentication login default local
 aaa authentication enable default enable
-!
-!
-!
-!
-!
-!
-aaa session-id common
-!
-!
-!
-!
 !
 vtp mode off
 no ip source-route
 no ip routing
-!
-!
 !
 no ip domain-lookup
 ip domain-name ws.nsrc.org
@@ -48,112 +30,81 @@ no ip cef
 no ipv6 source-route
 no ipv6 cef
 !
-!
-!
 spanning-tree mode mst
 spanning-tree extend system-id
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
 !
 interface GigabitEthernet0/0
  description P1
  switchport mode access
- negotiation auto
  spanning-tree portfast edge
  spanning-tree bpduguard enable
 !
 interface GigabitEthernet0/1
  description P2
  switchport mode access
- negotiation auto
  spanning-tree portfast edge
  spanning-tree bpduguard enable
 !
 interface GigabitEthernet0/2
  description P3
  switchport mode access
- negotiation auto
  spanning-tree portfast edge
  spanning-tree bpduguard enable
 !
 interface GigabitEthernet0/3
  description P4
  switchport mode access
- negotiation auto
  spanning-tree portfast edge
  spanning-tree bpduguard enable
 !
 interface GigabitEthernet1/0
  description P5
  switchport mode access
- negotiation auto
  spanning-tree portfast edge
  spanning-tree bpduguard enable
 !
 interface GigabitEthernet1/1
  description P6
  switchport mode access
- negotiation auto
  spanning-tree portfast edge
  spanning-tree bpduguard enable
 !
 interface GigabitEthernet1/2
  description P7
  switchport mode access
- negotiation auto
  spanning-tree portfast edge
  spanning-tree bpduguard enable
 !
 interface GigabitEthernet1/3
  description P8
  switchport mode access
- negotiation auto
  spanning-tree portfast edge
  spanning-tree bpduguard enable
 !
 interface GigabitEthernet2/0
  shutdown
- negotiation auto
 !
 interface GigabitEthernet2/1
  shutdown
- negotiation auto
 !
 interface GigabitEthernet2/2
  shutdown
- negotiation auto
 !
 interface GigabitEthernet2/3
  shutdown
- negotiation auto
 !
 interface GigabitEthernet3/0
  shutdown
- negotiation auto
 !
 interface GigabitEthernet3/1
  description Route server RS${DEV}
  switchport mode access
- negotiation auto
  spanning-tree portfast edge
  spanning-tree bpduguard enable
 !
 interface GigabitEthernet3/2
  description Service router SR${DEV}
  switchport mode access
- negotiation auto
  spanning-tree portfast edge
  spanning-tree bpduguard enable
 !
@@ -163,7 +114,6 @@ interface GigabitEthernet3/3
  ip address ${V4SRV}.2 255.255.255.248
  no ip redirects
  no ip proxy-arp
- negotiation auto
  ipv6 address ${V6BLOCK}::2/64
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
@@ -185,10 +135,6 @@ ipv6 route ::/0 ${V6BLOCK}::1
 snmp-server community NetManage RO
 snmp-server location NSRC Workshop
 snmp ifmib ifindex persist
-!
-!
-!
-control-plane
 !
 banner exec ^
 ^
