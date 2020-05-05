@@ -65,24 +65,30 @@ for i, node in enumerate(gns3["topology"]["nodes"]):
     bits = re.split(r'(\d+)', name)
     script = os.path.abspath(os.path.join(templates_dir, config, "gen-%sX" % bits[0]))
     if not os.path.isfile(script):
-        print("Skipping: %s" % name)
+        print("Skipping: %s/%s" % (config, name))
         continue
     # e.g. edge1-b2-campus3 => [1, 2, 3]
     rc = subprocess.run([script, *bits[1::2]], stdout=subprocess.PIPE, check=True,
             cwd=templates_dir)
     startup = rc.stdout
-    # Convert config to nvram format
-    nvram = nvram_import(None, startup, None, 512)
-    with open(os.path.join(tmp_dir, "%s.nvram" % name), "wb") as f:
-        f.write(nvram)
+    src = os.path.join(tmp_dir, "%s.nvram" % name)
+    if prop.get("hda_disk_image")[0:4] == "iosv":  # Is there a better way to decide this?
+        # Convert config to nvram format
+        data = nvram_import(None, startup, None, 512)
+        dst = "/nvram"
+    else:
+        data = startup
+        dst = "/config.txt"
+    with open(src, "wb") as f:
+        f.write(data)
     label = ("%d" % i).translate(MAPPING)  # can only contain a-zA-Z
-    configs.append((name, uuid, prop, label))
+    configs.append((name, src, dst, uuid, prop, label))
 
 # Generate all qcow2 files
 gfcmd = [
     "guestfish", "--",
 ]
-for name, uuid, prop, label in configs:
+for name, src, dst, uuid, prop, label in configs:
     qcowfile = os.path.join(tmp_dir, "%s.qcow2" % name)
     base = os.path.join(images_dir, prop["hda_disk_image"])
     gfcmd.extend([
@@ -92,10 +98,10 @@ for name, uuid, prop, label in configs:
 gfcmd.extend([
     "run", ":",
 ])
-for name, uuid, prop, label in configs:
+for name, src, dst, uuid, prop, label in configs:
     gfcmd.extend([
         "mount", "/dev/disk/guestfs/%s1" % label, "/", ":",
-        "upload", os.path.join(tmp_dir, "%s.nvram" % name), "/nvram", ":",
+        "upload", src, dst, ":",
         "umount", "/", ":",
     ])
 subprocess.run(gfcmd, check=True)
@@ -106,7 +112,7 @@ with ZipFile(zip_file, "w", ZIP_DEFLATED) as zip:
     zip.write(project_file, "project.gns3")
     zip.write(readme_file, "README.txt")
 
-    for name, uuid, prop, label in configs:
+    for name, src, dst, uuid, prop, label in configs:
         qcowfile = os.path.join(tmp_dir, "%s.qcow2" % name)
         zip.write(qcowfile, os.path.join("project-files", "qemu", uuid, "hda_disk.qcow2"))
 
