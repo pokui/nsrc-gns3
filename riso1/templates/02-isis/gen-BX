@@ -1,0 +1,46 @@
+#!/bin/bash -eu
+. common-B
+preamble_csrv
+cat <<EOS
+interface Null0
+ no ip unreachables
+ no ipv6 unreachables
+!
+interface Loopback0
+ description Loopback on B${GROUP}
+ ip address 100.68.${GROUP}.1 255.255.255.255
+ ipv6 address 2001:DB8:${GROUP}::1/128
+!
+interface GigabitEthernet1
+ description P2P Ethernet Link to C${GROUP}
+ ip address 100.68.${GROUP}.17 255.255.255.254
+ no ip redirects
+ no ip proxy-arp
+ no shutdown
+ ip router isis as${AS}
+ ipv6 address 2001:DB8:${GROUP}:10::1/127
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+ ipv6 router isis as${AS}
+ isis network point-to-point
+ isis metric 2
+ isis ipv6 metric 2
+!
+router isis as${AS}
+ net 49.0001.000${GROUP}.0001.00
+ is-type level-2-only
+ authentication mode md5 level-2
+ authentication key-chain as${AS}-key level-2
+ metric-style wide
+ set-overload-bit on-startup wait-for-bgp
+ log-adjacency-changes all
+ metric 100000
+ passive-interface Loopback0
+ !
+ address-family ipv6
+  multi-topology
+  set-overload-bit on-startup wait-for-bgp
+  metric 100000
+ exit-address-family
+EOS
+postamble_csrv

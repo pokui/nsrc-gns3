@@ -1,0 +1,2 @@
+#!/bin/bash -eu
+"01-setup/$(basename "$0")" "$@"
