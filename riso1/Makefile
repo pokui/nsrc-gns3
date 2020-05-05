@@ -11,8 +11,9 @@ hosts-riso: hosts.sh
 	./hosts.sh >hosts-riso
 
 .PHONY: nocloud
-nocloud: nocloud.sh
-	./nocloud.sh
+nocloud: nocloud-srv.sh nocloud-rs.sh
+	./nocloud-srv.sh
+	./nocloud-rs.sh
 
 .PHONY: import
 import:
