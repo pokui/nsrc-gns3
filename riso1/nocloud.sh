@@ -453,7 +453,7 @@ write_files:
       }
 
 EOS
-  for GROUP in $(seq 1 8); do
+  for GROUP in $(seq $((i*4-3)) $((i*4))); do
     AS=$((GROUP*10))
     OTHER=$(( ((GROUP-1)^1)+1 ))
     cat <<EOS
