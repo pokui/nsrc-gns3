@@ -34,52 +34,40 @@ spanning-tree mode mst
 spanning-tree extend system-id
 !
 interface GigabitEthernet0/0
- description P1
+ description P$(( GROUP_OFFSET+1 ))
  switchport mode access
  spanning-tree portfast edge
  spanning-tree bpduguard enable
 !
 interface GigabitEthernet0/1
- description P2
+ description P$(( GROUP_OFFSET+2 ))
  switchport mode access
  spanning-tree portfast edge
  spanning-tree bpduguard enable
 !
 interface GigabitEthernet0/2
- description P3
+ description P$(( GROUP_OFFSET+3 ))
  switchport mode access
  spanning-tree portfast edge
  spanning-tree bpduguard enable
 !
 interface GigabitEthernet0/3
- description P4
+ description P$(( GROUP_OFFSET+4 ))
  switchport mode access
  spanning-tree portfast edge
  spanning-tree bpduguard enable
 !
 interface GigabitEthernet1/0
- description P5
- switchport mode access
- spanning-tree portfast edge
- spanning-tree bpduguard enable
+ shutdown
 !
 interface GigabitEthernet1/1
- description P6
- switchport mode access
- spanning-tree portfast edge
- spanning-tree bpduguard enable
+ shutdown
 !
 interface GigabitEthernet1/2
- description P7
- switchport mode access
- spanning-tree portfast edge
- spanning-tree bpduguard enable
+ shutdown
 !
 interface GigabitEthernet1/3
- description P8
- switchport mode access
- spanning-tree portfast edge
- spanning-tree bpduguard enable
+ shutdown
 !
 interface GigabitEthernet2/0
  shutdown
