@@ -16,32 +16,20 @@ interface GigabitEthernet1
  ip address 100.68.${GROUP}.19 255.255.255.254
  no ip redirects
  no ip proxy-arp
- negotiation auto
  ipv6 address 2001:DB8:${GROUP}:11::1/127
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
- no mop enabled
- no mop sysid
 !
 interface GigabitEthernet2
  no ip address
  shutdown
- negotiation auto
- no mop enabled
- no mop sysid
 !
 interface GigabitEthernet3
  no ip address
  shutdown
- negotiation auto
- no mop enabled
- no mop sysid
 !
 interface GigabitEthernet4
  no ip address
  shutdown
- negotiation auto
- no mop enabled
- no mop sysid
 EOS
 postamble_csrv
