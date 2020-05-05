@@ -1,0 +1,3 @@
+boot config bootflash:config.txt nvbypass
+exit
+copy bootflash:config.txt running-config

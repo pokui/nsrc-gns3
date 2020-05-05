@@ -2,3 +2,4 @@ site
 nocloud
 snapshots
 hosts-*
+*.iso
