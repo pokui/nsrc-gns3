@@ -336,7 +336,6 @@ write_files:
 EOS
   for GROUP in $(seq $((i*4-3)) $((i*4))); do
     AS=$((GROUP*10))
-    OTHER=$(( ((GROUP-1)^1)+1 ))
     cat <<EOS
 
       ### AS${AS} - Group ${GROUP}
@@ -347,11 +346,11 @@ EOS
         if (prefix_is_bogon()) then reject;
         if (bgp_path.first != ${AS} ) then reject;
 
-        allas = [ ${AS}, $(( GROUP*10 + 100000 )), $(( OTHER*10 + 100000 )) ];
+        allas = [ ${AS}, $(( GROUP*10 + 100000 )) ];
         if ! (bgp_path.last ~ allas) then reject;
 
-        allnet = [ 100.68.${GROUP}.0/24, 100.68.$(( GROUP+100 )).0/24, 100.68.$(( OTHER+100 )).0/24,
-                   2001:DB8:${GROUP}::/48, 2001:DB8:$(( GROUP+100 ))::/48, 2001:DB8:$(( OTHER+100 ))::/48 ];
+        allnet = [ 100.68.${GROUP}.0/24, 100.68.$(( GROUP+100 )).0/24,
+                   2001:DB8:${GROUP}::/48, 2001:DB8:$(( GROUP+100 ))::/48 ];
         if ! (net ~ allnet) then reject;
 
         accept;
