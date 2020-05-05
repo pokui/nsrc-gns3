@@ -16,6 +16,7 @@ interface GigabitEthernet1
  ip address 100.68.${GROUP}.16 255.255.255.254
  no ip redirects
  no ip proxy-arp
+ no shutdown
  ipv6 address 2001:DB8:${GROUP}:10::/127
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
@@ -25,6 +26,7 @@ interface GigabitEthernet2
  ip address 100.68.${GROUP}.18 255.255.255.254
  no ip redirects
  no ip proxy-arp
+ no shutdown
  ipv6 address 2001:DB8:${GROUP}:11::/127
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
@@ -34,6 +36,7 @@ interface GigabitEthernet3
  ip address 100.68.${GROUP}.20 255.255.255.254
  no ip redirects
  no ip proxy-arp
+ no shutdown
  ipv6 address 2001:DB8:${GROUP}:12::/127
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
@@ -43,6 +46,7 @@ interface GigabitEthernet4
  ip address 100.68.${GROUP}.29 255.255.255.252
  no ip redirects
  no ip proxy-arp
+ no shutdown
  ipv6 address 2001:DB8:${GROUP}:21::29/64
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
