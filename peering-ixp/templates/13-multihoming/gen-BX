@@ -11,22 +11,12 @@ interface Null0
  no ip unreachables
  no ipv6 unreachables
 !
-interface GigabitEthernet0/0
- no ip address
- shutdown
- duplex auto
- speed auto
- media-type rj45
-!
 interface GigabitEthernet0/1
  description P2P Ethernet Link to C${GROUP}
  ip address 100.68.${GROUP}.17 255.255.255.254
  no ip redirects
  no ip proxy-arp
  ip router isis as${AS}
- duplex auto
- speed auto
- media-type rj45
  ipv6 address 2001:DB8:${GROUP}:10::1/127
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
@@ -40,9 +30,6 @@ interface GigabitEthernet0/2
  ip address ${ISP1_LOCAL_V4} 255.255.255.254
  no ip redirects
  no ip proxy-arp
- duplex auto
- speed auto
- media-type rj45
  ipv6 address ${ISP1_LOCAL_V6}/127
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
@@ -52,19 +39,9 @@ interface GigabitEthernet0/3
  ip address ${ISP2_LOCAL_V4} 255.255.255.254
  no ip redirects
  no ip proxy-arp
- duplex auto
- speed auto
- media-type rj45
  ipv6 address ${ISP2_LOCAL_V6}/127
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
-!
-interface GigabitEthernet0/4
- no ip address
- shutdown
- duplex auto
- speed auto
- media-type rj45
 !
 router isis as${AS}
  net 49.0001.000${GROUP}.0001.00
