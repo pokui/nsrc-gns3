@@ -71,7 +71,7 @@ for i, node in enumerate(gns3["topology"]["nodes"]):
     rc = subprocess.run([script, *bits[1::2]], stdout=subprocess.PIPE, check=True,
             cwd=templates_dir)
     startup = rc.stdout
-    src = os.path.join(tmp_dir, "%s.nvram" % name)
+    src = os.path.join(tmp_dir, "%s.data" % name)
     if prop.get("hda_disk_image")[0:4] == "vios":  # Is there a better way to decide this?
         # Convert config to nvram format
         data = nvram_import(None, startup, None, 512)
