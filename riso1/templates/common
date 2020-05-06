@@ -28,7 +28,7 @@ banner incoming ^
 * Cisco in writing.                                                      *
 **************************************************************************^
 banner login ^
-             BGP Peering/IXP Workshop
+Routing Infrastructure and Security Operations Workshop
           Network Startup Resource Center
 ^
 !
