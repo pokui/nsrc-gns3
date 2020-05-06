@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 """
-CGI tool to manage configurations of IOSv devices in GNS3
+CGI tool to manage configurations of IOSv and CSR1000v devices in GNS3
 
 * Restore configurations from snapshots
 * Read and edit the config in NVRAM
@@ -214,7 +214,7 @@ def restore(project_id, node_ids, snapshot_id):
         start_stop(project_id, node["node_id"], "start")
     return "Restore complete"
 
-def export_import_config(project_id, node_id, config=None):
+def export_import_config(project_id, node_id, format, config=None):
     """
     If config is None: reads the config
     if config is bytes: replaces the config
@@ -240,24 +240,41 @@ def export_import_config(project_id, node_id, config=None):
     g = guestfs.GuestFS(python_return_dict=True)
     g.add_drive_opts(node["node_directory"]+"/hda_disk.qcow2", format="qcow2", readonly=int(not bool(config)))
     g.launch()
+    g.mount("/dev/sda1", "/")
     try:
-        g.mount("/dev/sda1", "/")
-        nvram = g.read_file("/nvram")
-        try:
-            startup, private = nvram_export(nvram)
-        except ValueError as e:
-            return ("nvram_export: %s" % e, name, None)
+        if format == "nvram":
+            nvram = g.read_file("/nvram")
+            try:
+                startup, private = nvram_export(nvram)
+            except ValueError as e:
+                return ("nvram_export: %s" % e, name, None)
+            if config is None:
+                return (None, name, startup)
 
-        if config:
             try:
                 nvram = nvram_import(nvram, config, private, 512)
             except ValueError as e:
-                return ("nvram_import: %s" % e, name, startup)
+                return ("nvram_import: %s" % e, name, config)
             try:
                 g.write("/nvram", bytes(nvram))
             except RuntimeError as e:
-                return ("guestfs_write: %s" % e, name, startup)
-        return (None, name, startup)
+                return ("guestfs_write: %s" % e, name, config)
+            return (None, name, config)
+
+        elif format == "config":
+            if config is None:
+                startup = g.read_file("/config.txt")
+                return (None, name, startup or "boot config bootflash:config.txt nvbypass\n")
+
+            try:
+                g.write("/config.txt", bytes(config))
+            except RuntimeError as e:
+                return ("guestfs_write: %s" % e, name, config)
+            return (None, name, config)
+
+        else:
+            return ("unknown format: %s" % format, name, None)
+
     finally:
         g.shutdown()
         g.close()
@@ -317,14 +334,18 @@ if action == "restore" and os.environ["REQUEST_METHOD"] == "POST":
 if action == "edit":
     config = (form.getfirst("config") or "").encode("UTF-8", errors="replace")
     if os.environ["REQUEST_METHOD"] == "POST" and config:
-        err, name, prev_config = export_import_config(form.getfirst("project_id"), form.getfirst("node_id"), config)
+        err, name, prev_config = export_import_config(form.getfirst("project_id"), form.getfirst("node_id"), form.getfirst("format"), config)
         if not err:
-            flash("Imported to %s" % name)
+            msg = "Imported to %s" % name
+            if form.getfirst("status") == "started":
+                start_stop(form.getfirst("project_id"), form.getfirst("node_id"), "start")
+                msg += " and restarted"
+            flash(msg)
             redirect("?project_id=%s" % project_id)
         flash_message = err
         # but fall through to redisplay same page
     else:
-        err, name, config = export_import_config(form.getfirst("project_id"), form.getfirst("node_id"))
+        err, name, config = export_import_config(form.getfirst("project_id"), form.getfirst("node_id"), form.getfirst("format"))
         if err:
             flash(err)
             redirect("?project_id=%s" % project_id)
@@ -406,7 +427,12 @@ with layout():
         hda = props.get("hda_disk_image")
         if not hda:
             continue  # filters out NAT nodes etc
-        iosv = hda[0:4] == "vios"
+        if hda[0:4] == "vios":
+            format = "nvram"
+        elif hda[0:8] == "csr1000v":
+            format = "config"
+        else:
+            format = None
         nid = node["node_id"]
 
         attr = ""
@@ -415,8 +441,8 @@ with layout():
             actions.append('<a href="?project_id=%s&node_id=%s&action=start">Start</a>' % (pid, nid))
         else:
             actions.append('<a href="?project_id=%s&node_id=%s&action=stop">Stop</a>' % (pid, nid))
-        if iosv:
-            actions.append('<a href="?project_id=%s&node_id=%s&action=edit">Edit</a>' % (pid, nid))
+        if format:
+            actions.append('<a href="?project_id=%s&node_id=%s&action=edit&status=%s&format=%s">Edit</a>' % (pid, nid, node["status"], format))
         print("""
 <tr>
     <td><input type="checkbox" name="node_id" id="%s" value="%s"%s></td>
