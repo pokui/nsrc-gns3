@@ -49,6 +49,11 @@ EOS
 postamble_iosv () {
   cat <<EOS
 !
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
 banner exec ^
 ^
 banner incoming ^

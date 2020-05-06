@@ -153,7 +153,6 @@ ip route 100.${AS}.0.0 255.255.0.0 Null0
 !
 ipv6 route 2001:${V6}::/32 Null0
 ipv6 route ::/0 GigabitEthernet0/0 FE80::1
-ipv6 ioam timestamp
 !
 snmp-server community NetManage RO
 snmp-server ifindex persist

@@ -160,7 +160,6 @@ EOS
 done
 cat <<EOS
 ipv6 route ${V6BLOCK}::/48 Null0
-ipv6 ioam timestamp
 !
 !
 ipv6 prefix-list AS${AS}-v6block permit ${V6BLOCK}::/48
