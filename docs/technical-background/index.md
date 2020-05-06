@@ -357,6 +357,7 @@ Some of these are being tracked on github.
 * [Dual stack support](https://github.com/GNS3/gns3-server/issues/1673)
 * [Export/import configs for IOSv](https://github.com/GNS3/gns3-server/issues/1315)
   ([discussion](https://www.gns3.com/qa/how-to-import-configs-for-iosv-i))
+* [Export/import configs for CSRv](https://github.com/GNS3/gns3-server/issues/1749)
 * [Restore individual devices from snapshot](https://github.com/GNS3/gns3-gui/issues/2870)
 * [Reset individual devices to initial state](https://github.com/GNS3/gns3-gui/issues/2868)
 * [Assigning fixed port numbers for consoles](https://github.com/GNS3/gns3-gui/issues/2811)
