@@ -91,8 +91,10 @@ Click on one to connect, then hit Enter to wake up the serial port.
 
 shellinabox doesn't have a configuration setting to bind to the internal
 interface.  Therefore, it will be open and accessible over the Internet if
-you have a public IP address on your WAN interface.
+you have a public IP address on your WAN interface, and you may wish to
+firewall it off (e.g. with `iptables` or `ufw`).
 
+<!--
 It can be protected using iptables, and a simple way to configure this is
 using [ufw](https://help.ubuntu.com/community/UFW):
 
@@ -117,3 +119,4 @@ visible over the Internet:
 ```
 ufw allow 19999/tcp
 ```
+-->
