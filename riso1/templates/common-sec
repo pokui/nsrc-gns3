@@ -117,6 +117,8 @@ line vty 0 4
  transport input ssh
  transport output ssh
 !
+crypto key generate rsa modulus 2048
+!
 end
 EOS
 }
@@ -217,6 +219,8 @@ line vty 0 4
  transport preferred none
  transport input ssh
  transport output ssh
+!
+crypto key generate rsa modulus 2048
 !
 end
 EOS
