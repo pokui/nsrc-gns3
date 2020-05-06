@@ -1,0 +1,95 @@
+#!/bin/bash -eu
+. common-A
+preamble_csrv
+cat <<EOS
+interface Null0
+ no ip unreachables
+ no ipv6 unreachables
+!
+interface Loopback0
+ description Loopback on A${GROUP}
+ ip address 100.68.${GROUP}.4 255.255.255.255
+ ipv6 address 2001:DB8:${GROUP}::4/128
+!
+interface GigabitEthernet1
+ description P2P Ethernet Link to C${GROUP}
+ ip address 100.68.${GROUP}.21 255.255.255.254
+ no ip redirects
+ no ip proxy-arp
+ no shutdown
+ ip router isis as${AS}
+ ipv6 address 2001:DB8:${GROUP}:12::1/127
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+ ipv6 router isis as${AS}
+ isis network point-to-point
+ isis metric 2
+ isis ipv6 metric 2
+!
+interface GigabitEthernet2
+ description P2P Ethernet Link to Cust${GROUP}
+ ip address 100.68.${GROUP}.34 255.255.255.254
+ no ip redirects
+ no ip proxy-arp
+ no shutdown
+ ipv6 address 2001:DB8:${GROUP}:31::/127
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+!
+router isis as${AS}
+ net 49.0001.000${GROUP}.0004.00
+ is-type level-2-only
+ authentication mode md5 level-2
+ authentication key-chain as${AS}-key level-2
+ metric-style wide
+ set-overload-bit on-startup wait-for-bgp
+ log-adjacency-changes all
+ metric 100000
+ passive-interface Loopback0
+ !
+ address-family ipv6
+  multi-topology
+  set-overload-bit on-startup wait-for-bgp
+  metric 100000
+ exit-address-family
+!
+router bgp ${AS}
+ bgp log-neighbor-changes
+ bgp deterministic-med
+ no bgp default ipv4-unicast
+ neighbor ibgp-rr peer-group
+ neighbor ibgp-rr remote-as ${AS}
+ neighbor ibgp-rr description iBGP with RR
+ neighbor ibgp-rr password 7 072D067C42081B
+ neighbor ibgp-rr update-source Loopback0
+ neighbor ibgpv6-rr peer-group
+ neighbor ibgpv6-rr remote-as ${AS}
+ neighbor ibgpv6-rr description iBGP with RR
+ neighbor ibgpv6-rr password 7 15302C3C082B29
+ neighbor ibgpv6-rr update-source Loopback0
+ neighbor 2001:DB8:${GROUP}::2 peer-group ibgpv6-rr
+ neighbor 2001:DB8:${GROUP}::2 description iBGP with Core
+ neighbor 100.68.${GROUP}.2 peer-group ibgp-rr
+ neighbor 100.68.${GROUP}.2 description iBGP with Core
+ !
+ address-family ipv4
+  network 100.68.${GROUP}.64 mask 255.255.255.192
+  neighbor ibgp-rr send-community
+  neighbor ibgp-rr next-hop-self
+  neighbor 100.68.${GROUP}.2 activate
+  distance bgp 200 200 200
+ exit-address-family
+ !
+ address-family ipv6
+  distance bgp 200 200 200
+  network 2001:DB8:${GROUP}:4000::/52
+  neighbor ibgpv6-rr send-community
+  neighbor ibgpv6-rr next-hop-self
+  neighbor 2001:DB8:${GROUP}::2 activate
+ exit-address-family
+!
+ip route 100.68.${GROUP}.64 255.255.255.192 100.68.${GROUP}.35
+!
+ipv6 route 2001:DB8:${GROUP}:4000::/52 2001:DB8:${GROUP}:31::1
+EOS
+postamble_csrv

@@ -1,0 +1,2 @@
+#!/bin/bash -eu
+. "00-base/$(basename "$0")" "$@"
