@@ -71,11 +71,15 @@ logging trap debugging
 logging facility local4
 logging source-interface Loopback0
 !
-snmp-server community NetManage RO SNMP
+snmp-server community NetManage RO ipv6 SNMPv6 SNMP
 snmp-server ifindex persist
 snmp-server trap-source Loopback0
 snmp-server source-interface informs Loopback0
 snmp-server location NSRC Lab
+!
+ipv6 access-list SNMPv6
+ permit ipv6 host 2001:DB8:${GROUP}:21::30 any
+ deny ipv6 any any log
 !
 ipv6 access-list ipv6-vty
  permit ipv6 2001:DB8:${GROUP}::/64 any
@@ -183,11 +187,15 @@ logging trap debugging
 logging facility local4
 logging source-interface Loopback0
 !
-snmp-server community NetManage RO SNMP
+snmp-server community NetManage RO ipv6 SNMPv6 SNMP
 snmp-server trap-source Loopback0
 snmp-server source-interface informs Loopback0
 snmp-server location NSRC Lab
 snmp ifmib ifindex persist
+!
+ipv6 access-list SNMPv6
+ permit ipv6 host 2001:DB8:${GROUP}:21::30 any
+ deny ipv6 any any log
 !
 ipv6 access-list ipv6-vty
  permit ipv6 2001:DB8:${GROUP}::/64 any
