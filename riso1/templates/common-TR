@@ -34,8 +34,8 @@ fi
 # The IXP that we provide transit to
 IXP_AS="$((DEV+130))"
 
-IXP_LOCAL_V4="100.${AS}.1.16"
-IXP_REMOTE_V4="100.${AS}.1.17"
+IXP_LOCAL_V4="100.${AS}.1.$((NGROUPS*2))"
+IXP_REMOTE_V4="100.${AS}.1.$((NGROUPS*2+1))"
 IXP_LOCAL_V6="2001:${V6}:0:$((NGROUPS+10))::"
 IXP_REMOTE_V6="${IXP_LOCAL_V6}1"
 
