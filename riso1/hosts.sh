@@ -143,12 +143,12 @@ ${PEER_LOCAL_V6}	gi0-2.p${GROUP}.ws.nsrc.org
 
 100.68.${GROUP}.64	lo0.cust${GROUP}.ws.nsrc.org cust${GROUP}.ws.nsrc.org cust${GROUP}
 2001:DB8:${GROUP}:4000::	lo0.cust${GROUP}.ws.nsrc.org cust${GROUP}.ws.nsrc.org cust${GROUP}
-100.68.$(( GROUP+100 )).1	lo1.cust${GROUP}.ws.nsrc.org cust${GROUP}.ws.nsrc.org cust${GROUP}
-2001:DB8:$(( GROUP+100 ))::1	lo1.cust${GROUP}.ws.nsrc.org cust${GROUP}.ws.nsrc.org cust${GROUP}
-100.68.${GROUP}.35	gi0-1.cust${GROUP}.ws.nsrc.org cust${GROUP}.ws.nsrc.org cust${GROUP}
-2001:DB8:${GROUP}:31::1	gi0-1.cust${GROUP}.ws.nsrc.org cust${GROUP}.ws.nsrc.org cust${GROUP}
-100.68.${OTHER}.37	gi0-2.cust${GROUP}.ws.nsrc.org cust${GROUP}.ws.nsrc.org cust${GROUP}
-2001:DB8:${OTHER}:32::1	gi0-2.cust${GROUP}.ws.nsrc.org cust${GROUP}.ws.nsrc.org cust${GROUP}
+100.68.$(( GROUP+100 )).1	lo1.cust${GROUP}.ws.nsrc.org
+2001:DB8:$(( GROUP+100 ))::1	lo1.cust${GROUP}.ws.nsrc.org
+100.68.${GROUP}.35	gi0-1.cust${GROUP}.ws.nsrc.org
+2001:DB8:${GROUP}:31::1	gi0-1.cust${GROUP}.ws.nsrc.org
+100.68.${OTHER}.37	gi0-2.cust${GROUP}.ws.nsrc.org
+2001:DB8:${OTHER}:32::1	gi0-2.cust${GROUP}.ws.nsrc.org
 
 100.68.${GROUP}.30	ens3.srv${GROUP}.ws.nsrc.org
 2001:db8:${GROUP}:21::30	ens3.srv${GROUP}.ws.nsrc.org
