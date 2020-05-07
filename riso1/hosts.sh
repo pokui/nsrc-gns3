@@ -100,6 +100,8 @@ for GLO in $(seq 0 3); do
     PEER_LOCAL_V4="$PEER_HI_V4"
     PEER_LOCAL_V6="$PEER_HI_V6"
   fi
+  IXP_V4="100.127.$((GHI*2+1)).$((GLO+1))"
+  IXP_V6="2001:DB8:$( printf "%04X" $(( 65535 - GHI)) ):1::$((GLO+1))"
   cat <<EOS
 
 ### Group ${GROUP} ###
@@ -130,10 +132,8 @@ ${TRANSIT_LOCAL_V6}	gi2.b${GROUP}.ws.nsrc.org
 2001:DB8:${GROUP}:11::1	gi1.p${GROUP}.ws.nsrc.org
 ${PEER_LOCAL_V4}	gi2.p${GROUP}.ws.nsrc.org
 ${PEER_LOCAL_V6}	gi2.p${GROUP}.ws.nsrc.org
-100.127.1.${GROUP}	gi3.p${GROUP}.ws.nsrc.org
-2001:DB8:FFFF:1::${GROUP}	gi3.p${GROUP}.ws.nsrc.org
-100.127.3.${GROUP}	gi4.p${GROUP}.ws.nsrc.org
-2001:DB8:FFFE:1::${GROUP}	gi4.p${GROUP}.ws.nsrc.org
+${IXP_V4}	gi3.p${GROUP}.ws.nsrc.org
+${IXP_V6}	gi3.p${GROUP}.ws.nsrc.org
 
 100.68.${GROUP}.4	lo0.a${GROUP}.ws.nsrc.org a${GROUP}.ws.nsrc.org a${GROUP}
 2001:DB8:${GROUP}::4	lo0.a${GROUP}.ws.nsrc.org a${GROUP}.ws.nsrc.org a${GROUP}
