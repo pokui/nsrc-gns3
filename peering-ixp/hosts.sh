@@ -137,9 +137,9 @@ ${PEER_LOCAL_V6}	gi0-2.p${GROUP}.ws.nsrc.org
 100.68.${GROUP}.21	gi0-1.a${GROUP}.ws.nsrc.org
 2001:DB8:${GROUP}:12::1	gi0-1.a${GROUP}.ws.nsrc.org
 100.68.${GROUP}.34	gi0-2.a${GROUP}.ws.nsrc.org
-2001:DB8:${GROUP}:31::1	gi0-2.a${GROUP}.ws.nsrc.org
+2001:DB8:${GROUP}:31::	gi0-2.a${GROUP}.ws.nsrc.org
 100.68.${GROUP}.36	gi0-3.a${GROUP}.ws.nsrc.org
-2001:DB8:${GROUP}:32::1	gi0-3.a${GROUP}.ws.nsrc.org
+2001:DB8:${GROUP}:32::	gi0-3.a${GROUP}.ws.nsrc.org
 
 100.68.${GROUP}.64	lo0.cust${GROUP}.ws.nsrc.org cust${GROUP}.ws.nsrc.org cust${GROUP}
 2001:DB8:${GROUP}:4000::	lo0.cust${GROUP}.ws.nsrc.org cust${GROUP}.ws.nsrc.org cust${GROUP}
