@@ -10,7 +10,8 @@ ff02::2 ip6-allrouters
 
 ### Management ###
 
-192.168.122.1		vtp.ws.nsrc.org apt.ws.nsrc.org gns3.ws.nsrc.org www.ws.nsrc.org gw.ws.nsrc.org
+192.168.122.1		vtp.ws.nsrc.org apt.ws.nsrc.org gns3.ws.nsrc.org www.ws.nsrc.org gw.ws.nsrc.org vtp
+192.168.122.8		vtp2.ws.nsrc.org vtp2
 192.168.122.250		noc.ws.nsrc.org librenms.ws.nsrc.org rt.ws.nsrc.org nfsen.ws.nsrc.org noc
 2001:DB8::250		noc.ws.nsrc.org librenms.ws.nsrc.org rt.ws.nsrc.org nfsen.ws.nsrc.org noc
 192.168.122.251		ap1.ws.nsrc.org ap1
