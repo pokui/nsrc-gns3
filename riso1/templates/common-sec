@@ -65,6 +65,7 @@ ip access-list standard SNMP
 !
 ip access-list extended ipv4-vty
  permit ip 100.68.${GROUP}.0 0.0.0.15 any
+ permit ip 192.168.122.0 0.0.0.255 any
  deny   ip any any log
 !
 logging trap debugging
@@ -184,6 +185,7 @@ ip access-list standard SNMP
 !
 ip access-list extended ipv4-vty
  permit ip 100.68.${GROUP}.0 0.0.0.15 any
+ permit ip 192.168.122.0 0.0.0.255 any
  deny   ip any any log
 logging trap debugging
 logging facility local4
