@@ -60,12 +60,14 @@ os.makedirs(tmp_dir)
 configs = []
 for i, node in enumerate(gns3["topology"]["nodes"]):
     name = node["name"]
+    type = node["node_type"]
     uuid = node["node_id"]
     prop = node["properties"]
     bits = re.split(r'(\d+)', name)
     script = os.path.abspath(os.path.join(templates_dir, config, "gen-%sX" % bits[0]))
     if not os.path.isfile(script):
-        print("Skipping: %s/%s" % (config, name))
+        if type != "nat":
+            print("Skipping: %s/%s" % (config, name))
         continue
     # e.g. edge1-b2-campus3 => [1, 2, 3]
     rc = subprocess.run([script, *bits[1::2]], stdout=subprocess.PIPE, check=True,
