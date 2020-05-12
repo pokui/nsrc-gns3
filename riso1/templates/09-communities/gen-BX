@@ -1,0 +1,31 @@
+#!/bin/bash -eu
+. "08-ixp-policy/$(basename "$0")"
+cat <<EOS
+router bgp ${AS}
+ address-family ipv4
+  no neighbor ${ISP_REMOTE_V4} prefix-list AS${AS}-block out
+  neighbor ${ISP_REMOTE_V4} route-map Transit-out out
+ exit-address-family
+ !
+ address-family ipv6
+  no neighbor ${ISP_REMOTE_V6} prefix-list AS${AS}-v6block out
+  neighbor ${ISP_REMOTE_V6} route-map Transit-out out
+ exit-address-family
+!
+ip bgp-community new-format
+ip community-list standard aggregate permit ${AS}:1000
+ip community-list standard subnets permit ${AS}:1001
+ip community-list standard customer-pi permit ${AS}:1005
+ip community-list standard private-peer permit ${AS}:1100
+ip community-list standard bilateral-peer permit ${AS}:1200
+ip community-list standard RS-peer permit ${AS}:1300
+!
+no ip prefix-list AS${AS}-block
+!
+no ipv6 prefix-list AS${AS}-v6block
+!
+route-map Transit-out permit 5
+ match community aggregate customer-pi
+!
+EOS
+return 2>/dev/null || echo "end"

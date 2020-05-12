@@ -1,0 +1,8 @@
+#!/bin/bash -eu
+. "06-private-peer/$(basename "$0")"
+cat <<EOS
+interface GigabitEthernet0/0
+ no shutdown
+!
+EOS
+return 2>/dev/null || echo "end"

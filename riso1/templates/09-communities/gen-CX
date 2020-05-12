@@ -1,0 +1,41 @@
+#!/bin/bash -eu
+. "08-ixp-policy/$(basename "$0")"
+cat <<EOS
+router bgp ${AS}
+ address-family ipv4
+  network 100.68.${GROUP}.0 mask 255.255.255.0 route-map set-aggregate-community
+  network 100.68.${GROUP}.28 mask 255.255.255.252 route-map set-subnet-community
+  no neighbor ibgp-partial filter-list 10 out
+  neighbor ibgp-partial route-map partial-iBGP out
+ exit-address-family
+ !
+ address-family ipv6
+  network 2001:DB8:${GROUP}::/48 set-aggregate-community
+  network 2001:DB8:${GROUP}:21::/64 route-map set-subnet-community
+  no neighbor ibgpv6-partial filter-list 10 out
+  neighbor ibgpv6-partial route-map partial-iBGP out
+ exit-address-family
+!
+no ip as-path access-list 10 permit ^$
+!
+ip bgp-community new-format
+ip community-list standard aggregate permit ${AS}:1000
+ip community-list standard subnets permit ${AS}:1001
+ip community-list standard customer-pi permit ${AS}:1005
+ip community-list standard private-peer permit ${AS}:1100
+ip community-list standard bilateral-peer permit ${AS}:1200
+ip community-list standard RS-peer permit ${AS}:1300
+!
+route-map set-subnet-community permit 5
+ description Set community on Server subnet
+ set community ${AS}:1001
+!
+route-map partial-iBGP permit 5
+ match community aggregate subnets customer-pi
+!
+route-map set-aggregate-community permit 5
+ description Set community on Aggregate
+ set community ${AS}:1000
+!
+EOS
+return 2>/dev/null || echo "end"

@@ -1,0 +1,3 @@
+#!/bin/bash -eu
+. "06-private-peer/$(basename "$0")"
+return 2>/dev/null || echo "end"

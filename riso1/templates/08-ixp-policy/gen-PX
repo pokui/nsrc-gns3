@@ -1,0 +1,24 @@
+#!/bin/bash -eu
+. "07-ixp/$(basename "$0")"
+cat <<EOS
+router bgp ${AS}
+ address-family ipv4
+  neighbor ${PEER_REMOTE_V4} route-map private-peer-in in
+  neighbor ${IXP_V4IXP}.254 route-map IXP-RS-in in
+ exit-address-family
+ !
+ address-family ipv6
+  neighbor ${PEER_REMOTE_V6} route-map private-peer-in in
+  neighbor ${IXP_V6BLOCK}:1::FE route-map IXP-RS-in in
+ exit-address-family
+!
+route-map private-peer-in permit 5
+ description Local pref for Private Peer
+ set local-preference 200
+!
+route-map IXP-RS-in permit 5
+ description Local pref for IXP RS Peers
+ set local-preference 150
+!
+EOS
+return 2>/dev/null || echo "end"

@@ -1,0 +1,13 @@
+#!/bin/bash -eu
+. "07-ixp/$(basename "$0")"
+cat <<EOS
+route-map Transitv6-in permit 20
+ description Local pref for Upstream routes
+ set local-preference 50
+!
+ route-map Transit-in permit 20
+ description Local pref for Upstream routes
+ set local-preference 50
+!
+EOS
+return 2>/dev/null || echo "end"

@@ -1,0 +1,55 @@
+#!/bin/bash -eu
+. "06-private-peer/$(basename "$0")"
+cat <<EOS
+interface GigabitEthernet3
+ description AS${AS} link to IXP
+ ip address ${IXP_V4IXP}.${INDEX} 255.255.255.0
+ no ip redirects
+ no ip proxy-arp
+ ipv6 address ${IXP_V6BLOCK}:1::${INDEX}/64
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+ no shutdown
+!
+router isis as${AS}
+ passive-interface GigabitEthernet3
+!
+router bgp ${AS}
+ no bgp enforce-first-as
+ neighbor ${IXP_V6BLOCK}:1::FE remote-as ${RS_AS}
+ neighbor ${IXP_V6BLOCK}:1::FE description eBGP with IXP RS
+ neighbor ${IXP_V6BLOCK}:1::FE password 7 0452131642335F
+ neighbor ${IXP_V4IXP}.254 remote-as ${RS_AS}
+ neighbor ${IXP_V4IXP}.254 description eBGP with IXP RS
+ neighbor ${IXP_V4IXP}.254 password 7 0452131642335F
+ !
+ address-family ipv4
+  neighbor ${IXP_V4IXP}.254 activate
+  neighbor ${IXP_V4IXP}.254 prefix-list IXP-RS in
+  neighbor ${IXP_V4IXP}.254 prefix-list AS${AS}-block out
+ exit-address-family
+ !
+ address-family ipv6
+  neighbor ${IXP_V6BLOCK}:1::FE activate
+  neighbor ${IXP_V6BLOCK}:1::FE prefix-list IXP-v6RS in
+  neighbor ${IXP_V6BLOCK}:1::FE prefix-list AS${AS}-v6block out
+ exit-address-family
+!
+ip prefix-list IXP-RS description IPv4 prefixes from RouteServer
+EOS
+for G in $(seq "$FIRST_GROUP" "$LAST_GROUP"); do
+  [ "$G" -ne "$GROUP" ] && echo "ip prefix-list IXP-RS permit 100.68.${G}.0/24"
+done
+cat <<EOS
+ip prefix-list IXP-RS permit ${IXP_V4SRV}.0/24
+!
+ipv6 prefix-list IXP-v6RS description IPv6 prefixes from RouteServer
+EOS
+for G in $(seq "$FIRST_GROUP" "$LAST_GROUP"); do
+  [ "$G" -ne "$GROUP" ] && echo "ipv6 prefix-list IXP-v6RS permit 2001:DB8:${G}::/48"
+done
+cat <<EOS
+ipv6 prefix-list IXP-v6RS permit ${IXP_V6BLOCK}::/48
+!
+EOS
+return 2>/dev/null || echo "end"

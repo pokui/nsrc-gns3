@@ -1,0 +1,43 @@
+#!/bin/bash -eu
+. "05-ebgp/$(basename "$0")"
+cat <<EOS
+interface GigabitEthernet2
+ description Link to Group ${PEER_GROUP} Peering Router
+ ip address ${PEER_LOCAL_V4} 255.255.255.254
+ no ip redirects
+ no ip proxy-arp
+ ipv6 address ${PEER_LOCAL_V6}/127
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+ no shutdown
+!
+router bgp ${AS}
+ neighbor ${PEER_REMOTE_V6} remote-as ${PEER_AS}
+ neighbor ${PEER_REMOTE_V6} description eBGP with AS${PEER_AS}
+ neighbor ${PEER_REMOTE_V6} password 7 1435353B000528
+ neighbor ${PEER_REMOTE_V4} remote-as ${PEER_AS}
+ neighbor ${PEER_REMOTE_V4} description eBGP with AS${PEER_AS}
+ neighbor ${PEER_REMOTE_V4} password 7 1435353B000528
+ !
+ address-family ipv4
+  neighbor ${PEER_REMOTE_V4} activate
+  neighbor ${PEER_REMOTE_V4} prefix-list AS${PEER_AS}-block in
+  neighbor ${PEER_REMOTE_V4} prefix-list AS${AS}-block out
+ exit-address-family
+ !
+ address-family ipv6
+  neighbor ${PEER_REMOTE_V6} activate
+  neighbor ${PEER_REMOTE_V6} prefix-list AS${PEER_AS}-v6block in
+  neighbor ${PEER_REMOTE_V6} prefix-list AS${AS}-v6block out
+ exit-address-family
+!
+ip prefix-list AS${AS}-block permit 100.68.${GROUP}.0/24
+!
+ip prefix-list AS${PEER_AS}-block permit 100.68.${PEER_GROUP}.0/24
+!
+ipv6 prefix-list AS${AS}-v6block permit 2001:DB8:${GROUP}::/48
+!
+ipv6 prefix-list AS${PEER_AS}-v6block permit 2001:DB8:${PEER_GROUP}::/48
+!
+EOS
+return 2>/dev/null || echo "end"
