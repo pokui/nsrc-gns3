@@ -1,0 +1,5 @@
+. common
+NGROUPS=4   # this is the number of groups per topology
+GROUP="${1}"
+OTHER="$(( ((GROUP-1)^1) + 1 ))"
+AS="$(( GROUP*10 ))"

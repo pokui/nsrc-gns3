@@ -1,0 +1,59 @@
+# Configs improvements from the "sec" lab
+cat <<EOS
+clock timezone AEST 10
+!
+service timestamps log datetime localtime msec show-timezone year
+service timestamps debug datetime localtime msec show-timezone year
+!
+banner login ^
+Routing Infrastructure and Security Operations Workshop
+          Network Startup Resource Center
+^
+!
+no logging console
+logging source-interface Loopback 0
+logging trap debugging
+logging buffered 16384 debugging
+logging facility local4
+!
+ip access-list standard SNMP
+ permit 100.68.${GROUP}.30
+ deny   any log
+!
+ipv6 access-list SNMPv6
+ permit ipv6 host 2001:DB8:${GROUP}:21::30 any
+ deny ipv6 any any log
+!
+snmp-server community NetManage RO ipv6 SNMPv6 SNMP
+snmp-server ifindex persist
+snmp-server trap-source Loopback0
+snmp-server source-interface informs Loopback0
+snmp-server location NSRC Lab
+!
+ip domain name ws.nsrc.org
+crypto key generate rsa modulus 2048
+ip ssh source-interface Loopback0
+ip ssh version 2
+!
+ip access-list extended ipv4-vty
+ permit ip 100.68.${GROUP}.0 0.0.0.15 any
+ permit ip 192.168.122.0 0.0.0.255 any
+ deny   ip any any log
+!
+ipv6 access-list ipv6-vty
+ permit ipv6 2001:DB8:${GROUP}::/64 any
+ deny ipv6 any any log
+!
+line con 0
+ exec-timeout 15 0
+ transport preferred none
+ transport output ssh
+line vty 0 4
+ access-class ipv4-vty in
+ exec-timeout 15 0
+ ipv6 access-class ipv6-vty in
+ transport preferred none
+ transport input ssh
+ transport output ssh
+!
+EOS

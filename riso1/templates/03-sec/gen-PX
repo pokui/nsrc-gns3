@@ -1,3 +1,4 @@
 #!/bin/bash -eu
-LAME="N"
-. "02-isis/$(basename "$0")" "$@"
+. "02-isis/$(basename "$0")"
+. setup-sec
+return 2>/dev/null || echo "end"

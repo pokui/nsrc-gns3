@@ -1,5 +1,13 @@
 #!/bin/bash -eu
+. common-group
+HOSTNAME="Cust${GROUP}"
+
+CUST_AS="$(( GROUP*10 + 100000 ))"
+ISPA_AS="$(( GROUP*10 ))"
+
 cat <<EOS
+!
 version 15.7
-end
+!
 EOS
+return 2>/dev/null || echo "end"

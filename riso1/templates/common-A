@@ -1,4 +1,0 @@
-. common
-HOSTNAME="A${GROUP}"
-
-CUST_AS="$(( GROUP*10 + 100000 ))"

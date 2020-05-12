@@ -1,7 +1,6 @@
 #!/bin/bash -eu
-: "${LAME:=Y}"
-. common-Cust
-preamble_iosv N
+. "00-base/$(basename "$0")"
+. setup-iosv
 cat <<EOS
 interface Loopback0
  description Address anchor for Customer ${GROUP}
@@ -20,5 +19,7 @@ interface GigabitEthernet0/1
  ipv6 address 2001:DB8:${GROUP}:31::1/127
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
+ no shutdown
+!
 EOS
-postamble_iosv
+return 2>/dev/null || echo "end"

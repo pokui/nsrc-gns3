@@ -1,8 +1,20 @@
 #!/bin/bash -eu
-. common-IXP
+. common
+
+DEV="${1}"
+HOSTNAME="IXP${DEV}"
+
+V6DEC="$(( 65536 - DEV ))"
+V6BLOCK="2001:DB8:`printf "%04X" "$V6DEC"`"
+V4SRV="100.127.$(( (DEV-1)*2 ))"
+V4IXP="100.127.$(( (DEV-1)*2+1 ))"
+
+GROUP_OFFSET=$(( (DEV-1)*NGROUPS ))
+
 cat <<EOS
 !
 version 15.2
+!
 service timestamps debug datetime msec localtime show-timezone year
 service timestamps log datetime msec localtime show-timezone year
 no service password-encryption
@@ -38,63 +50,42 @@ interface GigabitEthernet0/0
  switchport mode access
  spanning-tree portfast edge
  spanning-tree bpduguard enable
+ no shutdown
 !
 interface GigabitEthernet0/1
  description P$(( GROUP_OFFSET+2 ))
  switchport mode access
  spanning-tree portfast edge
  spanning-tree bpduguard enable
+ no shutdown
 !
 interface GigabitEthernet0/2
  description P$(( GROUP_OFFSET+3 ))
  switchport mode access
  spanning-tree portfast edge
  spanning-tree bpduguard enable
+ no shutdown
 !
 interface GigabitEthernet0/3
  description P$(( GROUP_OFFSET+4 ))
  switchport mode access
  spanning-tree portfast edge
  spanning-tree bpduguard enable
-!
-interface GigabitEthernet1/0
- shutdown
-!
-interface GigabitEthernet1/1
- shutdown
-!
-interface GigabitEthernet1/2
- shutdown
-!
-interface GigabitEthernet1/3
- shutdown
-!
-interface GigabitEthernet2/0
- shutdown
-!
-interface GigabitEthernet2/1
- shutdown
-!
-interface GigabitEthernet2/2
- shutdown
-!
-interface GigabitEthernet2/3
- shutdown
-!
-interface GigabitEthernet3/0
- shutdown
+ no shutdown
 !
 interface GigabitEthernet3/1
  description Route server RS${DEV}
  switchport mode access
  spanning-tree portfast edge
  spanning-tree bpduguard enable
+ no shutdown
 !
 interface GigabitEthernet3/2
  description Service router SR${DEV}
  switchport mode access
  spanning-tree portfast edge
  spanning-tree bpduguard enable
+ no shutdown
 !
 interface GigabitEthernet3/3
  description Management interface
@@ -105,6 +96,7 @@ interface GigabitEthernet3/3
  ipv6 address ${V6BLOCK}::2/64
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
+ no shutdown
 !
 ip default-gateway ${V4SRV}.1
 ip forward-protocol nd
@@ -115,10 +107,7 @@ no ip http server
 ip ssh server algorithm encryption aes128-ctr aes192-ctr aes256-ctr
 ip ssh client algorithm encryption aes128-ctr aes192-ctr aes256-ctr
 !
-!
 ipv6 route ::/0 ${V6BLOCK}::1
-!
-!
 !
 snmp-server community NetManage RO
 snmp-server location NSRC Workshop
@@ -126,15 +115,6 @@ snmp ifmib ifindex persist
 !
 banner exec ^
 ^
-banner incoming ^
-**************************************************************************
-* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
-* education. IOSv is provided as-is and is not supported by Cisco's      *
-* Technical Advisory Center. Any use or disclosure, in whole or in part, *
-* of the IOSv Software or Documentation to any third party for any       *
-* purposes is expressly prohibited except as otherwise authorized by     *
-* Cisco in writing.                                                      *
-**************************************************************************^
 banner login ^
 Routing Infrastructure and Security Operations Workshop Lab
           Network Startup Resource Center
@@ -150,6 +130,5 @@ line vty 0 4
  transport preferred none
  transport input telnet ssh
 !
-!
-end
 EOS
+return 2>/dev/null || echo "end"

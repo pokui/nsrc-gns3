@@ -1,0 +1,45 @@
+cat <<EOS
+service timestamps debug datetime msec localtime show-timezone year
+service timestamps log datetime msec localtime show-timezone year
+service password-encryption
+!
+hostname ${HOSTNAME}
+!
+no logging console
+enable secret 5 \$1\$b3/k\$jNHoF35fzOxYKUTFO0Ef3/
+!
+aaa new-model
+!
+aaa authentication login default local
+aaa authentication enable default enable
+!
+no ip source-route
+!
+no ip domain lookup
+ip domain name ws.nsrc.org
+ip cef
+no ipv6 source-route
+ipv6 unicast-routing
+ipv6 cef
+!
+username isplab secret 5 \$1\$vPNP\$hA1Tq3C05ByW2G31WA0wh0
+!
+ip tcp path-mtu-discovery
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+banner exec ^
+^
+!
+line con 0
+ transport preferred none
+line aux 0
+ transport preferred none
+line vty 0 4
+ transport preferred none
+ transport input telnet ssh
+!
+EOS

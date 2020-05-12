@@ -1,5 +1,10 @@
 #!/bin/bash -eu
+. common-group
+HOSTNAME="C${GROUP}"
+
 cat <<EOS
+!
 version 16.6
-end
+!
 EOS
+return 2>/dev/null || echo "end"

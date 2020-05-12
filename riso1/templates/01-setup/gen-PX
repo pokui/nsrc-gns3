@@ -1,6 +1,6 @@
 #!/bin/bash -eu
-. common-P
-preamble_csrv N
+. "00-base/$(basename "$0")"
+. setup-csrv
 cat <<EOS
 interface Null0
  no ip unreachables
@@ -16,9 +16,10 @@ interface GigabitEthernet1
  ip address 100.68.${GROUP}.19 255.255.255.254
  no ip redirects
  no ip proxy-arp
- no shutdown
  ipv6 address 2001:DB8:${GROUP}:11::1/127
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
+ no shutdown
+!
 EOS
-postamble_csrv
+return 2>/dev/null || echo "end"

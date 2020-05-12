@@ -1,2 +1,3 @@
 #!/bin/bash -eu
-00-base/gen-IXPX "$@"
+. "00-base/$(basename "$0")"
+return 2>/dev/null || echo "end"

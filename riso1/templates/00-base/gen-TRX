@@ -1,8 +1,52 @@
 #!/bin/bash -eu
-. common-TR
+. common
+DEV="${1}"
+OTHER="$(( ((DEV-1)^1) + 1 ))"
+AS="$((DEV+120))"
+V6="$((DEV+17))"
+
+if (( DEV == 1 )); then
+  VRRP_PRIORITY=""
+else
+  VRRP_PRIORITY=$'\n  priority 50'
+fi
+
+# The "other" transit router
+PEER_AS="$((OTHER+120))"
+
+PEER_LO_V4="100.121.0.0"
+PEER_HI_V4="100.121.0.1"
+
+PEER_LO_V6="2001:18::"
+PEER_HI_V6="2001:18::1"
+
+if (( (DEV & 1) == 1 )); then
+  PEER_LOCAL_V4="$PEER_LO_V4"
+  PEER_REMOTE_V4="$PEER_HI_V4"
+  PEER_LOCAL_V6="$PEER_LO_V6"
+  PEER_REMOTE_V6="$PEER_HI_V6"
+else
+  PEER_LOCAL_V4="$PEER_HI_V4"
+  PEER_REMOTE_V4="$PEER_LO_V4"
+  PEER_LOCAL_V6="$PEER_HI_V6"
+  PEER_REMOTE_V6="$PEER_LO_V6"
+fi
+
+# The IXP that we provide transit to
+IXP_AS="$((DEV+130))"
+
+IXP_LOCAL_V4="100.${AS}.1.$((NGROUPS*2))"
+IXP_REMOTE_V4="100.${AS}.1.$((NGROUPS*2+1))"
+IXP_LOCAL_V6="2001:${V6}:0:$((NGROUPS+10))::"
+IXP_REMOTE_V6="${IXP_LOCAL_V6}1"
+
+# Our group customers
+GROUP_OFFSET=$(( (DEV-1)*NGROUPS ))
+
 cat <<EOS
 !
 version 15.7
+!
 service timestamps debug datetime msec localtime show-timezone year
 service timestamps log datetime msec localtime show-timezone year
 service password-encryption
@@ -52,6 +96,7 @@ interface GigabitEthernet0/0
   address FE80::254 primary
   address 2001:DB8::254/64
   exit-vrrp
+ no shutdown
 EOS
 for G in $(seq "$NGROUPS"); do
   cat <<EOS
@@ -63,6 +108,7 @@ interface GigabitEthernet0/${G}
  no ip proxy-arp
  load-interval 30
  ipv6 address 2001:${V6}:0:$((G+9))::/127
+ no shutdown
 EOS
 done
 cat <<EOS
@@ -76,6 +122,7 @@ interface GigabitEthernet0/$((NGROUPS + 1))
  ipv6 address ${IXP_LOCAL_V6}/127
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
+ no shutdown
 !
 router bgp ${AS}
  bgp log-neighbor-changes
@@ -148,7 +195,6 @@ cat <<EOS
 !
 ip forward-protocol nd
 !
-!
 no ip http server
 no ip http secure-server
 ip route 0.0.0.0 0.0.0.0 192.168.122.1
@@ -160,5 +206,24 @@ ipv6 route ::/0 GigabitEthernet0/0 FE80::1
 snmp-server community NetManage RO
 snmp-server ifindex persist
 snmp-server location NSRC Workshop
+!
+banner exec ^
+^
+banner login ^
+Routing Infrastructure and Security Operations Workshop
+          Network Startup Resource Center
+^
+!
+line con 0
+ exec-timeout 0 0
+ transport preferred none
+line aux 0
+ exec-timeout 0 0
+ transport preferred none
+line vty 0 4
+ exec-timeout 0 0
+ transport preferred none
+ transport input telnet ssh
+!
 EOS
-postamble_iosv_generic
+return 2>/dev/null || echo "end"

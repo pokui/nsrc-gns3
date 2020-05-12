@@ -1,27 +1,12 @@
 #!/bin/bash -eu
-: "${LAME:=Y}"
-. common-P
-preamble_csrv
+. "01-setup/$(basename "$0")"
 cat <<EOS
-interface Null0
- no ip unreachables
- no ipv6 unreachables
-!
-interface Loopback0
- description Loopback on P${GROUP}
- ip address 100.68.${GROUP}.3 255.255.255.255
- ipv6 address 2001:DB8:${GROUP}::3/128
+key chain as${AS}-key
+ key 1
+  key-string 7 0706325C42081B
 !
 interface GigabitEthernet1
- description P2P Ethernet Link to C${GROUP}
- ip address 100.68.${GROUP}.19 255.255.255.254
- no ip redirects
- no ip proxy-arp
- no shutdown
  ip router isis as${AS}
- ipv6 address 2001:DB8:${GROUP}:11::1/127
- ipv6 nd prefix default no-advertise
- ipv6 nd ra suppress all
  ipv6 router isis as${AS}
  isis network point-to-point
  isis metric 2
@@ -43,5 +28,6 @@ router isis as${AS}
   set-overload-bit on-startup wait-for-bgp
   metric 100000
  exit-address-family
+!
 EOS
-postamble_csrv
+return 2>/dev/null || echo "end"
