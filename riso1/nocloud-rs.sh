@@ -24,21 +24,23 @@ PASSWD='$6$e5ItKycG$AKYaEL8pZgSaedbBd4xJ1f0rTr9rDumjduQmo3qlOKWcLx/3WpojiyrWIulV
 PASSWD_INST='$6$znULAkk5$bkvmUKKtfX2h9vYxlUjbj2JRlRYkqQfiA7qoQGq7Tjy4MQeW4ewd2k5Ist.QFZmtzZkAxKZfuFQT3r.49U19W.'
 : "${TMPDIR:=/tmp}"
 DATE="$(date -u +%Y%m%d)"
+NGROUPS=4
 
 mkdir -p nocloud
 for i in $(seq 1 2); do
   FQDN="rs$i.ws.nsrc.org"
   SR_AS="$(( 130 + i ))"
-  V6DEC="$(( 65536 - i ))"
-  V6BLOCK="2001:DB8:`printf "%04X" "$V6DEC"`"
-  V4SRV="100.127.$(( (i-1)*2 ))"
-  V4IXP="100.127.$(( (i-1)*2+1 ))"
-  IPV4="${V4SRV}.10"
-  GWV4="${V4SRV}.9"
-  IPV6="${V6BLOCK}:2::10"
-  GWV6="${V6BLOCK}:2::9"
-  IPV4_IXP="${V4IXP}.254"
-  IPV6_IXP="${V6BLOCK}:1::FE"
+  IXP_V6DEC="$(( 65536 - i ))"
+  IXP_V6BLOCK="2001:DB8:`printf "%04X" "$IXP_V6DEC"`"
+  IXP_V4SRV="100.127.$(( (i-1)*2 ))"
+  IXP_V4IXP="100.127.$(( (i-1)*2+1 ))"
+  GROUP_OFFSET="$(( (i-1)*NGROUPS ))"
+  IPV4="${IXP_V4SRV}.10"
+  GWV4="${IXP_V4SRV}.9"
+  IPV6="${IXP_V6BLOCK}:2::10"
+  GWV6="${IXP_V6BLOCK}:2::9"
+  IPV4_IXP="${IXP_V4IXP}.254"
+  IPV6_IXP="${IXP_V6BLOCK}:1::FE"
   BACKDOOR="192.168.122.$((i+4))"
 
   ######## NETWORK CONFIG ########
@@ -161,7 +163,7 @@ write_files:
       log "/var/log/bird/bird.log" all;
       #log syslog all;
 
-      router id ${V4IXP}.254;
+      router id ${IXP_V4IXP}.254;
       define myas = $(( 65535 - i ));
 
       protocol device { }
@@ -305,7 +307,7 @@ write_files:
         allas = [ ${SR_AS} ];
         if ! (bgp_path.last ~ allas) then reject;
 
-        allnet = [ ${V4SRV}.0/24, ${V6BLOCK}::/48 ];
+        allnet = [ ${IXP_V4SRV}.0/24, ${IXP_V6BLOCK}::/48 ];
         if ! (net ~ allnet) then reject;
 
         accept;
@@ -313,7 +315,7 @@ write_files:
 
       protocol bgp SR${i}v4 from PEERS {
         description "SR${i} - IPv4";
-        neighbor ${V4IXP}.253 as ${SR_AS};
+        neighbor ${IXP_V4IXP}.253 as ${SR_AS};
         password "ixp-rs";
         ipv4 {
           import filter bgp_in_AS${SR_AS};
@@ -324,7 +326,7 @@ write_files:
 
       protocol bgp SR${i}v6 from PEERS {
         description "SR${i} - IPv6";
-        neighbor ${V6BLOCK}:1::FD as ${SR_AS};
+        neighbor ${IXP_V6BLOCK}:1::FD as ${SR_AS};
         password "ixp-rs";
         ipv6 {
           import filter bgp_in_AS${SR_AS};
@@ -334,7 +336,8 @@ write_files:
       }
 
 EOS
-  for GROUP in $(seq $((i*4-3)) $((i*4))); do
+  for INDEX in $(seq 1 $NGROUPS)); do
+    GROUP=$(( INDEX + GROUP_OFFSET ))
     AS=$((GROUP*10))
     cat <<EOS
 
@@ -358,7 +361,7 @@ EOS
 
       protocol bgp R${AS}v4 from PEERS {
         description "Group ${GROUP} - IPv4";
-        neighbor ${V4IXP}.${GROUP} as ${AS};
+        neighbor ${IXP_V4IXP}.${INDEX} as ${AS};
         password "ixp-rs";
         ipv4 {
           import filter bgp_in_AS${AS};
@@ -369,7 +372,7 @@ EOS
 
       protocol bgp R${AS}v6 from PEERS {
         description "Group ${GROUP} - IPv6";
-        neighbor ${V6BLOCK}:1::${GROUP} as ${AS};
+        neighbor ${IXP_V6BLOCK}:1::${INDEX} as ${AS};
         password "ixp-rs";
         ipv6 {
           import filter bgp_in_AS${AS};

@@ -69,5 +69,6 @@ route-map Transit-in permit 20
 !
 route-map DEFAULT-ORIG permit 10
  match ip address prefix-list DEFAULT-ROUTE
+!
 EOS
 return 2>/dev/null || echo "end"

@@ -1,13 +1,8 @@
 #!/bin/bash -eu
 . common
 DEV="${1}"
-
-AS="$((DEV+130))"
-RS_AS="$(( 65535 - DEV ))"
-V6DEC="$(( 65536 - DEV ))"
-V6BLOCK="2001:DB8:`printf "%04X" "$V6DEC"`"
-V4SRV="100.127.$(( (DEV-1)*2 ))"
-V4IXP="100.127.$(( (DEV-1)*2+1 ))"
+IXP="${1}"
+. common-ixp
 
 # The upstream TR
 TR_AS="$((DEV+120))"
@@ -16,9 +11,6 @@ TR_REMOTE_V4="100.${TR_AS}.1.$((NGROUPS*2))"
 TR_LOCAL_V4="100.${TR_AS}.1.$((NGROUPS*2+1))"
 TR_REMOTE_V6="2001:$((DEV+17)):0:$((NGROUPS+10))::"
 TR_LOCAL_V6="${TR_REMOTE_V6}1"
-
-# Our group peers
-GROUP_OFFSET=$(( (DEV-1)*NGROUPS ))
 
 cat <<EOS
 !
@@ -69,37 +61,37 @@ interface GigabitEthernet0/0
 !
 interface GigabitEthernet0/1
  description Link to RS${DEV}
- ip address ${V4SRV}.9 255.255.255.248
+ ip address ${IXP_V4SRV}.9 255.255.255.248
  no ip redirects
  no ip proxy-arp
  load-interval 30
- ipv6 address ${V6BLOCK}:2::9/64
+ ipv6 address ${IXP_V6BLOCK}:2::9/64
  ipv6 nd ra suppress all
  no shutdown
 !
 interface GigabitEthernet0/2
  description IXP${DEV} peering LAN
- ip address ${V4IXP}.253 255.255.255.0
+ ip address ${IXP_V4IXP}.253 255.255.255.0
  no ip redirects
  no ip proxy-arp
  load-interval 30
- ipv6 address ${V6BLOCK}:1::FD/64
+ ipv6 address ${IXP_V6BLOCK}:1::FD/64
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
  no shutdown
 !
 interface GigabitEthernet0/3
  description Link to IXP${DEV} management port
- ip address ${V4SRV}.1 255.255.255.248
+ ip address ${IXP_V4SRV}.1 255.255.255.248
  no ip redirects
  no ip proxy-arp
  load-interval 30
- ipv6 address ${V6BLOCK}::1/64
+ ipv6 address ${IXP_V6BLOCK}::1/64
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
  no shutdown
 !
-router bgp ${AS}
+router bgp ${SR_AS}
  no bgp enforce-first-as
  bgp log-neighbor-changes
  bgp deterministic-med
@@ -108,48 +100,48 @@ router bgp ${AS}
  neighbor ${TR_REMOTE_V6} description eBGP with TR1
  neighbor ${TR_REMOTE_V6} ttl-security hops 1
  neighbor ${TR_REMOTE_V6} password 7 096E6939150415
- neighbor ${V6BLOCK}:1::FE remote-as ${RS_AS}
- neighbor ${V6BLOCK}:1::FE description eBGP with IXP${DEV} RS
- neighbor ${V6BLOCK}:1::FE password 7 0452131642335F
+ neighbor ${IXP_V6BLOCK}:1::FE remote-as ${RS_AS}
+ neighbor ${IXP_V6BLOCK}:1::FE description eBGP with IXP${DEV} RS
+ neighbor ${IXP_V6BLOCK}:1::FE password 7 0452131642335F
  neighbor ${TR_REMOTE_V4} remote-as ${TR_AS}
  neighbor ${TR_REMOTE_V4} description eBGP with TR1
  neighbor ${TR_REMOTE_V4} ttl-security hops 1
  neighbor ${TR_REMOTE_V4} password 7 096E6939150415
- neighbor ${V4IXP}.254 remote-as ${RS_AS}
- neighbor ${V4IXP}.254 description eBGP with IXP${DEV} RS
- neighbor ${V4IXP}.254 password 7 0452131642335F
+ neighbor ${IXP_V4IXP}.254 remote-as ${RS_AS}
+ neighbor ${IXP_V4IXP}.254 description eBGP with IXP${DEV} RS
+ neighbor ${IXP_V4IXP}.254 password 7 0452131642335F
  !
  address-family ipv4
-  network ${V4SRV}.0 mask 255.255.255.0
+  network ${IXP_V4SRV}.0 mask 255.255.255.0
   neighbor ${TR_REMOTE_V4} activate
   neighbor ${TR_REMOTE_V4} prefix-list FULL-ROUTES in
-  neighbor ${TR_REMOTE_V4} prefix-list AS${AS}-block out
-  neighbor ${V4IXP}.254 activate
-  neighbor ${V4IXP}.254 prefix-list IXP-RS in
-  neighbor ${V4IXP}.254 prefix-list AS${AS}-block out
+  neighbor ${TR_REMOTE_V4} prefix-list AS${SR_AS}-block out
+  neighbor ${IXP_V4IXP}.254 activate
+  neighbor ${IXP_V4IXP}.254 prefix-list IXP-RS in
+  neighbor ${IXP_V4IXP}.254 prefix-list AS${SR_AS}-block out
  exit-address-family
  !
  address-family ipv6
-  network ${V6BLOCK}::/48
+  network ${IXP_V6BLOCK}::/48
   neighbor ${TR_REMOTE_V6} activate
   neighbor ${TR_REMOTE_V6} prefix-list FULL-v6ROUTES in
-  neighbor ${TR_REMOTE_V6} prefix-list AS${AS}-v6block out
-  neighbor ${V6BLOCK}:1::FE activate
-  neighbor ${V6BLOCK}:1::FE prefix-list IXP-v6RS in
-  neighbor ${V6BLOCK}:1::FE prefix-list AS${AS}-v6block out
+  neighbor ${TR_REMOTE_V6} prefix-list AS${SR_AS}-v6block out
+  neighbor ${IXP_V6BLOCK}:1::FE activate
+  neighbor ${IXP_V6BLOCK}:1::FE prefix-list IXP-v6RS in
+  neighbor ${IXP_V6BLOCK}:1::FE prefix-list AS${SR_AS}-v6block out
  exit-address-family
 !
 ip forward-protocol nd
 !
 no ip http server
 no ip http secure-server
-ip route ${V4SRV}.0 255.255.255.0 Null0
+ip route ${IXP_V4SRV}.0 255.255.255.0 Null0
 !
 ip access-list extended OUTSIDE_IN_V4
- deny   ip any ${V4IXP}.0 0.0.0.255
+ deny   ip any ${IXP_V4IXP}.0 0.0.0.255
  permit ip any any
 !
-ip prefix-list AS${AS}-block permit ${V4SRV}.0/24
+ip prefix-list AS${SR_AS}-block permit ${IXP_V4SRV}.0/24
 !
 ip prefix-list FULL-ROUTES permit 0.0.0.0/0 le 32
 !
@@ -166,9 +158,9 @@ ip prefix-list IXP-RS permit 100.68.$(( G+GROUP_OFFSET+100 )).0/24
 EOS
 done
 cat <<EOS
-ipv6 route ${V6BLOCK}::/48 Null0
+ipv6 route ${IXP_V6BLOCK}::/48 Null0
 !
-ipv6 prefix-list AS${AS}-v6block permit ${V6BLOCK}::/48
+ipv6 prefix-list AS${SR_AS}-v6block permit ${IXP_V6BLOCK}::/48
 !
 ipv6 prefix-list FULL-v6ROUTES permit ::/0 le 128
 !
@@ -190,7 +182,7 @@ snmp-server ifindex persist
 snmp-server location NSRC Workshop
 !
 ipv6 access-list OUTSIDE_IN_V6
- deny ipv6 any ${V6BLOCK}:1::/64
+ deny ipv6 any ${IXP_V6BLOCK}:1::/64
  permit ipv6 any any
 !
 banner exec ^

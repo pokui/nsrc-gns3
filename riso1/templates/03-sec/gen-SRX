@@ -1,3 +1,3 @@
 #!/bin/bash -eu
-. "00-base/$(basename "$0")"
+. "02-isis/$(basename "$0")"
 return 2>/dev/null || echo "end"

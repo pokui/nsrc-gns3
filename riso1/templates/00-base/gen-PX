@@ -27,6 +27,10 @@ else
   PEER_REMOTE_V6="$PEER_LO_V6"
 fi
 
+# which IXP we peer at
+IXP="$(( (GROUP-1)/4 + 1 ))"
+. common-ixp
+
 cat <<EOS
 !
 version 16.6
