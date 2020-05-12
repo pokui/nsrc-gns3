@@ -10,7 +10,7 @@ router bgp ${AS}
  exit-address-family
  !
  address-family ipv6
-  network 2001:DB8:${GROUP}::/48 set-aggregate-community
+  network 2001:DB8:${GROUP}::/48 route-map set-aggregate-community
   network 2001:DB8:${GROUP}:21::/64 route-map set-subnet-community
   no neighbor ibgpv6-partial filter-list 10 out
   neighbor ibgpv6-partial route-map partial-iBGP out
