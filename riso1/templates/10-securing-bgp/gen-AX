@@ -1,0 +1,39 @@
+#!/bin/bash -eu
+. "09-communities/$(basename "$0")"
+cat <<EOS
+router bgp ${AS}
+ neighbor 2001:DB8:${GROUP}:31::1 remote-as 64512
+ neighbor 2001:DB8:${GROUP}:31::1 description eBGP with Customer
+ neighbor 100.68.${GROUP}.35 remote-as 64512
+ neighbor 100.68.${GROUP}.35 remote-as description eBGP with Customer
+ !
+ address-family ipv4
+  neighbor 100.68.${GROUP}.35 activate
+  neighbor 100.68.${GROUP}.35 default-originate
+  neighbor 100.68.${GROUP}.35 prefix-list Cust${GROUP}-in in
+  neighbor 100.68.${GROUP}.35 prefix-list default out
+  neighbor 100.68.${GROUP}.35 route-map set-pi-community in
+ exit-address-family
+ !
+ address-family ipv6
+  neighbor 2001:DB8:${GROUP}:31::1 activate
+  neighbor 2001:DB8:${GROUP}:31::1 default-originate
+  neighbor 2001:DB8:${GROUP}:31::1 prefix-list Cust${GROUP}-v6in in
+  neighbor 2001:DB8:${GROUP}:31::1 prefix-list v6default out
+  neighbor 2001:DB8:${GROUP}:31::1 route-map set-pi-community in
+ exit-address-family
+!
+ip prefix-list Cust${GROUP}-in permit 100.68.$(( GROUP+100 )).0/24
+!
+ip prefix-list default permit 0.0.0.0/0
+!
+ipv6 prefix-list Cust${GROUP}-v6in permit 2001:DB8:$(( GROUP+100 ))::/48
+!
+ipv6 prefix-list v6default permit ::/0
+!
+route-map set-pi-community permit 5
+ description Set community on Provider Independent prefix
+ set community ${AS}:1005
+!
+EOS
+return 2>/dev/null || echo "end"

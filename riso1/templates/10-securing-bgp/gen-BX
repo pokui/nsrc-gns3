@@ -1,0 +1,20 @@
+#!/bin/bash -eu
+. "09-communities/$(basename "$0")"
+cat <<EOS
+router bgp ${AS}
+ bgp maxas-limit 5
+ neighbor ${ISP_REMOTE_V6} ttl-security hops 1
+ neighbor ${ISP_REMOTE_V4} ttl-security hops 1
+ !
+ address-family ipv4
+  neighbor ${ISP_REMOTE_V4} remove-private-as
+  neighbor ${ISP_REMOTE_V4} maximum-prefix 20
+ exit-address-family
+ !
+ address-family ipv6
+  neighbor ${ISP_REMOTE_V6} remove-private-as
+  neighbor ${ISP_REMOTE_V6} maximum-prefix 20
+ exit-address-family
+!
+EOS
+return 2>/dev/null || echo "end"

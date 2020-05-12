@@ -1,0 +1,40 @@
+#!/bin/bash -eu
+. "09-communities/$(basename "$0")"
+cat <<EOS
+router bgp ${AS}
+ bgp maxas-limit 5
+ neighbor ${PEER_REMOTE_V6} ttl-security hops 1
+ neighbor ${PEER_REMOTE_V4} ttl-security hops 1
+ !
+ address-family ipv4
+  neighbor ${PEER_REMOTE_V4} remove-private-as
+  neighbor ${PEER_REMOTE_V4} maximum-prefix 5
+  neighbor ${IXP_V4IXP}.254 remove-private-as
+  neighbor ${IXP_V4IXP}.254 maximum-prefix 20
+ exit-address-family
+ !
+ address-family ipv6
+  neighbor ${PEER_REMOTE_V6} remove-private-as
+  neighbor ${PEER_REMOTE_V6} maximum-prefix 5
+  neighbor ${IXP_V6BLOCK}:1::FE remove-private-as
+  neighbor ${IXP_V6BLOCK}:1::FE maximum-prefix 20
+ exit-address-family
+!
+ip prefix-list AS${PEER_AS}-block permit 100.68.$(( PEER_GROUP+100 )).0/24
+!
+EOS
+for G in $(seq "$FIRST_GROUP" "$LAST_GROUP"); do
+  [ "$G" -ne "$GROUP" ] && echo "ip prefix-list IXP-RS permit 100.68.$(( G+100 )).0/24"
+done
+cat <<EOS
+!
+ipv6 prefix-list AS${PEER_AS}-v6block permit 2001:DB8:$(( PEER_GROUP+100 ))::/48
+!
+EOS
+for G in $(seq "$FIRST_GROUP" "$LAST_GROUP"); do
+  [ "$G" -ne "$GROUP" ] && echo "ipv6 prefix-list IXP-v6RS permit 2001:DB8:$(( G+100 ))::/48"
+done
+cat <<EOS
+!
+EOS
+return 2>/dev/null || echo "end"

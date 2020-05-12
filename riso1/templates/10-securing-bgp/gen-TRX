@@ -1,0 +1,19 @@
+#!/bin/bash -eu
+. "09-communities/$(basename "$0")"
+cat <<EOS
+router bgp ${AS}
+EOS
+for G in $(seq "$NGROUPS"); do
+  cat <<EOS
+ neighbor 2001:${V6}:0:$((G+9))::1 ttl-security hops 1
+EOS
+done
+for G in $(seq "$NGROUPS"); do
+  cat <<EOS
+ neighbor 100.${AS}.1.$((G*2-1)) ttl-security hops 1
+EOS
+done
+cat <<EOS
+!
+EOS
+return 2>/dev/null || echo "end"
