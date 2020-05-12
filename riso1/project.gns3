@@ -3611,12 +3611,12 @@
                 "label": {
                     "rotation": 0,
                     "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
-                    "text": "Trigger1",
-                    "x": 7,
+                    "text": "T1",
+                    "x": 23,
                     "y": -25
                 },
                 "locked": true,
-                "name": "Trigger1",
+                "name": "T1",
                 "node_id": "85bafbf4-25b0-412e-ad32-92556b180193",
                 "node_type": "qemu",
                 "port_name_format": "Gi0/{0}",
@@ -3677,12 +3677,12 @@
                 "label": {
                     "rotation": 0,
                     "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
-                    "text": "Trigger4",
-                    "x": 6,
+                    "text": "T4",
+                    "x": 23,
                     "y": -25
                 },
                 "locked": true,
-                "name": "Trigger4",
+                "name": "T4",
                 "node_id": "a5be530f-2e61-40c7-b775-533bda85d402",
                 "node_type": "qemu",
                 "port_name_format": "Gi0/{0}",
@@ -3743,12 +3743,12 @@
                 "label": {
                     "rotation": 0,
                     "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
-                    "text": "Trigger2",
-                    "x": 7,
+                    "text": "T2",
+                    "x": 23,
                     "y": -25
                 },
                 "locked": true,
-                "name": "Trigger2",
+                "name": "T2",
                 "node_id": "c871594d-702b-4961-827a-3a16e95675e1",
                 "node_type": "qemu",
                 "port_name_format": "Gi0/{0}",
@@ -3809,12 +3809,12 @@
                 "label": {
                     "rotation": 0,
                     "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
-                    "text": "Trigger3",
-                    "x": 6,
+                    "text": "T3",
+                    "x": 23,
                     "y": -25
                 },
                 "locked": true,
-                "name": "Trigger3",
+                "name": "T3",
                 "node_id": "0c41c79f-3413-426e-bbd7-c7ab17882d78",
                 "node_type": "qemu",
                 "port_name_format": "Gi0/{0}",
