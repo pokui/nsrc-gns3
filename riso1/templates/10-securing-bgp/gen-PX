@@ -10,14 +10,14 @@ router bgp ${AS}
   neighbor ${PEER_REMOTE_V4} remove-private-as
   neighbor ${PEER_REMOTE_V4} maximum-prefix 5
   neighbor ${IXP_V4IXP}.254 remove-private-as
-  neighbor ${IXP_V4IXP}.254 maximum-prefix 20
+  neighbor ${IXP_V4IXP}.254 maximum-prefix 25
  exit-address-family
  !
  address-family ipv6
   neighbor ${PEER_REMOTE_V6} remove-private-as
   neighbor ${PEER_REMOTE_V6} maximum-prefix 5
   neighbor ${IXP_V6BLOCK}:1::FE remove-private-as
-  neighbor ${IXP_V6BLOCK}:1::FE maximum-prefix 20
+  neighbor ${IXP_V6BLOCK}:1::FE maximum-prefix 25
  exit-address-family
 !
 ip prefix-list AS${PEER_AS}-block permit 100.68.$(( PEER_GROUP+100 )).0/24
