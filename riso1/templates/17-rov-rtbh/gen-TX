@@ -1,0 +1,7 @@
+#!/bin/bash -eu
+. "16-rov-state/$(basename "$0")"
+cat <<EOS
+ip route 61.45.$((GROUP + 247)).240 255.255.255.255 Null0 tag 66
+!
+EOS
+return 2>/dev/null || echo "end"

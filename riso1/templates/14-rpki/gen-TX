@@ -1,0 +1,3 @@
+#!/bin/bash -eu
+. "13-uRPF/$(basename "$0")"
+return 2>/dev/null || echo "end"

@@ -1,0 +1,18 @@
+#!/bin/bash -eu
+. "15-rov/$(basename "$0")"
+cat <<EOS
+router bgp ${AS}
+ address-family ipv4
+  bgp bestpath prefix-validate allow-invalid
+  neighbor ibgp-rr send-community both
+  neighbor ibgp-rr announce rpki state
+ exit-address-family
+ !
+ address-family ipv6
+  bgp bestpath prefix-validate allow-invalid
+  neighbor ibgpv6-rr send-community both
+  neighbor ibgpv6-rr announce rpki state
+ exit-address-family
+!
+EOS
+return 2>/dev/null || echo "end"

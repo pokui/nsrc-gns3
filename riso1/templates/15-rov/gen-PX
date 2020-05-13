@@ -1,0 +1,13 @@
+#!/bin/bash -eu
+. "14-rpki/$(basename "$0")"
+cat <<EOS
+ip prefix-list AS${PEER_AS}-block permit 61.45.$(( PEER_GROUP+247 )).0/24
+!
+EOS
+for G in $(seq "$FIRST_GROUP" "$LAST_GROUP"); do
+  [ "$G" -ne "$GROUP" ] && echo "ip prefix-list IXP-RS permit 61.45.$(( G+247 )).0/24"
+done
+cat <<EOS
+!
+EOS
+return 2>/dev/null || echo "end"

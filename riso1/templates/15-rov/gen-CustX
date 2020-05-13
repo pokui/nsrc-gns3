@@ -1,0 +1,34 @@
+#!/bin/bash -eu
+. "14-rpki/$(basename "$0")"
+cat <<EOS
+no router bgp 64512
+router bgp $(( GROUP+135532 ))
+ bgp log-neighbor-changes
+ bgp deterministic-med
+ no bgp default ipv4-unicast
+ neighbor 2001:DB8:${GROUP}:31:: remote-as ${AS}
+ neighbor 100.68.${GROUP}.34 remote-as ${AS}
+ !
+ address-family ipv4
+  network 100.68.$(( GROUP+100 )).0 mask 255.255.255.0
+  network 61.45.$(( GROUP+247 )).0 mask 255.255.255.0
+  neighbor 100.68.${GROUP}.34 activate
+  neighbor 100.68.${GROUP}.34 prefix-list default in
+  neighbor 100.68.${GROUP}.34 prefix-list Cust${GROUP}-out out
+  distance bgp 200 200 200
+ exit-address-family
+ !
+ address-family ipv6
+  distance bgp 200 200 200
+  network 2001:DB8:$(( GROUP+100 ))::/48
+  neighbor 2001:DB8:${GROUP}:31:: activate
+  neighbor 2001:DB8:${GROUP}:31:: prefix-list v6default in
+  neighbor 2001:DB8:${GROUP}:31:: prefix-list Cust${GROUP}-v6out out
+ exit-address-family
+!
+ip route 61.45.$(( GROUP+247 )).0 255.255.255.0 Null0
+!
+ip prefix-list Cust${GROUP}-out permit 61.45.$(( GROUP+247 )).0/24
+!
+EOS
+return 2>/dev/null || echo "end"

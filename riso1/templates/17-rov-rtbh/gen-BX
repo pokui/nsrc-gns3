@@ -1,0 +1,14 @@
+#!/bin/bash -eu
+. "16-rov-state/$(basename "$0")"
+cat <<EOS
+router bgp ${AS}
+ address-family ipv4
+  neighbor ${ISP_REMOTE_V4} maximum-prefix 40
+ exit-address-family
+ !
+ address-family ipv6
+  neighbor ${ISP_REMOTE_V6} maximum-prefix 40
+ exit-address-family
+!
+EOS
+return 2>/dev/null || echo "end"

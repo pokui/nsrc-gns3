@@ -1,0 +1,8 @@
+#!/bin/bash -eu
+. "13-uRPF/$(basename "$0")"
+cat <<EOS
+router bgp ${AS}
+ bgp rpki server tcp 100.68.${GROUP}.30 port 3323 refresh 3600
+!
+EOS
+return 2>/dev/null || echo "end"

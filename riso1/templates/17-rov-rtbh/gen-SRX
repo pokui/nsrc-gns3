@@ -1,0 +1,3 @@
+#!/bin/bash -eu
+. "16-rov-state/$(basename "$0")"
+return 2>/dev/null || echo "end"

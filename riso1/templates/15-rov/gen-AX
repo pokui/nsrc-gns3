@@ -1,0 +1,11 @@
+#!/bin/bash -eu
+. "14-rpki/$(basename "$0")"
+cat <<EOS
+router bgp ${AS}
+ neighbor 2001:DB8:${GROUP}:31::1 remote-as $(( GROUP+135532 ))
+ neighbor 100.68.${GROUP}.35 remote-as $(( GROUP+135532 ))
+!
+ip prefix-list Cust${GROUP}-in permit 61.45.$(( GROUP+247 )).0/24
+!
+EOS
+return 2>/dev/null || echo "end"
