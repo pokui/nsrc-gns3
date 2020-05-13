@@ -20,9 +20,9 @@ router bgp ${AS}
 !
 ip community-list standard RTBH permit 65535:666
 !
-ip prefix-list RTBH-filter seq 5 permit 100.68.0.0/16 ge 32
+ip prefix-list RTBH-filter permit 100.68.0.0/16 ge 32
 !
-ipv6 prefix-list RTBH-v6filter seq 5 permit 2001:DB8::/32 ge 128
+ipv6 prefix-list RTBH-v6filter permit 2001:DB8::/32 ge 128
 !
 route-map private-peer-out permit 5
  match community aggregate customer-pi RTBH
