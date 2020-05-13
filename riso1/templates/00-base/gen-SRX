@@ -187,6 +187,8 @@ ipv6 access-list OUTSIDE_IN_V6
 !
 banner exec ^
 ^
+banner incoming ^
+^
 banner login ^
 Routing Infrastructure and Security Operations Workshop
           Network Startup Resource Center

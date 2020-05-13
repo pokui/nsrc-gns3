@@ -209,6 +209,8 @@ snmp-server location NSRC Workshop
 !
 banner exec ^
 ^
+banner incoming ^
+^
 banner login ^
 Routing Infrastructure and Security Operations Workshop
           Network Startup Resource Center

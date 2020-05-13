@@ -109,6 +109,8 @@ snmp ifmib ifindex persist
 !
 banner exec ^
 ^
+banner incoming ^
+^
 banner login ^
 Routing Infrastructure and Security Operations Workshop Lab
           Network Startup Resource Center
