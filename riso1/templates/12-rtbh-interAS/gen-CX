@@ -1,0 +1,10 @@
+#!/bin/bash -eu
+. "11-rtbh-local/$(basename "$0")"
+cat <<EOS
+ip community-list standard RTBH permit 65535:666
+!
+route-map partial-iBGP permit 5
+ match community aggregate subnets customer-pi RTBH
+!
+EOS
+return 2>/dev/null || echo "end"

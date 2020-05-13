@@ -1,0 +1,14 @@
+#!/bin/bash -eu
+. "11-rtbh-local/$(basename "$0")"
+cat <<EOS
+router bgp ${AS}
+ neighbor ${ISP_REMOTE_V6} send-community
+ neighbor ${ISP_REMOTE_V4} send-community
+!
+ip community-list standard RTBH permit 65535:666
+!
+route-map Transit-out permit 5
+ match community aggregate customer-pi RTBH
+!
+EOS
+return 2>/dev/null || echo "end"

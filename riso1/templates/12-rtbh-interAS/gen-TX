@@ -1,0 +1,19 @@
+#!/bin/bash -eu
+. "11-rtbh-local/$(basename "$0")"
+cat <<EOS
+ip community-list standard RTBH permit 65535:666
+!
+no ip route 8.8.8.8 255.255.255.255 Null0 tag 66
+!
+no ipv6 route 2001:4860:4860::8888/128 Null0 tag 66
+!
+route-map black-hole-trigger permit 10
+ no set community no-export
+ set community 65535:666
+!
+route-map black-hole-triggerv6 permit 10
+ no set community no-export
+ set community 65535:666
+!
+EOS
+return 2>/dev/null || echo "end"

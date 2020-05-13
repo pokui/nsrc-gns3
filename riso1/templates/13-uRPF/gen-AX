@@ -1,0 +1,9 @@
+#!/bin/bash -eu
+. "12-rtbh-interAS/$(basename "$0")"
+cat <<EOS
+interface GigabitEthernet2
+ ip verify unicast source reachable-via rx allow-self-ping
+ ipv6 verify unicast source reachable-via rx
+!
+EOS
+return 2>/dev/null || echo "end"

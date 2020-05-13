@@ -1,0 +1,82 @@
+#!/bin/bash -eu
+. "11-rtbh-local/$(basename "$0")"
+cat <<EOS
+router bgp ${AS}
+ address-family ipv4
+
+ address-family ipv4
+  no neighbor ibgp-rr next-hop-self
+  neighbor ibgp-rr route-map ibgp out
+  neighbor ${PEER_REMOTE_V4} send-community
+  neighbor ${IXP_V4IXP}.254 send-community
+ exit-address-family
+ !
+ address-family ipv6
+  no neighbor ibgpv6-rr next-hop-self
+  neighbor ibgpv6-rr route-map ibgpv6 out
+  neighbor ${PEER_REMOTE_V6} send-community
+  neighbor ${IXP_V6BLOCK}:1::FE send-community
+ exit-address-family
+!
+ip community-list standard RTBH permit 65535:666
+!
+ip prefix-list RTBH-filter seq 5 permit 100.68.0.0/16 ge 32
+!
+ipv6 prefix-list RTBH-v6filter seq 5 permit 2001:DB8::/32 ge 128
+!
+route-map private-peer-out permit 5
+ match community aggregate customer-pi RTBH
+!
+route-map IXP-RSv6-in permit 1
+ description Allow RTBH routes
+ match ipv6 address prefix-list RTBH-v6filter
+ match community RTBH
+ set community no-export additive
+!
+route-map ibgp permit 10
+ description Catch RTBH routes
+ match community RTBH
+ set local-preference 1000
+ set origin igp
+ set community no-export
+ set ip next-hop 192.0.2.1
+!
+route-map ibgp permit 20
+ description next-hop-self for normal routes
+ set ip next-hop 100.68.${GROUP}.3
+!
+route-map private-peerv6-in permit 1
+ description Allow RTBH routes
+ match ipv6 address prefix-list RTBH-v6filter
+ match community RTBH
+ set community no-export additive
+!
+route-map IXP-RS-out permit 5
+ match community aggregate customer-pi RTBH
+!
+route-map IXP-RS-in permit 1
+ description Allow RTBH routes
+ match ip address prefix-list RTBH-filter
+ match community RTBH
+ set community no-export additive
+!
+route-map ibgpv6 permit 10
+ description Catch RTBH routes
+ match community RTBH
+ set local-preference 1000
+ set origin igp
+ set community no-export
+ set ipv6 next-hop 100::1
+!
+route-map ibgpv6 permit 20
+ description next-hop-self for normal routes
+ set ipv6 next-hop 2001:DB8:${GROUP}::3
+!
+route-map private-peer-in permit 1
+ description Allow RTBH routes
+ match ip address prefix-list RTBH-filter
+ match community RTBH
+ set community no-export additive
+!
+EOS
+return 2>/dev/null || echo "end"

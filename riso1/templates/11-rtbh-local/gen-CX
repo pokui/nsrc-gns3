@@ -1,0 +1,37 @@
+#!/bin/bash -eu
+. "10-securing-bgp/$(basename "$0")"
+cat <<EOS
+interface GigabitEthernet5
+ description P2P Ethernet Link to T${GROUP}
+ ip address 100.68.${GROUP}.22 255.255.255.254
+ no ip redirects
+ no ip proxy-arp
+ ip router isis as${AS}
+ ipv6 address 2001:DB8:${GROUP}:13::/127
+ ipv6 nd prefix default no-advertise
+ ipv6 nd ra suppress all
+ ipv6 router isis as${AS}
+ isis network point-to-point
+ isis metric 2
+ isis ipv6 metric 2
+ no shutdown
+!
+router bgp ${AS}
+ neighbor 2001:DB8:${GROUP}::5 peer-group ibgpv6-partial
+ neighbor 2001:DB8:${GROUP}::5 description iBGP with Trigger
+ neighbor 100.68.${GROUP}.5 peer-group ibgp-full
+ neighbor 100.68.${GROUP}.5 description iBGP with Trigger
+ !
+ address-family ipv4
+  neighbor 100.68.${GROUP}.5 activate
+ exit-address-family
+ !
+ address-family ipv6
+  neighbor 2001:DB8:${GROUP}::5 activate
+ exit-address-family
+!
+ip route 192.0.2.1 255.255.255.255 Null0
+ipv6 route 100::1/128 Null0
+!
+EOS
+return 2>/dev/null || echo "end"

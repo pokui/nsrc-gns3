@@ -1,0 +1,8 @@
+#!/bin/bash -eu
+. "10-securing-bgp/$(basename "$0")"
+cat <<EOS
+ip route 192.0.2.1 255.255.255.255 Null0
+ipv6 route 100::1/128 Null0
+!
+EOS
+return 2>/dev/null || echo "end"
