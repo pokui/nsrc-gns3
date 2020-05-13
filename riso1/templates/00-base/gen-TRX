@@ -195,6 +195,8 @@ cat <<EOS
 !
 ip forward-protocol nd
 !
+ip bgp-community new-format
+!
 no ip http server
 no ip http secure-server
 ip route 0.0.0.0 0.0.0.0 192.168.122.1

@@ -133,6 +133,8 @@ router bgp ${SR_AS}
 !
 ip forward-protocol nd
 !
+ip bgp-community new-format
+!
 no ip http server
 no ip http secure-server
 ip route ${IXP_V4SRV}.0 255.255.255.0 Null0
