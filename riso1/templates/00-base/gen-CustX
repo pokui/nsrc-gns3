@@ -5,6 +5,8 @@ HOSTNAME="Cust${GROUP}"
 cat <<EOS
 !
 version 15.7
+banner exec ^
+^
 !
 EOS
 return 2>/dev/null || echo "end"

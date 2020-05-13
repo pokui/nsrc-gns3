@@ -31,9 +31,6 @@ ip forward-protocol nd
 no ip http server
 no ip http secure-server
 !
-banner exec ^
-^
-!
 line con 0
  transport preferred none
 line aux 0
