@@ -2,8 +2,13 @@
 . "11-rtbh-local/$(basename "$0")"
 cat <<EOS
 router bgp ${AS}
- neighbor ${ISP_REMOTE_V6} send-community
- neighbor ${ISP_REMOTE_V4} send-community
+ address-family ipv4
+  neighbor ${ISP_REMOTE_V6} send-community
+ exit-address-family
+ !
+ address-family ipv6
+  neighbor ${ISP_REMOTE_V4} send-community
+ exit-address-family
 !
 ip community-list standard RTBH permit 65535:666
 !

@@ -5,7 +5,7 @@ router bgp ${AS}
  neighbor 2001:DB8:${GROUP}:31::1 remote-as 64512
  neighbor 2001:DB8:${GROUP}:31::1 description eBGP with Customer
  neighbor 100.68.${GROUP}.35 remote-as 64512
- neighbor 100.68.${GROUP}.35 remote-as description eBGP with Customer
+ neighbor 100.68.${GROUP}.35 description eBGP with Customer
  !
  address-family ipv4
   neighbor 100.68.${GROUP}.35 activate

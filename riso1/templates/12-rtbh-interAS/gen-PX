@@ -3,8 +3,6 @@
 cat <<EOS
 router bgp ${AS}
  address-family ipv4
-
- address-family ipv4
   no neighbor ibgp-rr next-hop-self
   neighbor ibgp-rr route-map ibgp out
   neighbor ${PEER_REMOTE_V4} send-community

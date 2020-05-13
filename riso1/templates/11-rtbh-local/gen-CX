@@ -19,7 +19,7 @@ interface GigabitEthernet5
 router bgp ${AS}
  neighbor 2001:DB8:${GROUP}::5 peer-group ibgpv6-partial
  neighbor 2001:DB8:${GROUP}::5 description iBGP with Trigger
- neighbor 100.68.${GROUP}.5 peer-group ibgp-full
+ neighbor 100.68.${GROUP}.5 peer-group ibgp-partial
  neighbor 100.68.${GROUP}.5 description iBGP with Trigger
  !
  address-family ipv4
