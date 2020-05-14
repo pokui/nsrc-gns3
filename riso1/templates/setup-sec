@@ -1,6 +1,6 @@
 # Configs improvements from the "sec" lab
 cat <<EOS
-clock timezone AEST 10
+clock timezone GMT 0
 !
 service timestamps log datetime localtime msec show-timezone year
 service timestamps debug datetime localtime msec show-timezone year
