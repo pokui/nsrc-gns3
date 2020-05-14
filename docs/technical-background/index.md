@@ -347,6 +347,25 @@ sudo chmod +r /boot/vmlinuz-*
 (This has to be re-done each time you upgrade the kernel on your server)
 -->
 
+# CSR1000v configuration management
+
+IOSv stores its configuration in an NVRAM file, which gns3man is able to
+access and manipulate using utilities from gns3.
+
+Unfortunately, CSR1000v stores its NVRAM in an [encrypted partition](https://www.cisco.com/c/en/us/td/docs/routers/csr1000/software/configuration/b_CSR1000v_Configuration_Guide/b_CSR1000v_Configuration_Guide_chapter_01.html#con_1074437)
+which is not accessible.  However, CSR1000v can load a configuration
+[from an ISO CD-ROM file](https://www.cisco.com/c/en/us/td/docs/routers/csr1000/software/configuration/b_CSR1000v_Configuration_Guide/b_CSR1000v_Configuration_Guide_chapter_0101.html#con_1337709)
+on initial boot.
+
+We attach an ISO image which has the following command:
+
+```
+boot config bootflash:config.txt nvbypass
+```
+
+This tells the CSR to store its configuration in a plain text file on
+"bootflash:" (the root partition), where it can be easily manipulated.
+
 # Issues outstanding with GNS3
 
 Some of these are being tracked on github.
