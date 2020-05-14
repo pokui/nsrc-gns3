@@ -349,10 +349,10 @@ EOS
         if (prefix_is_bogon()) then reject;
         if (bgp_path.first != ${AS} ) then reject;
 
-        allas = [ ${AS}, $(( GROUP*10 + 100000 )) ];
+        allas = [ ${AS}, $(( GROUP + 135532 )) ];
         if ! (bgp_path.last ~ allas) then reject;
 
-        allnet = [ 100.68.${GROUP}.0/24, 100.68.$(( GROUP+100 )).0/24,
+        allnet = [ 100.68.${GROUP}.0/24, 100.68.$(( GROUP+100 )).0/24, 61.45.$(( GROUP+247 )).0/24,
                    2001:DB8:${GROUP}::/48, 2001:DB8:$(( GROUP+100 ))::/48 ];
         if ! (net ~ allnet) then reject;
 
