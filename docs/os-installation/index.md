@@ -1,4 +1,4 @@
-!!! note
+!!! Note
     Some familiarity with Linux and the command line is assumed for the
     rest of this document, including that you can edit a file using an editor of
     your choice (e.g.  `vi` or `nano`).

@@ -103,7 +103,7 @@ or upgrade it, run the following command:
 bash <(curl -Ss https://my-netdata.io/kickstart-static64.sh)
 ```
 
-!!!note
+!!! Note
     No 'sudo' is required - it will sudo itself when required
 
 Netdata is then visible at <http://192.168.122.1:19999/>
