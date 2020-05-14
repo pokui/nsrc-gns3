@@ -7,5 +7,6 @@ if [ ! -f "$GNS3FILE" ]; then
   exit 1
 fi
 dir="$(dirname "$GNS3FILE")"
-rm "$dir"/snapshots/*
+mkdir -p "$dir"/snapshots
+rm -f "$dir"/snapshots/*
 cp -p snapshots/* "$dir"/snapshots/
