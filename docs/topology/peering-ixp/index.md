@@ -28,6 +28,7 @@ You will need the following files:
 
 File | Description
 :--- | :----------
+`hosts-peering-ixp` | `/etc/hosts` file to go on the server
 `peering-ixp-<version>.gns3project` | the GNS3 project
 `vios-adventerprisek9-m.vmdk.SPA.157-3.M3` | IOSv image
 `vios_l2-adventerprisek9-m.SSA.high_iron_20180619.qcow2` | IOSvL2 image
@@ -88,7 +89,7 @@ There are pre-generated snapshots for many different stages of the lab.
 
 Normally this class starts with the routers and switches completely
 unconfigured.  You can reset to this state using the "00-base" snapshot
-(note that the transit routers *are* configured in this snapshot).  The
+(note that the transit and IXP routers *are* configured in this snapshot).  The
 uplinks from the IXP services router (SR) are shut down, so that the IXP
 services subnets do not appear in the initial BGP routing table.
 

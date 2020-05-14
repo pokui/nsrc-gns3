@@ -22,6 +22,7 @@ You will need the following files:
 
 File | Description
 :--- | :----------
+`hosts-cndo-nmm` | `/etc/hosts` file to go on the server
 `nmm-<version>.gns3project` | the GNS3 project
 `vios-adventerprisek9-m.vmdk.SPA.157-3.M3` | IOSv image - same as CNDO
 `vios_l2-adventerprisek9-m.SSA.high_iron_20180619.qcow2` | IOSvL2 image - same as CNDO
