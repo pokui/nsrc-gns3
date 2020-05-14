@@ -207,6 +207,7 @@ You will see `ksmd` using more CPU, but the memory is deduped more quickly.
 If you want to make this change permanent, you can edit the setting
 `SLEEP_MILLISECS` in `/etc/default/qemu-kvm`
 
+<!--
 # GNS3 manual configuration management
 
 The `gns3man` tool performs direct manipulation of the qemu image state for
@@ -344,6 +345,7 @@ sudo chmod +r /boot/vmlinuz-*
 ```
 
 (This has to be re-done each time you upgrade the kernel on your server)
+-->
 
 # Issues outstanding with GNS3
 
