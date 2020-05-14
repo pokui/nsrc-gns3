@@ -2,7 +2,7 @@
 . "09-communities/$(basename "$0")"
 cat <<EOS
 !
-router bgp 64512
+router bgp ${CUST_AS}
  bgp log-neighbor-changes
  bgp deterministic-med
  no bgp default ipv4-unicast

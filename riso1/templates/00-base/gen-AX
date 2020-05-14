@@ -2,8 +2,6 @@
 . common-group
 HOSTNAME="A${GROUP}"
 
-CUST_AS="$(( GROUP*10 + 100000 ))"
-
 cat <<EOS
 !
 version 16.6
