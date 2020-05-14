@@ -336,7 +336,7 @@ write_files:
       }
 
 EOS
-  for INDEX in $(seq 1 $NGROUPS)); do
+  for INDEX in $(seq 1 $NGROUPS); do
     GROUP=$(( INDEX + GROUP_OFFSET ))
     AS=$((GROUP*10))
     cat <<EOS
