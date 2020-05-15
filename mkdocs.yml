@@ -12,6 +12,7 @@ nav:
   - 'Hardware': 'hardware/index.md'
   - 'Software': 'software/index.md'
   - 'OS Installation': 'os-installation/index.md'
+  - 'Scripted Setup': 'scripted-setup/index.md'
   - 'OS Configuration': 'os-configuration/index.md'
   - 'Networking': 'networking/index.md'
   - 'Host Tools': 'host-tools/index.md'
