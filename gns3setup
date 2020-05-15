@@ -1,0 +1,482 @@
+#!/bin/bash
+
+#
+# This script configures the NSRC GNS3 training platform
+# See: https://shell.nsrc.org/~vtp/gns3/docs/
+#
+
+set -eu
+set -o pipefail
+
+if [ "$(id -u)" = "0" ]; then
+  echo "This script must be run as the user you intend to run gns3 as, not as root"
+  exit 1
+fi
+
+# This is the last octet of the IP address.
+# Override via environment or gns3setup.conf if building a second server.
+: "${IP_OFFSET:=1}"
+
+if [ -r gns3setup.conf ]; then
+  source gns3setup.conf
+fi
+
+USER="$(id -un)"
+GROUP="$(id -gn)"
+MODS=""
+
+#
+# Helper script to install a new file only if it has changed
+#
+REPLACE () {
+  src="${1}.new"
+  dst="${1}"
+  sudo="${2:-}"
+  $sudo tee "${src}" >/dev/null
+  if $sudo cmp "$dst" "$src" 2>/dev/null; then
+    $sudo rm "$src"
+    return 1
+  elif [ "${DRY_RUN:-N}" = "Y" ]; then
+    $sudo test -f "$dst" && $sudo diff -u "$dst" "$src"
+    $sudo rm "$src"
+    return 0
+  else
+    $sudo test -f "$dst" && $sudo ln "$dst" "${dst}.bak"
+    $sudo mv "$src" "$dst"
+    return 0
+  fi
+}
+
+CHMOD () {
+  [ "${DRY_RUN:-N}" = "Y" ] && return
+  chmod "$@"
+}
+
+SUDO_CHMOD () {
+  [ "${DRY_RUN:-N}" = "Y" ] && return
+  sudo chmod "$@"
+}
+
+#
+# Configure grub (disable Spectre/Meltdown mitigations)
+#
+MODS="$MODS grub"
+conf_grub () {
+  if egrep '^GRUB_CMDLINE_LINUX.*mitigations=off' /etc/default/grub >/dev/null; then
+    echo "Not changing /etc/default/grub"
+    return
+  fi
+  (
+egrep -v '^(GRUB_CMDLINE_LINUX=|GRUB_DISABLE_OS_PROBER=|GRUB_RECORDFAIL_TIMEOUT=|# gns3setup)' /etc/default/grub
+cat <<EOS
+# gns3setup
+GRUB_CMDLINE_LINUX="mitigations=off nomodeset"
+GRUB_DISABLE_OS_PROBER=true
+GRUB_RECORDFAIL_TIMEOUT=2
+EOS
+  ) | REPLACE /etc/default/grub sudo && sudo update-grub
+}
+
+#
+# Configure kvm (disable halt-polling)
+#
+MODS="$MODS kvm"
+conf_kvm () {
+  (
+egrep -v '^(options kvm |# gns3setup)' /etc/modprobe.d/qemu-system-x86.conf 2>/dev/null || true
+cat <<EOS
+# gns3setup
+options kvm halt_poll_ns=0
+EOS
+  ) | REPLACE /etc/modprobe.d/qemu-system-x86.conf sudo || true
+}
+
+#
+# Configure sshd security (disallow password logins except from LAN)
+#
+MODS="$MODS sshd"
+conf_sshd () {
+  (
+egrep -v '^(PasswordAuthentication |ChallengeResponseAuthentication |Match Address |# gns3setup)' /etc/ssh/sshd_config
+cat <<EOS
+# gns3setup
+PasswordAuthentication no
+ChallengeResponseAuthentication no
+# gns3setup: allow PasswordAuthentication from trusted networks only
+Match Address 100.64.0.0/10,10.0.0.0/8,192.168.0.0/16,2001:db8::/32,fc00::/7${TRUSTED_EXTERNAL_NETWORK:+,}${TRUSTED_EXTERNAL_NETWORK:-}${IPV6_PREFIX:+,}${IPV6_PREFIX:-}${IPV6_PREFIX:+/64}
+PasswordAuthentication yes
+EOS
+  ) | REPLACE /etc/ssh/sshd_config sudo && sudo systemctl restart ssh
+}
+
+#
+# Configure ssh (don't hash known hosts)
+#
+MODS="$MODS ssh"
+conf_ssh () {
+  (
+egrep -v '^ *HashKnownHosts |^# gns3setup)' /etc/ssh/ssh_config
+cat <<EOS
+# gns3setup
+    HashKnownHosts no
+EOS
+  ) | REPLACE /etc/ssh/ssh_config sudo || true
+}
+
+#
+# Configure time (ensure ntp sync)
+#
+MODS="$MODS time"
+conf_time () {
+  [ -f /etc/ntp.conf ] && return
+  sudo timedatectl set-ntp on
+}
+
+#
+# Configure apt repositories
+#
+MODS="$MODS apt"
+conf_apt () {
+  sudo add-apt-repository -y ppa:gns3/ppa
+
+  curl -Ss https://syncthing.net/release-key.txt | sudo apt-key add -
+  echo "deb https://apt.syncthing.net/ syncthing stable" | sudo tee /etc/apt/sources.list.d/syncthing.list
+
+  sudo apt-get update
+}
+
+#
+# Configure libvirt
+#
+MODS="$MODS libvirt"
+conf_libvirt () {
+  sudo apt-get install -y libvirt-daemon-system bridge-utils
+  sudo usermod -a -G kvm,libvirt "$USER"
+}
+
+MODS="$MODS network"
+conf_network () {
+  # Prompt for interfaces unless already specified in environment
+  if [ -z "${WAN_INTERFACE:-}" -o -z "${LAN_INTERFACE:-}" ]; then
+    readarray -t INTERFACES < <(find /sys/class/net -type l -not -lname '*virtual*' -printf '%f\n' | sort)
+    # Rough and ready: eno comes before enx, and enx before wlp
+    # So assume first one is LAN, second is WAN, third is WIFI
+    echo "The following network interfaces were found:"
+    echo ${INTERFACES[@]}
+    echo
+    echo "Please select, or hit enter to accept default."
+    read -p "LAN interface [${INTERFACES[0]}]: " LAN_INTERFACE
+    [ -z "$LAN_INTERFACE" ] && LAN_INTERFACE="${INTERFACES[0]}"
+    read -p "WAN interface [${INTERFACES[1]}]: " WAN_INTERFACE
+    [ -z "$WAN_INTERFACE" ] && WAN_INTERFACE="${INTERFACES[1]}"
+  fi
+
+  # Libvirt networking
+  (
+cat <<EOS
+<!--
+WARNING: THIS IS AN AUTO-GENERATED FILE. CHANGES TO IT ARE LIKELY TO BE
+OVERWRITTEN AND LOST. Changes to this xml configuration should be made using:
+  virsh net-edit default
+or other application using the libvirt API.
+-->
+
+<network>
+  <name>default</name>
+EOS
+    sudo grep '<uuid>' /etc/libvirt/qemu/networks/default.xml
+cat <<EOS
+  <forward mode='nat'/>
+  <bridge name='virbr0' stp='off' delay='0'/>
+EOS
+    sudo grep '<mac address=' /etc/libvirt/qemu/networks/default.xml
+cat <<EOS
+  <ip address='192.168.122.${IP_OFFSET}' netmask='255.255.255.0' localPtr='yes'>
+EOS
+[ "$IP_OFFSET" = "1" ] && cat <<EOS
+    <dhcp>
+      <range start='192.168.122.100' end='192.168.122.249'/>
+    </dhcp>
+EOS
+cat <<EOS
+  </ip>
+  <ip family='ipv6' address='fe80::${IP_OFFSET}' prefix='64'>
+  </ip>
+EOS
+if [ -n "$IPV6_PREFIX" ]; then
+  cat <<EOS
+  <ip family='ipv6' address='${IPV6_PREFIX}::1' prefix='64'>
+    <dhcp>
+      <range start='${IPV6_PREFIX}::1000' end='${IPV6_PREFIX}::ffff'/>
+    </dhcp>
+  </ip>
+EOS
+fi
+cat <<EOS
+  <route address='100.64.0.0' prefix='10' gateway='192.168.122.254'/>
+  <route family='ipv6' address='2001:db8::' prefix='32' gateway='fe80::254'/>
+  <route family='ipv6' address='2001:10::' prefix='28' gateway='fe80::254'/>
+</network>
+EOS
+  ) | REPLACE /etc/libvirt/qemu/networks/default.xml sudo && NETWORK_CHANGED="Y"
+
+  # Remove any existing netplan config
+  if [ "${DRY_RUN:-N}" != "Y" ]; then
+    for f in /etc/netplan/*.yaml /etc/netplan/*.yml; do
+      [ -f "$f" ] && ! grep "# gns3setup" "$f" >/dev/null && sudo mv "$f" "${f}.disabled"
+    done
+  fi
+
+  ( echo "network: {config: disabled}" ) | REPLACE /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg sudo || true
+
+  # WAN
+  (
+cat <<EOS
+# gns3setup
+network:
+  version: 2
+  ethernets:
+    $WAN_INTERFACE:
+      dhcp4: true
+      optional: true
+      # For static WAN IP address, change 'dhcp4: true' to 'false' above,
+      # and uncomment/update the following lines
+      #addresses: [192.0.2.2/24]
+      #gateway4: 192.0.2.1
+      #nameservers:
+      #  search: [ws.nsrc.org]
+      #  addresses: [8.8.8.8, 8.8.4.4]
+EOS
+  ) | REPLACE /etc/netplan/10-wan.yaml sudo && NETWORK_CHANGED="Y"
+
+  # LAN via libvirt
+  (
+# Beware: Use \$ to get a literal $ in the output
+cat <<EOS
+#!/bin/bash
+if [ "\$1" = "default" -a "\$2" = "started" ]; then
+  /sbin/ip link set $LAN_INTERFACE up
+  # https://serverfault.com/questions/616485/e1000e-reset-adapter-unexpectedly-detected-hardware-unit-hang
+  /sbin/ethtool -K $LAN_INTERFACE gso off gro off tso off
+  /sbin/brctl addif virbr0 $LAN_INTERFACE
+  sysctl net.ipv4.conf.virbr0.accept_redirects=0
+  sysctl net.ipv4.conf.virbr0.send_redirects=0
+  iptables -I FORWARD -j ACCEPT -s 100.64.0.0/10 -i virbr0
+  iptables -I FORWARD -j ACCEPT -d 100.64.0.0/10 -o virbr0 -m conntrack --ctstate RELATED,ESTABLISHED
+  iptables -t nat -I POSTROUTING -j RETURN -o virbr0
+  iptables -t nat -A POSTROUTING -j MASQUERADE -s 100.64.0.0/10
+  ip6tables -I FORWARD -j ACCEPT -i virbr0
+  ip6tables -I FORWARD -j ACCEPT -o virbr0 -m conntrack --ctstate RELATED,ESTABLISHED
+  ip6tables -t nat -I POSTROUTING -j RETURN -o virbr0
+  ip6tables -t nat -A POSTROUTING -j MASQUERADE -s 2001:db8::/32
+  ip6tables -t nat -A POSTROUTING -j MASQUERADE -s 2001:10::/28
+  ip6tables -t nat -A POSTROUTING -j MASQUERADE -s fc00::/7
+EOS
+[ -n "${TRUSTED_EXTERNAL_NETWORK:-}" ] && cat <<EOS
+  # Accept inbound from trusted source
+  iptables -I FORWARD -s $TRUSTED_EXTERNAL_NETWORK -j ACCEPT
+EOS
+cat <<EOS
+fi
+EOS
+  ) | REPLACE /etc/libvirt/hooks/network sudo && NETWORK_CHANGED="Y"
+  SUDO_CHMOD +x /etc/libvirt/hooks/network
+
+  sudo mkdir -p /etc/systemd/system/systemd-networkd-wait-online.service.d
+  (
+cat <<EOS
+[Service]
+ExecStart=
+ExecStart=/lib/systemd/systemd-networkd-wait-online --any --timeout=15
+EOS
+  ) | REPLACE /etc/systemd/system/systemd-networkd-wait-online.service.d/override.conf sudo && sudo systemctl daemon-reload || true
+}
+
+MODS="$MODS apt_cacher_ng"
+conf_apt_cacher_ng () {
+  sudo apt-get install -y apt-cacher-ng
+
+  (
+egrep -v '^(ConnectProto:|UseWrap:|# gns3setup)' /etc/apt-cacher-ng/acng.conf
+cat <<EOS
+# gns3setup
+ConnectProto: v4
+UseWrap: 1
+EOS
+  ) | REPLACE /etc/apt-cacher-ng/acng.conf sudo || true
+  (
+egrep -v '^(apt-cacher-ng:|# gns3setup)' /etc/hosts.allow || true
+cat <<EOS
+# gns3setup
+apt-cacher-ng: 127.0.0.1 10.0.0.0/8 100.64.0.0/10 192.0.2.0/24 192.168.0.0/16 [::1] [2001:db8::]/32
+EOS
+  ) | REPLACE /etc/hosts.allow sudo || true
+
+  (
+egrep -v '^(apt-cacher-ng:|# gns3setup)' /etc/hosts.deny || true
+cat <<EOS
+# gns3setup
+apt-cacher-ng: ALL
+EOS
+  ) | REPLACE /etc/hosts.deny sudo || true
+
+  (
+cat <<EOS
+# gns3setup
+Acquire::http::Proxy "http://192.168.122.1:3142/";
+Acquire::https::Proxy "DIRECT";
+EOS
+  ) | REPLACE /etc/apt/apt.conf.d/99proxy sudo || true
+}
+
+MODS="$MODS gns3server"
+conf_gns3server () {
+  sudo apt-get install -y gns3-server
+  sudo apt-mark hold gns3-server
+  sudo usermod -a -G ubridge "$USER"
+
+  (
+cat <<EOS
+[Unit]
+Description=GNS3 network simulator
+After=network-online.target
+Wants=network-online.target
+Conflicts=shutdown.target
+
+[Service]
+User=%i
+Restart=always
+RestartSec=5
+ExecStart=/usr/bin/gns3server
+LimitNOFILE=16384
+
+[Install]
+WantedBy=multi-user.target
+EOS
+  ) | REPLACE /etc/systemd/system/gns3@.service sudo || true
+  sudo systemctl enable "gns3@$USER"
+
+  sudo mkdir -p /var/lib/GNS3/images
+  sudo chown -R "$USER":"$GROUP" /var/lib/GNS3/images
+
+  if [ ! -f "$HOME/.config/GNS3/2.2/gns3_server.conf" ]; then
+    mkdir -p "$HOME/.config/GNS3/2.2"
+    (
+cat <<EOS
+[Server]
+images_path = /var/lib/GNS3/images
+host = 192.168.122.${IP_OFFSET}
+#auth = True
+#user = $USER
+#password = XXXXXXXX
+EOS
+    ) | REPLACE "$HOME/.config/GNS3/2.2/gns3_server.conf" || true
+    PASSWORD_REQUIRED="Y"
+  fi
+}
+
+MODS="$MODS shellinabox"
+conf_shellinabox () {
+  # Hopefully this won't be needed for much longer:
+  # https://github.com/GNS3/gns3-gui/issues/2883
+  sudo apt-get install -y shellinabox
+  curl -Ss https://raw.githubusercontent.com/nsrc-org/nsrc-gns3/master/gns3-shellinabox.py |
+    REPLACE /usr/local/bin/gns3-shellinabox.py sudo || true
+  SUDO_CHMOD +x /usr/local/bin/gns3-shellinabox.py
+
+  (
+egrep -v '^(SHELLINABOX_ARGS=|# gns3setup)' /etc/default/shellinabox
+cat <<EOS
+# gns3setup
+SHELLINABOX_ARGS="--no-beep -t -s /:shellinabox:shellinabox:/var/tmp:/usr/local/bin/gns3-shellinabox.py"
+EOS
+  ) | REPLACE /etc/default/shellinabox sudo || true
+
+  sudo systemctl enable shellinabox
+}
+
+MODS="$MODS gns3man"
+conf_gns3man () {
+  sudo apt-get install -y python3-guestfs apache2 apache2-suexec-pristine unzip
+  sudo a2enmod cgi suexec userdir
+  SUDO_CHMOD +r /boot/vmlinuz-*
+  (
+cat <<EOS
+<Directory "/home/*/public_html/cgi-bin/">
+    Options ExecCGI
+    SetHandler cgi-script
+</Directory>
+EOS
+  ) | REPLACE /etc/apache2/conf-enabled/usercgi.conf sudo && sudo systemctl restart apache2
+
+  mkdir -p "$HOME/public_html/cgi-bin"
+  curl -Ss https://raw.githubusercontent.com/nsrc-org/nsrc-gns3/master/gns3man | REPLACE "$HOME/public_html/cgi-bin/gns3man" || true
+  CHMOD 755 "$HOME/public_html/cgi-bin" "$HOME/public_html/cgi-bin/gns3man"
+}
+
+MODS="$MODS apache"
+conf_apache () {
+  sudo apt-get install -y apache2
+  sudo mkdir -p /var/www/html/downloads
+  sudo chown -R "$USER":"$GROUP" /var/www/html
+}
+
+MODS="$MODS syncthing"
+conf_syncthing() {
+  sudo apt-get install -y syncthing
+
+  sudo mkdir -p "/etc/systemd/system/syncthing@.service.d"
+  (
+cat <<EOS
+[Service]
+ExecStart=
+ExecStart=/usr/bin/syncthing -no-browser -no-restart -logflags=0 -gui-address=192.168.122.${IP_OFFSET}:8384
+EOS
+  ) | REPLACE "/etc/systemd/system/syncthing@.service.d/override.conf" sudo && sudo systemctl daemon-reload || true
+
+  sudo systemctl enable "syncthing@$USER" || true
+}
+
+MODS="$MODS netdata"
+conf_netdata () {
+  if [ -d /opt/netdata ]; then
+    echo "Skipping netdata"
+    return
+  fi
+  echo "Installing netdata..."
+  bash <(curl -Ss https://my-netdata.io/kickstart-static64.sh)
+}
+
+for module in ${MODULES:-$MODS}; do
+  echo "### Configuring $module ###"
+  conf_$module
+  echo
+done
+
+# Save network settings for next time
+if [ ! -f gns3setup.conf ]; then
+  (
+cat <<EOS
+LAN_INTERFACE="$LAN_INTERFACE"
+WAN_INTERFACE="$WAN_INTERFACE"
+EOS
+[ "${IP_OFFSET}" != "1" ] && echo "IP_OFFSET=\"${IP_OFFSET}\""
+  ) >gns3setup.conf
+fi
+
+echo "All done!"
+
+[ "${NETWORK_CHANGED:-}" = "Y" ] && cat <<EOS
+
+########################################################
+# Networking configuration has changed - please reboot #
+########################################################
+EOS
+
+[ "${PASSWORD_REQUIRED:-}" = "Y" ] && cat <<EOS
+
+********************************************************
+* Please set a GNS3 password in                        *
+* ~/.config/GNS3/2.2/gns3_server.conf                  *
+********************************************************
+EOS
