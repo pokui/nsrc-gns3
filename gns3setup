@@ -42,6 +42,7 @@ REPLACE () {
     return 0
   else
     $sudo test -f "$dst" && $sudo ln "$dst" "${dst}.bak"
+    echo "REPLACING: $dst"
     $sudo mv "$src" "$dst"
     return 0
   fi
