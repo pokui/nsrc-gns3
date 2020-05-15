@@ -17,7 +17,7 @@ This account will also allow you to participate in the GNS3 forums.
 The project files and associated disk images are available from
 [NSRC](https://shell.nsrc.org/~vtp/gns3/).
 
-# IOSv / IOSvL2
+# IOSv / IOSvL2 / CSR1000v
 
 The process for obtaining VIRL images, which requires a paid subscription,
 is as follows:

@@ -53,7 +53,7 @@ sudo systemctl restart apt-cacher-ng
 To limit which networks can access your proxy, edit `/etc/hosts.allow`:
 
 ```
-apt-cacher-ng: 127.0.0.1 10.0.0.0/8 192.168.0.0/16 [::1] [2001:db8::]/16
+apt-cacher-ng: 127.0.0.1 10.0.0.0/8 100.64.0.0/10 192.168.0.0/16 [::1] [2001:db8::]/32
 ```
 
 and `/etc/hosts.deny`:
