@@ -27,24 +27,25 @@ MODS=""
 
 #
 # Helper script to install a new file only if it has changed
+# Return 0 if not changed, 1 if changed (=> trigger extra action)
 #
 REPLACE () {
   src="${1}.new"
   dst="${1}"
   sudo="${2:-}"
   $sudo tee "${src}" >/dev/null
-  if $sudo cmp "$dst" "$src" 2>/dev/null; then
+  if $sudo cmp -s "$dst" "$src" 2>/dev/null; then
     $sudo rm "$src"
-    return 1
+    return 0
   elif [ "${DRY_RUN:-N}" = "Y" ]; then
     $sudo test -f "$dst" && $sudo diff -u "$dst" "$src"
     $sudo rm "$src"
-    return 0
+    return 1
   else
-    $sudo test -f "$dst" && $sudo ln "$dst" "${dst}.bak"
+    $sudo test -f "$dst" && $sudo ln "$dst" "${dst}.bak" || true
     echo "REPLACING: $dst"
     $sudo mv "$src" "$dst"
-    return 0
+    return 1
   fi
 }
 
@@ -75,7 +76,7 @@ GRUB_CMDLINE_LINUX="mitigations=off nomodeset"
 GRUB_DISABLE_OS_PROBER=true
 GRUB_RECORDFAIL_TIMEOUT=2
 EOS
-  ) | REPLACE /etc/default/grub sudo && sudo update-grub
+  ) | REPLACE /etc/default/grub sudo || sudo update-grub
 }
 
 #
@@ -107,7 +108,7 @@ ChallengeResponseAuthentication no
 Match Address 100.64.0.0/10,10.0.0.0/8,192.168.0.0/16,2001:db8::/32,fc00::/7${TRUSTED_EXTERNAL_NETWORK:+,}${TRUSTED_EXTERNAL_NETWORK:-}${IPV6_PREFIX:+,}${IPV6_PREFIX:-}${IPV6_PREFIX:+/64}
 PasswordAuthentication yes
 EOS
-  ) | REPLACE /etc/ssh/sshd_config sudo && sudo systemctl restart ssh
+  ) | REPLACE /etc/ssh/sshd_config sudo || sudo systemctl restart ssh
 }
 
 #
@@ -116,7 +117,7 @@ EOS
 MODS="$MODS ssh"
 conf_ssh () {
   (
-egrep -v '^ *HashKnownHosts |^# gns3setup)' /etc/ssh/ssh_config
+egrep -v '^( *HashKnownHosts |# gns3setup)' /etc/ssh/ssh_config
 cat <<EOS
 # gns3setup
     HashKnownHosts no
@@ -204,7 +205,7 @@ cat <<EOS
   <ip family='ipv6' address='fe80::${IP_OFFSET}' prefix='64'>
   </ip>
 EOS
-if [ -n "$IPV6_PREFIX" ]; then
+if [ -n "${IPV6_PREFIX:-}" ]; then
   cat <<EOS
   <ip family='ipv6' address='${IPV6_PREFIX}::1' prefix='64'>
     <dhcp>
@@ -219,7 +220,7 @@ cat <<EOS
   <route family='ipv6' address='2001:10::' prefix='28' gateway='fe80::254'/>
 </network>
 EOS
-  ) | REPLACE /etc/libvirt/qemu/networks/default.xml sudo && NETWORK_CHANGED="Y"
+  ) | REPLACE /etc/libvirt/qemu/networks/default.xml sudo || NETWORK_CHANGED="Y"
 
   # Remove any existing netplan config
   if [ "${DRY_RUN:-N}" != "Y" ]; then
@@ -228,7 +229,9 @@ EOS
     done
   fi
 
-  ( echo "network: {config: disabled}" ) | REPLACE /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg sudo || true
+  if [ -d "/etc/cloud/cloud.cfg.d" ]; then
+    ( echo "network: {config: disabled}" ) | REPLACE /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg sudo || true
+  fi
 
   # WAN
   (
@@ -248,7 +251,7 @@ network:
       #  search: [ws.nsrc.org]
       #  addresses: [8.8.8.8, 8.8.4.4]
 EOS
-  ) | REPLACE /etc/netplan/10-wan.yaml sudo && NETWORK_CHANGED="Y"
+  ) | REPLACE /etc/netplan/10-wan.yaml sudo || NETWORK_CHANGED="Y"
 
   # LAN via libvirt
   (
@@ -280,7 +283,7 @@ EOS
 cat <<EOS
 fi
 EOS
-  ) | REPLACE /etc/libvirt/hooks/network sudo && NETWORK_CHANGED="Y"
+  ) | REPLACE /etc/libvirt/hooks/network sudo || NETWORK_CHANGED="Y"
   SUDO_CHMOD +x /etc/libvirt/hooks/network
 
   sudo mkdir -p /etc/systemd/system/systemd-networkd-wait-online.service.d
@@ -290,7 +293,7 @@ cat <<EOS
 ExecStart=
 ExecStart=/lib/systemd/systemd-networkd-wait-online --any --timeout=15
 EOS
-  ) | REPLACE /etc/systemd/system/systemd-networkd-wait-online.service.d/override.conf sudo && sudo systemctl daemon-reload || true
+  ) | REPLACE /etc/systemd/system/systemd-networkd-wait-online.service.d/override.conf sudo || sudo systemctl daemon-reload || true
 }
 
 MODS="$MODS apt_cacher_ng"
@@ -408,7 +411,7 @@ cat <<EOS
     SetHandler cgi-script
 </Directory>
 EOS
-  ) | REPLACE /etc/apache2/conf-enabled/usercgi.conf sudo && sudo systemctl restart apache2
+  ) | REPLACE /etc/apache2/conf-enabled/usercgi.conf sudo || sudo systemctl restart apache2
 
   mkdir -p "$HOME/public_html/cgi-bin"
   curl -Ss https://raw.githubusercontent.com/nsrc-org/nsrc-gns3/master/gns3man | REPLACE "$HOME/public_html/cgi-bin/gns3man" || true
@@ -433,7 +436,7 @@ cat <<EOS
 ExecStart=
 ExecStart=/usr/bin/syncthing -no-browser -no-restart -logflags=0 -gui-address=192.168.122.${IP_OFFSET}:8384
 EOS
-  ) | REPLACE "/etc/systemd/system/syncthing@.service.d/override.conf" sudo && sudo systemctl daemon-reload || true
+  ) | REPLACE "/etc/systemd/system/syncthing@.service.d/override.conf" sudo || sudo systemctl daemon-reload || true
 
   sudo systemctl enable "syncthing@$USER" || true
 }
