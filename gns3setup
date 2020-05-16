@@ -453,7 +453,7 @@ conf_netdata () {
     return
   fi
   echo "Installing netdata..."
-  bash <(curl -Ss https://my-netdata.io/kickstart-static64.sh)
+  bash <(curl -Ss https://my-netdata.io/kickstart-static64.sh) || true
 }
 
 for module in ${MODULES:-$MODS}; do
