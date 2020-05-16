@@ -5,11 +5,8 @@
 
 # Operating system installation
 
-Install Ubuntu Linux 18.04, server edition.
-
-Ubuntu 16.04 *might* work with these instructions, but has not been tested,
-and some changes may be required (e.g.  network configuration).  Earlier
-versions are unlikely to work and already end-of-life.
+Install Ubuntu Linux 18.04, server edition.  Other versions including 20.04
+have not been tested.
 
 Desktop edition will probably work, but since you are likely to be running
 "headless" with no keyboard and display attached, the GUI is unlikely to be
