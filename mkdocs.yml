@@ -14,6 +14,7 @@ nav:
   - 'OS Installation': 'os-installation/index.md'
   - 'Scripted Setup': 'scripted-setup/index.md'
   - 'OS Configuration': 'os-configuration/index.md'
+  - 'Virtualization': 'libvirt/index.md'
   - 'Networking': 'networking/index.md'
   - 'Host Tools': 'host-tools/index.md'
   - 'GNS3 Server': 'gns3-server/index.md'

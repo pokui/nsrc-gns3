@@ -10,6 +10,7 @@ If you want to do a manual setup instead, follow the instructions in these
 pages:
 
 * [OS Configuration](../os-configuration/)
+* [Virtualization](../libvirt/)
 * [Networking](../networking/)
 * [Host Tools](../host-tools/)
 * [GNS3 Server](../gns3-server/)
