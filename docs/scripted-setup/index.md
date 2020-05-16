@@ -72,6 +72,15 @@ You may be asked whether ubridge should be usable by non-root users.  Say Yes.
 
 You will be asked to accept the netdata license. Say Yes.
 
+## gns3 server password
+
+The script does not set a username or password for the GNS3 administrative
+interface.
+
+You should edit `$HOME/.config/GNS3/2.2/gns3_server.conf` to uncomment and
+change the auth settings, to prevent students from being able to control the
+GNS3 server.
+
 # Review and reboot server
 
 The network changes won't take effect until you reboot the server.  You may
