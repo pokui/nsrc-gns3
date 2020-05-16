@@ -72,7 +72,7 @@ You may be asked whether ubridge should be usable by non-root users.  Say Yes.
 
 You will be asked to accept the netdata license. Say Yes.
 
-## gns3 server password
+# Set GNS3 server password
 
 The script does not set a username or password for the GNS3 administrative
 interface.
