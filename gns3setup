@@ -229,8 +229,13 @@ EOS
     done
   fi
 
-  if [ -d "/etc/cloud/cloud.cfg.d" ]; then
-    ( echo "network: {config: disabled}" ) | REPLACE /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg sudo || true
+  if [ -d "/etc/cloud/cloud.cfg.d" -a ! -f "/etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg" ]; then
+    (
+cat <<EOS
+# gns3setup
+network: {config: disabled}
+EOS
+    ) | REPLACE /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg sudo || true
   fi
 
   # WAN
