@@ -35,7 +35,9 @@ you for your password as soon as it needs to.
     although it may overwrite files which you have manually changed to put them
     back how it thinks they should be.
 
-# Selecting network interfaces
+# Installation questions
+
+## Selecting network interfaces
 
 The script will list your network interfaces and ask you to choose:
 
@@ -60,6 +62,14 @@ instructions.
     The script saves your LAN/WAN settings in a file `gns3setup.conf` so you
     don't have to re-enter them when re-running the script.  Delete this
     file if you want to make a different selection.
+
+## ubridge
+
+You may be asked whether ubridge should be usable by non-root users.  Say Yes.
+
+## netdata license
+
+You will be asked to accept the netdata license. Say Yes.
 
 # Review and reboot server
 

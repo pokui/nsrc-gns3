@@ -80,20 +80,6 @@ EOS
 }
 
 #
-# Configure kvm (disable halt-polling)
-#
-MODS="$MODS kvm"
-conf_kvm () {
-  (
-egrep -v '^(options kvm |# gns3setup)' /etc/modprobe.d/qemu-system-x86.conf 2>/dev/null || true
-cat <<EOS
-# gns3setup
-options kvm halt_poll_ns=0
-EOS
-  ) | REPLACE /etc/modprobe.d/qemu-system-x86.conf sudo || true
-}
-
-#
 # Configure sshd security (disallow password logins except from LAN)
 #
 MODS="$MODS sshd"
@@ -154,6 +140,20 @@ MODS="$MODS libvirt"
 conf_libvirt () {
   sudo apt-get install -y libvirt-daemon-system bridge-utils
   sudo usermod -a -G kvm,libvirt "$USER"
+}
+
+#
+# Configure kvm (disable halt-polling)
+#
+MODS="$MODS kvm"
+conf_kvm () {
+  (
+egrep -v '^(options kvm |# gns3setup)' /etc/modprobe.d/qemu-system-x86.conf 2>/dev/null || true
+cat <<EOS
+# gns3setup
+options kvm halt_poll_ns=0
+EOS
+  ) | REPLACE /etc/modprobe.d/qemu-system-x86.conf sudo || true
 }
 
 MODS="$MODS network"
