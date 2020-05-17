@@ -91,7 +91,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5001,
+                "console": 5003,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -123,8 +123,8 @@
                     "hda_disk_image": "nsrc-nmm-20200309-cfe3779f.qcow2",
                     "hda_disk_image_md5sum": "cfe3779f9cdc1fb8315b2505202c8470",
                     "hda_disk_interface": "virtio",
-                    "hdb_disk_image": "noc-hdb-20191107-3cd7fb7a.img",
-                    "hdb_disk_image_md5sum": "3cd7fb7a2c45b33dcc273eefcbb14e7c",
+                    "hdb_disk_image": "noc-hdb-20200517-9f353bc6.img",
+                    "hdb_disk_image_md5sum": "9f353bc646adf94caca0201c7ee080ea",
                     "hdb_disk_interface": "virtio",
                     "hdc_disk_image": "",
                     "hdc_disk_image_md5sum": null,
@@ -159,6 +159,6 @@
     },
     "type": "topology",
     "variables": [],
-    "version": "2.2.5",
+    "version": "2.2.8",
     "zoom": 100
 }
