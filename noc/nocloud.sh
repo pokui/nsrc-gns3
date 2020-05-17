@@ -104,6 +104,8 @@ write_files:
       label 2001:db8::/32 6
       label 2001:10::/28  6
 runcmd:
+  # Fixup https repositories to use proxy
+  - sed -i -e 's#https://#http://HTTPS///#' /etc/apt/sources.list /etc/apt/sources.list.d/*.list
   - DEBIAN_FRONTEND=noninteractive fix-hostname $FQDN
   # Don't run any hostN containers, but prepare for cloning them in case they are desired.
   # They will be connected to external network and pick up IP address via DHCP.
@@ -143,6 +145,9 @@ runcmd:
       - path: /etc/apt/apt.conf.d/99proxy
         content: |
           Acquire::http::Proxy "http://192.168.122.1:3142/";
+    runcmd:
+      # Fixup https repositories to use proxy
+      - sed -i -e 's#https://#http://HTTPS///#' /etc/apt/sources.list /etc/apt/sources.list.d/*.list
     final_message: Greetings from NSRC!
     END
 final_message: NOC is ready!

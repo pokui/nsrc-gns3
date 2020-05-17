@@ -129,7 +129,7 @@ write_files:
       net.ipv4.conf.all.rp_filter=2
 runcmd:
   # YAML doesn't need escaping of backslash, but shell (cat <<END2) does
-  - sed -i'' -r -e 's#(\\\\h)([^.])#\\1.campus$i\\2#g' /etc/profile /etc/bash.bashrc /etc/skel/.bashrc /root/.bashrc /home/*/.bashrc
+  - sed -i -r -e 's#(\\\\h)([^.])#\\1.campus$i\\2#g' /etc/profile /etc/bash.bashrc /etc/skel/.bashrc /root/.bashrc /home/*/.bashrc
   - IFACE=$ETH1 /etc/networkd-dispatcher/routable.d/50-backdoor
   - sysctl -p /etc/sysctl.d/90-rpf.conf
 final_message: NSRC welcomes you to CNDO!

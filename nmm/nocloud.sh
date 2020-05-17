@@ -141,8 +141,10 @@ write_files:
       # Loose reverse path filtering (traffic from 192.168.122 address may come in via br0)
       net.ipv4.conf.all.rp_filter=2
 runcmd:
+  # Fixup https repositories to use proxy
+  - sed -i -e 's#https://#http://HTTPS///#' /etc/apt/sources.list /etc/apt/sources.list.d/*.list
   # YAML doesn't need escaping of backslash, but shell (cat <<EOS) does
-  - sed -i'' -r -e 's#(\\\\h)([^.])#\\1.campus$i\\2#g' /etc/profile /etc/bash.bashrc /etc/skel/.bashrc /root/.bashrc /home/*/.bashrc
+  - sed -i -r -e 's#(\\\\h)([^.])#\\1.campus$i\\2#g' /etc/profile /etc/bash.bashrc /etc/skel/.bashrc /root/.bashrc /home/*/.bashrc
   - DEBIAN_FRONTEND=noninteractive fix-hostname $FQDN
   - IFACE=br1 /etc/networkd-dispatcher/routable.d/50-backdoor
   - sysctl -p /etc/sysctl.d/90-rpf.conf
@@ -251,8 +253,10 @@ runcmd:
           # Loose reverse path filtering (traffic from 192.168.122 address may come in via eth0)
           net.ipv4.conf.all.rp_filter=2
     runcmd:
+      # Fixup https repositories to use proxy
+      - sed -i -e 's#https://#http://HTTPS///#' /etc/apt/sources.list /etc/apt/sources.list.d/*.list
       # Additional level of escaping required
-      - sed -i'' -r -e 's#(\\\\\\\\h)([^.])#\\\\1.campus$i\\\\2#g' /etc/profile /etc/bash.bashrc /etc/skel/.bashrc /root/.bashrc /home/*/.bashrc
+      - sed -i -r -e 's#(\\\\\\\\h)([^.])#\\\\1.campus$i\\\\2#g' /etc/profile /etc/bash.bashrc /etc/skel/.bashrc /root/.bashrc /home/*/.bashrc
       - DEBIAN_FRONTEND=noninteractive fix-hostname \$HOST_FQDN
       - IFACE=eth1 /etc/networkd-dispatcher/routable.d/50-backdoor
       - sysctl -p /etc/sysctl.d/90-rpf.conf
