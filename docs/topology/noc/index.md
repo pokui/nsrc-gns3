@@ -38,6 +38,26 @@ Note that this topology does *not* use the Cisco IOSv or IOSvL2 images.
 This means that it is completely free to use, and can be freely
 shared.
 
+# IP addresses
+
+IP Address      | DNS Name
+:-------------- | :---------------------------
+192.168.122.250 | noc.ws.nsrc.org
+2001:db8::250   | noc.ws.nsrc.org
+
+Note that the NOC's IPv6 default gateway is the TR1/TR2 transit routers in
+the teaching topology.  Hence if the teaching topology is down, IPv6
+connectivity won't work.
+
+This means that if you want to ssh from the server to the NOC VM, and the
+teaching topology is not running, you need to force IPv4:
+
+```
+ssh -4 sysadm@noc.ws.nsrc.org
+# OR
+ssh sysadm@192.168.122.250
+```
+
 # Credentials
 
 * ssh login: `sysadm` and `nsrc+ws` (the standard student login).  It's up to
