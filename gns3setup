@@ -27,7 +27,7 @@ MODS=""
 
 #
 # Helper script to install a new file only if it has changed
-# Return 0 if not changed, 1 if changed (=> trigger extra action)
+# Exit code 126 if result was OK but change was made
 #
 REPLACE () {
   src="${1}.new"
@@ -36,16 +36,27 @@ REPLACE () {
   $sudo tee "${src}" >/dev/null
   if $sudo cmp -s "$dst" "$src" 2>/dev/null; then
     $sudo rm "$src"
-    return 0
   elif [ "${DRY_RUN:-N}" = "Y" ]; then
     $sudo test -f "$dst" && $sudo diff -u "$dst" "$src"
     $sudo rm "$src"
-    return 1
   else
     $sudo test -f "$dst" && $sudo ln "$dst" "${dst}.bak" || true
     echo "REPLACING: $dst"
     $sudo mv "$src" "$dst"
-    return 1
+    return 126
+  fi
+}
+
+IF_CHANGED () {
+  rc="$?"
+  if [ "$rc" -eq 0 ]; then
+    return
+  elif [ "$rc" -eq 126 ]; then
+    echo "$@"
+    eval "$@"
+  else
+    echo "Command terminated with exit code $rc"
+    exit "$rc"
   fi
 }
 
@@ -76,7 +87,7 @@ GRUB_CMDLINE_LINUX="mitigations=off nomodeset"
 GRUB_DISABLE_OS_PROBER=true
 GRUB_RECORDFAIL_TIMEOUT=2
 EOS
-  ) | REPLACE /etc/default/grub sudo || sudo update-grub
+  ) | REPLACE /etc/default/grub sudo || IF_CHANGED sudo update-grub
 }
 
 #
@@ -94,7 +105,7 @@ ChallengeResponseAuthentication no
 Match Address 100.64.0.0/10,10.0.0.0/8,192.168.0.0/16,2001:db8::/32,fc00::/7${TRUSTED_EXTERNAL_NETWORK:+,}${TRUSTED_EXTERNAL_NETWORK:-}${IPV6_PREFIX:+,}${IPV6_PREFIX:-}${IPV6_PREFIX:+/64}
 PasswordAuthentication yes
 EOS
-  ) | REPLACE /etc/ssh/sshd_config sudo || sudo systemctl restart ssh
+  ) | REPLACE /etc/ssh/sshd_config sudo || IF_CHANGED sudo systemctl restart ssh
 }
 
 #
@@ -108,7 +119,7 @@ cat <<EOS
 # gns3setup
     HashKnownHosts no
 EOS
-  ) | REPLACE /etc/ssh/ssh_config sudo || true
+  ) | REPLACE /etc/ssh/ssh_config sudo || IF_CHANGED
 }
 
 #
@@ -153,7 +164,7 @@ cat <<EOS
 # gns3setup
 options kvm halt_poll_ns=0
 EOS
-  ) | REPLACE /etc/modprobe.d/qemu-system-x86.conf sudo || true
+  ) | REPLACE /etc/modprobe.d/qemu-system-x86.conf sudo || IF_CHANGED
 }
 
 MODS="$MODS network"
@@ -169,8 +180,13 @@ conf_network () {
     echo "Please select, or hit enter to accept default."
     read -p "LAN interface [${INTERFACES[0]}]: " LAN_INTERFACE
     [ -z "$LAN_INTERFACE" ] && LAN_INTERFACE="${INTERFACES[0]}"
+    if [ -z "$LAN_INTERFACE" ]; then
+      echo "LAN_INTERFACE is required!"
+      exit 1
+    fi
     read -p "WAN interface [${INTERFACES[1]}]: " WAN_INTERFACE
     [ -z "$WAN_INTERFACE" ] && WAN_INTERFACE="${INTERFACES[1]}"
+    [ -z "$WAN_INTERFACE" ] && WAN_INTERFACE="FIXME"
   fi
 
   # Libvirt networking
@@ -220,7 +236,7 @@ cat <<EOS
   <route family='ipv6' address='2001:10::' prefix='28' gateway='fe80::254'/>
 </network>
 EOS
-  ) | REPLACE /etc/libvirt/qemu/networks/default.xml sudo || NETWORK_CHANGED="Y"
+  ) | REPLACE /etc/libvirt/qemu/networks/default.xml sudo || IF_CHANGED NETWORK_CHANGED="Y"
 
   # Remove any existing netplan config
   if [ "${DRY_RUN:-N}" != "Y" ]; then
@@ -235,7 +251,7 @@ cat <<EOS
 # gns3setup
 network: {config: disabled}
 EOS
-    ) | REPLACE /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg sudo || true
+    ) | REPLACE /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg sudo || IF_CHANGED
   fi
 
   # WAN
@@ -256,7 +272,7 @@ network:
       #  search: [ws.nsrc.org]
       #  addresses: [8.8.8.8, 8.8.4.4]
 EOS
-  ) | REPLACE /etc/netplan/10-wan.yaml sudo || NETWORK_CHANGED="Y"
+  ) | REPLACE /etc/netplan/10-wan.yaml sudo || IF_CHANGED NETWORK_CHANGED="Y"
 
   # LAN via libvirt
   (
@@ -288,7 +304,7 @@ EOS
 cat <<EOS
 fi
 EOS
-  ) | REPLACE /etc/libvirt/hooks/network sudo || NETWORK_CHANGED="Y"
+  ) | REPLACE /etc/libvirt/hooks/network sudo || IF_CHANGED NETWORK_CHANGED="Y"
   SUDO_CHMOD +x /etc/libvirt/hooks/network
 
   sudo mkdir -p /etc/systemd/system/systemd-networkd-wait-online.service.d
@@ -298,7 +314,7 @@ cat <<EOS
 ExecStart=
 ExecStart=/lib/systemd/systemd-networkd-wait-online --any --timeout=15
 EOS
-  ) | REPLACE /etc/systemd/system/systemd-networkd-wait-online.service.d/override.conf sudo || sudo systemctl daemon-reload || true
+  ) | REPLACE /etc/systemd/system/systemd-networkd-wait-online.service.d/override.conf sudo || IF_CHANGED sudo systemctl daemon-reload || true
 }
 
 MODS="$MODS apt_cacher_ng"
@@ -312,14 +328,14 @@ cat <<EOS
 ConnectProto: v4
 UseWrap: 1
 EOS
-  ) | REPLACE /etc/apt-cacher-ng/acng.conf sudo || true
+  ) | REPLACE /etc/apt-cacher-ng/acng.conf sudo || IF_CHANGED
   (
 egrep -v '^(apt-cacher-ng:|# gns3setup)' /etc/hosts.allow || true
 cat <<EOS
 # gns3setup
 apt-cacher-ng: 127.0.0.1 10.0.0.0/8 100.64.0.0/10 192.0.2.0/24 192.168.0.0/16 [::1] [2001:db8::]/32
 EOS
-  ) | REPLACE /etc/hosts.allow sudo || true
+  ) | REPLACE /etc/hosts.allow sudo || IF_CHANGED
 
   (
 egrep -v '^(apt-cacher-ng:|# gns3setup)' /etc/hosts.deny || true
@@ -327,7 +343,7 @@ cat <<EOS
 # gns3setup
 apt-cacher-ng: ALL
 EOS
-  ) | REPLACE /etc/hosts.deny sudo || true
+  ) | REPLACE /etc/hosts.deny sudo || IF_CHANGED
 
   (
 cat <<EOS
@@ -335,7 +351,7 @@ cat <<EOS
 Acquire::http::Proxy "http://192.168.122.1:3142/";
 Acquire::https::Proxy "DIRECT";
 EOS
-  ) | REPLACE /etc/apt/apt.conf.d/99proxy sudo || true
+  ) | REPLACE /etc/apt/apt.conf.d/99proxy sudo || IF_CHANGED
 }
 
 MODS="$MODS gns3server"
@@ -362,7 +378,7 @@ LimitNOFILE=16384
 [Install]
 WantedBy=multi-user.target
 EOS
-  ) | REPLACE /etc/systemd/system/gns3@.service sudo || true
+  ) | REPLACE /etc/systemd/system/gns3@.service sudo || IF_CHANGED
   sudo systemctl enable "gns3@$USER"
 
   sudo mkdir -p /var/lib/GNS3/images
@@ -379,7 +395,7 @@ host = 192.168.122.${IP_OFFSET}
 #user = $USER
 #password = XXXXXXXX
 EOS
-    ) | REPLACE "$HOME/.config/GNS3/2.2/gns3_server.conf" || true
+    ) | REPLACE "$HOME/.config/GNS3/2.2/gns3_server.conf" || IF_CHANGED
     PASSWORD_REQUIRED="Y"
   fi
 }
@@ -390,7 +406,7 @@ conf_shellinabox () {
   # https://github.com/GNS3/gns3-gui/issues/2883
   sudo apt-get install -y shellinabox
   curl -Ss https://raw.githubusercontent.com/nsrc-org/nsrc-gns3/master/gns3-shellinabox.py |
-    REPLACE /usr/local/bin/gns3-shellinabox.py sudo || true
+    REPLACE /usr/local/bin/gns3-shellinabox.py sudo || IF_CHANGED
   SUDO_CHMOD +x /usr/local/bin/gns3-shellinabox.py
 
   (
@@ -399,7 +415,7 @@ cat <<EOS
 # gns3setup
 SHELLINABOX_ARGS="--no-beep -t -s /:shellinabox:shellinabox:/var/tmp:/usr/local/bin/gns3-shellinabox.py"
 EOS
-  ) | REPLACE /etc/default/shellinabox sudo || true
+  ) | REPLACE /etc/default/shellinabox sudo || IF_CHANGED
 
   sudo systemctl enable shellinabox
 }
@@ -416,10 +432,10 @@ cat <<EOS
     SetHandler cgi-script
 </Directory>
 EOS
-  ) | REPLACE /etc/apache2/conf-enabled/usercgi.conf sudo || sudo systemctl restart apache2
+  ) | REPLACE /etc/apache2/conf-enabled/usercgi.conf sudo || IF_CHANGED sudo systemctl restart apache2
 
   mkdir -p "$HOME/public_html/cgi-bin"
-  curl -Ss https://raw.githubusercontent.com/nsrc-org/nsrc-gns3/master/gns3man | REPLACE "$HOME/public_html/cgi-bin/gns3man" || true
+  curl -Ss https://raw.githubusercontent.com/nsrc-org/nsrc-gns3/master/gns3man | REPLACE "$HOME/public_html/cgi-bin/gns3man" || IF_CHANGED
   CHMOD 755 "$HOME/public_html/cgi-bin" "$HOME/public_html/cgi-bin/gns3man"
 }
 
@@ -441,7 +457,7 @@ cat <<EOS
 ExecStart=
 ExecStart=/usr/bin/syncthing -no-browser -no-restart -logflags=0 -gui-address=192.168.122.${IP_OFFSET}:8384
 EOS
-  ) | REPLACE "/etc/systemd/system/syncthing@.service.d/override.conf" sudo || sudo systemctl daemon-reload || true
+  ) | REPLACE "/etc/systemd/system/syncthing@.service.d/override.conf" sudo || IF_CHANGED sudo systemctl daemon-reload || true
 
   sudo systemctl enable "syncthing@$USER" || true
 }
@@ -470,6 +486,8 @@ LAN_INTERFACE="$LAN_INTERFACE"
 WAN_INTERFACE="$WAN_INTERFACE"
 EOS
 [ "${IP_OFFSET}" != "1" ] && echo "IP_OFFSET=\"${IP_OFFSET}\""
+[ -n "${TRUSTED_EXTERNAL_NETWORK:-}" ] && echo "TRUSTED_EXTERNAL_NETWORK=\"${TRUSTED_EXTERNAL_NETWORK}\""
+[ -n "${IPV6_PREFIX:-}" ] && echo "IPV6_PREFIX=\"${IPV6_PREFIX}\""
   ) >gns3setup.conf
 fi
 
