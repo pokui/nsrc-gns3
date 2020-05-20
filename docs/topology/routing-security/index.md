@@ -95,6 +95,7 @@ File | Description
 `riso-rs<N>-hdb-<version>.img` | cloud-init configs for Route Servers (RS)
 `riso-srv<N>-hdb-<version>.img` | cloud-init configs for SRV in each group
 `nsrc-rs-<version>.qcow2` | VM image with bird preinstalled, for RS and SRV instances
+`CSRv_boot_config.iso` | Initial configuration for CSR1000v
 `vios-adventerprisek9-m.vmdk.SPA.157-3.M3` | IOSv image
 `vios_l2-adventerprisek9-m.SSA.high_iron_20180619.qcow2` | IOSvL2 image
 `csr1000v-universalk9.16.6.1.qcow2` | CSR1000v image
