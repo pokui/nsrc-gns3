@@ -182,9 +182,28 @@ right-clicking in the GNS3 GUI and reloading them:
 
 ![Reloading single router](reload.png)
 
+Alternatively, a faster way is to say "no" to the configuration dialog, get
+to the router prompt and do `copy flash:config running`, as follows:
+
+```
+         --- System Configuration Dialog ---
+
+Would you like to enter the initial configuration dialog? [yes/no]: no
+
+Would you like to terminate autoinstall? [yes]:
+
+<lots of stuff>
+
+Router>en
+Router#copy flash:config.txt running-config
+Destination filename [running-config]?
+% Warning: use /31 mask on non point-to-point interface cautiously
+... etc
+```
+
 If you are restoring the entire class to a later stage, a quick way to check
 them is to login just to the core routers (CX).  If any shows the initial
-configuration dialog, then reload it.  Once you are able to login, check all
+configuration dialog, then fix it.  Once you are able to login, check all
 the expected IS-IS neighbors are present:
 
 ```
@@ -208,4 +227,4 @@ C2>
 ```
 
 In the above example, B2 is missing, so it would also be necessary to
-right-click on B2 and reload it.
+fix B2.
