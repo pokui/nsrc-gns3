@@ -43,9 +43,10 @@ The second server should be built identically to the first, except:
 * Change the classroom IPv4 address from 192.168.122.1 to 192.168.122.8
 * Change the classroom IPv6 address from fe80::1 to fe80::8
 * Disable DHCP on the classroom network
+* Edit gns3-shellinabox.py and change TARGET to 192.168.122.8
 
-These can all be changed using `virsh net-edit default` followed by a
-reboot:
+The first three can all be changed using `virsh net-edit default` followed
+by a reboot:
 
 ```
 <!-- before -->
