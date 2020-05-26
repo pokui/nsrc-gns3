@@ -64,6 +64,10 @@ instructions.
     don't have to re-enter them when re-running the script.  Delete this
     file if you want to make a different selection.
 
+!!! Note
+    For a cloud installation, where you have only a WAN interface, you
+    should select "none" for the LAN interface.
+
 ## ubridge
 
 You may be asked whether ubridge should be usable by non-root users.  Say Yes.

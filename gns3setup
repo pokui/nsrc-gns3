@@ -174,22 +174,22 @@ conf_network () {
     readarray -t INTERFACES < <(find /sys/class/net -type l -not -lname '*virtual*' -printf '%f\n' | sort)
     # Rough and ready: eno comes before enx, and enx before wlp
     # So assume first one is LAN, second is WAN, third is WIFI
+    if [ -z "${INTERFACES[1]:-}" ]; then
+      # Single interface: no LAN, only WAN
+      INTERFACES[1]="${INTERFACES[0]:-none}"
+      INTERFACES[0]="none"
+    fi
     echo "The following network interfaces were found:"
     echo ${INTERFACES[@]}
     echo
-    echo "Please select, or hit enter to accept default."
+    echo "Please select, or hit enter to accept default (enter 'none' for no connection)"
     read -p "LAN interface [${INTERFACES[0]}]: " LAN_INTERFACE
     [ -z "$LAN_INTERFACE" ] && LAN_INTERFACE="${INTERFACES[0]}"
-    if [ -z "$LAN_INTERFACE" ]; then
-      echo "LAN_INTERFACE is required!"
-      exit 1
-    fi
     read -p "WAN interface [${INTERFACES[1]}]: " WAN_INTERFACE
     [ -z "$WAN_INTERFACE" ] && WAN_INTERFACE="${INTERFACES[1]}"
-    [ -z "$WAN_INTERFACE" ] && WAN_INTERFACE="FIXME"
   fi
 
-  # Libvirt networking
+  # Libvirt networking (virbr0)
   (
 cat <<EOS
 <!--
@@ -238,24 +238,25 @@ cat <<EOS
 EOS
   ) | REPLACE /etc/libvirt/qemu/networks/default.xml sudo || IF_CHANGED NETWORK_CHANGED="Y"
 
-  # Remove any existing netplan config
-  if [ "${DRY_RUN:-N}" != "Y" ]; then
-    for f in /etc/netplan/*.yaml /etc/netplan/*.yml; do
-      [ -f "$f" ] && ! grep "# gns3setup" "$f" >/dev/null && sudo mv "$f" "${f}.disabled"
-    done
-  fi
+  # WAN interface via netplan.  "none" means leave as-is.
+  if [ "${WAN_INTERFACE}" != "none" ]; then
+    # Remove any existing netplan config
+    if [ "${DRY_RUN:-N}" != "Y" ]; then
+      for f in /etc/netplan/*.yaml /etc/netplan/*.yml; do
+        [ -f "$f" ] && ! grep "# gns3setup" "$f" >/dev/null && sudo mv "$f" "${f}.disabled"
+      done
+    fi
 
-  if [ -d "/etc/cloud/cloud.cfg.d" -a ! -f "/etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg" ]; then
-    (
+    if [ -d "/etc/cloud/cloud.cfg.d" -a ! -f "/etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg" ]; then
+      (
 cat <<EOS
 # gns3setup
 network: {config: disabled}
 EOS
-    ) | REPLACE /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg sudo || IF_CHANGED
-  fi
+      ) | REPLACE /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg sudo || IF_CHANGED
+    fi
 
-  # WAN
-  (
+    (
 cat <<EOS
 # gns3setup
 network:
@@ -272,18 +273,23 @@ network:
       #  search: [ws.nsrc.org]
       #  addresses: [8.8.8.8, 8.8.4.4]
 EOS
-  ) | REPLACE /etc/netplan/10-wan.yaml sudo || IF_CHANGED NETWORK_CHANGED="Y"
+    ) | REPLACE /etc/netplan/10-wan.yaml sudo || IF_CHANGED NETWORK_CHANGED="Y"
+  fi
 
-  # LAN via libvirt
+  # LAN interface via libvirt
   (
 # Beware: Use \$ to get a literal $ in the output
 cat <<EOS
 #!/bin/bash
 if [ "\$1" = "default" -a "\$2" = "started" ]; then
+EOS
+[ "${LAN_INTERFACE}" != "none" ] && cat <<EOS
   /sbin/ip link set $LAN_INTERFACE up
   # https://serverfault.com/questions/616485/e1000e-reset-adapter-unexpectedly-detected-hardware-unit-hang
   /sbin/ethtool -K $LAN_INTERFACE gso off gro off tso off
   /sbin/brctl addif virbr0 $LAN_INTERFACE
+EOS
+cat <<EOS
   sysctl net.ipv4.conf.virbr0.accept_redirects=0
   sysctl net.ipv4.conf.virbr0.send_redirects=0
   iptables -I FORWARD -j ACCEPT -s 100.64.0.0/10 -i virbr0
