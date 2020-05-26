@@ -87,6 +87,16 @@ HashKnownHosts no
 This is helpful when reinitializing the lab, as it makes it easier to find
 and delete entries from `known_hosts` selectively.
 
+# Disable sudo DNS lookups (optional)
+
+`sudo` can give long timeouts when for some reason DNS is not available.
+To disable them, create a file `/etc/sudoers.d/nofqdn` with the
+following contents:
+
+```
+Defaults !fqdn
+```
+
 # Time sync
 
 Check time sync status with:

@@ -123,6 +123,19 @@ EOS
 }
 
 #
+# Configure sudo (don't do DNS lookups)
+#
+MODS="$MODS sudo"
+conf_sudo () {
+  (
+cat <<EOS
+# Prevent sudo doing DNS queries, so it doesn't timeout when DNS is down
+Defaults !fqdn
+EOS
+  ) | REPLACE /etc/sudoers.d/nofqdn || IF_CHANGED
+}
+
+#
 # Configure time (ensure ntp sync)
 #
 MODS="$MODS time"
