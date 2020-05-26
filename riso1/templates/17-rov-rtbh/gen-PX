@@ -3,13 +3,11 @@
 cat <<EOS
 router bgp ${AS}
  address-family ipv4
-  neighbor ${PEER_REMOTE_V4} maximum-prefix 25
-  neighbor ${IXP_V4IXP}.254 maximum-prefix 40
+  neighbor ${PEER_REMOTE_V4} maximum-prefix 10
  exit-address-family
  !
  address-family ipv6
-  neighbor ${PEER_REMOTE_V6} maximum-prefix 25
-  neighbor ${IXP_V6BLOCK}:1::FE maximum-prefix 40
+  neighbor ${PEER_REMOTE_V6} maximum-prefix 10
  exit-address-family
 !
 ip prefix-list RTBH-filter permit 61.45.248.0/21 ge 32

@@ -8,12 +8,12 @@ router bgp ${AS}
  !
  address-family ipv4
   neighbor ${ISP_REMOTE_V4} remove-private-as
-  neighbor ${ISP_REMOTE_V4} maximum-prefix 25
+  neighbor ${ISP_REMOTE_V4} maximum-prefix 30
  exit-address-family
  !
  address-family ipv6
   neighbor ${ISP_REMOTE_V6} remove-private-as
-  neighbor ${ISP_REMOTE_V6} maximum-prefix 25
+  neighbor ${ISP_REMOTE_V6} maximum-prefix 30
  exit-address-family
 !
 EOS
