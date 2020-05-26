@@ -17,14 +17,7 @@ for config in os.listdir("templates"):
     templates = glob.glob("templates/%s/gen-*X" % config)
     if not templates:
         continue
-    templates += glob.glob("templates/common*")
-    templates += ["project.gns3", "README.txt", "../scripts/gen-snapshot.py"]
-    newest_template_ts = max((os.stat(t).st_mtime for t in templates))
     snaps = glob.glob("snapshots/%s_*.gns3project" % config)
-    older = [1 for f in snaps if os.stat(f).st_mtime < newest_template_ts]
-    # If there is an existing snapshot, and it's not older than the template, then keep it
-    if snaps and not older:
-        continue
     # Delete old snapshots
     for snap in snaps:
         os.unlink(snap)
