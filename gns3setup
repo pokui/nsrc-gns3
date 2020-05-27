@@ -33,7 +33,7 @@ REPLACE () {
   src="${1}.new"
   dst="${1}"
   sudo="${2:-}"
-  $sudo tee "${src}" >/dev/null
+  $sudo tee "${src}" >/dev/null || return $?
   if $sudo cmp -s "$dst" "$src" 2>/dev/null; then
     $sudo rm "$src"
   elif [ "${DRY_RUN:-N}" = "Y" ]; then
@@ -42,7 +42,7 @@ REPLACE () {
   else
     $sudo test -f "$dst" && $sudo ln "$dst" "${dst}.bak" || true
     echo "REPLACING: $dst"
-    $sudo mv "$src" "$dst"
+    $sudo mv "$src" "$dst" || return $?
     return 126
   fi
 }
