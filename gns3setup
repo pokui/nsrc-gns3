@@ -525,4 +525,7 @@ EOS
 * Please set a GNS3 password in                        *
 * ~/.config/GNS3/2.2/gns3_server.conf                  *
 ********************************************************
+
+And don't forget to install an /etc/hosts file
+
 EOS
