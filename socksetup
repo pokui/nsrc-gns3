@@ -87,7 +87,7 @@ internal: ${WAN_INTERFACE} port = 11080
 external: 192.168.122.1
 
 # methods for socks-rules.
-method: username
+socksmethod: username
 
 # methods for client-rules.
 clientmethod: none
@@ -107,57 +107,63 @@ client pass {
         from: 0.0.0.0/0 port 1-65535 to: 0.0.0.0/0
 }
 
-# The rules that do not have a "client" prefix are checked later, when the
-# client has sent its request and are used to evaluate the actual
-# request.
-#
-# The "to:" in the non-"client" context gives the destination of the clients
-# socksrequest.
-#
-# "from:" is the source address in both contexts.
-
 # you probably don't want people connecting to loopback addresses,
 # who knows what could happen then.
-block {
+socks block {
         from: 0.0.0.0/0 to: 127.0.0.0/8
         log: connect error
 }
 
 # unless you need it, you could block any bind requests.
-block {
+socks block {
         from: 0.0.0.0/0 to: 0.0.0.0/0
         command: bind
         log: connect error
 }
 
 # Workshop: allow everything inbound to VMs
-pass {
+socks pass {
+        from: 0.0.0.0/0 to: .ws.nsrc.org
+        protocol: tcp udp
+        socksmethod: username
+        user: proxy
+}
+socks pass {
         from: 0.0.0.0/0 to: 192.168.122.0/24
         protocol: tcp udp
-        method: username
+        socksmethod: username
         user: proxy
 }
-pass {
+socks pass {
         from: 0.0.0.0/0 to: 100.64.0.0/10
         protocol: tcp udp
-        method: username
+        socksmethod: username
         user: proxy
 }
-pass {
+socks pass {
         from: 0.0.0.0/0 to: 2001:db8::/32
         protocol: tcp udp
-        method: username
+        socksmethod: username
         user: proxy
 }
 
 # last line, block everyone else.  This is the default but if you provide
 # one yourself you can specify your own logging/actions
-block {
+socks block {
         from: 0.0.0.0/0 to: 0.0.0.0/0
         log: connect error
 }
 EOS
 ) | REPLACE /etc/danted.conf sudo || IF_CHANGED sudo systemctl restart danted
+
+sudo mkdir -p /etc/systemd/system/danted.service.d
+(
+cat <<EOS
+[Service]
+Restart=on-failure
+RestartSec=5
+EOS
+) | REPLACE /etc/systemd/system/danted.service.d/override.conf sudo || IF_CHANGED
 
 # Ensure that 'proxy' user exists
 id proxy || sudo useradd -r -d /bin -s /usr/sbin/nologin proxy
