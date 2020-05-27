@@ -1,0 +1,217 @@
+#!/bin/bash
+
+#
+# This script configures inbound SOCKS5 proxy
+#
+
+set -eu
+set -o pipefail
+
+if [ "$(id -u)" = "0" ]; then
+  # To allow this to be integrated into gns3setup later if required
+  echo "This script must be run as a regular user, not as root"
+  exit 1
+fi
+
+#
+# Helper script to install a new file only if it has changed
+# Exit code 126 if result was OK but change was made
+#
+REPLACE () {
+  src="${1}.new"
+  dst="${1}"
+  sudo="${2:-}"
+  $sudo tee "${src}" >/dev/null || return $?
+  if $sudo cmp -s "$dst" "$src" 2>/dev/null; then
+    $sudo rm "$src"
+  elif [ "${DRY_RUN:-N}" = "Y" ]; then
+    $sudo test -f "$dst" && $sudo diff -u "$dst" "$src"
+    $sudo rm "$src"
+  else
+    $sudo test -f "$dst" && $sudo ln "$dst" "${dst}.bak" || true
+    echo "REPLACING: $dst"
+    $sudo mv "$src" "$dst" || return $?
+    return 126
+  fi
+}
+
+IF_CHANGED () {
+  rc="$?"
+  if [ "$rc" -eq 0 ]; then
+    return
+  elif [ "$rc" -eq 126 ]; then
+    echo "$@"
+    eval "$@"
+  else
+    echo "Command terminated with exit code $rc"
+    exit "$rc"
+  fi
+}
+
+CHMOD () {
+  [ "${DRY_RUN:-N}" = "Y" ] && return
+  chmod "$@"
+}
+
+SUDO_CHMOD () {
+  [ "${DRY_RUN:-N}" = "Y" ] && return
+  sudo chmod "$@"
+}
+
+#
+# Identify the WAN_INTERFACE by looking at default route
+#
+
+if [ -z "${WAN_INTERFACE:-}" ]; then
+  WAN_INTERFACE="$(expr "$(ip route get 1.2.3.4)" : ".* dev \([a-z0-9]*\) ")"
+fi
+
+#
+# Install and configure SOCKS5 server
+#
+
+sudo apt-get update
+sudo apt-get install dante-server
+sudo systemctl enable danted
+
+(
+cat <<EOS
+logoutput: stderr
+
+# Accept connections from the outside interface. Use a non-default
+# port to be slightly less susceptible to port scanning
+internal: ${WAN_INTERFACE} port = 11080
+
+# "Outgoing" connections use the inside interface
+# NOTE: Doesn't accept ifnames with dash (e.g. "br-bbone") or IPv6 literals
+external: 192.168.122.1
+
+# methods for socks-rules.
+method: username
+
+# methods for client-rules.
+clientmethod: none
+
+user.privileged: root
+user.notprivileged: proxy
+user.libwrap: proxy
+
+# The rules prefixed with "client" are checked first and say who is allowed
+# and who is not allowed to speak/connect to the server
+#
+# The "to:" in the "client" context gives the address the connection
+# is accepted on, i.e the address the socksserver is listening on, or
+# just "0.0.0.0/0" for any address the server is listening on.
+
+client pass {
+        from: 0.0.0.0/0 port 1-65535 to: 0.0.0.0/0
+}
+
+# The rules that do not have a "client" prefix are checked later, when the
+# client has sent its request and are used to evaluate the actual
+# request.
+#
+# The "to:" in the non-"client" context gives the destination of the clients
+# socksrequest.
+#
+# "from:" is the source address in both contexts.
+
+# you probably don't want people connecting to loopback addresses,
+# who knows what could happen then.
+block {
+        from: 0.0.0.0/0 to: 127.0.0.0/8
+        log: connect error
+}
+
+# unless you need it, you could block any bind requests.
+block {
+        from: 0.0.0.0/0 to: 0.0.0.0/0
+        command: bind
+        log: connect error
+}
+
+# Workshop: allow everything inbound to VMs
+pass {
+        from: 0.0.0.0/0 to: 192.168.122.0/24
+        protocol: tcp udp
+        method: username
+        user: proxy
+}
+pass {
+        from: 0.0.0.0/0 to: 100.64.0.0/10
+        protocol: tcp udp
+        method: username
+        user: proxy
+}
+pass {
+        from: 0.0.0.0/0 to: 2001:db8::/32
+        protocol: tcp udp
+        method: username
+        user: proxy
+}
+
+# last line, block everyone else.  This is the default but if you provide
+# one yourself you can specify your own logging/actions
+block {
+        from: 0.0.0.0/0 to: 0.0.0.0/0
+        log: connect error
+}
+EOS
+) | REPLACE /etc/danted.conf sudo || IF_CHANGED sudo systemctl restart danted
+
+# Ensure that 'proxy' user exists
+id proxy || sudo useradd -r -d /bin -s /usr/sbin/nologin proxy
+
+#
+# Create an Apache virtualhost on port 81 that serves the PAC file
+#
+
+sudo mkdir -p /var/www/pac
+
+(
+cat <<EOS
+Listen 81
+<VirtualHost *:81>
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/pac
+    ErrorLog \${APACHE_LOG_DIR}/error.log
+    CustomLog \${APACHE_LOG_DIR}/access.log combined
+
+    <Directory /var/www/pac>
+        AllowOverride All
+        Options +Includes
+        XBitHack on
+        AddOutputFilter INCLUDES .pac
+    </Directory>
+</VirtualHost>
+EOS
+) | REPLACE /etc/apache2/sites-available/pac.conf sudo || IF_CHANGED
+
+(
+cat <<EOS
+function FindProxyForURL(url, host)
+{
+  if (dnsDomainIs( host, ".ws.nsrc.org" )) {
+    return "SOCKS5 <!--#echo var="SERVER_NAME" -->:11080";
+  } else {
+    return "DIRECT";
+  }
+}
+EOS
+) | REPLACE /var/www/pac/proxy.pac sudo || IF_CHANGED
+SUDO_CHMOD +x /var/www/pac/proxy.pac
+
+# Note: extension "pac" is already bound to application/x-ns-proxy-autoconfig
+# in the default /etc/mime.types
+
+sudo a2enmod include
+sudo a2ensite pac
+sudo apache2ctl graceful
+
+cat <<EOS
+
+******************************************************
+Run "sudo passwd proxy" to set the proxy user password
+******************************************************
+
+EOS
