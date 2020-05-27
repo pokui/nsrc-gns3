@@ -132,7 +132,7 @@ cat <<EOS
 # Prevent sudo doing DNS queries, so it doesn't timeout when DNS is down
 Defaults !fqdn
 EOS
-  ) | REPLACE /etc/sudoers.d/nofqdn || IF_CHANGED
+  ) | REPLACE /etc/sudoers.d/nofqdn sudo || IF_CHANGED
 }
 
 #
