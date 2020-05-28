@@ -507,6 +507,7 @@ EOS
 [ "${IP_OFFSET}" != "1" ] && echo "IP_OFFSET=\"${IP_OFFSET}\""
 [ -n "${TRUSTED_EXTERNAL_NETWORK:-}" ] && echo "TRUSTED_EXTERNAL_NETWORK=\"${TRUSTED_EXTERNAL_NETWORK}\""
 [ -n "${IPV6_PREFIX:-}" ] && echo "IPV6_PREFIX=\"${IPV6_PREFIX}\""
+true
   ) >gns3setup.conf
 fi
 
