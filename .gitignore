@@ -3,3 +3,4 @@ nocloud
 snapshots
 hosts-*
 *.iso
+gns3setup.conf
