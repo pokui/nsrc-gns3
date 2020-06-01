@@ -115,7 +115,7 @@ EOS
 
 (
 cat <<EOS
-${EXTERNAL_DOMAIN} www.${EXTERNAL_DOMAIN} console.${EXTERNAL_DOMAIN} netdata.${EXTERNAL_DOMAIN} noc.${EXTERNAL_DOMAIN} >vtp_cloud
+${EXTERNAL_DOMAIN} www.${EXTERNAL_DOMAIN} console.${EXTERNAL_DOMAIN} netdata.${EXTERNAL_DOMAIN} noc.${EXTERNAL_DOMAIN} librenms.${EXTERNAL_DOMAIN} >vtp_cloud
 EOS
 ) | REPLACE /etc/dehydrated/domains.txt sudo || IF_CHANGED
 
@@ -147,9 +147,8 @@ SUDO_CHMOD +x /etc/dehydrated/deploy_cert.sh
 if ! sudo test -d "/etc/dehydrated/accounts"; then
   sudo /etc/dehydrated/dehydrated --register --accept-terms
 fi
-if ! sudo test -e "/etc/dehydrated/certs/vtp_cloud/fullchain.pem"; then
-  sudo /etc/dehydrated/dehydrated -c
-fi
+# This will skip if the cert is still sufficiently valid
+sudo /etc/dehydrated/dehydrated -c
 
 sudo apt-get install -y cronic
 
@@ -323,6 +322,7 @@ cat <<'EOS'
 
 	# Proxy authentication: serve locally
 	RewriteRule "^/nsrc-auth/.*" - [L]
+	RewriteRule "^/.well-known/.*" - [L]
 
 	# Pages that we serve locally: redirect to https
 	RewriteCond "%{ENV:SUFFIX}" "."
@@ -363,6 +363,7 @@ cat <<'EOS'
 
 	# Proxy authentication: serve locally
 	RewriteRule "^/nsrc-auth/.*" - [L]
+	RewriteRule "^/.well-known/.*" - [L]
 
 	# Local pages
 	RewriteCond "%{ENV:SUFFIX}" "."
