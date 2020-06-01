@@ -1,0 +1,447 @@
+#!/bin/bash
+
+#
+# This script configures external access via
+# inbound HTTP/HTTPS proxy. Run this after gns3setup
+#
+
+set -eu
+set -o pipefail
+
+if [ "$(id -u)" = "0" ]; then
+  echo "This script must be run as a regular user, not as root"
+  exit 1
+fi
+
+if [ -r gns3setup.conf ]; then
+  source gns3setup.conf
+fi
+
+MODS=""
+
+#
+# Helper script to install a new file only if it has changed
+# Exit code 126 if result was OK but change was made
+#
+REPLACE () {
+  src="${1}.new"
+  dst="${1}"
+  sudo="${2:-}"
+  $sudo tee "${src}" >/dev/null || return $?
+  if $sudo cmp -s "$dst" "$src" 2>/dev/null; then
+    $sudo rm "$src"
+  elif [ "${DRY_RUN:-N}" = "Y" ]; then
+    $sudo test -f "$dst" && $sudo diff -u "$dst" "$src"
+    $sudo rm "$src"
+  else
+    $sudo test -f "$dst" && $sudo ln "$dst" "${dst}.bak" || true
+    echo "REPLACING: $dst"
+    $sudo mv "$src" "$dst" || return $?
+    return 126
+  fi
+}
+
+IF_CHANGED () {
+  rc="$?"
+  if [ "$rc" -eq 0 ]; then
+    return
+  elif [ "$rc" -eq 126 ]; then
+    echo "$@"
+    eval "$@"
+  else
+    echo "Command terminated with exit code $rc"
+    exit "$rc"
+  fi
+}
+
+CHMOD () {
+  [ "${DRY_RUN:-N}" = "Y" ] && return
+  chmod "$@"
+}
+
+SUDO_CHMOD () {
+  [ "${DRY_RUN:-N}" = "Y" ] && return
+  sudo chmod "$@"
+}
+
+if [ -z "${EXTERNAL_DOMAIN:-}" ]; then
+  cat <<EOS
+You will need a domain with wildcard A record for the lab.
+
+The chosen domain will normally have three parts, e.g. "mylab.example.com"
+
+This domain must resolve to the current server's external IP address
+and inbound port 80 must be permitted so that ACME cert can be issued.
+
+EOS
+  echo -n "Enter domain: "
+  read EXTERNAL_DOMAIN
+  [ -z "${EXTERNAL_DOMAIN:-}" ] && exit 1
+fi
+
+#
+# Install and configure Dehydrated
+# NOTE: at this point Apache must already be running so
+# that certs can be issued
+#
+mods="$MODS dehydrated"
+conf_dehydrated() {
+sudo mkdir -p /etc/dehydrated
+sudo mkdir -p /var/www/html/.well-known/acme-challenge
+sudo touch /var/www/html/.well-known/acme-challenge/test123
+
+if ! curl -Ss localhost/.well-known/acme-challenge/test123; then
+  sudo a2dissite 100-vtp-cloud || true
+  sudo a2disconf 100-vtp-access || true
+  sudo a2ensite 000-default
+  sudo systemctl restart apache2
+  sleep 1
+  if ! curl -Ss localhost/.well-known/acme-challenge/test123; then
+    echo "ERROR: apache2 must be running first so that ACME cert can be issued!"
+    exit 1
+  fi
+fi
+
+curl -Ss https://raw.githubusercontent.com/lukas2511/dehydrated/master/dehydrated |
+  REPLACE /etc/dehydrated/dehydrated sudo || IF_CHANGED
+SUDO_CHMOD +x /etc/dehydrated/dehydrated
+
+(
+cat <<EOS
+WELLKNOWN="/var/www/html/.well-known/acme-challenge"
+HOOK=/etc/dehydrated/hook.sh
+EOS
+) | REPLACE /etc/dehydrated/config sudo || IF_CHANGED
+
+(
+cat <<EOS
+${EXTERNAL_DOMAIN} www.${EXTERNAL_DOMAIN} console.${EXTERNAL_DOMAIN} netdata.${EXTERNAL_DOMAIN} noc.${EXTERNAL_DOMAIN} >vtp_cloud
+EOS
+) | REPLACE /etc/dehydrated/domains.txt sudo || IF_CHANGED
+
+(
+cat <<'EOS'
+#!/bin/bash
+
+set -eu
+set -o pipefail
+
+case "$1" in
+    "deploy_cert")
+        /etc/dehydrated/deploy_cert.sh "$@"
+        ;;
+esac
+exit 0
+EOS
+) | REPLACE /etc/dehydrated/hook.sh sudo || IF_CHANGED
+SUDO_CHMOD +x /etc/dehydrated/hook.sh
+
+(
+cat <<EOS
+#!/bin/bash -e
+/usr/sbin/apache2ctl graceful
+EOS
+) | REPLACE /etc/dehydrated/deploy_cert.sh sudo || IF_CHANGED
+SUDO_CHMOD +x /etc/dehydrated/deploy_cert.sh
+
+if ! sudo test -d "/etc/dehydrated/accounts"; then
+  sudo /etc/dehydrated/dehydrated --register --accept-terms
+fi
+if ! sudo test -e "/etc/dehydrated/certs/vtp_cloud/fullchain.pem"; then
+  sudo /etc/dehydrated/dehydrated -c
+fi
+
+sudo apt-get install -y cronic
+
+(
+cat <<EOS
+17 23 * * * root cronic /etc/dehydrated/dehydrated -c
+EOS
+) | REPLACE /etc/cron.d/dehydrated sudo || IF_CHANGED
+}
+
+#
+# Configure Apache proxy
+#
+MODS="$MODS apache2"
+conf_apache2 () {
+sudo a2enmod session session_cookie session_crypto auth_form \
+  headers proxy proxy_html proxy_http request rewrite ssl
+
+EXTERNAL_DOMAIN_RE="$(echo "$EXTERNAL_DOMAIN" | sed -e 's/\./\\./g')"
+
+(
+cat <<'EOS'
+######### AUTHENTICATION ########
+
+# Global configuration with mod_auth_form and mod_session to require
+# all external users to login before they can access content
+
+Session On
+SessionCookieRemove On
+EOS
+grep -m1 "^SessionCryptoPassphrase" /etc/apache2/conf-available/100-vtp-access.conf 2>/dev/null ||
+  echo "SessionCryptoPassphrase $(dd if=/dev/urandom bs=1 count=33 2>/dev/null| base64)"
+
+cat <<EOS
+
+# Option 1: have a single cookie for all sites.
+# This is preferred, but you have to write in the domain here.
+SessionCookieName nsrc_session path=/;domain=.${EXTERNAL_DOMAIN};httponly
+
+# Option 2: separate login for every subdomain
+#SessionCookieName nsrc_session path=/;httponly
+
+EOS
+# Avoid $ expansions
+cat <<'EOS'
+<Location "/">
+	# https://httpd.apache.org/docs/2.4/mod/mod_auth_form.html
+	AuthFormProvider file
+	AuthUserFile "/etc/apache2/nsrc_passwd"
+	AuthType form
+	AuthName "Workshop-lab"
+
+	#Option 1: redirect to the top and use HTTPS
+	AuthFormLoginRequiredLocation "https://%{reqenv:SUFFIX}/nsrc-auth/login.html"
+	#Option 2:
+	#AuthFormLoginRequiredLocation "/nsrc-auth/login.html"
+
+	# Do not require authentication for local classroom users
+	<RequireAny>
+		Require ip 192.168.122.0/24 100.64.0.0/10 2001:db8::/32 127.0.0.1 ::1
+		Require valid-user
+	</RequireAny>
+</Location>
+
+# No authentication for the login pages
+<Location "/nsrc-auth">
+	Require all granted
+</Location>
+
+<Location "/.well-known">
+	Require all granted
+</Location>
+
+<Location "/nsrc-auth/login">
+	SetHandler form-login-handler
+	AuthName "Workshop-lab"
+	AuthFormLoginSuccessLocation "/nsrc-auth/login-success.html"
+</Location>
+
+<Location "/nsrc-auth/logout">
+	SetHandler form-logout-handler
+	AuthName "Workshop-lab"
+	AuthFormLogoutLocation "/nsrc-auth/logout-success.html"
+	SessionMaxAge 1
+</Location>
+
+######## PROXYING ########
+
+# Proxying breaks with net::ERR_CONTENT_DECODING_FAILED unless
+# we provide this setting (e.g. try console.XXX.XXX.XXX)
+RequestHeader unset Accept-Encoding
+
+# Prefer connecting over IPv4 (especially for noc.ws.nsrc.org)
+ProxySourceAddress 192.168.122.1
+
+# Allow for slow-running virtual machines
+ProxyTimeout 60
+
+# Include the original Host: header (e.g. noc.mylab.example.com)
+# instead of the proxied destination (e.g. noc.ws.nsrc.org).  This
+# makes it more likely that any embedded links won't need rewriting.
+ProxyPreserveHost On
+
+# librenms is confused by X-Forwarded-Host, but I want to keep X-Forwarded-For
+ProxyAddHeaders Off
+RequestHeader set X-Forwarded-For "expr=%{REMOTE_ADDR}"
+
+# In case we ever want to proxy to internal SSL sites
+SSLProxyEngine On
+SSLProxyVerify none
+
+# Rewrite absolute links which point to *.ws.nsrc.org when proxying
+ProxyHTMLEnable On
+ProxyHTMLInterp On
+# OPTIONAL: if you have wildcard certs, and want https for all http port 80 links,
+# uncomment the next line
+#ProxyHTMLURLMap "^http://([^/]+)\.ws\.nsrc\.org(/.*|))$" "https://$1.${SUFFIX}$2" RixVL "-n reqenv('SUFFIX')"
+ProxyHTMLURLMap "^http://([^/]+)\.ws\.nsrc\.org(.*)$" "http://$1.${SUFFIX}$2" RixVL "-n reqenv('SUFFIX')"
+ProxyHTMLURLMap "^https://([^/]+)\.ws\.nsrc\.org(.*)$" "https://$1.${SUFFIX}$2" RixVL "-n reqenv('SUFFIX')"
+EOS
+) | REPLACE /etc/apache2/conf-available/100-vtp-access.conf sudo || IF_CHANGED
+sudo a2enconf 100-vtp-access
+
+sudo mkdir -p /var/www/html/nsrc-auth
+
+REPLACE /var/www/html/nsrc-auth/login-success.html sudo <<EOS || IF_CHANGED
+You have successfully logged in.  Please try the original URL again.
+EOS
+
+REPLACE /var/www/html/nsrc-auth/login.html sudo <<EOS || IF_CHANGED
+<p><b>LOGIN TO ACCESS THE WORKSHOP LAB</b></p>
+<form method="POST" action="/nsrc-auth/login">
+  Username: <input type="text" name="httpd_username" value="" />
+  Password: <input type="password" name="httpd_password" value="" />
+  <input type="submit" name="login" value="Login" />
+</form>
+EOS
+
+REPLACE /var/www/html/nsrc-auth/logout-success.html sudo <<EOS || IF_CHANGED
+You have successfully logged out.
+EOS
+
+(
+echo "ServerName ${EXTERNAL_DOMAIN}"
+cat <<'EOS'
+
+# Additional ports that we will forward (plain HTTP)
+
+Listen 3000
+Listen 9090
+Listen 9093
+
+# Default HTTP handler
+
+<VirtualHost *:80 _default_:*>
+	DocumentRoot /var/www/html
+
+	RewriteEngine On
+
+	# Access by IP address: serve locally
+	RewriteCond "%{HTTP_HOST}" "^\d+\.\d+\.\d+\.\d+(:\d+)?$"
+	RewriteRule . - [L]
+
+	# Split into (srv1.campus1).(mylab.example.com)
+EOS
+cat <<EOS
+	RewriteCond "%{HTTP_HOST}" "^([^:]+\.)?(${EXTERNAL_DOMAIN_RE})(:\d+)?\$"
+EOS
+cat <<'EOS'
+	RewriteRule . - [E=PREFIX:%1,E=SUFFIX:%2,E=PORT:%3]
+
+	# Proxy authentication: serve locally
+	RewriteRule "^/nsrc-auth/.*" - [L]
+
+	# Pages that we serve locally: redirect to https
+	RewriteCond "%{ENV:SUFFIX}" "."
+	RewriteCond "%{ENV:PREFIX}" "^((www|netdata|console)\.|)$" [NC]
+	RewriteCond "%{HTTP_HOST}" "^[^:]+$"
+	RewriteRule "(.*)" "https://%{HTTP_HOST}$1" [L,R]
+
+	# Default: proxy to internal destination *.ws.nsrc.org
+	RewriteCond "%{ENV:PREFIX}%{ENV:PORT}" "^([^:]+)(:\d+)?$"
+	RewriteRule "(.*)" "http://%1ws.nsrc.org%2$1" [L,P]
+</VirtualHost>
+
+# Additional ports that we will forward (HTTPS)
+
+Listen 8443
+
+# Default HTTPS handler
+
+<VirtualHost *:443 *:8443>
+	DocumentRoot /var/www/html
+
+	SSLEngine on
+	SSLCertificateFile      /etc/dehydrated/certs/vtp_cloud/fullchain.pem
+	SSLCertificateKeyFile   /etc/dehydrated/certs/vtp_cloud/privkey.pem
+
+	# Suggest to applications that they should use https:// in links
+	RequestHeader set X-Forwarded-Proto "https"
+
+	RewriteEngine On
+
+	# Split into (srv1.campus1).(mylab.example.com)
+EOS
+cat <<EOS
+	RewriteCond "%{HTTP_HOST}" "^([^:]+\.)?(${EXTERNAL_DOMAIN_RE})(:\d+)?\$" [NC]
+EOS
+cat <<'EOS'
+	RewriteRule . - [E=PREFIX:%1,E=SUFFIX:%2,E=PORT:%3]
+
+	# Proxy authentication: serve locally
+	RewriteRule "^/nsrc-auth/.*" - [L]
+
+	# Local pages
+	RewriteCond "%{ENV:SUFFIX}" "."
+	RewriteCond "%{ENV:PREFIX}" "^((www|)\.|)$" [NC]
+	RewriteRule . - [L]
+	#FIXME: instead proxy to local server to get links rewritten
+	#RewriteRule "(.*)" "http:/127.0.0.1$1" [L,P]
+
+	# Sites that we proxy locally
+	RewriteCond "%{ENV:PREFIX}" "^netdata\.$" [NC]
+	RewriteRule "(.*)" "http://192.168.122.1:19999$1" [L,P]
+	RewriteCond "%{ENV:PREFIX}" "^console\.$" [NC]
+	RewriteRule "(.*)" "http://192.168.122.1:4200$1" [L,P]
+
+	# Default: proxy to (HTTP) internal destination *.ws.nsrc.org
+	RewriteCond "%{ENV:PREFIX}%{ENV:PORT}" "^([^:]+)(:\d+)?$"
+	RewriteRule "(.*)" "http://%1ws.nsrc.org%2$1" [L,P]
+</VirtualHost>
+
+# Handle *.ws.nsrc.org
+#
+# Any request which hits us with this must be a local request
+# for local content on this server (i.e. what the 000-default
+# site would have returned originally)
+
+<VirtualHost *:80>
+	ServerName www.ws.nsrc.org
+	ServerAlias *.ws.nsrc.org
+	ServerAlias 192.168.122.*
+	DocumentRoot /var/www/html
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+
+<VirtualHost *:443>
+	ServerName www.ws.nsrc.org
+	ServerAlias *.ws.nsrc.org
+	ServerAlias 192.168.122.*
+	DocumentRoot /var/www/html
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+	SSLEngine on
+	# ws.nsrc.org is not resolvable on Internet, may as well use self-signed cert
+	SSLCertificateFile      /etc/ssl/certs/ssl-cert-snakeoil.pem
+	SSLCertificateKeyFile   /etc/ssl/private/ssl-cert-snakeoil.key
+</VirtualHost>
+
+# Handle all accesses to 127.0.0.1 as served locally
+
+<VirtualHost 127.0.0.1:80 [::1]:80>
+	ServerName www.ws.nsrc.org
+	DocumentRoot /var/www/html
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+EOS
+) | REPLACE /etc/apache2/sites-available/100-vtp-sites.conf sudo || IF_CHANGED
+sudo a2dissite 000-default default-ssl || true
+sudo a2ensite 100-vtp-sites
+# Note: don't restart apache2 until the end when certificates are available
+
+sudo systemctl restart apache2
+
+if [ ! -f "/etc/apache2/nsrc_passwd" ]; then
+  : "${EXTERNAL_USERNAME:=sysadm}"
+  if [ -z "${EXTERNAL_PASSWORD:-}" ]; then
+    EXTERNAL_PASSWORD="$(dd if=/dev/urandom bs=6 count=1 | base64)"
+    cat <<EOS
+***
+*** External web login credentials:
+*** Username: $EXTERNAL_USERNAME
+*** Password: $EXTERNAL_PASSWORD
+***
+EOS
+  fi
+  sudo htpasswd -bc /etc/apache2/nsrc_passwd "$EXTERNAL_USERNAME" "$EXTERNAL_PASSWORD"
+fi
+}
+
+for module in ${MODULES:-$MODS}; do
+  echo "### Configuring $module ###"
+  conf_$module
+  echo
+done

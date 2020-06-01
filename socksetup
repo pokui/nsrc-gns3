@@ -1,7 +1,8 @@
 #!/bin/bash
 
 #
-# This script configures inbound SOCKS5 proxy
+# This script configures external access via SOCKS5.
+# Most people should NOT need this - use extsetup instead.
 #
 
 set -eu
