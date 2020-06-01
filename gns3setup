@@ -403,20 +403,24 @@ EOS
   sudo mkdir -p /var/lib/GNS3/images
   sudo chown -R "$USER":"$GROUP" /var/lib/GNS3/images
 
-  if [ ! -f "$HOME/.config/GNS3/2.2/gns3_server.conf" ]; then
-    mkdir -p "$HOME/.config/GNS3/2.2"
-    (
+  mkdir -p "$HOME/.config/GNS3/2.2"
+  (
 cat <<EOS
 [Server]
 images_path = /var/lib/GNS3/images
 host = 192.168.122.${IP_OFFSET}
-#auth = True
-#user = $USER
-#password = XXXXXXXX
+auth = True
+user = ${GNS3_USERNAME:-$USER}
 EOS
-    ) | REPLACE "$HOME/.config/GNS3/2.2/gns3_server.conf" || IF_CHANGED
-    PASSWORD_REQUIRED="Y"
+if [ -z "${GNS3_PASSWORD:-}" ]; then
+  if ! grep -m1 "^password *=" "$HOME/.config/GNS3/2.2/gns3_server.conf" 2>/dev/null; then
+    GNS3_PASSWORD="$(dd if=/dev/urandom bs=1 count=6 2>/dev/null | base64)"
+    echo "password = ${GNS3_PASSWORD}"
   fi
+else
+  echo "password = ${GNS3_PASSWORD}"
+fi
+  ) | REPLACE "$HOME/.config/GNS3/2.2/gns3_server.conf" || IF_CHANGED
 }
 
 MODS="$MODS shellinabox"
@@ -511,22 +515,14 @@ true
   ) >gns3setup.conf
 fi
 
-echo "All done!"
+echo "All done!  GNS3 login details:"
+egrep '^(user|password) *=' "$HOME/.config/GNS3/2.2/gns3_server.conf"
 
 [ "${NETWORK_CHANGED:-}" = "Y" ] && cat <<EOS
 
 ########################################################
 # Networking configuration has changed - please reboot #
 ########################################################
-EOS
-
-[ "${PASSWORD_REQUIRED:-}" = "Y" ] && cat <<EOS
-
-********************************************************
-* Please set a GNS3 password in                        *
-* ~/.config/GNS3/2.2/gns3_server.conf                  *
-********************************************************
 
 And don't forget to install an /etc/hosts file
-
 EOS
