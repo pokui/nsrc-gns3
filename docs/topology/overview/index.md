@@ -21,7 +21,7 @@ cd /var/lib/GNS3/images/QEMU
 wget shell.nsrc.org/~vtp/gns3/cndo/ubuntu-16.04-server-cloudimg-amd64-disk1-20191002.1.img
 ```
 
-Then re-import the project.  If other image files are missing, repeat as
+Then open the project.  If other image files are missing, repeat as
 required.
 
 !!! Warning
@@ -31,7 +31,10 @@ required.
     time the project was saved.
 
 !!! Note
-    You may end up with multiple projects because of failed imports -
+    It should not be necessary to repeat the import: if there are missing
+    files, the project is imported but cannot be opened.
+
+    If you repeat the import, you will end up with multiple projects -
     e.g. `nmm`, `nmm-1`, `nmm-2` etc.  You can delete the old ones by going
     to `File > Open Project` and selecting each of the previous ones and
     clicking Delete.  The final one can be renamed using `File > Edit Project`
