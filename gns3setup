@@ -222,6 +222,7 @@ cat <<EOS
 EOS
     sudo grep '<mac address=' /etc/libvirt/qemu/networks/default.xml
 cat <<EOS
+  <domain name='ws.nsrc.org'/>
   <ip address='192.168.122.${IP_OFFSET}' netmask='255.255.255.0' localPtr='yes'>
 EOS
 [ "$IP_OFFSET" = "1" ] && cat <<EOS
@@ -325,6 +326,7 @@ fi
 EOS
   ) | REPLACE /etc/libvirt/hooks/network sudo || IF_CHANGED NETWORK_CHANGED="Y"
   SUDO_CHMOD +x /etc/libvirt/hooks/network
+  SUDO_CHMOD -x /etc/libvirt/hooks/network.bak || true
 
   sudo mkdir -p /etc/systemd/system/systemd-networkd-wait-online.service.d
   (
