@@ -41,7 +41,7 @@ bridges:
     stp: false
     accept-ra: false
     addresses:
-      - $IPV4/28
+      - $IPV4/24
       - $IPV6/64
     gateway4: 192.168.122.1
     gateway6: 2001:db8:0:0::254
