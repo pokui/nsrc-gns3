@@ -106,6 +106,12 @@ srv1 and host1-6 ssh login is `sysadm` with password `nsrc+ws`.
 Monitoring tool credentials are as per the [NOC](../noc/#credentials) topology -
 it's the same VM image.
 
+URLs are:
+
+* <http://srv1.campusX.ws.nsrc.org/> - all tools apart from the following ones
+* <http://librenms.campusX.ws.nsrc.org/>
+* <http://netbox.campusX.ws.nsrc.org/>
+
 # Snapshots
 
 There is a smaller set of snapshots provided.
