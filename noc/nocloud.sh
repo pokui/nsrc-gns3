@@ -37,8 +37,10 @@ bridges:
   br0:
     interfaces:
       - $ETH0
-    forward-delay: 0
-    stp: false
+    # note https://bugs.launchpad.net/cloud-init/+bug/1879673
+    parameters:
+      forward-delay: 0
+      stp: false
     accept-ra: false
     addresses:
       - $IPV4/24
