@@ -165,7 +165,7 @@ EOS
 MODS="$MODS apache2"
 conf_apache2 () {
 sudo a2enmod session session_cookie session_crypto auth_form \
-  headers proxy proxy_html proxy_http request rewrite ssl
+  headers proxy proxy_html proxy_http proxy_wstunnel request rewrite ssl
 
 EXTERNAL_DOMAIN_RE="$(echo "$EXTERNAL_DOMAIN" | sed -e 's/\./\\./g')"
 
@@ -330,6 +330,12 @@ cat <<'EOS'
 	RewriteCond "%{HTTP_HOST}" "^[^:]+$"
 	RewriteRule "(.*)" "https://%{HTTP_HOST}$1" [L,R]
 
+	# Websockets for Grafana live tailing
+	RewriteCond %{HTTP:Connection} Upgrade [NC]
+	RewriteCond %{HTTP:Upgrade} websocket [NC]
+	RewriteCond "%{ENV:PREFIX}%{ENV:PORT}" "^([^:]+)(:\d+)?$"
+	RewriteRule "(.*)" "ws://%1ws.nsrc.org%2$1" [L,P]
+
 	# Default: proxy to internal destination *.ws.nsrc.org
 	RewriteCond "%{ENV:PREFIX}%{ENV:PORT}" "^([^:]+)(:\d+)?$"
 	RewriteRule "(.*)" "http://%1ws.nsrc.org%2$1" [L,P]
@@ -377,6 +383,12 @@ cat <<'EOS'
 	RewriteRule "(.*)" "http://192.168.122.1:19999$1" [L,P]
 	RewriteCond "%{ENV:PREFIX}" "^console\.$" [NC]
 	RewriteRule "(.*)" "http://192.168.122.1:4200$1" [L,P]
+
+	# Websockets for Grafana live tailing
+	RewriteCond %{HTTP:Connection} Upgrade [NC]
+	RewriteCond %{HTTP:Upgrade} websocket [NC]
+	RewriteCond "%{ENV:PREFIX}%{ENV:PORT}" "^([^:]+)(:\d+)?$"
+	RewriteRule "(.*)" "ws://%1ws.nsrc.org%2$1" [L,P]
 
 	# Default: proxy to (HTTP) internal destination *.ws.nsrc.org
 	RewriteCond "%{ENV:PREFIX}%{ENV:PORT}" "^([^:]+)(:\d+)?$"
