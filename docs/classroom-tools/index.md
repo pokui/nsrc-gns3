@@ -98,24 +98,30 @@ If you want to run it on the server, then we suggest you install it inside
 your NOC VM.  Beware that it typically consumes 0.5-1GB of RAM.
 
 To [install](https://help.ubnt.com/hc/en-us/articles/220066768-UniFi-How-to-Install-and-Update-via-APT-on-Debian-or-Ubuntu)
-Unifi under Ubuntu 16.04, ssh to noc.ws.nsrc.org and run:
+Unifi under Ubuntu 16.04 or 18.04, ssh to noc.ws.nsrc.org and run:
 
 ```shell
-sudo apt-get install ca-certificates apt-transport-https
+sudo apt-get update && sudo apt-get install ca-certificates apt-transport-https
 echo 'deb http://www.ui.com/downloads/unifi/debian stable ubiquiti' | sudo tee /etc/apt/sources.list.d/100-ubnt-unifi.list
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv 06E85760C0A52C50
-sudo apt-get update
-sudo apt-get install openjdk-8-jre-headless unifi
+# Workarounds for Ubuntu 18.04 only
+wget -qO - https://www.mongodb.org/static/pgp/server-3.4.asc | sudo apt-key add -
+echo "deb https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.4.list
+sudo apt-mark hold "openjdk-11-*"
+# end workarounds
+sudo apt-get update && sudo apt-get install openjdk-8-jre-headless unifi
 ```
+
+The workarounds are because the unifi package has not been updated to work
+with the newer versions of MongoDB and Java which are packaged with Ubuntu
+18.04.  There is a script in
+[this thread](https://community.ui.com/questions/UniFi-Installation-Scripts-or-UniFi-Easy-Update-Script-or-UniFi-Lets-Encrypt-or-Ubuntu-16-04-18-04-/ccbc7530-dd61-40a7-82ec-22b17f027776)
+which can automate the process.
 
 You should then be able to access it at <https://noc.ws.nsrc.org:8443/>
 
-Unifi controller *should* be able to run on Ubuntu 18.04, and therefore it
-could be installed directly on your server, but it requires the correct
-versions of Java (openjdk-8-jre-headless:amd64) and MongoDB to be installed
-first.  There is a script in
-[this thread](https://community.ui.com/questions/UniFi-Installation-Scripts-or-UniFi-Easy-Update-Script-or-UniFi-Lets-Encrypt-or-Ubuntu-16-04-18-04-/ccbc7530-dd61-40a7-82ec-22b17f027776)
-which can automate the process.
+Alternatively, you could install the Unifi controller directly on your host
+(physical server).
 
 Another option is to isolate it inside an lxd container on your host.  This
 requires several steps, and the following is only a rough outline:
