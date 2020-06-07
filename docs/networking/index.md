@@ -223,6 +223,37 @@ connected keyboard and screen before continuing.
 Once this is working, you should be fine to go "headless" in future, since
 you can get access to your server on the LAN port.
 
+## Debugging: no virbr0
+
+If you don't get a virbr0 on bootup, try the following command and see if
+you get the error shown here:
+
+```
+$ virsh net-start default
+error: Failed to start network default
+error: internal error: Check the host setup: enabling IPv6 forwarding with RA routes without accept_ra set to 2 is likely to cause routes loss. Interfaces to look at: enx00e04c063260
+```
+
+The interface name should be your WAN interface.  See if this workaround
+solves it:
+
+```
+sudo sysctl net.ipv6.conf.enx00e04c063260.accept_ra=2
+virsh net-start default
+```
+
+The permanent solution is to create
+`/etc/networkd-dispatcher/routable.d/accept-ra` with the following contents
+(and make it executable)
+
+```
+#!/bin/bash -eu
+# https://superuser.com/questions/1208952/qemu-kvm-libvirt-forwarding
+if [ "$IFACE" = "enx00e04c063260" ]; then
+  sysctl net.ipv6.conf.$WAN_INTERFACE.enx00e04c063260=2
+fi
+```
+
 # Classroom network
 
 You can now connect the wireless access point and/or switch to the LAN port,
