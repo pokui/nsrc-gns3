@@ -411,16 +411,16 @@ cat <<EOS
 [Server]
 images_path = /var/lib/GNS3/images
 host = 192.168.122.${IP_OFFSET}
-auth = True
-user = ${GNS3_USERNAME:-$USER}
+#auth = True
+#user = ${GNS3_USERNAME:-$USER}
 EOS
 if [ -z "${GNS3_PASSWORD:-}" ]; then
-  if ! grep -m1 "^password *=" "$HOME/.config/GNS3/2.2/gns3_server.conf" 2>/dev/null; then
+  if ! grep -m1 "^#?password *=" "$HOME/.config/GNS3/2.2/gns3_server.conf" 2>/dev/null; then
     GNS3_PASSWORD="$(dd if=/dev/urandom bs=1 count=6 2>/dev/null | base64)"
-    echo "password = ${GNS3_PASSWORD}"
+    echo "#password = ${GNS3_PASSWORD}"
   fi
 else
-  echo "password = ${GNS3_PASSWORD}"
+  echo "#password = ${GNS3_PASSWORD}"
 fi
   ) | REPLACE "$HOME/.config/GNS3/2.2/gns3_server.conf" || IF_CHANGED
 }
@@ -517,8 +517,8 @@ true
   ) >gns3setup.conf
 fi
 
-echo "All done!  GNS3 login details:"
-egrep '^(user|password) *=' "$HOME/.config/GNS3/2.2/gns3_server.conf"
+echo "All done!"
+egrep '^(user|password) *=' "$HOME/.config/GNS3/2.2/gns3_server.conf" || true
 
 [ "${NETWORK_CHANGED:-}" = "Y" ] && cat <<EOS
 
