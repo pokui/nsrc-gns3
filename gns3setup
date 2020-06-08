@@ -185,6 +185,9 @@ conf_network () {
   # Prompt for interfaces unless already specified in environment
   if [ -z "${WAN_INTERFACE:-}" -o -z "${LAN_INTERFACE:-}" ]; then
     readarray -t INTERFACES < <(find /sys/class/net -type l -not -lname '*virtual*' -printf '%f\n' | sort)
+    echo "The following network interfaces were found:"
+    echo ${INTERFACES[@]}
+    echo
     # Rough and ready: eno comes before enx, and enx before wlp
     # So assume first one is LAN, second is WAN, third is WIFI
     if [ -z "${INTERFACES[1]:-}" ]; then
@@ -192,9 +195,6 @@ conf_network () {
       INTERFACES[1]="${INTERFACES[0]:-none}"
       INTERFACES[0]="none"
     fi
-    echo "The following network interfaces were found:"
-    echo ${INTERFACES[@]}
-    echo
     echo "Please select, or hit enter to accept default (enter 'none' for no connection)"
     read -p "LAN interface [${INTERFACES[0]}]: " LAN_INTERFACE
     [ -z "$LAN_INTERFACE" ] && LAN_INTERFACE="${INTERFACES[0]}"
