@@ -215,12 +215,12 @@ or other application using the libvirt API.
 <network>
   <name>default</name>
 EOS
-    sudo grep '<uuid>' /etc/libvirt/qemu/networks/default.xml
+    sudo egrep '<uuid>' /etc/libvirt/qemu/networks/default.xml
 cat <<EOS
   <forward mode='nat'/>
   <bridge name='virbr0' stp='off' delay='0'/>
 EOS
-    sudo grep '<mac address=' /etc/libvirt/qemu/networks/default.xml
+    sudo egrep '<mac address=' /etc/libvirt/qemu/networks/default.xml
 cat <<EOS
   <domain name='ws.nsrc.org'/>
   <ip address='192.168.122.${IP_OFFSET}' netmask='255.255.255.0' localPtr='yes'>
@@ -257,7 +257,7 @@ EOS
     # Remove any existing netplan config
     if [ "${DRY_RUN:-N}" != "Y" ]; then
       for f in /etc/netplan/*.yaml /etc/netplan/*.yml; do
-        [ -f "$f" ] && ! grep "# gns3setup" "$f" >/dev/null && sudo mv "$f" "${f}.disabled"
+        [ -f "$f" ] && ! egrep "# gns3setup" "$f" >/dev/null && sudo mv "$f" "${f}.disabled"
       done
     fi
 
@@ -430,7 +430,7 @@ host = 192.168.122.${IP_OFFSET}
 #user = ${GNS3_USERNAME:-$USER}
 EOS
 if [ -z "${GNS3_PASSWORD:-}" ]; then
-  if ! grep -m1 "^#?password *=" "$HOME/.config/GNS3/2.2/gns3_server.conf" 2>/dev/null; then
+  if ! egrep -m1 "^#?password *=" "$HOME/.config/GNS3/2.2/gns3_server.conf" 2>/dev/null; then
     GNS3_PASSWORD="$(dd if=/dev/urandom bs=1 count=6 2>/dev/null | base64)"
     echo "#password = ${GNS3_PASSWORD}"
   fi
