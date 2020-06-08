@@ -392,7 +392,7 @@ conf_gns3server () {
   sudo debconf-set-selections << EOS
 ubridge	ubridge/install-setuid	boolean	true
 EOS
-  sudo apt-get install -y gns3-server
+  sudo apt-get install -y gns3-server cpu-checker
   sudo apt-mark hold gns3-server
   sudo usermod -a -G ubridge "$USER"
 
@@ -436,6 +436,11 @@ if [ -z "${GNS3_PASSWORD:-}" ]; then
   fi
 else
   echo "#password = ${GNS3_PASSWORD}"
+fi
+if ! sudo kvm-ok >/dev/null 2>&1; then
+  echo "[Qemu]"
+  echo "; Uncomment the following to run without kvm (warning: VERY slow)"
+  egrep -m1 "^;?enable_kvm" "$HOME/.config/GNS3/2.2/gns3_server.conf" || echo ";enable_kvm = false"
 fi
   ) | REPLACE "$HOME/.config/GNS3/2.2/gns3_server.conf" || IF_CHANGED
 }
