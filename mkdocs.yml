@@ -22,6 +22,7 @@ nav:
   - 'Lab Topologies':
       'Overview': 'topology/overview/index.md'
       'NOC': 'topology/noc/index.md'
+      'ELK': 'topology/elk/index.md'
       'CNDO': 'topology/cndo/index.md'
       'NMM': 'topology/nmm/index.md'
       'Peering/IXP': 'topology/peering-ixp/index.md'
