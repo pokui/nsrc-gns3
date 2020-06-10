@@ -110,7 +110,6 @@ URLs are:
 
 * <http://srv1.campusX.ws.nsrc.org/> - all tools apart from the following ones
 * <http://librenms.campusX.ws.nsrc.org/>
-* <http://netbox.campusX.ws.nsrc.org/>
 
 # Snapshots
 

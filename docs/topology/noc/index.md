@@ -66,7 +66,7 @@ ssh sysadm@192.168.122.250
   hand, you might want to protect it from being damaged by students.
 * nagios login: `nagiosadmin` and `nsrc+ws`
 * LibreNMS login: <http://librenms.ws.nsrc.org/>, `admin` and `nsrc+ws`
-* netbox login: <http://netbox.ws.nsrc.org/>, `admin` and `nsrc+ws`
+* netbox login: `admin` and `nsrc+ws`
 * cacti login: `admin` and `nsrc+ws`.  On older systems (based on Ubuntu
   16.04) it is `admin` and `admin`; it then prompts for password change.
 * RT login: `root` and `nsrc+ws`
