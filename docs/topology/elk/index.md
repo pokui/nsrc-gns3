@@ -22,7 +22,7 @@ You will need the following files:
 File | Description
 :--- | :----------
 `elk-<version>.gns3project` | the GNS3 project
-`nsrc-elk-<version>.qcow2` | the VM image with tools pre-installed (large download: ~1.6GB)
+`nsrc-elk-<version>.qcow2` | the VM image with tools pre-installed (large download: ~1.2GB)
 `elk-hdb-<version>.img` | the cloud-init image which configures username/password and static IP
 
 # IP addresses
@@ -54,6 +54,21 @@ and perform all the standard configuration:
 
 ```
 sudo /usr/local/libexec/elastiflow-setup.sh
+```
+
+This takes around 4 minutes to run, and then another 2-3 minutes for
+logstash to finish restarting before it can start processing flow data.
+
+You will see the following warnings appear several times, but they can be
+[ignored](https://github.com/jruby/jruby/issues/6049):
+
+```
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by com.headius.backport9.modules.Modules to method sun.nio.ch.NativeThread.signal(long)
+WARNING: Please consider reporting this to the maintainers of com.headius.backport9.modules.Modules
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
 ```
 
 ## Filebeat
