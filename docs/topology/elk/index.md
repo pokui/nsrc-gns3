@@ -53,7 +53,7 @@ Login to the VM, and then run the following script to download ElastiFlow
 and perform all the standard configuration:
 
 ```
-sudo elk-setup.sh
+sudo /usr/local/libexec/elastiflow-setup.sh
 ```
 
 ## Filebeat
@@ -62,7 +62,7 @@ Although Filebeat (OSS) is already installed, we provide a setup script for
 it as well:
 
 ```
-sudo filebeat-setup.sh
+sudo /usr/local/libexec/filebeat-setup.sh
 ```
 
 This sets up the "system" module to read local logs from (`/var/log/syslog`)
