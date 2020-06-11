@@ -1,1 +1,1 @@
-Elasticsearch/Logstash/Kibana/Elastiflow prebuilt VM
+Elasticsearch/Logstash/Kibana (OSS) prebuilt VM
