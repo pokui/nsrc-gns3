@@ -76,9 +76,22 @@ ssh sysadm@192.168.122.250
 
 # Configuration
 
-The NMM tools are in an unconfigured state.  You can configure them
-following the NMM lab exercises, but ultimately how you configure them is up
-to you.  You could:
+The NMM tools are in an unconfigured state, but there are some scripts you
+can run to perform a basic automated setup for the CNDO/NMM topology.
+
+Login to the NOC, using SSH or at the console, and run the following
+commands:
+
+```
+git clone https://github.com/nsrc-org/nsrc-noc-setup.git
+cd nsrc-noc-setup
+./run-all
+```
+
+It's a good idea to reboot to ensure everything comes up as expected.
+
+Alternatively, you may wish to configure them by hand, following the NMM lab
+exercises.  You could:
 
 * Monitor the classroom hardware (access point, switch)
 * Monitor external resources (e.g. smokeping DNS test to 8.8.8.8)
