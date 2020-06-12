@@ -517,6 +517,131 @@ conf_netdata () {
   bash <(curl -Ss https://my-netdata.io/kickstart-static64.sh) --accept --stable-channel
 }
 
+MODS="$MODS snmpd"
+conf_snmpd () {
+  sudo apt-get install -y snmpd
+
+  curl https://raw.githubusercontent.com/librenms/librenms-agent/master/snmp/distro |
+    REPLACE /usr/local/bin/distro sudo || IF_CHANGED sudo chmod +x /usr/local/bin/distro
+
+  (
+cat <<'EOS'
+#  Listen for connections on all interfaces (both IPv4 *and* IPv6)
+agentAddress udp:161,udp6:161
+
+# For SNMPv2: Configure Read-Only community and restrict who can connect
+rocommunity   NetManage  127.0.0.1
+rocommunity   NetManage  100.64.0.0/10
+rocommunity   NetManage  192.168.122.0/24
+rocommunity6  NetManage  ::1
+rocommunity6  NetManage  2001:db8::/32
+
+# Information about this host
+sysLocation    NSRC Network Management Workshop
+sysContact     nsrc@gw.ws.nsrc.org
+
+# Which OSI layers are active in this host
+# (Application + End-to-End layers)
+sysServices    72
+
+# Include proprietary dskTable MIB (in addition to hrStorageTable)
+includeAllDisks  10%
+
+#Distro Detection for librenms
+extend .1.3.6.1.4.1.2021.7890.1 distro /usr/local/bin/distro
+EOS
+  ) | REPLACE /etc/snmp/snmpd.conf sudo || IF_CHANGED
+
+  sudo systemctl enable snmpd
+}
+
+MODS="$MODS softflowd"
+conf_softflowd () {
+  sudo apt-get install -y softflowd
+  (
+cat <<'EOS'
+#
+# configuration for softflowd
+#
+# note: softflowd will not start without an interface configured.
+
+# The interface softflowd listens on. You may also use "any" to listen
+# on all interfaces.
+INTERFACE="virbr0"
+
+# Further options for softflowd, see "man softflowd" for details.
+# You should at least define a host and a port where the accounting
+# datagrams should be sent to, e.g.
+OPTIONS="-n 192.168.122.250:9996 -v 9 -t maxlife=5m"
+#OPTIONS="-n 192.168.122.249:2055 -v 9 -t maxlife=5m"
+EOS
+  ) | REPLACE /etc/default/softflowd sudo || IF_CHANGED
+
+  (
+cat <<'EOS'
+[Unit]
+Description=softflowd
+After=network-online.target
+Wants=network-online.target
+Conflicts=shutdown.target
+
+[Service]
+EnvironmentFile=/etc/default/softflowd
+ExecStart=/usr/sbin/softflowd -d -i $INTERFACE $OPTIONS
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOS
+  ) | REPLACE /etc/systemd/system/softflowd.service sudo || IF_CHANGED sudo systemctl daemon-reload || true
+
+  sudo systemctl enable softflowd
+}
+
+MODS="$MODS node_exporter"
+conf_node_exporter () {
+  # prometheus-node-exporter in apt repository is old
+  : "${NODE_EXPORTER_VERSION:=1.0.0}"
+
+  if [ "${DRY_RUN:-N}" != "Y" -a ! -d "/opt/node_exporter-${NODE_EXPORTER_VERSION}.linux-amd64" ]; then
+    curl -sSL "https://github.com/prometheus/node_exporter/releases/download/v${NODE_EXPORTER_VERSION}/node_exporter-${NODE_EXPORTER_VERSION}.linux-amd64.tar.gz" |
+      sudo tar -C /opt -xvzf -
+    sudo rm /opt/node_exporter || true
+    sudo ln -s "node_exporter-${NODE_EXPORTER_VERSION}.linux-amd64" /opt/node_exporter
+  fi
+
+  (
+cat <<'EOS'
+[Unit]
+Description=Prometheus Node Exporter
+Documentation=https://github.com/prometheus/node_exporter
+After=network-online.target
+
+[Service]
+User=root
+EnvironmentFile=/etc/default/node_exporter
+ExecStart=/opt/node_exporter/node_exporter $OPTIONS
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOS
+  ) | REPLACE /etc/systemd/system/node_exporter.service sudo || IF_CHANGED sudo systemctl daemon-reload || true
+
+  (
+cat <<'EOS'
+OPTIONS='--collector.textfile.directory=/var/lib/node_exporter --collector.systemd'
+EOS
+  ) | REPLACE /etc/default/node_exporter sudo || IF_CHANGED
+
+  sudo mkdir -p /var/lib/node_exporter
+  sudo systemctl enable node_exporter
+}
+
+###################################
+
 for module in ${MODULES:-$MODS}; do
   echo "### Configuring $module ###"
   conf_$module

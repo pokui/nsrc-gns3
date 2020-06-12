@@ -96,7 +96,7 @@ to you.  You could:
 You should also install a HTML page at `/var/www/html/index.html` which links
 to all the tools.  You can use [this sample](noc-index.html) as a base.
 
-# snmpd
+## snmpd
 
 To allow your physical host to be monitored by LibreNMS, install
 and configure snmpd.
@@ -115,7 +115,7 @@ access from `192.168.122.0/24`.
 Then return to the LibreNMS web interface and add "gw.ws.nsrc.org" as a
 device.  It will take up to 5 minutes for it to be discovered.
 
-# softflowd
+## softflowd
 
 To generate netflow data for traffic going in and out of the class, install
 softflowd on your server.
@@ -182,6 +182,14 @@ sudo service nfsen start
 ```
 
 Data will become visible at <http://noc.ws.nsrc.org/nfsen/nfsen.php>
+
+## node_exporter
+
+To allow the host to be monitored by prometheus, install `node_exporter`.
+
+For the current version, follow the instructions in the `ex-node-exporter.md`
+lab exercise.  An older version can be obtained via `apt-get install
+prometheus-node-exporter`.
 
 # Auto-start
 
