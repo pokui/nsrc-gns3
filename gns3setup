@@ -521,6 +521,9 @@ MODS="$MODS snmpd"
 conf_snmpd () {
   sudo apt-get install -y snmpd libsnmp-dev
 
+  # This makes snmpd less verbose in syslog
+  sudo sed -i 's/-Lsd/-LSwd/' /etc/default/snmpd
+
   curl https://raw.githubusercontent.com/librenms/librenms-agent/master/snmp/distro |
     REPLACE /usr/local/bin/distro sudo || IF_CHANGED sudo chmod +x /usr/local/bin/distro
 
