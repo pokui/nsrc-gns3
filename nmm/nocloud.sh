@@ -33,6 +33,11 @@ for i in $(seq 1 6); do
   IPV6="2001:db8:$i:1::130"
   BACKDOOR="192.168.122.$((10*i))"
 
+  # We need all the srv1 br1's to have unique MAC addresses
+  # See https://bugs.launchpad.net/netplan/+bug/1782221
+  MAC0="$(printf "52:54:%02x:%02x:%02x:%02x" 100 68 $i 130)"
+  MAC1="$(printf "52:54:%02x:%02x:%02x:%02x" 192 168 122 $((10*i)) )"
+
   ######## NETWORK CONFIG ########
   cat <<EOS >"$TMPDIR/network-config"
 version: 2
@@ -43,6 +48,7 @@ ethernets:
     accept-ra: false
 bridges:
   br0:
+    macaddress: $MAC0
     interfaces:
       - $ETH0
     # note https://bugs.launchpad.net/cloud-init/+bug/1879673
@@ -56,6 +62,7 @@ bridges:
     gateway4: 100.68.$i.129
     gateway6: 2001:db8:$i:1::1
   br1:
+    macaddress: $MAC1
     interfaces:
       - $ETH1
     parameters:
@@ -184,14 +191,14 @@ runcmd:
       lxc copy host-master host\$h -c user.network-config="\$(cat <<END1)" -c user.user-data="\$(cat <<END2)"
     version: 2
     ethernets:
-      $ETH0:
+      eth0:
         accept-ra: false
         addresses:
           - 100.68.$i.\$((130 + h))/28
           - 2001:db8:$i:1::\$((130 + h))/64
         gateway4: 100.68.$i.129
         gateway6: 2001:db8:$i:1::1
-      $ETH1:
+      eth1:
         accept-ra: false
         addresses:
           - \$HOST_BACKDOOR/24
