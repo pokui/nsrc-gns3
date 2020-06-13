@@ -91,7 +91,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5003,
+                "console": 5119,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -120,11 +120,11 @@
                     "cdrom_image_md5sum": null,
                     "cpu_throttling": 0,
                     "cpus": 4,
-                    "hda_disk_image": "nsrc-nmm-20200309-cfe3779f.qcow2",
-                    "hda_disk_image_md5sum": "cfe3779f9cdc1fb8315b2505202c8470",
+                    "hda_disk_image": "nsrc-nmm-20200613-6c5e8bdc.qcow2",
+                    "hda_disk_image_md5sum": "6c5e8bdc44b652824bb6eb34dac52cfa",
                     "hda_disk_interface": "virtio",
-                    "hdb_disk_image": "noc-hdb-20200517-9f353bc6.img",
-                    "hdb_disk_image_md5sum": "9f353bc646adf94caca0201c7ee080ea",
+                    "hdb_disk_image": "noc-hdb-20200605-57220f0e.img",
+                    "hdb_disk_image_md5sum": "57220f0e02dfab04330634f30d7865bb",
                     "hdb_disk_interface": "virtio",
                     "hdc_disk_image": "",
                     "hdc_disk_image_md5sum": null,
@@ -146,6 +146,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 2560,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: sysadm\nPassword: nsrc+ws"
                 },
                 "symbol": ":/symbols/qemu_guest.svg",
@@ -159,6 +160,6 @@
     },
     "type": "topology",
     "variables": [],
-    "version": "2.2.8",
+    "version": "2.2.9",
     "zoom": 100
 }

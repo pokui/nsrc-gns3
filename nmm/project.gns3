@@ -20,7 +20,7 @@
         "links": [
             {
                 "filters": {},
-                "link_id": "241a59c1-41cf-462b-8975-138536b360c2",
+                "link_id": "c3e235d1-b00f-4783-9289-260534d791a8",
                 "nodes": [
                     {
                         "adapter_number": 2,
@@ -31,7 +31,7 @@
                             "x": 5,
                             "y": -7
                         },
-                        "node_id": "ca9bb11d-724b-4e6f-a574-948386dc7f27",
+                        "node_id": "67601f7c-8dd9-42ea-8e0d-ebaf98d5a804",
                         "port_number": 0
                     },
                     {
@@ -43,7 +43,7 @@
                             "x": 60,
                             "y": 51
                         },
-                        "node_id": "314a68ac-ddb0-46f1-bb57-8c96865eb7f3",
+                        "node_id": "8b95e034-0050-462d-8366-97e98283e1ff",
                         "port_number": 0
                     }
                 ],
@@ -51,7 +51,7 @@
             },
             {
                 "filters": {},
-                "link_id": "a9dcb431-babc-42b9-a96e-d35d61e79dc9",
+                "link_id": "087ee95b-8185-41da-b464-1dce3dd161b4",
                 "nodes": [
                     {
                         "adapter_number": 2,
@@ -62,7 +62,7 @@
                             "x": -5,
                             "y": 11
                         },
-                        "node_id": "b4ef65ef-3474-4ffa-9285-e0e74ed83e2e",
+                        "node_id": "9e29ac16-99f5-469f-87f8-64875878ddd3",
                         "port_number": 0
                     },
                     {
@@ -74,7 +74,7 @@
                             "x": 71,
                             "y": 32
                         },
-                        "node_id": "314a68ac-ddb0-46f1-bb57-8c96865eb7f3",
+                        "node_id": "8b95e034-0050-462d-8366-97e98283e1ff",
                         "port_number": 0
                     }
                 ],
@@ -82,7 +82,7 @@
             },
             {
                 "filters": {},
-                "link_id": "d6caa66a-6283-4c2c-98ad-58c72da91a2b",
+                "link_id": "11dc5e4d-7903-4099-922d-97bfc6c430b3",
                 "nodes": [
                     {
                         "adapter_number": 2,
@@ -93,7 +93,7 @@
                             "x": -6,
                             "y": 16
                         },
-                        "node_id": "c7355427-223c-4866-9cbf-67a8250e9a71",
+                        "node_id": "38a0272a-9b67-41a9-8b2c-9e8249805dd1",
                         "port_number": 0
                     },
                     {
@@ -105,7 +105,7 @@
                             "x": 72,
                             "y": 27
                         },
-                        "node_id": "314a68ac-ddb0-46f1-bb57-8c96865eb7f3",
+                        "node_id": "8b95e034-0050-462d-8366-97e98283e1ff",
                         "port_number": 0
                     }
                 ],
@@ -113,7 +113,7 @@
             },
             {
                 "filters": {},
-                "link_id": "2ed912a3-ba82-4cad-b2fe-e2eb145f1d45",
+                "link_id": "2fbe51ad-5bab-4ddd-88d5-8e31f5d0e92f",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -124,7 +124,7 @@
                             "x": -6,
                             "y": 14
                         },
-                        "node_id": "b4ef65ef-3474-4ffa-9285-e0e74ed83e2e",
+                        "node_id": "9e29ac16-99f5-469f-87f8-64875878ddd3",
                         "port_number": 0
                     },
                     {
@@ -136,7 +136,7 @@
                             "x": 72,
                             "y": 29
                         },
-                        "node_id": "6d01560b-c2d1-467d-87a9-6bdd99ea4685",
+                        "node_id": "8090e486-8f1e-482d-b382-d06337e80c57",
                         "port_number": 0
                     }
                 ],
@@ -144,7 +144,7 @@
             },
             {
                 "filters": {},
-                "link_id": "517047b1-0b94-4c1f-ad9c-66ad4dd67248",
+                "link_id": "7a4a2665-9e31-4d5a-b207-a06e530c213d",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -155,7 +155,7 @@
                             "x": 62,
                             "y": -5
                         },
-                        "node_id": "06dfafd2-9dd6-4a7f-b1d3-9c15623e4aff",
+                        "node_id": "cdf271d9-276a-4924-8804-e5548b6c7563",
                         "port_number": 0
                     },
                     {
@@ -167,7 +167,7 @@
                             "x": 3,
                             "y": 49
                         },
-                        "node_id": "6d01560b-c2d1-467d-87a9-6bdd99ea4685",
+                        "node_id": "8090e486-8f1e-482d-b382-d06337e80c57",
                         "port_number": 0
                     }
                 ],
@@ -175,7 +175,7 @@
             },
             {
                 "filters": {},
-                "link_id": "e346a020-d470-4181-bf17-ed15707efcb7",
+                "link_id": "9d84f606-7e46-4168-9b5b-5dc9a787bac5",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -186,7 +186,7 @@
                             "x": -4,
                             "y": 7
                         },
-                        "node_id": "ca9bb11d-724b-4e6f-a574-948386dc7f27",
+                        "node_id": "67601f7c-8dd9-42ea-8e0d-ebaf98d5a804",
                         "port_number": 0
                     },
                     {
@@ -198,7 +198,7 @@
                             "x": 70,
                             "y": 36
                         },
-                        "node_id": "6d01560b-c2d1-467d-87a9-6bdd99ea4685",
+                        "node_id": "8090e486-8f1e-482d-b382-d06337e80c57",
                         "port_number": 0
                     }
                 ],
@@ -206,7 +206,7 @@
             },
             {
                 "filters": {},
-                "link_id": "ef5c70a9-49c3-4beb-9aad-537ce29f353d",
+                "link_id": "8c9b9cc5-3a26-4cf5-9621-1c5fd401e693",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -217,7 +217,7 @@
                             "x": 72,
                             "y": 13
                         },
-                        "node_id": "9a564d07-70e2-4b89-9957-aea2bd326165",
+                        "node_id": "632c5083-363a-4d3b-98ff-7070d32e162f",
                         "port_number": 0
                     },
                     {
@@ -229,7 +229,7 @@
                             "x": -6,
                             "y": 30
                         },
-                        "node_id": "6d01560b-c2d1-467d-87a9-6bdd99ea4685",
+                        "node_id": "8090e486-8f1e-482d-b382-d06337e80c57",
                         "port_number": 0
                     }
                 ],
@@ -237,7 +237,7 @@
             },
             {
                 "filters": {},
-                "link_id": "c1ae363e-069f-448a-ae9c-d440d902413f",
+                "link_id": "a68ebb60-cd58-441c-9454-5d538f4acca2",
                 "nodes": [
                     {
                         "adapter_number": 2,
@@ -248,7 +248,7 @@
                             "x": 70,
                             "y": 8
                         },
-                        "node_id": "06dfafd2-9dd6-4a7f-b1d3-9c15623e4aff",
+                        "node_id": "cdf271d9-276a-4924-8804-e5548b6c7563",
                         "port_number": 0
                     },
                     {
@@ -260,7 +260,7 @@
                             "x": -4,
                             "y": 35
                         },
-                        "node_id": "314a68ac-ddb0-46f1-bb57-8c96865eb7f3",
+                        "node_id": "8b95e034-0050-462d-8366-97e98283e1ff",
                         "port_number": 0
                     }
                 ],
@@ -268,7 +268,7 @@
             },
             {
                 "filters": {},
-                "link_id": "16ef793b-30be-4785-92e4-2976c82b9093",
+                "link_id": "e7d48137-acb6-441b-b178-6bb9dd53c499",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -279,7 +279,7 @@
                             "x": -6,
                             "y": 15
                         },
-                        "node_id": "ab34d74a-eea0-4507-84da-f419c16a8e85",
+                        "node_id": "7a535f6d-7024-4ba7-b5ca-1883cf32af60",
                         "port_number": 0
                     },
                     {
@@ -291,7 +291,7 @@
                             "x": 72,
                             "y": 28
                         },
-                        "node_id": "6d01560b-c2d1-467d-87a9-6bdd99ea4685",
+                        "node_id": "8090e486-8f1e-482d-b382-d06337e80c57",
                         "port_number": 0
                     }
                 ],
@@ -299,7 +299,7 @@
             },
             {
                 "filters": {},
-                "link_id": "24de8794-16ec-404d-998d-f123abb31bd3",
+                "link_id": "a30d7007-d1c8-41c6-bfc6-3c848025d57d",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -310,7 +310,7 @@
                             "x": -6,
                             "y": 16
                         },
-                        "node_id": "c7355427-223c-4866-9cbf-67a8250e9a71",
+                        "node_id": "38a0272a-9b67-41a9-8b2c-9e8249805dd1",
                         "port_number": 0
                     },
                     {
@@ -322,7 +322,7 @@
                             "x": 72,
                             "y": 27
                         },
-                        "node_id": "6d01560b-c2d1-467d-87a9-6bdd99ea4685",
+                        "node_id": "8090e486-8f1e-482d-b382-d06337e80c57",
                         "port_number": 0
                     }
                 ],
@@ -330,7 +330,7 @@
             },
             {
                 "filters": {},
-                "link_id": "e4a94d0a-fbe0-44c9-9579-8ea36e1c1e30",
+                "link_id": "be4d72f9-5d2b-4e3f-978f-29701a1bb574",
                 "nodes": [
                     {
                         "adapter_number": 2,
@@ -341,7 +341,7 @@
                             "x": -6,
                             "y": 13
                         },
-                        "node_id": "ab34d74a-eea0-4507-84da-f419c16a8e85",
+                        "node_id": "7a535f6d-7024-4ba7-b5ca-1883cf32af60",
                         "port_number": 0
                     },
                     {
@@ -353,7 +353,7 @@
                             "x": 72,
                             "y": 30
                         },
-                        "node_id": "314a68ac-ddb0-46f1-bb57-8c96865eb7f3",
+                        "node_id": "8b95e034-0050-462d-8366-97e98283e1ff",
                         "port_number": 0
                     }
                 ],
@@ -361,7 +361,7 @@
             },
             {
                 "filters": {},
-                "link_id": "bd1782a0-35b1-442a-babc-89855b1b3b0d",
+                "link_id": "29b7a200-f880-4bb0-91a9-b540c673c72c",
                 "nodes": [
                     {
                         "adapter_number": 2,
@@ -372,7 +372,7 @@
                             "x": 72,
                             "y": 16
                         },
-                        "node_id": "9a564d07-70e2-4b89-9957-aea2bd326165",
+                        "node_id": "632c5083-363a-4d3b-98ff-7070d32e162f",
                         "port_number": 0
                     },
                     {
@@ -384,7 +384,7 @@
                             "x": -6,
                             "y": 27
                         },
-                        "node_id": "314a68ac-ddb0-46f1-bb57-8c96865eb7f3",
+                        "node_id": "8b95e034-0050-462d-8366-97e98283e1ff",
                         "port_number": 0
                     }
                 ],
@@ -392,7 +392,7 @@
             },
             {
                 "filters": {},
-                "link_id": "9943f7ce-4b21-436d-a11e-c9cda3349295",
+                "link_id": "32562795-d6f5-482e-8e24-6b8f23924b6b",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -403,7 +403,7 @@
                             "x": 31,
                             "y": -17
                         },
-                        "node_id": "6d01560b-c2d1-467d-87a9-6bdd99ea4685",
+                        "node_id": "8090e486-8f1e-482d-b382-d06337e80c57",
                         "port_number": 0
                     },
                     {
@@ -415,7 +415,7 @@
                             "x": 80,
                             "y": 74
                         },
-                        "node_id": "c79129ad-e13e-4f7e-8efd-9dbe19e75769",
+                        "node_id": "042a43f6-9719-48f2-a980-7ad2859f0d42",
                         "port_number": 0
                     }
                 ],
@@ -423,7 +423,7 @@
             },
             {
                 "filters": {},
-                "link_id": "2fbd5a18-4f84-4a70-a35b-a414cdbf0d1d",
+                "link_id": "dbadaf54-9adf-461f-8f89-eb7d148affed",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -434,7 +434,7 @@
                             "x": 32,
                             "y": -17
                         },
-                        "node_id": "314a68ac-ddb0-46f1-bb57-8c96865eb7f3",
+                        "node_id": "8b95e034-0050-462d-8366-97e98283e1ff",
                         "port_number": 0
                     },
                     {
@@ -446,7 +446,7 @@
                             "x": 79,
                             "y": 74
                         },
-                        "node_id": "fdbe6de0-9c5a-4612-84af-a4d57b00c4c1",
+                        "node_id": "e7cea41f-bbe6-493e-8620-a4498319f15e",
                         "port_number": 0
                     }
                 ],
@@ -454,7 +454,7 @@
             },
             {
                 "filters": {},
-                "link_id": "dd01847d-1636-476e-8ce9-b79379ee1a7d",
+                "link_id": "0b157718-0d29-4c8c-82f1-9cdd6dda34b2",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -465,7 +465,7 @@
                             "x": 78,
                             "y": -4
                         },
-                        "node_id": "8c94bf7f-7355-4416-a48d-a9d5931d2b11",
+                        "node_id": "ff2b51cf-6e75-4ad1-8d4e-b085ca9364a0",
                         "port_number": 0
                     },
                     {
@@ -477,7 +477,7 @@
                             "x": 25,
                             "y": 74
                         },
-                        "node_id": "e634035e-19f5-4bf9-bbf6-7f28d0bd1d6c",
+                        "node_id": "d5bc97fd-1d01-43a2-86c9-171715365895",
                         "port_number": 0
                     }
                 ],
@@ -485,7 +485,7 @@
             },
             {
                 "filters": {},
-                "link_id": "dfc3a561-96a7-498c-9589-e92abe8860e3",
+                "link_id": "c023b68e-3f74-4eaf-8b5c-58a41bf8a04c",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -496,7 +496,7 @@
                             "x": 77,
                             "y": -4
                         },
-                        "node_id": "c2c4235d-8ce4-4788-84ef-29ed5b08720c",
+                        "node_id": "39fea669-a010-4f71-af81-eebc97e1a4bd",
                         "port_number": 0
                     },
                     {
@@ -508,7 +508,7 @@
                             "x": 26,
                             "y": 74
                         },
-                        "node_id": "ace6817e-566e-4c75-8df3-4bfe11bbc906",
+                        "node_id": "e1870555-a639-410f-bbd8-e32f0a97a830",
                         "port_number": 0
                     }
                 ],
@@ -516,7 +516,7 @@
             },
             {
                 "filters": {},
-                "link_id": "20cabccc-3578-4ff2-97c3-a74725e3cdff",
+                "link_id": "d544e2bb-33d5-45c5-84ef-1cc5dc3023bc",
                 "nodes": [
                     {
                         "adapter_number": 1,
@@ -527,7 +527,7 @@
                             "x": 24,
                             "y": 74
                         },
-                        "node_id": "89f32367-7edb-4fbc-9ec8-77b6d2df5774",
+                        "node_id": "1a2ef293-e433-4d9c-aafe-ab42e1424294",
                         "port_number": 0
                     },
                     {
@@ -539,7 +539,7 @@
                             "x": 79,
                             "y": -4
                         },
-                        "node_id": "27ab42ce-b7f1-4607-ba23-c2374638e228",
+                        "node_id": "9ff0f460-7bdc-4949-98c0-3759b186935f",
                         "port_number": 0
                     }
                 ],
@@ -547,7 +547,7 @@
             },
             {
                 "filters": {},
-                "link_id": "fd87ea46-ca10-4776-a78c-f542b024a943",
+                "link_id": "9cecf25e-0c47-44c6-add8-f68b5cbbab33",
                 "nodes": [
                     {
                         "adapter_number": 1,
@@ -558,7 +558,7 @@
                             "x": 25,
                             "y": 74
                         },
-                        "node_id": "5fd18c7c-581b-4cf6-b1d5-b766ac26dd9c",
+                        "node_id": "65a33ca7-9d49-4308-8163-6064b8716e0d",
                         "port_number": 0
                     },
                     {
@@ -570,7 +570,7 @@
                             "x": 78,
                             "y": -4
                         },
-                        "node_id": "bd2d8caa-e779-4902-af23-0bb75c4759be",
+                        "node_id": "b1c8625a-4035-4376-8c82-7e530c18fe68",
                         "port_number": 0
                     }
                 ],
@@ -578,7 +578,7 @@
             },
             {
                 "filters": {},
-                "link_id": "1d2d20e3-b582-4d8a-8bc3-618c8f0ed946",
+                "link_id": "157bf1f0-250f-44ce-9f15-3777d411f34d",
                 "nodes": [
                     {
                         "adapter_number": 1,
@@ -589,7 +589,7 @@
                             "x": 25,
                             "y": 74
                         },
-                        "node_id": "247ad2a4-76f5-434c-9003-66bcb8a1f22d",
+                        "node_id": "fb11cad3-8d40-4239-b93a-c6f1b7958115",
                         "port_number": 0
                     },
                     {
@@ -601,7 +601,7 @@
                             "x": 78,
                             "y": -4
                         },
-                        "node_id": "ffe46fd3-c96a-41b9-afcb-7850ba591c73",
+                        "node_id": "8c708416-c3a6-4be1-8a4b-44f07b5e7198",
                         "port_number": 0
                     }
                 ],
@@ -609,7 +609,7 @@
             },
             {
                 "filters": {},
-                "link_id": "e66a4ee8-b804-4c6f-9be0-519ef81531c6",
+                "link_id": "0ddcfb2f-7273-402a-ac9b-14bd16a5569a",
                 "nodes": [
                     {
                         "adapter_number": 1,
@@ -620,7 +620,7 @@
                             "x": 25,
                             "y": 74
                         },
-                        "node_id": "8f24a67a-6fd2-480a-9bac-baf277cd9dd0",
+                        "node_id": "382d5abd-bb16-4888-829a-0eabd6a226f9",
                         "port_number": 0
                     },
                     {
@@ -632,7 +632,7 @@
                             "x": 78,
                             "y": -4
                         },
-                        "node_id": "8992513e-675c-4024-9b56-19b567e84123",
+                        "node_id": "2108bfc5-1ecd-456b-a2d2-772df19972fc",
                         "port_number": 0
                     }
                 ],
@@ -640,7 +640,7 @@
             },
             {
                 "filters": {},
-                "link_id": "1ab86c8f-a713-4c4a-8c2b-5ca11c930fa1",
+                "link_id": "5382f3c9-1444-4743-aa12-528a15b8347f",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -648,7 +648,7 @@
                             "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
                             "text": "0/0"
                         },
-                        "node_id": "58ee80fe-5c72-4bc0-bfdb-6dad1fe6b33f",
+                        "node_id": "b9c7fe7b-7b8c-44b5-8361-4c1881302b88",
                         "port_number": 0
                     },
                     {
@@ -657,7 +657,7 @@
                             "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
                             "text": "1/0"
                         },
-                        "node_id": "9a564d07-70e2-4b89-9957-aea2bd326165",
+                        "node_id": "632c5083-363a-4d3b-98ff-7070d32e162f",
                         "port_number": 0
                     }
                 ],
@@ -665,7 +665,7 @@
             },
             {
                 "filters": {},
-                "link_id": "4f2217b5-8d84-4acd-b763-1747229dbe20",
+                "link_id": "69c8bfe1-91ae-4dd1-ba70-41a42a5ab8f0",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -673,7 +673,7 @@
                             "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
                             "text": "0/0"
                         },
-                        "node_id": "56f1a930-2855-455d-b4df-c671aa311e86",
+                        "node_id": "ae02b9c7-1c42-4e3b-89ed-4c7e6e451bed",
                         "port_number": 0
                     },
                     {
@@ -682,7 +682,7 @@
                             "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
                             "text": "1/0"
                         },
-                        "node_id": "06dfafd2-9dd6-4a7f-b1d3-9c15623e4aff",
+                        "node_id": "cdf271d9-276a-4924-8804-e5548b6c7563",
                         "port_number": 0
                     }
                 ],
@@ -690,7 +690,7 @@
             },
             {
                 "filters": {},
-                "link_id": "40279992-d95d-42ad-b45f-3f81dd0025bc",
+                "link_id": "e878e156-a4d4-4b01-ab7e-d0b0259aebc9",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -698,7 +698,7 @@
                             "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
                             "text": "0/0"
                         },
-                        "node_id": "28642fda-274d-44f5-ad27-08522c4247c6",
+                        "node_id": "815d7d4c-3d37-4da0-898b-0448471dc895",
                         "port_number": 0
                     },
                     {
@@ -707,7 +707,7 @@
                             "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
                             "text": "1/0"
                         },
-                        "node_id": "ca9bb11d-724b-4e6f-a574-948386dc7f27",
+                        "node_id": "67601f7c-8dd9-42ea-8e0d-ebaf98d5a804",
                         "port_number": 0
                     }
                 ],
@@ -715,7 +715,7 @@
             },
             {
                 "filters": {},
-                "link_id": "df8da543-77d3-4720-81a8-4b614c47b052",
+                "link_id": "28fb5b1b-0f41-4f46-809c-47a91055c767",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -723,7 +723,7 @@
                             "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
                             "text": "0/0"
                         },
-                        "node_id": "1d4d1360-3284-4fa2-b247-a9fa568f10dc",
+                        "node_id": "dea0b28e-1e5d-449a-a5b6-c05df848d0c7",
                         "port_number": 0
                     },
                     {
@@ -732,7 +732,7 @@
                             "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
                             "text": "1/0"
                         },
-                        "node_id": "ab34d74a-eea0-4507-84da-f419c16a8e85",
+                        "node_id": "7a535f6d-7024-4ba7-b5ca-1883cf32af60",
                         "port_number": 0
                     }
                 ],
@@ -740,7 +740,7 @@
             },
             {
                 "filters": {},
-                "link_id": "e2585ccf-014e-4ecb-89f5-f6d86b9309a7",
+                "link_id": "35ed1680-47a8-4039-8d4f-856bcef1ab47",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -748,7 +748,7 @@
                             "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
                             "text": "0/0"
                         },
-                        "node_id": "47daf08e-ee8e-4f8c-b99f-4f0defa34431",
+                        "node_id": "6748a079-2adf-4863-ae83-d7fdd9853bbc",
                         "port_number": 0
                     },
                     {
@@ -757,7 +757,7 @@
                             "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
                             "text": "1/0"
                         },
-                        "node_id": "b4ef65ef-3474-4ffa-9285-e0e74ed83e2e",
+                        "node_id": "9e29ac16-99f5-469f-87f8-64875878ddd3",
                         "port_number": 0
                     }
                 ],
@@ -765,7 +765,7 @@
             },
             {
                 "filters": {},
-                "link_id": "d3b0b60d-1c28-4f73-b39b-f6365716f453",
+                "link_id": "b8cab86c-5e47-4729-93c2-a8c7c56f04c4",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -776,7 +776,7 @@
                             "x": 31,
                             "y": -12
                         },
-                        "node_id": "eb6ee7d9-9118-4e79-b3db-9a1455f8a4a8",
+                        "node_id": "c49a4158-e8d2-4f1d-8c62-c0c5649b3a94",
                         "port_number": 0
                     },
                     {
@@ -788,7 +788,7 @@
                             "x": 34,
                             "y": 61
                         },
-                        "node_id": "c7355427-223c-4866-9cbf-67a8250e9a71",
+                        "node_id": "38a0272a-9b67-41a9-8b2c-9e8249805dd1",
                         "port_number": 0
                     }
                 ],
@@ -796,7 +796,7 @@
             },
             {
                 "filters": {},
-                "link_id": "4b6b029e-bda5-4732-a817-8455ffb2030a",
+                "link_id": "6911804a-701d-4f6e-8c9e-000bd28ed6cb",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -807,7 +807,7 @@
                             "x": 63,
                             "y": -12
                         },
-                        "node_id": "5e7f8e64-b1b1-40c8-91e4-e65bd2991ceb",
+                        "node_id": "c620f674-ab6c-413c-b14d-507efd668073",
                         "port_number": 0
                     },
                     {
@@ -819,7 +819,7 @@
                             "x": 4,
                             "y": 56
                         },
-                        "node_id": "58ee80fe-5c72-4bc0-bfdb-6dad1fe6b33f",
+                        "node_id": "b9c7fe7b-7b8c-44b5-8361-4c1881302b88",
                         "port_number": 0
                     }
                 ],
@@ -827,7 +827,7 @@
             },
             {
                 "filters": {},
-                "link_id": "f51cac0b-ef38-41f2-8b07-1f5269f75b67",
+                "link_id": "4b3578b6-cfb8-4b8a-b36c-3f74fcd7944e",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -838,7 +838,7 @@
                             "x": 7,
                             "y": -12
                         },
-                        "node_id": "880e7bd6-6718-42a9-a0e3-0d3efca06152",
+                        "node_id": "b29d9e2d-8288-4b32-941b-523bd99cc6eb",
                         "port_number": 0
                     },
                     {
@@ -850,7 +850,7 @@
                             "x": 60,
                             "y": 56
                         },
-                        "node_id": "58ee80fe-5c72-4bc0-bfdb-6dad1fe6b33f",
+                        "node_id": "b9c7fe7b-7b8c-44b5-8361-4c1881302b88",
                         "port_number": 0
                     }
                 ],
@@ -858,7 +858,7 @@
             },
             {
                 "filters": {},
-                "link_id": "4dee1771-e91a-46f2-bab9-de9020e0bf4e",
+                "link_id": "a1200369-51ad-4353-bf23-ecc308cf98e8",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -869,7 +869,7 @@
                             "x": 62,
                             "y": -13
                         },
-                        "node_id": "0943183f-5fe4-44dd-870c-6f81b82037bb",
+                        "node_id": "46210d9a-229d-47d7-ad9a-38a975035df4",
                         "port_number": 0
                     },
                     {
@@ -881,7 +881,7 @@
                             "x": 5,
                             "y": 56
                         },
-                        "node_id": "56f1a930-2855-455d-b4df-c671aa311e86",
+                        "node_id": "ae02b9c7-1c42-4e3b-89ed-4c7e6e451bed",
                         "port_number": 0
                     }
                 ],
@@ -889,7 +889,7 @@
             },
             {
                 "filters": {},
-                "link_id": "26e364c7-e74d-4441-bb8b-0f625821061a",
+                "link_id": "8f7c2191-3fd5-4389-9f27-ba2b9ab3e250",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -900,7 +900,7 @@
                             "x": 7,
                             "y": -12
                         },
-                        "node_id": "6ff4f5cd-d04b-42f4-b7b2-0bf2bb27ad77",
+                        "node_id": "f4bc7244-3fdd-459d-ae1f-4f7f29dcb01d",
                         "port_number": 0
                     },
                     {
@@ -912,7 +912,7 @@
                             "x": 60,
                             "y": 56
                         },
-                        "node_id": "56f1a930-2855-455d-b4df-c671aa311e86",
+                        "node_id": "ae02b9c7-1c42-4e3b-89ed-4c7e6e451bed",
                         "port_number": 0
                     }
                 ],
@@ -920,7 +920,7 @@
             },
             {
                 "filters": {},
-                "link_id": "911a99f9-ee85-4497-bd54-9e2e3e474da7",
+                "link_id": "2a881d60-6384-425a-8ead-0798477f897b",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -931,7 +931,7 @@
                             "x": 62,
                             "y": -13
                         },
-                        "node_id": "43f70cea-b703-4252-aeec-a168e6e27a4e",
+                        "node_id": "cc412710-54f7-48f0-aa0d-3900fa65efa4",
                         "port_number": 0
                     },
                     {
@@ -943,7 +943,7 @@
                             "x": 5,
                             "y": 56
                         },
-                        "node_id": "28642fda-274d-44f5-ad27-08522c4247c6",
+                        "node_id": "815d7d4c-3d37-4da0-898b-0448471dc895",
                         "port_number": 0
                     }
                 ],
@@ -951,7 +951,7 @@
             },
             {
                 "filters": {},
-                "link_id": "f7c72594-e766-428e-acf5-ad78e5e5e44d",
+                "link_id": "47fa17e0-60a2-4849-bcf4-ac78ae922798",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -962,7 +962,7 @@
                             "x": 7,
                             "y": -12
                         },
-                        "node_id": "f30c5251-5db4-4d48-9efe-6fd88bb423c6",
+                        "node_id": "d7672b30-e0db-458b-aad4-ee157fb81439",
                         "port_number": 0
                     },
                     {
@@ -974,7 +974,7 @@
                             "x": 60,
                             "y": 55
                         },
-                        "node_id": "28642fda-274d-44f5-ad27-08522c4247c6",
+                        "node_id": "815d7d4c-3d37-4da0-898b-0448471dc895",
                         "port_number": 0
                     }
                 ],
@@ -982,7 +982,7 @@
             },
             {
                 "filters": {},
-                "link_id": "cd00b6f5-a28b-4523-9dd1-9db67f6c0da1",
+                "link_id": "4b8095de-e549-4328-aa0d-68ef7f1a4ba5",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -993,7 +993,7 @@
                             "x": 62,
                             "y": -13
                         },
-                        "node_id": "2267539d-da45-47fc-8898-a8fb7a62c538",
+                        "node_id": "54be5e28-75bb-4929-a331-562a0473b189",
                         "port_number": 0
                     },
                     {
@@ -1005,7 +1005,7 @@
                             "x": 5,
                             "y": 56
                         },
-                        "node_id": "1d4d1360-3284-4fa2-b247-a9fa568f10dc",
+                        "node_id": "dea0b28e-1e5d-449a-a5b6-c05df848d0c7",
                         "port_number": 0
                     }
                 ],
@@ -1013,7 +1013,7 @@
             },
             {
                 "filters": {},
-                "link_id": "41328b9e-c6e8-483b-93f0-840a616b5302",
+                "link_id": "225c1996-11d6-4a4d-a314-decb2fe6175a",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -1024,7 +1024,7 @@
                             "x": 6,
                             "y": -11
                         },
-                        "node_id": "df356686-7689-4197-96b3-aea6a866268e",
+                        "node_id": "51edf508-5aaa-4e0c-967d-8d7324a2804b",
                         "port_number": 0
                     },
                     {
@@ -1036,7 +1036,7 @@
                             "x": 68,
                             "y": 61
                         },
-                        "node_id": "1d4d1360-3284-4fa2-b247-a9fa568f10dc",
+                        "node_id": "dea0b28e-1e5d-449a-a5b6-c05df848d0c7",
                         "port_number": 0
                     }
                 ],
@@ -1044,7 +1044,7 @@
             },
             {
                 "filters": {},
-                "link_id": "8978415a-5eed-4257-ab77-f4e98515b535",
+                "link_id": "aca5e493-f046-474a-8b73-9abb1647e099",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -1055,7 +1055,7 @@
                             "x": 62,
                             "y": -13
                         },
-                        "node_id": "26d405f7-d8c1-446e-92b1-e5e7cb808c36",
+                        "node_id": "eb362e20-2143-42f6-a9a1-125ca326382e",
                         "port_number": 0
                     },
                     {
@@ -1067,7 +1067,7 @@
                             "x": 5,
                             "y": 56
                         },
-                        "node_id": "47daf08e-ee8e-4f8c-b99f-4f0defa34431",
+                        "node_id": "6748a079-2adf-4863-ae83-d7fdd9853bbc",
                         "port_number": 0
                     }
                 ],
@@ -1075,7 +1075,7 @@
             },
             {
                 "filters": {},
-                "link_id": "fa545a83-279c-4c55-98a4-70227e306450",
+                "link_id": "83c46976-cfd4-46c6-8595-72c42c406697",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -1086,7 +1086,7 @@
                             "x": 6,
                             "y": -11
                         },
-                        "node_id": "e5e6d852-ec34-447f-9fcd-461855f9b0ed",
+                        "node_id": "56b5342a-f63f-46dd-99f2-88069493ac87",
                         "port_number": 0
                     },
                     {
@@ -1098,7 +1098,7 @@
                             "x": 68,
                             "y": 61
                         },
-                        "node_id": "47daf08e-ee8e-4f8c-b99f-4f0defa34431",
+                        "node_id": "6748a079-2adf-4863-ae83-d7fdd9853bbc",
                         "port_number": 0
                     }
                 ],
@@ -1106,7 +1106,7 @@
             },
             {
                 "filters": {},
-                "link_id": "ade07c93-4bc0-4abe-9f45-5d93924dbc31",
+                "link_id": "11a5eb0b-7c94-49dc-befb-9715db8b820e",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -1117,7 +1117,7 @@
                             "x": 63,
                             "y": -12
                         },
-                        "node_id": "e0980190-90dc-439b-b860-e1644bc2e2bb",
+                        "node_id": "45ba85e8-02e2-4378-8be9-3b386d08c0be",
                         "port_number": 0
                     },
                     {
@@ -1129,7 +1129,7 @@
                             "x": 4,
                             "y": 56
                         },
-                        "node_id": "eb6ee7d9-9118-4e79-b3db-9a1455f8a4a8",
+                        "node_id": "c49a4158-e8d2-4f1d-8c62-c0c5649b3a94",
                         "port_number": 0
                     }
                 ],
@@ -1137,7 +1137,7 @@
             },
             {
                 "filters": {},
-                "link_id": "c3fb636f-6ae8-4d79-aaa3-88121b6e5607",
+                "link_id": "5de682b6-ad8d-4da8-894a-4113f042ddee",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -1148,7 +1148,7 @@
                             "x": 6,
                             "y": -11
                         },
-                        "node_id": "d6335521-6f1a-4e3f-b4f1-fb389130aa99",
+                        "node_id": "2126c718-4df2-4e37-b7fa-35be3b09df17",
                         "port_number": 0
                     },
                     {
@@ -1160,7 +1160,7 @@
                             "x": 69,
                             "y": 61
                         },
-                        "node_id": "eb6ee7d9-9118-4e79-b3db-9a1455f8a4a8",
+                        "node_id": "c49a4158-e8d2-4f1d-8c62-c0c5649b3a94",
                         "port_number": 0
                     }
                 ],
@@ -1168,7 +1168,7 @@
             },
             {
                 "filters": {},
-                "link_id": "8f4e3fd7-0752-4867-abcb-8fbf5443417f",
+                "link_id": "49beb6ac-848d-4aa0-a8c9-dae064585693",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -1179,7 +1179,7 @@
                             "x": -15,
                             "y": 35
                         },
-                        "node_id": "e634035e-19f5-4bf9-bbf6-7f28d0bd1d6c",
+                        "node_id": "d5bc97fd-1d01-43a2-86c9-171715365895",
                         "port_number": 0
                     },
                     {
@@ -1191,7 +1191,7 @@
                             "x": 72,
                             "y": 26
                         },
-                        "node_id": "58ee80fe-5c72-4bc0-bfdb-6dad1fe6b33f",
+                        "node_id": "b9c7fe7b-7b8c-44b5-8361-4c1881302b88",
                         "port_number": 0
                     }
                 ],
@@ -1199,7 +1199,7 @@
             },
             {
                 "filters": {},
-                "link_id": "d15c3fb9-5e5e-4d68-b25c-5672be89cb08",
+                "link_id": "2c121b88-85bf-4efa-8b29-3f096abcd5ae",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -1210,7 +1210,7 @@
                             "x": -15,
                             "y": 34
                         },
-                        "node_id": "ace6817e-566e-4c75-8df3-4bfe11bbc906",
+                        "node_id": "e1870555-a639-410f-bbd8-e32f0a97a830",
                         "port_number": 0
                     },
                     {
@@ -1222,7 +1222,7 @@
                             "x": 72,
                             "y": 27
                         },
-                        "node_id": "56f1a930-2855-455d-b4df-c671aa311e86",
+                        "node_id": "ae02b9c7-1c42-4e3b-89ed-4c7e6e451bed",
                         "port_number": 0
                     }
                 ],
@@ -1230,7 +1230,7 @@
             },
             {
                 "filters": {},
-                "link_id": "936981e7-647c-45d5-938b-5e356a868ea5",
+                "link_id": "20ee8c51-c50a-475d-a32b-9ae2343ff0ad",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -1241,7 +1241,7 @@
                             "x": -15,
                             "y": 34
                         },
-                        "node_id": "89f32367-7edb-4fbc-9ec8-77b6d2df5774",
+                        "node_id": "1a2ef293-e433-4d9c-aafe-ab42e1424294",
                         "port_number": 0
                     },
                     {
@@ -1253,7 +1253,7 @@
                             "x": 72,
                             "y": 27
                         },
-                        "node_id": "28642fda-274d-44f5-ad27-08522c4247c6",
+                        "node_id": "815d7d4c-3d37-4da0-898b-0448471dc895",
                         "port_number": 0
                     }
                 ],
@@ -1261,7 +1261,7 @@
             },
             {
                 "filters": {},
-                "link_id": "3e5d1910-612d-4f05-a181-c454ef984df9",
+                "link_id": "714e2704-48d5-4f18-87b9-5880337ddd5f",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -1272,7 +1272,7 @@
                             "x": -15,
                             "y": 34
                         },
-                        "node_id": "5fd18c7c-581b-4cf6-b1d5-b766ac26dd9c",
+                        "node_id": "65a33ca7-9d49-4308-8163-6064b8716e0d",
                         "port_number": 0
                     },
                     {
@@ -1284,7 +1284,7 @@
                             "x": 72,
                             "y": 27
                         },
-                        "node_id": "1d4d1360-3284-4fa2-b247-a9fa568f10dc",
+                        "node_id": "dea0b28e-1e5d-449a-a5b6-c05df848d0c7",
                         "port_number": 0
                     }
                 ],
@@ -1292,7 +1292,7 @@
             },
             {
                 "filters": {},
-                "link_id": "57eee6bd-7777-4793-9aa1-c863200d2930",
+                "link_id": "207b8043-b81d-4ddb-9c2d-23cf39e1fd0d",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -1303,7 +1303,7 @@
                             "x": -15,
                             "y": 34
                         },
-                        "node_id": "247ad2a4-76f5-434c-9003-66bcb8a1f22d",
+                        "node_id": "fb11cad3-8d40-4239-b93a-c6f1b7958115",
                         "port_number": 0
                     },
                     {
@@ -1315,7 +1315,7 @@
                             "x": 72,
                             "y": 27
                         },
-                        "node_id": "47daf08e-ee8e-4f8c-b99f-4f0defa34431",
+                        "node_id": "6748a079-2adf-4863-ae83-d7fdd9853bbc",
                         "port_number": 0
                     }
                 ],
@@ -1323,7 +1323,7 @@
             },
             {
                 "filters": {},
-                "link_id": "62d08938-54be-490d-8d5d-b5d658bb8144",
+                "link_id": "6350e655-e766-4936-8ec2-3a3e789389a5",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -1334,7 +1334,7 @@
                             "x": -15,
                             "y": 34
                         },
-                        "node_id": "8f24a67a-6fd2-480a-9bac-baf277cd9dd0",
+                        "node_id": "382d5abd-bb16-4888-829a-0eabd6a226f9",
                         "port_number": 0
                     },
                     {
@@ -1346,7 +1346,7 @@
                             "x": 72,
                             "y": 27
                         },
-                        "node_id": "eb6ee7d9-9118-4e79-b3db-9a1455f8a4a8",
+                        "node_id": "c49a4158-e8d2-4f1d-8c62-c0c5649b3a94",
                         "port_number": 0
                     }
                 ],
@@ -1371,7 +1371,7 @@
                 },
                 "locked": true,
                 "name": "srv1-campus6",
-                "node_id": "8f24a67a-6fd2-480a-9bac-baf277cd9dd0",
+                "node_id": "382d5abd-bb16-4888-829a-0eabd6a226f9",
                 "node_type": "qemu",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
@@ -1385,11 +1385,11 @@
                     "cdrom_image_md5sum": null,
                     "cpu_throttling": 0,
                     "cpus": 2,
-                    "hda_disk_image": "nsrc-nmm-20200309-cfe3779f.qcow2",
-                    "hda_disk_image_md5sum": "cfe3779f9cdc1fb8315b2505202c8470",
+                    "hda_disk_image": "nsrc-nmm-20200613-6c5e8bdc.qcow2",
+                    "hda_disk_image_md5sum": "6c5e8bdc44b652824bb6eb34dac52cfa",
                     "hda_disk_interface": "virtio",
-                    "hdb_disk_image": "nmm-srv1-campus6-hdb-20200517-a25a94db.img",
-                    "hdb_disk_image_md5sum": "a25a94db1f12130dee65a0427a1a71c7",
+                    "hdb_disk_image": "nmm-srv1-campus6-hdb-20200613-64a20bf2.img",
+                    "hdb_disk_image_md5sum": "64a20bf2eeda85141513557609bb0795",
                     "hdb_disk_interface": "virtio",
                     "hdc_disk_image": "",
                     "hdc_disk_image_md5sum": null,
@@ -1411,6 +1411,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 2560,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: sysadm\nPassword: nsrc+ws"
                 },
                 "symbol": ":/symbols/server.svg",
@@ -1437,7 +1438,7 @@
                 },
                 "locked": true,
                 "name": "bdr1-campus1",
-                "node_id": "9a564d07-70e2-4b89-9957-aea2bd326165",
+                "node_id": "632c5083-363a-4d3b-98ff-7070d32e162f",
                 "node_type": "qemu",
                 "port_name_format": "Gi0/{0}",
                 "port_segment_size": 0,
@@ -1476,6 +1477,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 384,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nmmlab\nPassword: lab-PW\nEnable: lab-EN"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -1502,7 +1504,7 @@
                 },
                 "locked": true,
                 "name": "dist1-b2-campus1",
-                "node_id": "880e7bd6-6718-42a9-a0e3-0d3efca06152",
+                "node_id": "b29d9e2d-8288-4b32-941b-523bd99cc6eb",
                 "node_type": "qemu",
                 "port_name_format": "Gi{1}/{0}",
                 "port_segment_size": 4,
@@ -1541,6 +1543,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 512,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nmmlab\nPassword: lab-PW\nEnable: lab-EN"
                 },
                 "symbol": ":/symbols/ethernet_switch.svg",
@@ -1567,7 +1570,7 @@
                 },
                 "locked": true,
                 "name": "dist1-b1-campus5",
-                "node_id": "26d405f7-d8c1-446e-92b1-e5e7cb808c36",
+                "node_id": "eb362e20-2143-42f6-a9a1-125ca326382e",
                 "node_type": "qemu",
                 "port_name_format": "Gi{1}/{0}",
                 "port_segment_size": 4,
@@ -1606,6 +1609,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 512,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nmmlab\nPassword: lab-PW\nEnable: lab-EN"
                 },
                 "symbol": ":/symbols/ethernet_switch.svg",
@@ -1632,7 +1636,7 @@
                 },
                 "locked": true,
                 "name": "transit2-nren",
-                "node_id": "314a68ac-ddb0-46f1-bb57-8c96865eb7f3",
+                "node_id": "8b95e034-0050-462d-8366-97e98283e1ff",
                 "node_type": "qemu",
                 "port_name_format": "Gi0/{0}",
                 "port_segment_size": 0,
@@ -1671,6 +1675,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 384,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nsrc\nPassword: lab-PW\nEnable: lab-EN"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -1697,7 +1702,7 @@
                 },
                 "locked": true,
                 "name": "bdr1-campus6",
-                "node_id": "c7355427-223c-4866-9cbf-67a8250e9a71",
+                "node_id": "38a0272a-9b67-41a9-8b2c-9e8249805dd1",
                 "node_type": "qemu",
                 "port_name_format": "Gi0/{0}",
                 "port_segment_size": 0,
@@ -1736,6 +1741,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 384,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nmmlab\nPassword: lab-PW\nEnable: lab-EN"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -1762,7 +1768,7 @@
                 },
                 "locked": true,
                 "name": "bdr1-campus3",
-                "node_id": "ca9bb11d-724b-4e6f-a574-948386dc7f27",
+                "node_id": "67601f7c-8dd9-42ea-8e0d-ebaf98d5a804",
                 "node_type": "qemu",
                 "port_name_format": "Gi0/{0}",
                 "port_segment_size": 0,
@@ -1801,6 +1807,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 384,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nmmlab\nPassword: lab-PW\nEnable: lab-EN"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -1827,7 +1834,7 @@
                 },
                 "locked": true,
                 "name": "dist1-b2-campus2",
-                "node_id": "6ff4f5cd-d04b-42f4-b7b2-0bf2bb27ad77",
+                "node_id": "f4bc7244-3fdd-459d-ae1f-4f7f29dcb01d",
                 "node_type": "qemu",
                 "port_name_format": "Gi{1}/{0}",
                 "port_segment_size": 4,
@@ -1866,6 +1873,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 512,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nmmlab\nPassword: lab-PW\nEnable: lab-EN"
                 },
                 "symbol": ":/symbols/ethernet_switch.svg",
@@ -1892,7 +1900,7 @@
                 },
                 "locked": true,
                 "name": "dist1-b1-campus4",
-                "node_id": "2267539d-da45-47fc-8898-a8fb7a62c538",
+                "node_id": "54be5e28-75bb-4929-a331-562a0473b189",
                 "node_type": "qemu",
                 "port_name_format": "Gi{1}/{0}",
                 "port_segment_size": 4,
@@ -1931,6 +1939,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 512,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nmmlab\nPassword: lab-PW\nEnable: lab-EN"
                 },
                 "symbol": ":/symbols/ethernet_switch.svg",
@@ -1957,7 +1966,7 @@
                 },
                 "locked": true,
                 "name": "dist1-b1-campus2",
-                "node_id": "0943183f-5fe4-44dd-870c-6f81b82037bb",
+                "node_id": "46210d9a-229d-47d7-ad9a-38a975035df4",
                 "node_type": "qemu",
                 "port_name_format": "Gi{1}/{0}",
                 "port_segment_size": 4,
@@ -1996,6 +2005,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 512,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nmmlab\nPassword: lab-PW\nEnable: lab-EN"
                 },
                 "symbol": ":/symbols/ethernet_switch.svg",
@@ -2022,7 +2032,7 @@
                 },
                 "locked": true,
                 "name": "bdr1-campus5",
-                "node_id": "b4ef65ef-3474-4ffa-9285-e0e74ed83e2e",
+                "node_id": "9e29ac16-99f5-469f-87f8-64875878ddd3",
                 "node_type": "qemu",
                 "port_name_format": "Gi0/{0}",
                 "port_segment_size": 0,
@@ -2061,6 +2071,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 384,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nmmlab\nPassword: lab-PW\nEnable: lab-EN"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -2087,7 +2098,7 @@
                 },
                 "locked": true,
                 "name": "dist1-b2-campus6",
-                "node_id": "d6335521-6f1a-4e3f-b4f1-fb389130aa99",
+                "node_id": "2126c718-4df2-4e37-b7fa-35be3b09df17",
                 "node_type": "qemu",
                 "port_name_format": "Gi{1}/{0}",
                 "port_segment_size": 4,
@@ -2126,6 +2137,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 512,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nmmlab\nPassword: lab-PW\nEnable: lab-EN"
                 },
                 "symbol": ":/symbols/ethernet_switch.svg",
@@ -2152,7 +2164,7 @@
                 },
                 "locked": true,
                 "name": "transit1-nren",
-                "node_id": "6d01560b-c2d1-467d-87a9-6bdd99ea4685",
+                "node_id": "8090e486-8f1e-482d-b382-d06337e80c57",
                 "node_type": "qemu",
                 "port_name_format": "Gi0/{0}",
                 "port_segment_size": 0,
@@ -2191,6 +2203,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 384,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nsrc\nPassword: lab-PW\nEnable: lab-EN"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -2217,7 +2230,7 @@
                 },
                 "locked": true,
                 "name": "core1-campus1",
-                "node_id": "58ee80fe-5c72-4bc0-bfdb-6dad1fe6b33f",
+                "node_id": "b9c7fe7b-7b8c-44b5-8361-4c1881302b88",
                 "node_type": "qemu",
                 "port_name_format": "Gi{1}/{0}",
                 "port_segment_size": 4,
@@ -2256,6 +2269,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 512,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nmmlab\nPassword: lab-PW\nEnable: lab-EN"
                 },
                 "symbol": ":/symbols/gateway.svg",
@@ -2282,7 +2296,7 @@
                 },
                 "locked": true,
                 "name": "bdr1-campus2",
-                "node_id": "06dfafd2-9dd6-4a7f-b1d3-9c15623e4aff",
+                "node_id": "cdf271d9-276a-4924-8804-e5548b6c7563",
                 "node_type": "qemu",
                 "port_name_format": "Gi0/{0}",
                 "port_segment_size": 0,
@@ -2321,6 +2335,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 384,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nmmlab\nPassword: lab-PW\nEnable: lab-EN"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -2347,7 +2362,7 @@
                 },
                 "locked": true,
                 "name": "core1-campus3",
-                "node_id": "28642fda-274d-44f5-ad27-08522c4247c6",
+                "node_id": "815d7d4c-3d37-4da0-898b-0448471dc895",
                 "node_type": "qemu",
                 "port_name_format": "Gi{1}/{0}",
                 "port_segment_size": 4,
@@ -2386,6 +2401,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 512,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nmmlab\nPassword: lab-PW\nEnable: lab-EN"
                 },
                 "symbol": ":/symbols/gateway.svg",
@@ -2412,7 +2428,7 @@
                 },
                 "locked": true,
                 "name": "dist1-b1-campus6",
-                "node_id": "e0980190-90dc-439b-b860-e1644bc2e2bb",
+                "node_id": "45ba85e8-02e2-4378-8be9-3b386d08c0be",
                 "node_type": "qemu",
                 "port_name_format": "Gi{1}/{0}",
                 "port_segment_size": 4,
@@ -2451,6 +2467,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 512,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nmmlab\nPassword: lab-PW\nEnable: lab-EN"
                 },
                 "symbol": ":/symbols/ethernet_switch.svg",
@@ -2477,7 +2494,7 @@
                 },
                 "locked": true,
                 "name": "core1-campus6",
-                "node_id": "eb6ee7d9-9118-4e79-b3db-9a1455f8a4a8",
+                "node_id": "c49a4158-e8d2-4f1d-8c62-c0c5649b3a94",
                 "node_type": "qemu",
                 "port_name_format": "Gi{1}/{0}",
                 "port_segment_size": 4,
@@ -2516,6 +2533,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 512,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nmmlab\nPassword: lab-PW\nEnable: lab-EN"
                 },
                 "symbol": ":/symbols/gateway.svg",
@@ -2542,7 +2560,7 @@
                 },
                 "locked": true,
                 "name": "srv1-campus5",
-                "node_id": "247ad2a4-76f5-434c-9003-66bcb8a1f22d",
+                "node_id": "fb11cad3-8d40-4239-b93a-c6f1b7958115",
                 "node_type": "qemu",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
@@ -2556,11 +2574,11 @@
                     "cdrom_image_md5sum": null,
                     "cpu_throttling": 0,
                     "cpus": 2,
-                    "hda_disk_image": "nsrc-nmm-20200309-cfe3779f.qcow2",
-                    "hda_disk_image_md5sum": "cfe3779f9cdc1fb8315b2505202c8470",
+                    "hda_disk_image": "nsrc-nmm-20200613-6c5e8bdc.qcow2",
+                    "hda_disk_image_md5sum": "6c5e8bdc44b652824bb6eb34dac52cfa",
                     "hda_disk_interface": "virtio",
-                    "hdb_disk_image": "nmm-srv1-campus5-hdb-20200517-1254e42f.img",
-                    "hdb_disk_image_md5sum": "1254e42f1868935fef053ec433e56cb0",
+                    "hdb_disk_image": "nmm-srv1-campus5-hdb-20200613-3e3f4c86.img",
+                    "hdb_disk_image_md5sum": "3e3f4c865cdae32e63281cc0f9a96e8b",
                     "hdb_disk_interface": "virtio",
                     "hdc_disk_image": "",
                     "hdc_disk_image_md5sum": null,
@@ -2582,6 +2600,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 2560,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: sysadm\nPassword: nsrc+ws"
                 },
                 "symbol": ":/symbols/server.svg",
@@ -2608,7 +2627,7 @@
                 },
                 "locked": true,
                 "name": "dist1-b1-campus3",
-                "node_id": "43f70cea-b703-4252-aeec-a168e6e27a4e",
+                "node_id": "cc412710-54f7-48f0-aa0d-3900fa65efa4",
                 "node_type": "qemu",
                 "port_name_format": "Gi{1}/{0}",
                 "port_segment_size": 4,
@@ -2647,6 +2666,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 512,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nmmlab\nPassword: lab-PW\nEnable: lab-EN"
                 },
                 "symbol": ":/symbols/ethernet_switch.svg",
@@ -2673,7 +2693,7 @@
                 },
                 "locked": true,
                 "name": "dist1-b2-campus3",
-                "node_id": "f30c5251-5db4-4d48-9efe-6fd88bb423c6",
+                "node_id": "d7672b30-e0db-458b-aad4-ee157fb81439",
                 "node_type": "qemu",
                 "port_name_format": "Gi{1}/{0}",
                 "port_segment_size": 4,
@@ -2712,6 +2732,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 512,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nmmlab\nPassword: lab-PW\nEnable: lab-EN"
                 },
                 "symbol": ":/symbols/ethernet_switch.svg",
@@ -2738,7 +2759,7 @@
                 },
                 "locked": true,
                 "name": "dist1-b1-campus1",
-                "node_id": "5e7f8e64-b1b1-40c8-91e4-e65bd2991ceb",
+                "node_id": "c620f674-ab6c-413c-b14d-507efd668073",
                 "node_type": "qemu",
                 "port_name_format": "Gi{1}/{0}",
                 "port_segment_size": 4,
@@ -2777,6 +2798,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 512,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nmmlab\nPassword: lab-PW\nEnable: lab-EN"
                 },
                 "symbol": ":/symbols/ethernet_switch.svg",
@@ -2803,7 +2825,7 @@
                 },
                 "locked": true,
                 "name": "srv1-campus2",
-                "node_id": "ace6817e-566e-4c75-8df3-4bfe11bbc906",
+                "node_id": "e1870555-a639-410f-bbd8-e32f0a97a830",
                 "node_type": "qemu",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
@@ -2817,11 +2839,11 @@
                     "cdrom_image_md5sum": null,
                     "cpu_throttling": 0,
                     "cpus": 2,
-                    "hda_disk_image": "nsrc-nmm-20200309-cfe3779f.qcow2",
-                    "hda_disk_image_md5sum": "cfe3779f9cdc1fb8315b2505202c8470",
+                    "hda_disk_image": "nsrc-nmm-20200613-6c5e8bdc.qcow2",
+                    "hda_disk_image_md5sum": "6c5e8bdc44b652824bb6eb34dac52cfa",
                     "hda_disk_interface": "virtio",
-                    "hdb_disk_image": "nmm-srv1-campus2-hdb-20200517-1cd0b873.img",
-                    "hdb_disk_image_md5sum": "1cd0b87386a0a9e2f66138ddb19e1c13",
+                    "hdb_disk_image": "nmm-srv1-campus2-hdb-20200613-3e71ac8f.img",
+                    "hdb_disk_image_md5sum": "3e71ac8fb97a4b882889bd04ba80d75c",
                     "hdb_disk_interface": "virtio",
                     "hdc_disk_image": "",
                     "hdc_disk_image_md5sum": null,
@@ -2843,6 +2865,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 2560,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: sysadm\nPassword: nsrc+ws"
                 },
                 "symbol": ":/symbols/server.svg",
@@ -2869,7 +2892,7 @@
                 },
                 "locked": true,
                 "name": "srv1-campus4",
-                "node_id": "5fd18c7c-581b-4cf6-b1d5-b766ac26dd9c",
+                "node_id": "65a33ca7-9d49-4308-8163-6064b8716e0d",
                 "node_type": "qemu",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
@@ -2883,11 +2906,11 @@
                     "cdrom_image_md5sum": null,
                     "cpu_throttling": 0,
                     "cpus": 2,
-                    "hda_disk_image": "nsrc-nmm-20200309-cfe3779f.qcow2",
-                    "hda_disk_image_md5sum": "cfe3779f9cdc1fb8315b2505202c8470",
+                    "hda_disk_image": "nsrc-nmm-20200613-6c5e8bdc.qcow2",
+                    "hda_disk_image_md5sum": "6c5e8bdc44b652824bb6eb34dac52cfa",
                     "hda_disk_interface": "virtio",
-                    "hdb_disk_image": "nmm-srv1-campus4-hdb-20200517-70f6f2cd.img",
-                    "hdb_disk_image_md5sum": "70f6f2cdf3d2ca76b01381c999cfe93b",
+                    "hdb_disk_image": "nmm-srv1-campus4-hdb-20200613-31ff423f.img",
+                    "hdb_disk_image_md5sum": "31ff423f07fe8059d58a53696196c691",
                     "hdb_disk_interface": "virtio",
                     "hdc_disk_image": "",
                     "hdc_disk_image_md5sum": null,
@@ -2909,6 +2932,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 2560,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: sysadm\nPassword: nsrc+ws"
                 },
                 "symbol": ":/symbols/server.svg",
@@ -2935,7 +2959,7 @@
                 },
                 "locked": true,
                 "name": "core1-campus4",
-                "node_id": "1d4d1360-3284-4fa2-b247-a9fa568f10dc",
+                "node_id": "dea0b28e-1e5d-449a-a5b6-c05df848d0c7",
                 "node_type": "qemu",
                 "port_name_format": "Gi{1}/{0}",
                 "port_segment_size": 4,
@@ -2974,6 +2998,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 512,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nmmlab\nPassword: lab-PW\nEnable: lab-EN"
                 },
                 "symbol": ":/symbols/gateway.svg",
@@ -3000,7 +3025,7 @@
                 },
                 "locked": true,
                 "name": "core1-campus2",
-                "node_id": "56f1a930-2855-455d-b4df-c671aa311e86",
+                "node_id": "ae02b9c7-1c42-4e3b-89ed-4c7e6e451bed",
                 "node_type": "qemu",
                 "port_name_format": "Gi{1}/{0}",
                 "port_segment_size": 4,
@@ -3039,6 +3064,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 512,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nmmlab\nPassword: lab-PW\nEnable: lab-EN"
                 },
                 "symbol": ":/symbols/gateway.svg",
@@ -3065,7 +3091,7 @@
                 },
                 "locked": true,
                 "name": "bdr1-campus4",
-                "node_id": "ab34d74a-eea0-4507-84da-f419c16a8e85",
+                "node_id": "7a535f6d-7024-4ba7-b5ca-1883cf32af60",
                 "node_type": "qemu",
                 "port_name_format": "Gi0/{0}",
                 "port_segment_size": 0,
@@ -3104,6 +3130,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 384,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nmmlab\nPassword: lab-PW\nEnable: lab-EN"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -3130,7 +3157,7 @@
                 },
                 "locked": true,
                 "name": "dist1-b2-campus4",
-                "node_id": "df356686-7689-4197-96b3-aea6a866268e",
+                "node_id": "51edf508-5aaa-4e0c-967d-8d7324a2804b",
                 "node_type": "qemu",
                 "port_name_format": "Gi{1}/{0}",
                 "port_segment_size": 4,
@@ -3169,6 +3196,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 512,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nmmlab\nPassword: lab-PW\nEnable: lab-EN"
                 },
                 "symbol": ":/symbols/ethernet_switch.svg",
@@ -3195,7 +3223,7 @@
                 },
                 "locked": true,
                 "name": "core1-campus5",
-                "node_id": "47daf08e-ee8e-4f8c-b99f-4f0defa34431",
+                "node_id": "6748a079-2adf-4863-ae83-d7fdd9853bbc",
                 "node_type": "qemu",
                 "port_name_format": "Gi{1}/{0}",
                 "port_segment_size": 4,
@@ -3234,6 +3262,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 512,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nmmlab\nPassword: lab-PW\nEnable: lab-EN"
                 },
                 "symbol": ":/symbols/gateway.svg",
@@ -3260,7 +3289,7 @@
                 },
                 "locked": true,
                 "name": "NAT-1",
-                "node_id": "c79129ad-e13e-4f7e-8efd-9dbe19e75769",
+                "node_id": "042a43f6-9719-48f2-a980-7ad2859f0d42",
                 "node_type": "nat",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
@@ -3298,7 +3327,7 @@
                 },
                 "locked": true,
                 "name": "srv1-campus1",
-                "node_id": "e634035e-19f5-4bf9-bbf6-7f28d0bd1d6c",
+                "node_id": "d5bc97fd-1d01-43a2-86c9-171715365895",
                 "node_type": "qemu",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
@@ -3312,11 +3341,11 @@
                     "cdrom_image_md5sum": null,
                     "cpu_throttling": 0,
                     "cpus": 2,
-                    "hda_disk_image": "nsrc-nmm-20200309-cfe3779f.qcow2",
-                    "hda_disk_image_md5sum": "cfe3779f9cdc1fb8315b2505202c8470",
+                    "hda_disk_image": "nsrc-nmm-20200613-6c5e8bdc.qcow2",
+                    "hda_disk_image_md5sum": "6c5e8bdc44b652824bb6eb34dac52cfa",
                     "hda_disk_interface": "virtio",
-                    "hdb_disk_image": "nmm-srv1-campus1-hdb-20200517-38788aa1.img",
-                    "hdb_disk_image_md5sum": "38788aa1b824ee076fbd6d251ac23253",
+                    "hdb_disk_image": "nmm-srv1-campus1-hdb-20200613-b5a9af56.img",
+                    "hdb_disk_image_md5sum": "b5a9af56cf3e85d38b21a5001d537436",
                     "hdb_disk_interface": "virtio",
                     "hdc_disk_image": "",
                     "hdc_disk_image_md5sum": null,
@@ -3337,6 +3366,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 2560,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: sysadm\nPassword: nsrc+ws"
                 },
                 "symbol": ":/symbols/server.svg",
@@ -3363,7 +3393,7 @@
                 },
                 "locked": true,
                 "name": "dist1-b2-campus5",
-                "node_id": "e5e6d852-ec34-447f-9fcd-461855f9b0ed",
+                "node_id": "56b5342a-f63f-46dd-99f2-88069493ac87",
                 "node_type": "qemu",
                 "port_name_format": "Gi{1}/{0}",
                 "port_segment_size": 4,
@@ -3402,6 +3432,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 512,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nmmlab\nPassword: lab-PW\nEnable: lab-EN"
                 },
                 "symbol": ":/symbols/ethernet_switch.svg",
@@ -3428,7 +3459,7 @@
                 },
                 "locked": true,
                 "name": "srv1-campus3",
-                "node_id": "89f32367-7edb-4fbc-9ec8-77b6d2df5774",
+                "node_id": "1a2ef293-e433-4d9c-aafe-ab42e1424294",
                 "node_type": "qemu",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
@@ -3442,11 +3473,11 @@
                     "cdrom_image_md5sum": null,
                     "cpu_throttling": 0,
                     "cpus": 2,
-                    "hda_disk_image": "nsrc-nmm-20200309-cfe3779f.qcow2",
-                    "hda_disk_image_md5sum": "cfe3779f9cdc1fb8315b2505202c8470",
+                    "hda_disk_image": "nsrc-nmm-20200613-6c5e8bdc.qcow2",
+                    "hda_disk_image_md5sum": "6c5e8bdc44b652824bb6eb34dac52cfa",
                     "hda_disk_interface": "virtio",
-                    "hdb_disk_image": "nmm-srv1-campus3-hdb-20200517-576ada0e.img",
-                    "hdb_disk_image_md5sum": "576ada0e2a72b255d2455722dd7a6613",
+                    "hdb_disk_image": "nmm-srv1-campus3-hdb-20200613-7e8ffed8.img",
+                    "hdb_disk_image_md5sum": "7e8ffed8980e9fdc8c89f09983dff3e1",
                     "hdb_disk_interface": "virtio",
                     "hdc_disk_image": "",
                     "hdc_disk_image_md5sum": null,
@@ -3468,6 +3499,7 @@
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 2560,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: sysadm\nPassword: nsrc+ws"
                 },
                 "symbol": ":/symbols/server.svg",
@@ -3494,7 +3526,7 @@
                 },
                 "locked": true,
                 "name": "NAT-2",
-                "node_id": "fdbe6de0-9c5a-4612-84af-a4d57b00c4c1",
+                "node_id": "e7cea41f-bbe6-493e-8620-a4498319f15e",
                 "node_type": "nat",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
@@ -3532,7 +3564,7 @@
                 },
                 "locked": true,
                 "name": "NAT-3",
-                "node_id": "8c94bf7f-7355-4416-a48d-a9d5931d2b11",
+                "node_id": "ff2b51cf-6e75-4ad1-8d4e-b085ca9364a0",
                 "node_type": "nat",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
@@ -3570,7 +3602,7 @@
                 },
                 "locked": true,
                 "name": "NAT-4",
-                "node_id": "c2c4235d-8ce4-4788-84ef-29ed5b08720c",
+                "node_id": "39fea669-a010-4f71-af81-eebc97e1a4bd",
                 "node_type": "nat",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
@@ -3608,7 +3640,7 @@
                 },
                 "locked": true,
                 "name": "NAT-5",
-                "node_id": "27ab42ce-b7f1-4607-ba23-c2374638e228",
+                "node_id": "9ff0f460-7bdc-4949-98c0-3759b186935f",
                 "node_type": "nat",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
@@ -3646,7 +3678,7 @@
                 },
                 "locked": true,
                 "name": "NAT-6",
-                "node_id": "bd2d8caa-e779-4902-af23-0bb75c4759be",
+                "node_id": "b1c8625a-4035-4376-8c82-7e530c18fe68",
                 "node_type": "nat",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
@@ -3684,7 +3716,7 @@
                 },
                 "locked": true,
                 "name": "NAT-7",
-                "node_id": "ffe46fd3-c96a-41b9-afcb-7850ba591c73",
+                "node_id": "8c708416-c3a6-4be1-8a4b-44f07b5e7198",
                 "node_type": "nat",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
@@ -3722,7 +3754,7 @@
                 },
                 "locked": true,
                 "name": "NAT-8",
-                "node_id": "8992513e-675c-4024-9b56-19b567e84123",
+                "node_id": "2108bfc5-1ecd-456b-a2d2-772df19972fc",
                 "node_type": "nat",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
@@ -3747,6 +3779,6 @@
     },
     "type": "topology",
     "variables": [],
-    "version": "2.2.8",
+    "version": "2.2.9",
     "zoom": 100
 }
