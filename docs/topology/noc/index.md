@@ -107,7 +107,9 @@ exercises.  You could:
   to see which students are running torrents!
 
 You should also install a HTML page at `/var/www/html/index.html` which links
-to all the tools.  You can use [this sample](noc-index.html) as a base.
+to all the tools.  You can use
+[this sample](https://raw.githubusercontent.com/nsrc-org/nsrc-noc-setup/master/noc/index.html)
+as a base.
 
 ## snmpd
 
