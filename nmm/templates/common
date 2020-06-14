@@ -116,6 +116,14 @@ render_snmp=conf_null
 
 conf_tail_default () {
 cat <<END
+banner exec ^
+^
+banner incoming ^
+^
+banner login ^
+Network Monitoring and Management Workshop Lab
+       Network Startup Resource Center
+^
 !
 line con 0
  exec-timeout 0 0
@@ -135,6 +143,14 @@ END
 }
 conf_tail_ssh () {
 cat <<END
+banner exec ^
+^
+banner incoming ^
+^
+banner login ^
+Network Monitoring and Management Workshop Lab
+       Network Startup Resource Center
+^
 !
 line con 0
  exec-timeout 0 0
@@ -149,6 +165,9 @@ line vty 0 4
  transport preferred none
  transport input ssh
 !
+crypto key generate rsa modulus 2048
+!
+do write mem
 end
 END
 }

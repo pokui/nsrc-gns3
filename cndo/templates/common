@@ -102,7 +102,10 @@ banner login ^
 Campus Network Design and Operations Workshop Lab
           Network Startup Resource Center
 ^
-no banner exec
+banner exec ^
+^
+banner incoming ^
+^
 !
 line con 0
  exec-timeout 0 0
@@ -196,7 +199,10 @@ banner login ^
 Campus Network Design and Operations Workshop Lab
           Network Startup Resource Center
 ^
-no banner exec
+banner exec ^
+^
+banner incoming ^
+^
 !
 line con 0
  exec-timeout 0 0
@@ -213,6 +219,9 @@ line vty 0 4
  transport preferred none
  transport input telnet ssh
 !
+crypto key generate rsa modulus 2048
+!
+do write mem
 end
 END
 }
