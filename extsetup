@@ -115,7 +115,7 @@ EOS
 
 (
 cat <<EOS
-${EXTERNAL_DOMAIN} www.${EXTERNAL_DOMAIN} console.${EXTERNAL_DOMAIN} netdata.${EXTERNAL_DOMAIN} noc.${EXTERNAL_DOMAIN} librenms.${EXTERNAL_DOMAIN} >vtp_cloud
+${EXTERNAL_DOMAIN} www.${EXTERNAL_DOMAIN} console.${EXTERNAL_DOMAIN} netdata.${EXTERNAL_DOMAIN} noc.${EXTERNAL_DOMAIN} >vtp_cloud
 EOS
 ) | REPLACE /etc/dehydrated/domains.txt sudo || IF_CHANGED
 

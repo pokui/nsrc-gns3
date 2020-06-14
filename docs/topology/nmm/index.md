@@ -108,8 +108,8 @@ it's the same VM image.
 
 URLs are:
 
-* <http://srv1.campusX.ws.nsrc.org/> - all tools apart from the following ones
-* <http://librenms.campusX.ws.nsrc.org/>
+* <http://srv1.campusX.ws.nsrc.org/> - full set of tools
+* <http://hostY.campusX.ws.nsrc.org/> - basic tools only (nagios)
 
 # Snapshots
 

@@ -65,7 +65,7 @@ ssh sysadm@192.168.122.250
   might want students to be able to login and look around; on the other
   hand, you might want to protect it from being damaged by students.
 * nagios login: `nagiosadmin` and `nsrc+ws`
-* LibreNMS login: <http://librenms.ws.nsrc.org/>, `admin` and `nsrc+ws`
+* LibreNMS login: `admin` and `nsrc+ws`
 * netbox login: `admin` and `nsrc+ws`
 * cacti login: `admin` and `nsrc+ws`.  On older systems (based on Ubuntu
   16.04) it is `admin` and `admin`; it then prompts for password change.

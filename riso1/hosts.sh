@@ -14,8 +14,8 @@ ff02::2 ip6-allrouters
 192.168.122.8		vtp2.ws.nsrc.org vtp2
 192.168.122.249		elk.ws.nsrc.org kibana.ws.nsrc.org elk
 2001:DB8:0:0::249	elk.ws.nsrc.org kibana.ws.nsrc.org elk
-192.168.122.250		noc.ws.nsrc.org librenms.ws.nsrc.org noc
-2001:DB8::250		noc.ws.nsrc.org librenms.ws.nsrc.org noc
+192.168.122.250		noc.ws.nsrc.org noc
+2001:DB8::250		noc.ws.nsrc.org noc
 192.168.122.251		ap1.ws.nsrc.org ap1
 192.168.122.252		ap2.ws.nsrc.org ap2
 192.168.122.253		sw.ws.nsrc.org sw

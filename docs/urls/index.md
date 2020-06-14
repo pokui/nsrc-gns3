@@ -13,7 +13,6 @@ Downloads | <http://www.ws.nsrc.org/downloads/> | <http://192.168.122.1/download
 Description | With DNS | Without DNS
 ----------- | -------- | -----------
 NOC index page | <http://noc.ws.nsrc.org/> | <http://192.168.122.250/>
-LibreNMS | <http://librenms.ws.nsrc.org/> | N/A (named virtualhost)
 Netdata | <http://vtp.ws.nsrc.org:19999/> | <http://192.168.122.1:19999/>
 Unifi controller | <https://noc.ws.nsrc.org:8443/> | <https://192.168.122.250:8443/>
 
