@@ -100,6 +100,66 @@ ElastiFlow does not listen by default on IPv6 addresses, but it can be
 [configured](https://github.com/robcowart/elastiflow/blob/master/INSTALL.md#6-configure-inputs)
 to do so.
 
+Alternatively, you might want to configure one or more virtual Cisco routers
+(e.g. `transit1.nren` / `transit2.nren`) to generate flow records including
+NBAR application recognition, as Elastiflow will record this as
+`flow.application`.
+
+Here is a suggested configuration to apply:
+
+```
+flow record NBAR-V4
+ match application name
+ match ipv4 tos
+ match ipv4 protocol
+ match ipv4 source address
+ match ipv4 destination address
+ match transport source-port
+ match transport destination-port
+ collect interface input
+ collect interface output
+ collect counter bytes long
+ collect counter packets long
+!
+flow record NBAR-V6
+ match application name
+ match ipv6 traffic-class
+ match ipv6 protocol
+ match ipv4 source address
+ match ipv4 destination address
+ match transport source-port
+ match transport destination-port
+ collect interface input
+ collect interface output
+ collect counter bytes long
+ collect counter packets long
+!
+flow exporter EXPORTER-ELK
+ description Export to elk
+ destination 192.168.122.249
+ transport udp 2055
+ template data timeout 60
+!
+flow monitor FLOW-MONITOR-V4
+ exporter EXPORTER-ELK
+ cache timeout active 300
+ record NBAR-V4
+!
+flow monitor FLOW-MONITOR-V6
+ exporter EXPORTER-ELK
+ cache timeout active 300
+ record NBAR-V6
+!
+interface GigabitEthernet 0/0
+ ip flow monitor FLOW-MONITOR-V4 input
+ ip flow monitor FLOW-MONITOR-V4 output
+ ipv6 flow monitor FLOW-MONITOR-V6 input
+ ipv6 flow monitor FLOW-MONITOR-V6 output
+```
+
+The mapping from NBAR IDs to application names is in
+[`/opt/elastiflow/logstash/elastiflow/dictionaries/app_id.yml`](https://github.com/robcowart/elastiflow/blob/master/logstash/elastiflow/dictionaries/app_id.yml)
+
 # Disable auto-close
 
 ELK is slow to start up, particularly Logstash: once it's running, you'll
