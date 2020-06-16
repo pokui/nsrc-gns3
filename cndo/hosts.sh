@@ -18,24 +18,24 @@ EOS
 
 for campus in $(seq 1 6); do
 cat <<EOS
-192.168.122.$((10*campus))		eth1.srv1.campus${campus}.ws.nsrc.org srv1.campus${campus}.ws.nsrc.org srv1-campus${campus}
+192.168.122.$((10*campus))		eth1.srv1.campus${campus}.ws.nsrc.org oob.srv1.campus${campus}.ws.nsrc.org
 EOS
 for i in $(seq 1 6); do
 cat <<EOS
-192.168.122.$((10*campus+i))		eth1.host${i}.campus${campus}.ws.nsrc.org host${i}.campus${campus}.ws.nsrc.org host${i}-campus${campus}
+192.168.122.$((10*campus+i))		eth1.host${i}.campus${campus}.ws.nsrc.org oob.host${i}.campus${campus}.ws.nsrc.org
 EOS
 done
 done
 
 cat <<EOS
 
-192.168.122.249		elk.ws.nsrc.org kibana.ws.nsrc.org elk
-2001:DB8:0:0::249	elk.ws.nsrc.org kibana.ws.nsrc.org elk
-192.168.122.250		noc.ws.nsrc.org noc
-2001:DB8:0:0::250	noc.ws.nsrc.org noc
-192.168.122.251		ap1.ws.nsrc.org ap1
-192.168.122.252		ap2.ws.nsrc.org ap2
-192.168.122.253		sw.ws.nsrc.org sw
+192.168.122.249		elk.ws.nsrc.org kibana.ws.nsrc.org
+2001:DB8:0:0::249	elk.ws.nsrc.org kibana.ws.nsrc.org
+192.168.122.250		noc.ws.nsrc.org
+2001:DB8:0:0::250	noc.ws.nsrc.org
+192.168.122.251		ap1.ws.nsrc.org
+192.168.122.252		ap2.ws.nsrc.org
+192.168.122.253		sw.ws.nsrc.org
 192.168.122.254		transit.nren.ws.nsrc.org
 
 # Transit links
@@ -76,13 +76,13 @@ cat <<EOS
 
 100.68.${campus}.129		gi0-3.core1.campus${campus}.ws.nsrc.org
 2001:DB8:${campus}:1::1		gi0-3.core1.campus${campus}.ws.nsrc.org
-100.68.${campus}.130		eth0.srv1.campus${campus}.ws.nsrc.org
-2001:DB8:${campus}:1::130	eth0.srv1.campus${campus}.ws.nsrc.org
+100.68.${campus}.130		eth0.srv1.campus${campus}.ws.nsrc.org srv1.campus${campus}.ws.nsrc.org
+2001:DB8:${campus}:1::130	eth0.srv1.campus${campus}.ws.nsrc.org srv1.campus${campus}.ws.nsrc.org
 EOS
 for i in $(seq 1 6); do
 cat <<EOS
-100.68.${campus}.$((130+i))		eth0.host${i}.campus${campus}.ws.nsrc.org
-2001:DB8:${campus}:1::$((130+i))	eth0.host${i}.campus${campus}.ws.nsrc.org
+100.68.${campus}.$((130+i))		eth0.host${i}.campus${campus}.ws.nsrc.org host${i}.campus${campus}.ws.nsrc.org
+2001:DB8:${campus}:1::$((130+i))	eth0.host${i}.campus${campus}.ws.nsrc.org host${i}.campus${campus}.ws.nsrc.org
 EOS
 done
 

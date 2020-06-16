@@ -157,9 +157,9 @@ ${IXP_V6}	gi3.p${GROUP}.ws.nsrc.org
 100.68.${GROUP}.23	gi0-1.t${GROUP}.ws.nsrc.org
 2001:DB8:${GROUP}:13::1	gi0-1.t${GROUP}.ws.nsrc.org
 
-100.68.${GROUP}.30	ens3.srv${GROUP}.ws.nsrc.org
-2001:db8:${GROUP}:21::30	ens3.srv${GROUP}.ws.nsrc.org
-192.168.122.$(( GROUP*10 ))	ens4.srv${GROUP}.ws.nsrc.org srv${GROUP}.ws.nsrc.org srv${GROUP}
+100.68.${GROUP}.30	ens3.srv${GROUP}.ws.nsrc.org srv${GROUP}.ws.nsrc.org srv${GROUP}
+2001:db8:${GROUP}:21::30	ens3.srv${GROUP}.ws.nsrc.org srv${GROUP}.ws.nsrc.org srv${GROUP}
+192.168.122.$(( GROUP*10 ))	ens4.srv${GROUP}.ws.nsrc.org oob.srv${GROUP}.ws.nsrc.org oob.srv${GROUP}
 EOS
 done
 done
