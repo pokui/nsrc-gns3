@@ -643,7 +643,7 @@ EOS
 
   (
 cat <<'EOS'
-OPTIONS='--collector.textfile.directory=/var/lib/node_exporter --collector.systemd'
+OPTIONS='--collector.textfile.directory=/var/lib/node_exporter --collector.systemd --collector.processes --collector.interrupts --collector.powersupplyclass --collector.thermal_zone'
 EOS
   ) | REPLACE /etc/default/node_exporter sudo || IF_CHANGED
 
