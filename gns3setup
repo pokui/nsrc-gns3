@@ -420,28 +420,35 @@ EOS
   sudo mkdir -p /var/lib/GNS3/images
   sudo chown -R "$USER":"$GROUP" /var/lib/GNS3/images
 
+  # https://github.com/GNS3/gns3-server/blob/master/conf/gns3_server.conf
   mkdir -p "$HOME/.config/GNS3/2.2"
   (
 cat <<EOS
 [Server]
 images_path = /var/lib/GNS3/images
 host = 192.168.122.${IP_OFFSET}
-#auth = True
-#user = ${GNS3_USERNAME:-$USER}
 EOS
-if [ -z "${GNS3_PASSWORD:-}" ]; then
-  if ! egrep -m1 "^#?password *=" "$HOME/.config/GNS3/2.2/gns3_server.conf" 2>/dev/null; then
-    GNS3_PASSWORD="$(dd if=/dev/urandom bs=1 count=6 2>/dev/null | base64)"
-    echo "#password = ${GNS3_PASSWORD}"
-  fi
-else
-  echo "#password = ${GNS3_PASSWORD}"
+if [ -n "${GNS3_AUTH:-}" ]; then
+  echo "auth = ${GNS3_AUTH}"
+elif ! egrep -m1 "^#?auth *=" "$HOME/.config/GNS3/2.2/gns3_server.conf" 2>/dev/null; then
+  echo "auth = False"
 fi
-if ! sudo kvm-ok >/dev/null 2>&1; then
-  echo "[Qemu]"
-  echo "; Uncomment the following to run without kvm (warning: VERY slow)"
-  egrep -m1 "^;?enable_kvm" "$HOME/.config/GNS3/2.2/gns3_server.conf" || echo ";enable_kvm = false"
+if [ -n "${GNS3_USERNAME:-}" ]; then
+  echo "user = ${GNS3_USERNAME}"
+elif ! egrep -m1 "^#?user *=" "$HOME/.config/GNS3/2.2/gns3_server.conf" 2>/dev/null; then
+  echo "user = ${USER}"
 fi
+if [ -n "${GNS3_PASSWORD:-}" ]; then
+  echo "password = ${GNS3_PASSWORD}"
+elif ! egrep -m1 "^#?password *=" "$HOME/.config/GNS3/2.2/gns3_server.conf" 2>/dev/null; then
+  echo "password = $(dd if=/dev/urandom bs=1 count=6 2>/dev/null | base64)"
+fi
+cat <<EOS
+
+[Qemu]
+enable_kvm = True
+require_kvm = False
+EOS
   ) | REPLACE "$HOME/.config/GNS3/2.2/gns3_server.conf" || IF_CHANGED
 }
 
@@ -684,3 +691,11 @@ egrep '^(user|password) *=' "$HOME/.config/GNS3/2.2/gns3_server.conf" || true
 
 And don't forget to install an /etc/hosts file
 EOS
+
+if ! sudo kvm-ok >/dev/null 2>&1; then
+cat <<EOS
+
+WARNING: Your system does not appear to have KVM enabled.  Emulation will
+be extremely slow!  Check your BIOS settings.
+EOS
+fi
