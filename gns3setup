@@ -494,8 +494,126 @@ EOS
 MODS="$MODS apache"
 conf_apache () {
   sudo apt-get install -y apache2
-  sudo mkdir -p /var/www/html/downloads
+  sudo mkdir -p /var/www/html/downloads /var/www/html/css
   sudo chown -R "$USER":"$GROUP" /var/www/html
+
+  curl -Ss https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css |
+    REPLACE /var/www/html/css/font-awesome.min.css sudo || IF_CHANGED
+  curl -Ss https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.min.css |
+    REPLACE /var/www/html/css/bulma.min.css sudo || IF_CHANGED
+
+  # This page is aimed at the students.  But don't override any existing customized page.
+  if grep "Apache2 Ubuntu Default Page: It works" /var/www/html/index.html >/dev/null; then
+    (
+cat <<EOS
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>WWW</title>
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/bulma.min.css">
+  </head>
+  <body>
+
+<section class="hero is-info">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">
+        NSRC Workshop Webserver
+      </h1>
+      <h2 class="subtitle">
+        www.ws.nsrc.org
+      </h2>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+<div class="container">
+<aside class="menu">
+  <p class="menu-label">
+    Workshop Access on this Server
+  </p>
+  <ul class="menu-list">
+        <li><a href="XXXX">LINK TO CURRENT WORKSHOP DIRECTORY</a></li>
+	<li><a href=http://www.ws.nsrc.org/downloads/>Downloads</a></li>
+        <li><a href=http://vtp.ws.nsrc.org:4200/>GNS3 Lab Console ports</a></li>
+  </ul>
+  <p class="menu-label">
+    Links
+  </p>
+  <ul class="menu-list">
+	<li><a href="https://nsrc.org/">NSRC Home</a></li>
+	<li><a href="https://nsrc.org/workshops/">Archived workshops at NSRC</a></li>
+  </ul>
+</aside>
+</div>
+</section>
+
+  </body>
+</html>
+EOS
+    ) | REPLACE /var/www/html/index.html sudo || IF_CHANGED
+  fi
+
+  # This page is aimed at the instructor
+  (
+cat <<'EOS'
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>WWW</title>
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/bulma.min.css">
+  </head>
+  <body>
+
+<section class="hero is-info">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">
+        NSRC Virtualized Training Platform
+      </h1>
+      <h2 class="subtitle">
+        vtp.ws.nsrc.org
+      </h2>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+<div class="container">
+<aside class="menu">
+  <p class="menu-label">
+    Documentation to run the Class
+  </p>
+  <ul class="menu-list">
+	<li><a href="https://shell.nsrc.org/~vtp/gns3/docs/">GNS3 Training Platform</a></li>
+	<li><a href="http://vtp.ws.nsrc.org:8384/">Syncthing</a></li>
+	<li><a href="http://vtp.ws.nsrc.org:4200/">GNS3 Lab Consoles</a></li>
+	<li><a href="http://vtp.ws.nsrc.org/~nsrc/cgi-bin/gns3man">Configuration Management</a></li>
+	<li><a href="http://vtp.ws.nsrc.org:3080/static/web-ui/bundled">Experimental Web Interface for GNS3</a></li>
+  </ul>
+  <p class="menu-label">
+    Links
+  </p>
+  <ul class="menu-list">
+	<li><a href="http://noc.ws.nsrc.org/">Classroom NOC</a></li>
+	<li><a href="http://vtp.ws.nsrc.org:19999/">NetData for the server</a></li>
+  </ul>
+</aside>
+</div>
+</section>
+
+  </body>
+</html>
+}
+EOS
+  ) | REPLACE /var/www/html/nsrc.html sudo || IF_CHANGED
 }
 
 MODS="$MODS syncthing"
