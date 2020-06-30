@@ -407,7 +407,12 @@ cat <<'EOS'
 
 <VirtualHost *:80>
 	ServerName www.ws.nsrc.org
-	ServerAlias *.ws.nsrc.org
+	#ServerAlias *.ws.nsrc.org
+	ServerAlias ws.nsrc.org
+	ServerAlias apt.ws.nsrc.org
+	ServerAlias gns3.ws.nsrc.org
+	ServerAlias gw.ws.nsrc.org
+	ServerAlias vtp.ws.nsrc.org
 	ServerAlias 192.168.122.*
 	DocumentRoot /var/www/html
 	CustomLog ${APACHE_LOG_DIR}/access.log combined
@@ -416,14 +421,21 @@ cat <<'EOS'
 <VirtualHost *:443>
 	ServerName www.ws.nsrc.org
 	ServerAlias *.ws.nsrc.org
-	ServerAlias 192.168.122.*
+	#ServerAlias *.ws.nsrc.org
+	ServerAlias ws.nsrc.org
+	ServerAlias apt.ws.nsrc.org
+	ServerAlias gns3.ws.nsrc.org
+	ServerAlias gw.ws.nsrc.org
+	ServerAlias vtp.ws.nsrc.org
 	DocumentRoot /var/www/html
 	CustomLog ${APACHE_LOG_DIR}/access.log combined
 
 	SSLEngine on
-	# ws.nsrc.org is not resolvable on Internet, may as well use self-signed cert
-	SSLCertificateFile      /etc/ssl/certs/ssl-cert-snakeoil.pem
-	SSLCertificateKeyFile   /etc/ssl/private/ssl-cert-snakeoil.key
+	# ws.nsrc.org is not resolvable on Internet, the cert won't be valid
+	#SSLCertificateFile      /etc/ssl/certs/ssl-cert-snakeoil.pem
+	#SSLCertificateKeyFile   /etc/ssl/private/ssl-cert-snakeoil.key
+	SSLCertificateFile      /etc/dehydrated/certs/vtp_cloud/fullchain.pem
+	SSLCertificateKeyFile   /etc/dehydrated/certs/vtp_cloud/privkey.pem
 </VirtualHost>
 
 # Handle all accesses to 127.0.0.1 as served locally
