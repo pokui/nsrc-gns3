@@ -420,13 +420,13 @@ cat <<'EOS'
 
 <VirtualHost *:443>
 	ServerName www.ws.nsrc.org
-	ServerAlias *.ws.nsrc.org
 	#ServerAlias *.ws.nsrc.org
 	ServerAlias ws.nsrc.org
 	ServerAlias apt.ws.nsrc.org
 	ServerAlias gns3.ws.nsrc.org
 	ServerAlias gw.ws.nsrc.org
 	ServerAlias vtp.ws.nsrc.org
+	ServerAlias 192.168.122.*
 	DocumentRoot /var/www/html
 	CustomLog ${APACHE_LOG_DIR}/access.log combined
 
