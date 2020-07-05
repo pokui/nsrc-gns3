@@ -80,6 +80,43 @@ EOS
 fi
 
 #
+# When resolving *.ws.nsrc.org domains, we want the kit to forward to
+# dnsmasq instead of using the internal DNS.  Normally this doesn't
+# matter because we look in /etc/hosts first anyway, but in the case
+# of a non-existent domain, we want an NXDOMAIN response from dnsmasq
+# rather than matching a wildcard record in the public DNS
+#
+mods="$MODS dns"
+conf_dns() {
+    (
+cat <<'EOS'
+#  This file is part of systemd.
+#
+#  systemd is free software; you can redistribute it and/or modify it
+#  under the terms of the GNU Lesser General Public License as published by
+#  the Free Software Foundation; either version 2.1 of the License, or
+#  (at your option) any later version.
+#
+# Entries in this file show the compile time defaults.
+# You can change settings by editing this file.
+# Defaults can be restored by simply deleting this file.
+#
+# See resolved.conf(5) for details
+
+[Resolve]
+DNS=192.168.122.1
+FallbackDNS=9.9.9.9
+Domains=~ws.nsrc.org
+#LLMNR=no
+#MulticastDNS=no
+#DNSSEC=no
+#Cache=yes
+#DNSStubListener=yes
+EOS
+    ) | REPLACE /etc/systemd/resolved.conf sudo || IF_CHANGED systemctl restart systemd-resolved || true
+}
+
+#
 # Install and configure Dehydrated
 # NOTE: at this point Apache must already be running so
 # that certs can be issued
