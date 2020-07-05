@@ -26,6 +26,7 @@ Edit it so it looks like this (leave the sections marked `....` alone):
   </forward>
   <bridge name='virbr0' stp='off' delay='0'/>
   <mac address='....'/>
+  <domain name='ws.nsrc.org' localOnly='yes'/>
   <ip address='192.168.122.1' netmask='255.255.255.0' localPtr='yes'>
     <dhcp>
       <range start='192.168.122.100' end='192.168.122.249'/>
@@ -40,6 +41,9 @@ Edit it so it looks like this (leave the sections marked `....` alone):
 ```
 
 Then save.  The change won't take effect until you reboot.
+
+(The "domain" setting ensures that `*.ws.nsrc.org` names are only ever resolved
+locally, and never forwarded to the public DNS)
 
 # Reconfigure external ports
 
