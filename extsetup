@@ -152,7 +152,7 @@ EOS
 
 (
 cat <<EOS
-${EXTERNAL_DOMAIN} www.${EXTERNAL_DOMAIN} console.${EXTERNAL_DOMAIN} netdata.${EXTERNAL_DOMAIN} noc.${EXTERNAL_DOMAIN} >vtp_cloud
+${EXTERNAL_DOMAIN} www.${EXTERNAL_DOMAIN} console.${EXTERNAL_DOMAIN} ssh.${EXTERNAL_DOMAIN} netdata.${EXTERNAL_DOMAIN} noc.${EXTERNAL_DOMAIN} >vtp_cloud
 EOS
 ) | REPLACE /etc/dehydrated/domains.txt sudo || IF_CHANGED
 
@@ -424,6 +424,8 @@ cat <<'EOS'
 	RewriteRule "(.*)" "http://192.168.122.1:19999$1" [L,P]
 	RewriteCond "%{ENV:PREFIX}" "^console\.$" [NC]
 	RewriteRule "(.*)" "http://192.168.122.1:4200$1" [L,P]
+	RewriteCond "%{ENV:PREFIX}" "^ssh\.$" [NC]
+	RewriteRule "(.*)" "http://192.168.122.1:4200/ssh$1" [L,P]
 
 	# Websockets for Grafana live tailing
 	RewriteCond %{HTTP:Connection} Upgrade [NC]

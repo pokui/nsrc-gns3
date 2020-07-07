@@ -460,12 +460,15 @@ conf_shellinabox () {
   curl -Ss https://raw.githubusercontent.com/nsrc-org/nsrc-gns3/main/gns3-shellinabox.py |
     REPLACE /usr/local/bin/gns3-shellinabox.py sudo || IF_CHANGED
   SUDO_CHMOD +x /usr/local/bin/gns3-shellinabox.py
+  curl -Ss https://raw.githubusercontent.com/nsrc-org/nsrc-gns3/main/gns3-ssh.py |
+    REPLACE /usr/local/bin/gns3-ssh.py sudo || IF_CHANGED
+  SUDO_CHMOD +x /usr/local/bin/gns3-ssh.py
 
   (
 egrep -v '^(SHELLINABOX_ARGS=|# gns3setup)' /etc/default/shellinabox
 cat <<EOS
 # gns3setup
-SHELLINABOX_ARGS="--no-beep -t -s /:shellinabox:shellinabox:/var/tmp:/usr/local/bin/gns3-shellinabox.py"
+SHELLINABOX_ARGS="--no-beep -t -s /:shellinabox:shellinabox:/var/tmp:/usr/local/bin/gns3-shellinabox.py -s '/ssh:shellinabox:shellinabox:/var/tmp:PYTHONIOENCODING=utf-8:replace /usr/local/bin/gns3-ssh.py'"
 EOS
   ) | REPLACE /etc/default/shellinabox sudo || IF_CHANGED
 
