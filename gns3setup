@@ -457,7 +457,7 @@ conf_shellinabox () {
   # Hopefully this won't be needed for much longer:
   # https://github.com/GNS3/gns3-gui/issues/2883
   sudo apt-get install -y shellinabox
-  curl -Ss https://raw.githubusercontent.com/nsrc-org/nsrc-gns3/master/gns3-shellinabox.py |
+  curl -Ss https://raw.githubusercontent.com/nsrc-org/nsrc-gns3/main/gns3-shellinabox.py |
     REPLACE /usr/local/bin/gns3-shellinabox.py sudo || IF_CHANGED
   SUDO_CHMOD +x /usr/local/bin/gns3-shellinabox.py
 
@@ -487,7 +487,7 @@ EOS
   ) | REPLACE /etc/apache2/conf-enabled/usercgi.conf sudo || IF_CHANGED sudo systemctl restart apache2
 
   mkdir -p "$HOME/public_html/cgi-bin"
-  curl -Ss https://raw.githubusercontent.com/nsrc-org/nsrc-gns3/master/gns3man | REPLACE "$HOME/public_html/cgi-bin/gns3man" || IF_CHANGED
+  curl -Ss https://raw.githubusercontent.com/nsrc-org/nsrc-gns3/main/gns3man | REPLACE "$HOME/public_html/cgi-bin/gns3man" || IF_CHANGED
   CHMOD 755 "$HOME/public_html/cgi-bin" "$HOME/public_html/cgi-bin/gns3man"
 }
 
