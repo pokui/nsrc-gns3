@@ -25,8 +25,12 @@ chmod +x gns3-shellinabox.py
 sudo mv gns3-shellinabox.py /usr/local/bin/gns3-shellinabox.py
 ```
 
-If you have GNS3 http authentication turned on, you will need to set the
-username and password within `/usr/local/bin/gns3-shellinabox.py`.
+Add the shellinabox user to the "nsrc" group so it can read the GNS3 API
+password from the GNS3 config file:
+
+```
+usermod -a -G nsrc shellinabox
+```
 
 Edit `/etc/default/shellinabox` and change the SHELLINABOX_ARGS setting:
 

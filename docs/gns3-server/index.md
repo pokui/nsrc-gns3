@@ -95,19 +95,23 @@ the directory you just made.
 ```
 [Server]
 images_path = /var/lib/GNS3/images
-host = 100.64.0.1
 auth = True
 user = nsrc
 password = XXXXXXXX
 ```
 
-There are some additional, optional settings in here:
+Now restart the server:
 
-* `host = 100.64.0.1` makes GNS3 listen only on the internal interface,
-  for security.  If you want to access GNS3 over the Internet on a public
-  IP, comment out this line.  Note that if you do, the serial consoles
-  will be accessible remotely without any authentication.
-* `auth`, `user` and `password` configure the server to require
+```shell
+sudo systemctl start gns3@nsrc
+```
+
+For reference:
+
+* `images_path` tells GNS3 where to put its hard drive images.  The
+  pre-generated snapshots have `/var/lib/GNS3/images/QEMU/xxx.img` as the
+  base path coded within them, so we need to put images in the same place.
+* `auth`, `user` and `password` configure the GNS3 API to require
   authentication.  This will prevent students from connecting and taking
   over the emulator.  The password in this file is in cleartext, so do not
   use a valuable password.  The GNS3 username and password do not need to
@@ -117,8 +121,22 @@ There is more documentation on this file
 [here](https://docs.gns3.com/1f6uXq05vukccKdMCHhdki5MXFhV8vcwuGwiRvXMQvM0/index.html)
 and [here](https://github.com/GNS3/gns3-server/blob/master/conf/gns3_server.conf).
 
-Now restart the server:
+!!! Warning
 
-```shell
-sudo systemctl start gns3@nsrc
-```
+    Regardless of authentication settings, serial consoles are accessible
+    remotely without any authentication, to anyone who knows or guesses the port
+    number.  If this is a concern (e.g.  because your WAN interface is a public
+    IP) then you can apply firewall rules, or you can bind GNS3 so that it only
+    listens on the internal interface:
+
+    ```
+    [Server]
+    images_path = /var/lib/GNS3/images
+    host = 100.64.0.1
+    ... etc
+    ```
+
+    However there is a [bug](https://github.com/GNS3/gns3-server/issues/1802) in
+    gns3-server (at least 2.2.11) which may prevent network traffic flowing when
+    you have this setting.  You will also need to change the TARGET setting
+    in `~/public_html/cgi-bin/gns3man`.

@@ -426,12 +426,11 @@ EOS
 cat <<EOS
 [Server]
 images_path = /var/lib/GNS3/images
-host = 100.64.0.${IP_OFFSET}
 EOS
 if [ -n "${GNS3_AUTH:-}" ]; then
   echo "auth = ${GNS3_AUTH}"
 elif ! egrep -m1 "^#?auth *=" "$HOME/.config/GNS3/2.2/gns3_server.conf" 2>/dev/null; then
-  echo "auth = False"
+  echo "auth = True"
 fi
 if [ -n "${GNS3_USERNAME:-}" ]; then
   echo "user = ${GNS3_USERNAME}"
@@ -472,6 +471,7 @@ SHELLINABOX_ARGS="--no-beep -t -s /:shellinabox:shellinabox:/var/tmp:/usr/local/
 EOS
   ) | REPLACE /etc/default/shellinabox sudo || IF_CHANGED
 
+  sudo usermod -a -G "$GROUP" shellinabox
   sudo systemctl enable shellinabox
 }
 

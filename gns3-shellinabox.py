@@ -3,15 +3,25 @@
 # Usage:
 #   ./shellinaboxd -t -s '/:nsrc:nsrc:/home/nsrc:/home/nsrc/gns3-shellinabox.py'
 
-import os, sys
+import os, re, sys
 import urllib.parse as parse
 
-TARGET="100.64.0.1"
-GNS3_URL="http://" + TARGET + ":3080"
+GNS3_CONFIG="/home/nsrc/.config/GNS3/2.2/gns3_server.conf"
+CREDS = {
+    "host": "127.0.0.1",
+    "user": None,
+    "password": None,
+}
 
-# HTTP authentication to API (if required)
-GNS3_USER="nsrc"
-GNS3_PASS="XXXXXXXX"
+# Read config file to get HTTP credentials
+if GNS3_CONFIG:
+    with open(GNS3_CONFIG) as f:
+        for line in f:
+            m = re.match(r'^(user|password)\s*=\s*"?(.*?)"?\s*$', line)
+            if m:
+                CREDS[m.group(1)] = m.group(2)
+
+GNS3_URL="http://" + CREDS["host"] + ":3080"
 
 # Projects which should not be shown to end users
 EXCLUDE_PROJECTS = {
@@ -26,7 +36,7 @@ if q.get("port"):
     port = int(q["port"][0])
     if port < 1024 or port > 65535:
         raise RuntimeError("Invalid port")
-    os.execlp("telnet", "telnet", "-E", TARGET, str(port))
+    os.execlp("telnet", "telnet", "-E", CREDS["host"], str(port))
 
 import json
 import re
@@ -50,7 +60,7 @@ def dump_project(project_id):
         print("%-20s %s" % (node["name"], make_url(port=node["console"],name=node["name"])))
 
 passman = request.HTTPPasswordMgrWithDefaultRealm()
-passman.add_password(None, GNS3_URL, GNS3_USER, GNS3_PASS)
+passman.add_password(None, GNS3_URL, CREDS["user"], CREDS["password"])
 authhandler = request.HTTPBasicAuthHandler(passman)
 opener = request.build_opener(authhandler)
 request.install_opener(opener)

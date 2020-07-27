@@ -7,7 +7,8 @@ CGI tool to manage configurations of IOSv and CSR1000v devices in GNS3
 * Read and edit the config in NVRAM
 """
 
-GNS3_URL = "http://100.64.0.1:3080"
+TARGET = "127.0.0.1"
+GNS3_URL="http://" + TARGET + ":3080"
 EXCLUDE_PROJECTS = {
     "NOC",
 }
