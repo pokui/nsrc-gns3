@@ -5,6 +5,9 @@ NGROUPS=8
 GROUP="${1}"
 OTHER="$(( ((GROUP-1)^1) + 1 ))"
 AS="$(( GROUP*10 ))"
+WS_V4_SUBNET="100.64.0"
+WS_V4_NETMASK="255.255.252.0"
+WS_V4_WILDMASK="0.0.0.63"
 
 preamble_iosv () {
   ISIS_ENABLE="${1:-Y}"

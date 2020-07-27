@@ -36,7 +36,7 @@ ip tcp path-mtu-discovery
 interface GigabitEthernet0/0
  description Link to TR${OTHER} (and to the world)
  ip address ${PEER_LOCAL_V4} 255.255.255.254 secondary
- ip address ${WS_V4_SUBNET}$((DEV+1)) 255.255.255.0
+ ip address ${WS_V4_SUBNET}.$((DEV+1)) 255.255.255.0
  no ip redirects
  no ip proxy-arp
  ipv6 address FE80::$((DEV+1)) link-local
