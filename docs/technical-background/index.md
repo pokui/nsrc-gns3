@@ -2,29 +2,29 @@ This information may be useful in understanding how the platform works.
 
 # Addressing plan
 
-Since all the labs use the 192.168.122 network for their external
+Since all the labs use the 100.64.0.0/22 network for their external
 connectivity, there is a common addressing plan on the backbone.
 
-IP address          | DNS name            | Description
-:------------------ | :------------------ | :----------
-192.168.122.1       | gw.ws.nsrc.org      | The server itself (gateway to the external Internet)
-192.168.122.2-4     |                     | Transit routers
-192.168.122.5-7     |                     | IXP route servers
-192.168.122.8-9     |                     | Reserved for second/third server
-192.168.122.10-19   |                     | Group 1 out-of-band management
-192.168.122.20-29   |                     | Group 2 out-of-band management
-192.168.122.30-39   |                     | Group 3 out-of-band management
-192.168.122.40-49   |                     | Group 4 out-of-band management
-192.168.122.50-59   |                     | Group 5 out-of-band management
-192.168.122.60-69   |                     | Group 6 out-of-band management
-192.168.122.70-79   |                     | Group 7 out-of-band management
-192.168.122.80-89   |                     | Group 8 out-of-band management
-192.168.122.100-249 |                     | DHCP (student laptops)
-192.168.122.250     | noc.ws.nsrc.org     | NOC VM
-192.168.122.251     | ap1.ws.nsrc.org     | Wireless access point
-192.168.122.252     | ap2.ws.nsrc.org     | Wireless access point
-192.168.122.253     | sw.ws.nsrc.org      | Switch
-192.168.122.254     |                     | Target for inbound static route
+IP address              | DNS name            | Description
+:---------------------- | :------------------ | :----------
+100.64.0.1              | gw.ws.nsrc.org      | The server itself (gateway to the external Internet)
+100.64.0.2-4            |                     | Transit routers
+100.64.0.5-7            |                     | IXP route servers
+100.64.0.8-9            |                     | Reserved for second/third server
+100.64.0.10-19          |                     | Group 1 out-of-band management
+100.64.0.20-29          |                     | Group 2 out-of-band management
+100.64.0.30-39          |                     | Group 3 out-of-band management
+100.64.0.40-49          |                     | Group 4 out-of-band management
+100.64.0.50-59          |                     | Group 5 out-of-band management
+100.64.0.60-69          |                     | Group 6 out-of-band management
+100.64.0.70-79          |                     | Group 7 out-of-band management
+100.64.0.80-89          |                     | Group 8 out-of-band management
+100.64.0.250            | noc.ws.nsrc.org     | NOC VM
+100.64.0.251            | ap1.ws.nsrc.org     | Wireless access point
+100.64.0.252            | ap2.ws.nsrc.org     | Wireless access point
+100.64.0.253            | sw.ws.nsrc.org      | Switch
+100.64.0.254            |                     | Target for inbound static route
+100.64.1.0-100.64.3.254 |                     | DHCP (student laptops)
 
 Some topologies use the same address space - in particular, CNDO and NMM use
 the same backbone addresses for transit routers and out-of-band management. 
@@ -43,11 +43,11 @@ like" public IP space, but is actually reserved space from
 # Out-of-band management
 
 The student VMs (srv1/hostN) are connected both to the IOSv/IOSvL2 campus
-network and the 192.168.122 network.  Their default gateway points via the
-virtual campus network, but the 192.168.122 connection functions as an
+network and the 100.64.0.0/22 network.  Their default gateway points via the
+virtual campus network, but the 100.64.0.0/22 connection functions as an
 "out-of-band management" network.
 
-When students connect to their VM on its 192.168.122 address, it bypasses
+When students connect to their VM on its 100.64.0 address, it bypasses
 the IOSv network.  This is important because IOSv has a throughput limit of
 only 2Mbps (250KB/sec); it also minimises the load on the emulation.
 
@@ -56,7 +56,7 @@ virtual campus network is broken.  This can be useful - for example they can
 break the campus network and still get into Nagios to see everything turn
 red.
 
-The student machines are configured to fetch packages via 192.168.122.1 as a
+The student machines are configured to fetch packages via 100.64.0.1 as a
 proxy (see `/etc/apt/apt.conf.d/99proxy`).  This means that installing
 packages is also not throttled by IOSv, and reduces external bandwidth
 because of apt-cacher-ng.
@@ -129,22 +129,22 @@ sysadm@srv1:~$ lxc list
 +-------------+---------+-----------------------+----------------------------------------+------------+-----------+
 | host-master | STOPPED |                       |                                        | PERSISTENT | 0         |
 +-------------+---------+-----------------------+----------------------------------------+------------+-----------+
-| host1       | RUNNING | 192.168.122.11 (eth1) | 2001:db8:1:1::131 (eth0)               | PERSISTENT | 0         |
+| host1       | RUNNING | 100.64.0.11 (eth1) | 2001:db8:1:1::131 (eth0)               | PERSISTENT | 0         |
 |             |         | 100.68.1.131 (eth0)   | 2001:db8:1:1:216:3eff:fed8:988e (eth0) |            |           |
 +-------------+---------+-----------------------+----------------------------------------+------------+-----------+
-| host2       | RUNNING | 192.168.122.12 (eth1) | 2001:db8:1:1::132 (eth0)               | PERSISTENT | 0         |
+| host2       | RUNNING | 100.64.0.12 (eth1) | 2001:db8:1:1::132 (eth0)               | PERSISTENT | 0         |
 |             |         | 100.68.1.132 (eth0)   | 2001:db8:1:1:216:3eff:fef0:c02a (eth0) |            |           |
 +-------------+---------+-----------------------+----------------------------------------+------------+-----------+
-| host3       | RUNNING | 192.168.122.13 (eth1) | 2001:db8:1:1::133 (eth0)               | PERSISTENT | 0         |
+| host3       | RUNNING | 100.64.0.13 (eth1) | 2001:db8:1:1::133 (eth0)               | PERSISTENT | 0         |
 |             |         | 100.68.1.133 (eth0)   | 2001:db8:1:1:216:3eff:feec:66e (eth0)  |            |           |
 +-------------+---------+-----------------------+----------------------------------------+------------+-----------+
-| host4       | RUNNING | 192.168.122.14 (eth1) | 2001:db8:1:1::134 (eth0)               | PERSISTENT | 0         |
+| host4       | RUNNING | 100.64.0.14 (eth1) | 2001:db8:1:1::134 (eth0)               | PERSISTENT | 0         |
 |             |         | 100.68.1.134 (eth0)   | 2001:db8:1:1:216:3eff:fe7c:8e93 (eth0) |            |           |
 +-------------+---------+-----------------------+----------------------------------------+------------+-----------+
-| host5       | RUNNING | 192.168.122.15 (eth1) | 2001:db8:1:1::135 (eth0)               | PERSISTENT | 0         |
+| host5       | RUNNING | 100.64.0.15 (eth1) | 2001:db8:1:1::135 (eth0)               | PERSISTENT | 0         |
 |             |         | 100.68.1.135 (eth0)   | 2001:db8:1:1:216:3eff:fe33:e459 (eth0) |            |           |
 +-------------+---------+-----------------------+----------------------------------------+------------+-----------+
-| host6       | RUNNING | 192.168.122.16 (eth1) | 2001:db8:1:1::136 (eth0)               | PERSISTENT | 0         |
+| host6       | RUNNING | 100.64.0.16 (eth1) | 2001:db8:1:1::136 (eth0)               | PERSISTENT | 0         |
 |             |         | 100.68.1.136 (eth0)   | 2001:db8:1:1:216:3eff:fe37:687 (eth0)  |            |           |
 +-------------+---------+-----------------------+----------------------------------------+------------+-----------+
 ```

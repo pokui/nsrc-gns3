@@ -3,7 +3,7 @@
 cat <<EOS
 router bgp ${AS}
  bgp rpki server tcp 100.68.${GROUP}.30 port 3323 refresh 3600
- bgp rpki server tcp 192.168.122.1 port 3323 refresh 3600
+ bgp rpki server tcp ${WS_V4_SUBNET}.1 port 3323 refresh 3600
 !
 EOS
 return 2>/dev/null || echo "end"

@@ -96,7 +96,7 @@ it to the WAN port while the machine is rebooting.
 # Next steps
 
 Once this is completed, test your [classroom network](../networking/#classroom-network)
-- you should be able to connect a laptop and get a 192.168.122.x IP address
+- you should be able to connect a laptop and get a 100.64.0.x IP address
 and access the Internet via the WAN uplink on the server.
 
 Once you are happy that this is working, you can skip straight to

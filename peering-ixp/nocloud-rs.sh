@@ -39,7 +39,7 @@ for i in $(seq 1 2); do
   GWV6="${V6BLOCK}:2::9"
   IPV4_IXP="${V4IXP}.254"
   IPV6_IXP="${V6BLOCK}:1::FE"
-  BACKDOOR="192.168.122.$((i+4))"
+  BACKDOOR="100.64.0.$((i+4))"
 
   ######## NETWORK CONFIG ########
   cat <<EOS >"$TMPDIR/network-config"
@@ -60,10 +60,10 @@ ethernets:
   $ETH2:
     accept-ra: false
     addresses:
-      - $BACKDOOR/24
+      - $BACKDOOR/22
     nameservers:
       addresses:
-        - 192.168.122.1
+        - 100.64.0.1
       search:
         - ws.nsrc.org
 EOS
@@ -106,7 +106,7 @@ write_files:
   # Assume classroom server has virbr0 on standard address and apt-cacher-ng is available
   - path: /etc/apt/apt.conf.d/99proxy
     content: |
-      Acquire::http::Proxy "http://192.168.122.1:3142/";
+      Acquire::http::Proxy "http://100.64.0.1:3142/";
   - path: /etc/gai.conf
     content: |
       # New label table with separate label for 2001:db8::/32.
@@ -125,7 +125,7 @@ write_files:
       label 2001:0::/32   7
       label 2001:db8::/32 6
       label 2001:10::/28  6
-  # Policy routing so inbound traffic to 192.168.122.x always returns via same interface
+  # Policy routing so inbound traffic to 100.64.0.0/22 always returns via same interface
   - path: /etc/iproute2/rt_tables
     append: true
     content: |
@@ -137,13 +137,13 @@ write_files:
       if [ "\$IFACE" = "$ETH2" ]; then
         # Apply policy routing
         ip rule add from $BACKDOOR table backdoor
-        ip route add default via 192.168.122.1 dev $ETH2 metric 100 table backdoor
-        ip route add 192.168.122.0/24 dev $ETH2  proto kernel  scope link  src $BACKDOOR  table backdoor
+        ip route add default via 100.64.0.1 dev $ETH2 metric 100 table backdoor
+        ip route add 100.64.0.0/22 dev $ETH2  proto kernel  scope link  src $BACKDOOR  table backdoor
         ip route flush cache
       fi
   - path: /etc/sysctl.d/90-rpf.conf
     content: |
-      # Loose reverse path filtering (traffic from 192.168.122 address may come in via $ETH0/$ETH1)
+      # Loose reverse path filtering (traffic from 100.64.0.0/22 address may come in via $ETH0/$ETH1)
       net.ipv4.conf.all.rp_filter=2
   - path: /etc/bird/bird.conf
     owner: bird:bird

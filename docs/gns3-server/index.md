@@ -95,7 +95,7 @@ the directory you just made.
 ```
 [Server]
 images_path = /var/lib/GNS3/images
-host = 192.168.122.1
+host = 100.64.0.1
 auth = True
 user = nsrc
 password = XXXXXXXX
@@ -103,7 +103,7 @@ password = XXXXXXXX
 
 There are some additional, optional settings in here:
 
-* `host = 192.168.122.1` makes GNS3 listen only on the internal interface,
+* `host = 100.64.0.1` makes GNS3 listen only on the internal interface,
   for security.  If you want to access GNS3 over the Internet on a public
   IP, comment out this line.  Note that if you do, the serial consoles
   will be accessible remotely without any authentication.

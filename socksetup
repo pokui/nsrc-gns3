@@ -85,7 +85,7 @@ internal: ${WAN_INTERFACE} port = 11080
 
 # "Outgoing" connections use the inside interface
 # NOTE: Doesn't accept ifnames with dash (e.g. "br-bbone") or IPv6 literals
-external: 192.168.122.1
+external: 100.64.0.1
 
 # methods for socks-rules.
 socksmethod: username
@@ -130,7 +130,7 @@ socks pass {
         user: proxy
 }
 socks pass {
-        from: 0.0.0.0/0 to: 192.168.122.0/24
+        from: 0.0.0.0/0 to: 100.64.0.0/22
         protocol: tcp udp
         socksmethod: username
         user: proxy

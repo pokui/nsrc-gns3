@@ -21,7 +21,7 @@ DATE="$(date -u +%Y%m%d)"
 mkdir -p nocloud
 
 FQDN="elk.ws.nsrc.org"
-IPV4="192.168.122.249"
+IPV4="100.64.0.249"
 IPV6="2001:db8:0:0::249"
 
 ######## NETWORK CONFIG ########
@@ -31,13 +31,13 @@ ethernets:
   $ETH0:
     accept-ra: false
     addresses:
-      - $IPV4/24
+      - $IPV4/22
       - $IPV6/64
-    gateway4: 192.168.122.1
+    gateway4: 100.64.0.1
     gateway6: 2001:db8:0:0::254
     nameservers:
       addresses:
-        - 192.168.122.1
+        - 100.64.0.1
       search:
         - ws.nsrc.org
 EOS
@@ -74,7 +74,7 @@ write_files:
   # Assume classroom server has virbr0 on standard address and apt-cacher-ng is available
   - path: /etc/apt/apt.conf.d/99proxy
     content: |
-      Acquire::http::Proxy "http://192.168.122.1:3142/";
+      Acquire::http::Proxy "http://100.64.0.1:3142/";
   - path: /etc/gai.conf
     content: |
       # New label table with separate label for 2001:db8::/32.

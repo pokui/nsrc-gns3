@@ -18,7 +18,7 @@ to the students and VMs inside the labs, as well as to the host itself.
 # apt-cacher-ng
 
 All the student VMs are configured to fetch packages via a proxy on
-192.168.122.1:3142 - this speeds up downloads drastically when all the class
+100.64.0.1:3142 - this speeds up downloads drastically when all the class
 are fetching the same packages.  Install it:
 
 ```
@@ -53,7 +53,7 @@ sudo systemctl restart apt-cacher-ng
 To limit which networks can access your proxy, edit `/etc/hosts.allow`:
 
 ```
-apt-cacher-ng: 127.0.0.1 10.0.0.0/8 100.64.0.0/10 192.168.0.0/16 [::1] [2001:db8::]/32
+apt-cacher-ng: 127.0.0.1 10.0.0.0/8 100.64.0.0/10 172.16.0.0/12 192.168.0.0/16 [::1] [2001:db8::]/32
 ```
 
 and `/etc/hosts.deny`:
@@ -63,7 +63,7 @@ apt-cacher-ng: ALL
 ```
 
 !!! Note
-    Setting `BindAddress: localhost 192.168.122.1` ought to work too, but is
+    Setting `BindAddress: localhost 100.64.0.1` ought to work too, but is
     not a satisfactory solution because apt-cacher-ng can start before
     libvirt has created the virbr0 network - meaning that it only listens on
     the loopback interface.
@@ -75,7 +75,7 @@ apt-cacher-ng: ALL
 On your server, create `/etc/apt/apt.conf.d/99proxy` containing:
 
 ```
-Acquire::http::Proxy "http://192.168.122.1:3142/";
+Acquire::http::Proxy "http://100.64.0.1:3142/";
 Acquire::https::Proxy "DIRECT";
 ```
 
@@ -106,4 +106,4 @@ bash <(curl -Ss https://my-netdata.io/kickstart-static64.sh)
 !!! Note
     No 'sudo' is required - it will sudo itself when required
 
-Netdata is then visible at <http://192.168.122.1:19999/>
+Netdata is then visible at <http://100.64.0.1:19999/>

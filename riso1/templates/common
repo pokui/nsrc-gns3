@@ -2,3 +2,7 @@ set -eu
 set -o pipefail
 
 NGROUPS=4   # this is the number of groups per topology
+
+WS_V4_SUBNET="100.64.0"
+WS_V4_NETMASK="255.255.252.0"
+WS_V4_WILDMASK="0.0.0.63"

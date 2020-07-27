@@ -31,12 +31,12 @@ for i in $(seq 1 6); do
   FQDN="srv1.campus$i.ws.nsrc.org"
   IPV4="100.68.$i.130"
   IPV6="2001:db8:$i:1::130"
-  BACKDOOR="192.168.122.$((10*i))"
+  BACKDOOR="100.64.0.$((10*i))"
 
   # We need all the srv1 br1's to have unique MAC addresses
   # See https://bugs.launchpad.net/netplan/+bug/1782221
   MAC0="$(printf "52:54:%02x:%02x:%02x:%02x" 100 68 $i 130)"
-  MAC1="$(printf "52:54:%02x:%02x:%02x:%02x" 192 168 122 $((10*i)) )"
+  MAC1="$(printf "52:54:%02x:%02x:%02x:%02x" 100 64 0 $((10*i)) )"
 
   ######## NETWORK CONFIG ########
   cat <<EOS >"$TMPDIR/network-config"
@@ -70,10 +70,10 @@ bridges:
       stp: false
     accept-ra: false
     addresses:
-      - $BACKDOOR/24
+      - $BACKDOOR/22
     nameservers:
       addresses:
-        - 192.168.122.1
+        - 100.64.0.1
       search:
         - campus$i.ws.nsrc.org
         - ws.nsrc.org
@@ -111,7 +111,7 @@ write_files:
   # Assume classroom server has virbr0 on standard address and apt-cacher-ng is available
   - path: /etc/apt/apt.conf.d/99proxy
     content: |
-      Acquire::http::Proxy "http://192.168.122.1:3142/";
+      Acquire::http::Proxy "http://100.64.0.1:3142/";
   - path: /etc/gai.conf
     content: |
       # New label table with separate label for 2001:db8::/32.
@@ -130,7 +130,7 @@ write_files:
       label 2001:0::/32   7
       label 2001:db8::/32 6
       label 2001:10::/28  6
-  # Policy routing so inbound traffic to 192.168.122.x always returns via same interface
+  # Policy routing so inbound traffic to 100.64.0.0/22 always returns via same interface
   - path: /etc/iproute2/rt_tables
     append: true
     content: |
@@ -142,13 +142,13 @@ write_files:
       if [ "\$IFACE" = "br1" ]; then
         # Apply policy routing
         ip rule add from $BACKDOOR table backdoor
-        ip route add default via 192.168.122.1 dev br1 metric 100 table backdoor
-        ip route add 192.168.122.0/24 dev br1  proto kernel  scope link  src $BACKDOOR  table backdoor
+        ip route add default via 100.64.0.1 dev br1 metric 100 table backdoor
+        ip route add 100.64.0.0/22 dev br1  proto kernel  scope link  src $BACKDOOR  table backdoor
         ip route flush cache
       fi
   - path: /etc/sysctl.d/90-rpf.conf
     content: |
-      # Loose reverse path filtering (traffic from 192.168.122 address may come in via br0)
+      # Loose reverse path filtering (traffic from 100.64.0.0/22 address may come in via br0)
       net.ipv4.conf.all.rp_filter=2
 runcmd:
   # Fixup https repositories to use proxy
@@ -187,7 +187,7 @@ runcmd:
     PASSWD='$PASSWD'
     for h in \$(seq 1 6); do
       HOST_FQDN="host\$h.campus$i.ws.nsrc.org"
-      HOST_BACKDOOR="192.168.122.\$((10*$i + h))"
+      HOST_BACKDOOR="100.64.0.\$((10*$i + h))"
       lxc copy host-master host\$h -c user.network-config="\$(cat <<END1)" -c user.user-data="\$(cat <<END2)"
     version: 2
     ethernets:
@@ -201,10 +201,10 @@ runcmd:
       eth1:
         accept-ra: false
         addresses:
-          - \$HOST_BACKDOOR/24
+          - \$HOST_BACKDOOR/22
         nameservers:
           addresses:
-            - 192.168.122.1
+            - 100.64.0.1
           search:
             - campus$i.ws.nsrc.org
             - ws.nsrc.org
@@ -223,7 +223,7 @@ runcmd:
       # Assume classroom server has virbr0 on standard address and apt-cacher-ng is available
       - path: /etc/apt/apt.conf.d/99proxy
         content: |
-          Acquire::http::Proxy "http://192.168.122.1:3142/";
+          Acquire::http::Proxy "http://100.64.0.1:3142/";
       - path: /etc/gai.conf
         content: |
           # New label table with separate label for 2001:db8::/32.
@@ -242,7 +242,7 @@ runcmd:
           label 2001:0::/32   7
           label 2001:db8::/32 6
           label 2001:10::/28  6
-      # Policy routing so inbound traffic to 192.168.122.x always returns via same interface
+      # Policy routing so inbound traffic to 100.64.0.0/22 always returns via same interface
       - path: /etc/iproute2/rt_tables
         append: true
         content: |
@@ -254,13 +254,13 @@ runcmd:
           if [ "\\\$IFACE" = "eth1" ]; then
             # Apply policy routing
             ip rule add from \$HOST_BACKDOOR table backdoor
-            ip route add default via 192.168.122.1 dev eth1 metric 100 table backdoor
-            ip route add 192.168.122.0/24 dev eth1  proto kernel  scope link  src \$HOST_BACKDOOR  table backdoor
+            ip route add default via 100.64.0.1 dev eth1 metric 100 table backdoor
+            ip route add 100.64.0.0/22 dev eth1  proto kernel  scope link  src \$HOST_BACKDOOR  table backdoor
             ip route flush cache
           fi
       - path: /etc/sysctl.d/90-rpf.conf
         content: |
-          # Loose reverse path filtering (traffic from 192.168.122 address may come in via eth0)
+          # Loose reverse path filtering (traffic from 100.64.0.0/22 address may come in via eth0)
           net.ipv4.conf.all.rp_filter=2
     runcmd:
       # Fixup https repositories to use proxy

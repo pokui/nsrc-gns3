@@ -37,7 +37,7 @@ ip ssh version 2
 !
 ip access-list extended ipv4-vty
  permit ip 100.68.${GROUP}.0 0.0.0.15 any
- permit ip 192.168.122.0 0.0.0.255 any
+ permit ip ${WS_V4_SUBNET}.0 ${WS_V4_WILDMASK} any
  deny   ip any any log
 !
 ipv6 access-list ipv6-vty

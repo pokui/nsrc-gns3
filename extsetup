@@ -104,7 +104,7 @@ cat <<'EOS'
 # See resolved.conf(5) for details
 
 [Resolve]
-DNS=192.168.122.1
+DNS=100.64.0.1
 FallbackDNS=9.9.9.9
 Domains=~ws.nsrc.org
 #LLMNR=no
@@ -245,7 +245,7 @@ cat <<'EOS'
 
 	# Do not require authentication for local classroom users
 	<RequireAny>
-		Require ip 192.168.122.0/24 100.64.0.0/10 2001:db8::/32 127.0.0.1 ::1
+		Require ip 100.64.0.0/22 100.64.0.0/10 2001:db8::/32 127.0.0.1 ::1
 		Require valid-user
 	</RequireAny>
 </Location>
@@ -279,7 +279,7 @@ cat <<'EOS'
 RequestHeader unset Accept-Encoding
 
 # Prefer connecting over IPv4 (especially for noc.ws.nsrc.org)
-ProxySourceAddress 192.168.122.1
+ProxySourceAddress 100.64.0.1
 
 # Allow for slow-running virtual machines
 ProxyTimeout 60
@@ -421,11 +421,11 @@ cat <<'EOS'
 
 	# Sites that we proxy locally
 	RewriteCond "%{ENV:PREFIX}" "^netdata\.$" [NC]
-	RewriteRule "(.*)" "http://192.168.122.1:19999$1" [L,P]
+	RewriteRule "(.*)" "http://100.64.0.1:19999$1" [L,P]
 	RewriteCond "%{ENV:PREFIX}" "^console\.$" [NC]
-	RewriteRule "(.*)" "http://192.168.122.1:4200$1" [L,P]
+	RewriteRule "(.*)" "http://100.64.0.1:4200$1" [L,P]
 	RewriteCond "%{ENV:PREFIX}" "^ssh\.$" [NC]
-	RewriteRule "(.*)" "http://192.168.122.1:4200/ssh$1" [L,P]
+	RewriteRule "(.*)" "http://100.64.0.1:4200/ssh$1" [L,P]
 
 	# Websockets for Grafana live tailing
 	RewriteCond %{HTTP:Connection} Upgrade [NC]
@@ -452,7 +452,7 @@ cat <<'EOS'
 	ServerAlias gns3.ws.nsrc.org
 	ServerAlias gw.ws.nsrc.org
 	ServerAlias vtp.ws.nsrc.org
-	ServerAlias 192.168.122.*
+	ServerAlias 100.64.0.*
 	DocumentRoot /var/www/html
 	CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>
@@ -465,7 +465,7 @@ cat <<'EOS'
 	ServerAlias gns3.ws.nsrc.org
 	ServerAlias gw.ws.nsrc.org
 	ServerAlias vtp.ws.nsrc.org
-	ServerAlias 192.168.122.*
+	ServerAlias 100.64.0.*
 	DocumentRoot /var/www/html
 	CustomLog ${APACHE_LOG_DIR}/access.log combined
 

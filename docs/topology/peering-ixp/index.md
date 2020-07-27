@@ -43,18 +43,18 @@ be enough RAM to run the NOC on a 32GB machine.
 
 IP Address      | DNS Name
 :-------------- | :---------------------------
-192.168.122.2   | tr1.ws.nsrc.org
-192.168.122.3   | tr2.ws.nsrc.org
-192.168.122.5   | rs1.ws.nsrc.org
-192.168.122.6   | rs2.ws.nsrc.org
-192.168.122.10  | srv1.ws.nsrc.org
-192.168.122.20  | srv2.ws.nsrc.org
-192.168.122.30  | srv3.ws.nsrc.org
-192.168.122.40  | srv4.ws.nsrc.org
-192.168.122.50  | srv5.ws.nsrc.org
-192.168.122.60  | srv6.ws.nsrc.org
-192.168.122.70  | srv7.ws.nsrc.org
-192.168.122.80  | srv8.ws.nsrc.org
+100.64.0.2   | tr1.ws.nsrc.org
+100.64.0.3   | tr2.ws.nsrc.org
+100.64.0.5   | rs1.ws.nsrc.org
+100.64.0.6   | rs2.ws.nsrc.org
+100.64.0.10  | srv1.ws.nsrc.org
+100.64.0.20  | srv2.ws.nsrc.org
+100.64.0.30  | srv3.ws.nsrc.org
+100.64.0.40  | srv4.ws.nsrc.org
+100.64.0.50  | srv5.ws.nsrc.org
+100.64.0.60  | srv6.ws.nsrc.org
+100.64.0.70  | srv7.ws.nsrc.org
+100.64.0.80  | srv8.ws.nsrc.org
 
 See the training materials for the addressing plan used inside the network.
 

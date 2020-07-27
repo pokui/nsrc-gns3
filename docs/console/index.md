@@ -79,7 +79,7 @@ sudo systemctl start shellinabox
 sudo systemctl enable shellinabox
 ```
 
-Point your web browser at <http://192.168.122.1:4200/> to test.  If the
+Point your web browser at <http://100.64.0.1:4200/> to test.  If the
 emulator is running, it should show clickable URLs for each of the console
 ports.
 
@@ -102,7 +102,6 @@ using [ufw](https://help.ubuntu.com/community/UFW):
 sudo apt-get install ufw
 sudo ufw app list
 sudo ufw allow OpenSSH
-sudo ufw allow from 192.168.122.0/24
 sudo ufw allow from 100.64.0.0/10
 sudo ufw allow from 2001:db8::/32
 sudo ufw enable

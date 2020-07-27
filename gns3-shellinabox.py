@@ -6,7 +6,7 @@
 import os, sys
 import urllib.parse as parse
 
-TARGET="192.168.122.1"
+TARGET="100.64.0.1"
 GNS3_URL="http://" + TARGET + ":3080"
 
 # HTTP authentication to API (if required)

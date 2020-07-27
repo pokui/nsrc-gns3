@@ -35,7 +35,7 @@ no ip icmp rate-limit unreachable
 !
 no ip domain lookup
 ip domain name ws.nsrc.org
-ip name-server 192.168.122.1
+ip name-server ${WS_V4_SUBNET}.1
 ip cef
 no ipv6 source-route
 ipv6 unicast-routing

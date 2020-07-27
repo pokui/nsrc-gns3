@@ -61,7 +61,7 @@ Into the editor put:
 ```
 [Service]
 ExecStart=
-ExecStart=/usr/bin/syncthing -no-browser -no-restart -logflags=0 -gui-address=192.168.122.1:8384
+ExecStart=/usr/bin/syncthing -no-browser -no-restart -logflags=0 -gui-address=100.64.0.1:8384
 ```
 
 Save, and restart:
@@ -70,7 +70,7 @@ Save, and restart:
 sudo systemctl restart syncthing@nsrc
 ```
 
-The web interface will then be at <https://192.168.122.1:8384/>.  On first
+The web interface will then be at <https://100.64.0.1:8384/>.  On first
 login you should set a GUI authentication username and password.
 
 Note that every instance of syncthing has a unique cryptographic ID: you can
@@ -85,10 +85,10 @@ owned by 'nsrc'.
 
 If you are using Unifi access points, the controller software will let you
 configure SSID, WPA password etc.  You can also configure the access
-point(s) on static IP addresses (192.168.122.251 and .252 are reserved for
+point(s) on static IP addresses (100.64.0.251 and .252 are reserved for
 this purpose) and enable SNMP.
 
-Having the controller present on the 192.168.122 network is the easiest way
+Having the controller present on the 100.64.0.0 network is the easiest way
 to get AP discovery to work.
 
 You can simply run the unifi controller on your laptop - it is available for
@@ -149,4 +149,4 @@ lxc exec unifi bash
 exit
 ```
 
-The container will get a dynamic (DHCP) 192.168.122 address.
+The container will get a dynamic (DHCP) 100.64.1-3 address.

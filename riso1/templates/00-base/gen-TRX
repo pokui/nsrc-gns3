@@ -66,7 +66,7 @@ no ip source-route
 !
 no ip domain lookup
 ip domain name ws.nsrc.org
-ip name-server 192.168.122.1
+ip name-server ${WS_V4_SUBNET}.1
 ip cef
 no ipv6 source-route
 ipv6 unicast-routing
@@ -80,7 +80,7 @@ ip tcp path-mtu-discovery
 interface GigabitEthernet0/0
  description Link to TR${OTHER} (and to the world)
  ip address ${PEER_LOCAL_V4} 255.255.255.254 secondary
- ip address 192.168.122.$((DEV+1)) 255.255.255.0
+ ip address ${WS_V4_SUBNET}$((DEV+1)) 255.255.255.0
  no ip redirects
  no ip proxy-arp
  load-interval 30
@@ -90,7 +90,7 @@ interface GigabitEthernet0/0
  ipv6 nd prefix default no-advertise
  ipv6 nd ra suppress all
  vrrp 1 address-family ipv4${VRRP_PRIORITY}
-  address 192.168.122.254 primary
+  address ${WS_V4_SUBNET}.254 primary
   exit-vrrp
  vrrp 2 address-family ipv6${VRRP_PRIORITY}
   address FE80::254 primary
@@ -199,7 +199,7 @@ ip bgp-community new-format
 !
 no ip http server
 no ip http secure-server
-ip route 0.0.0.0 0.0.0.0 192.168.122.1
+ip route 0.0.0.0 0.0.0.0 ${WS_V4_SUBNET}.1
 ip route 100.${AS}.0.0 255.255.0.0 Null0
 !
 ipv6 route 2001:${V6}::/32 Null0

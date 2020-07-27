@@ -14,7 +14,7 @@ tools.
 
 # Topology
 
-NOC consists of a single virtual machine, noc.ws.nsrc.org (192.168.122.250). 
+NOC consists of a single virtual machine, noc.ws.nsrc.org (100.64.0.250). 
 It runs the same VM image as the NMM training course.
 
 ![NOC topology](noc.png)
@@ -42,7 +42,7 @@ shared.
 
 IP Address      | DNS Name
 :-------------- | :---------------------------
-192.168.122.250 | noc.ws.nsrc.org
+100.64.0.250 | noc.ws.nsrc.org
 2001:db8::250   | noc.ws.nsrc.org
 
 Note that the NOC's IPv6 default gateway is the TR1/TR2 transit routers in
@@ -55,7 +55,7 @@ teaching topology is not running, you need to force IPv4:
 ```
 ssh -4 sysadm@noc.ws.nsrc.org
 # OR
-ssh sysadm@192.168.122.250
+ssh sysadm@100.64.0.250
 ```
 
 # Credentials
@@ -99,10 +99,10 @@ exercises.  You could:
   you can visualise how the class is progressing.  Note that you won't be
   able to directly reach the dist and edge switches in CNDO, as they are
   behind NAT.
-* Collect configs from transit1-nren and transit2-nren (192.168.122.2 and .3)
+* Collect configs from transit1-nren and transit2-nren (100.64.0.2 and .3)
   using rancid
 * Generate graphs of classroom bandwidth usage - SNMP monitoring of
-  192.168.122.1 in LibreNMS
+  100.64.0.1 in LibreNMS
 * Collect classroom netflow data in nfsen.  This can be extremely interesting
   to see which students are running torrents!
 
@@ -125,7 +125,7 @@ sudo apt-get install snmpd
 
 Refer to the snmp labs in the NMM workshop for how to configure an SNMPv2c
 community string and SNMPv3 authentication.  Ensure that the ACL allows
-access from `192.168.122.0/24`.
+access from `100.64.0.0/22`.
 
 Then return to the LibreNMS web interface and add "gw.ws.nsrc.org" as a
 device.  It will take up to 5 minutes for it to be discovered.
@@ -147,7 +147,7 @@ Edit `/etc/default/softflowd`
 ```
 INTERFACE="virbr0"
 
-OPTIONS="-n 192.168.122.250:9996 -v 9 -t maxlife=5m"
+OPTIONS="-n 100.64.0.250:9996 -v 9 -t maxlife=5m"
 ```
 
 Create `/etc/systemd/system/softflowd.service`

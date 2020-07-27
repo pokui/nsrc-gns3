@@ -102,7 +102,7 @@ cat <<EOS
 PasswordAuthentication no
 ChallengeResponseAuthentication no
 # gns3setup: allow PasswordAuthentication from trusted networks only
-Match Address 100.64.0.0/10,10.0.0.0/8,192.168.0.0/16,2001:db8::/32,fc00::/7${TRUSTED_EXTERNAL_NETWORK:+,}${TRUSTED_EXTERNAL_NETWORK:-}${IPV6_PREFIX:+,}${IPV6_PREFIX:-}${IPV6_PREFIX:+/64}
+Match Address 100.64.0.0/10,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,2001:db8::/32,fc00::/7${TRUSTED_EXTERNAL_NETWORK:+,}${TRUSTED_EXTERNAL_NETWORK:-}${IPV6_PREFIX:+,}${IPV6_PREFIX:-}${IPV6_PREFIX:+/64}
 PasswordAuthentication yes
 EOS
   ) | REPLACE /etc/ssh/sshd_config sudo || IF_CHANGED sudo systemctl restart ssh
@@ -223,11 +223,11 @@ EOS
     sudo egrep '<mac address=' /etc/libvirt/qemu/networks/default.xml
 cat <<EOS
   <domain name='ws.nsrc.org' localOnly='yes'/>
-  <ip address='192.168.122.${IP_OFFSET}' netmask='255.255.255.0' localPtr='yes'>
+  <ip address='100.64.0.${IP_OFFSET}' netmask='255.255.252.0' localPtr='yes'>
 EOS
 [ "$IP_OFFSET" = "1" ] && cat <<EOS
     <dhcp>
-      <range start='192.168.122.100' end='192.168.122.249'/>
+      <range start='100.64.1.0' end='100.64.3.254'/>
     </dhcp>
 EOS
 cat <<EOS
@@ -245,7 +245,7 @@ if [ -n "${IPV6_PREFIX:-}" ]; then
 EOS
 fi
 cat <<EOS
-  <route address='100.64.0.0' prefix='10' gateway='192.168.122.254'/>
+  <route address='100.64.0.0' prefix='10' gateway='100.64.0.254'/>
   <route family='ipv6' address='2001:db8::' prefix='32' gateway='fe80::254'/>
   <route family='ipv6' address='2001:10::' prefix='28' gateway='fe80::254'/>
 </network>
@@ -366,7 +366,7 @@ EOS
 egrep -v '^(apt-cacher-ng:|# gns3setup)' /etc/hosts.allow || true
 cat <<EOS
 # gns3setup
-apt-cacher-ng: 127.0.0.1 10.0.0.0/8 100.64.0.0/10 192.0.2.0/24 192.168.0.0/16 [::1] [2001:db8::]/32
+apt-cacher-ng: 127.0.0.1 10.0.0.0/8 100.64.0.0/10 172.16.0.0/12 192.0.2.0/24 192.168.0.0/16 [::1] [2001:db8::]/32
 EOS
   ) | REPLACE /etc/hosts.allow sudo || IF_CHANGED
 
@@ -381,7 +381,7 @@ EOS
   (
 cat <<EOS
 # gns3setup
-Acquire::http::Proxy "http://192.168.122.1:3142/";
+Acquire::http::Proxy "http://100.64.0.1:3142/";
 Acquire::https::Proxy "DIRECT";
 EOS
   ) | REPLACE /etc/apt/apt.conf.d/99proxy sudo || IF_CHANGED
@@ -426,7 +426,7 @@ EOS
 cat <<EOS
 [Server]
 images_path = /var/lib/GNS3/images
-host = 192.168.122.${IP_OFFSET}
+host = 100.64.0.${IP_OFFSET}
 EOS
 if [ -n "${GNS3_AUTH:-}" ]; then
   echo "auth = ${GNS3_AUTH}"
@@ -628,7 +628,7 @@ conf_syncthing() {
 cat <<EOS
 [Service]
 ExecStart=
-ExecStart=/usr/bin/syncthing -no-browser -no-restart -logflags=0 -gui-address=192.168.122.${IP_OFFSET}:8384
+ExecStart=/usr/bin/syncthing -no-browser -no-restart -logflags=0 -gui-address=100.64.0.${IP_OFFSET}:8384
 EOS
   ) | REPLACE "/etc/systemd/system/syncthing@.service.d/override.conf" sudo || IF_CHANGED sudo systemctl daemon-reload || true
 
@@ -663,7 +663,6 @@ agentAddress udp:161,udp6:161
 # For SNMPv2: Configure Read-Only community and restrict who can connect
 rocommunity   NetManage  127.0.0.1
 rocommunity   NetManage  100.64.0.0/10
-rocommunity   NetManage  192.168.122.0/24
 rocommunity6  NetManage  ::1
 rocommunity6  NetManage  2001:db8::/32
 
@@ -711,8 +710,8 @@ INTERFACE="virbr0"
 # Further options for softflowd, see "man softflowd" for details.
 # You should at least define a host and a port where the accounting
 # datagrams should be sent to, e.g.
-OPTIONS="-n 192.168.122.250:9996 -v 9 -t maxlife=5m"
-#OPTIONS="-n 192.168.122.249:2055 -v 9 -t maxlife=5m"
+OPTIONS="-n 100.64.0.250:9996 -v 9 -t maxlife=5m"
+#OPTIONS="-n 100.64.0.249:2055 -v 9 -t maxlife=5m"
 EOS
   ) | REPLACE /etc/default/softflowd sudo || IF_CHANGED
 

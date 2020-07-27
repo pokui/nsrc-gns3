@@ -31,7 +31,7 @@ no ip routing
 !
 no ip domain-lookup
 ip domain-name ws.nsrc.org
-ip name-server 192.168.122.1
+ip name-server ${WS_V4_SUBNET}.1
 no ip cef
 no ipv6 source-route
 no ipv6 cef

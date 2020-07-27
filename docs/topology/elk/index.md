@@ -11,7 +11,7 @@ the same web interface for exploring data.
 # Topology
 
 This consists of a single virtual machine, elk.ws.nsrc.org
-(192.168.122.249).  The VM has been configured with 8GB of RAM.
+(100.64.0.249).  The VM has been configured with 8GB of RAM.
 
 ![ELK topology](elk.png)
 
@@ -29,7 +29,7 @@ File | Description
 
 IP Address      | DNS Name
 :-------------- | :---------------------------
-192.168.122.249 | elk.ws.nsrc.org, kibana.ws.nsrc.org
+100.64.0.249 | elk.ws.nsrc.org, kibana.ws.nsrc.org
 2001:db8::249   | elk.ws.nsrc.org, kibana.ws.nsrc.org
 
 # Credentials
@@ -93,7 +93,7 @@ traffic to Elastiflow instead of nfdump/nfsen by changing
 `/etc/default/softflowd` to
 
 ```
-OPTIONS="-n 192.168.122.249:2055 -v 9 -t maxlife=5m"
+OPTIONS="-n 100.64.0.249:2055 -v 9 -t maxlife=5m"
 ```
 
 ElastiFlow does not listen by default on IPv6 addresses, but it can be
@@ -136,7 +136,7 @@ flow record NBAR-V6
 !
 flow exporter EXPORTER-ELK
  description Export to elk
- destination 192.168.122.249
+ destination 100.64.0.249
  transport udp 2055
  template data timeout 60
 !

@@ -64,7 +64,7 @@ chmod 755 ~/public_html/cgi-bin ~/public_html/cgi-bin/gns3man
     execute if the group-write bit is set on the script or its enclosing
     directory.
 
-The CGI should now be available at <http://192.168.122.1/~nsrc/cgi-bin/gns3man>
+The CGI should now be available at <http://100.64.0.1/~nsrc/cgi-bin/gns3man>
 
 !!! Warning
     Whenever you update the kernel, you will need to re-run the command:

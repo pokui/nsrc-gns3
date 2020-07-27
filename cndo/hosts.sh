@@ -9,34 +9,34 @@ ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 
 # Devices on management network
-192.168.122.1		vtp.ws.nsrc.org apt.ws.nsrc.org gns3.ws.nsrc.org www.ws.nsrc.org gw.ws.nsrc.org
-192.168.122.2		gi0-0.transit1.nren.ws.nsrc.org transit1.nren.ws.nsrc.org
+100.64.0.1		vtp.ws.nsrc.org apt.ws.nsrc.org gns3.ws.nsrc.org www.ws.nsrc.org gw.ws.nsrc.org
+100.64.0.2		gi0-0.transit1.nren.ws.nsrc.org transit1.nren.ws.nsrc.org
 2001:DB8:0:0::2		gi0-0.transit1.nren.ws.nsrc.org transit1.nren.ws.nsrc.org
-192.168.122.3		gi0-0.transit2.nren.ws.nsrc.org transit2.nren.ws.nsrc.org
+100.64.0.3		gi0-0.transit2.nren.ws.nsrc.org transit2.nren.ws.nsrc.org
 2001:DB8:0:0::3		gi0-0.transit2.nren.ws.nsrc.org transit2.nren.ws.nsrc.org
 EOS
 
 for campus in $(seq 1 6); do
 cat <<EOS
-192.168.122.$((10*campus))		eth1.srv1.campus${campus}.ws.nsrc.org oob.srv1.campus${campus}.ws.nsrc.org
+100.64.0.$((10*campus))		eth1.srv1.campus${campus}.ws.nsrc.org oob.srv1.campus${campus}.ws.nsrc.org
 EOS
 for i in $(seq 1 6); do
 cat <<EOS
-192.168.122.$((10*campus+i))		eth1.host${i}.campus${campus}.ws.nsrc.org oob.host${i}.campus${campus}.ws.nsrc.org
+100.64.0.$((10*campus+i))		eth1.host${i}.campus${campus}.ws.nsrc.org oob.host${i}.campus${campus}.ws.nsrc.org
 EOS
 done
 done
 
 cat <<EOS
 
-192.168.122.249		elk.ws.nsrc.org kibana.ws.nsrc.org
+100.64.0.249		elk.ws.nsrc.org kibana.ws.nsrc.org
 2001:DB8:0:0::249	elk.ws.nsrc.org kibana.ws.nsrc.org
-192.168.122.250		noc.ws.nsrc.org
+100.64.0.250		noc.ws.nsrc.org
 2001:DB8:0:0::250	noc.ws.nsrc.org
-192.168.122.251		ap1.ws.nsrc.org
-192.168.122.252		ap2.ws.nsrc.org
-192.168.122.253		sw.ws.nsrc.org
-192.168.122.254		transit.nren.ws.nsrc.org
+100.64.0.251		ap1.ws.nsrc.org
+100.64.0.252		ap2.ws.nsrc.org
+100.64.0.253		sw.ws.nsrc.org
+100.64.0.254		transit.nren.ws.nsrc.org
 
 # Transit links
 EOS

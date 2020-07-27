@@ -75,21 +75,21 @@ web traffic does not need to traverse the emulated network.
 
 IP Address      | DNS Name
 :-------------- | :---------------------------
-192.168.122.2   | transit1-nren.ws.nsrc.org
-192.168.122.3   | transit2-nren.ws.nsrc.org
-192.168.122.10  | srv1.campus1.ws.nsrc.org
-192.168.122.11  | host1.campus1.ws.nsrc.org
-192.168.122.12  | host2.campus1.ws.nsrc.org
-192.168.122.13  | host3.campus1.ws.nsrc.org
-192.168.122.14  | host4.campus1.ws.nsrc.org
-192.168.122.15  | host5.campus1.ws.nsrc.org
-192.168.122.16  | host6.campus1.ws.nsrc.org
-192.168.122.2x  | (ditto for campus2)
-192.168.122.3x  | (ditto for campus3)
-192.168.122.4x  | (ditto for campus4)
-192.168.122.5x  | (ditto for campus5)
-192.168.122.6x  | (ditto for campus6)
-192.168.122.254 | transit-nren.ws.nsrc.org (on transit1-nren)
+100.64.0.2   | transit1-nren.ws.nsrc.org
+100.64.0.3   | transit2-nren.ws.nsrc.org
+100.64.0.10  | srv1.campus1.ws.nsrc.org
+100.64.0.11  | host1.campus1.ws.nsrc.org
+100.64.0.12  | host2.campus1.ws.nsrc.org
+100.64.0.13  | host3.campus1.ws.nsrc.org
+100.64.0.14  | host4.campus1.ws.nsrc.org
+100.64.0.15  | host5.campus1.ws.nsrc.org
+100.64.0.16  | host6.campus1.ws.nsrc.org
+100.64.0.2x  | (ditto for campus2)
+100.64.0.3x  | (ditto for campus3)
+100.64.0.4x  | (ditto for campus4)
+100.64.0.5x  | (ditto for campus5)
+100.64.0.6x  | (ditto for campus6)
+100.64.0.254 | transit-nren.ws.nsrc.org (on transit1-nren)
 
 See the training materials for the addressing plan used inside the network.
 

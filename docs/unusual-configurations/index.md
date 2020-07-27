@@ -68,7 +68,7 @@ you don't want any wifi connection to be attempted.
 
 Some environments will require you to authenticate to a captive portal
 before you get Internet access.  As long as your laptop is connected on the
-classroom side (192.168.122.x) it should be able to access the portal. 
+classroom side (100.64.0.x) it should be able to access the portal. 
 Alternatively you could try installing a text-based browser like "lynx",
 "links" or "elinks".
 
@@ -95,7 +95,6 @@ To make this happen:
 
 1. In the external site infrastructure ("rtr"), add static routes to
 
-    * 192.168.122.0/24
     * 100.64.0.0/10
 
     with your server's WAN address as the next hop

@@ -18,7 +18,7 @@ interface Loopback0
 !
 interface GigabitEthernet0/0
  description Workshop LAN
- ip address ${WS_V4_SUBNET}.$((1 + DEV)) 255.255.255.0
+ ip address ${WS_V4_SUBNET}.$((1 + DEV)) ${WS_V4_NETMASK}
  no ip redirects
  no ip proxy-arp
  ip router isis as65534
@@ -31,7 +31,7 @@ interface GigabitEthernet0/0
  ipv6 router isis as65534
  vrrp 1 address-family ipv4
   priority $((150 - DEV*50))
-  address 192.168.122.254 primary
+  address ${WS_V4_SUBNET}.254 primary
   exit-vrrp
  vrrp 2 address-family ipv6
   priority $((150 - DEV*50))
@@ -69,7 +69,7 @@ conf_static_transit_bgp () {
 ip route 0.0.0.0 0.0.0.0 ${WS_V4_SUBNET}.1
 !
 logging facility local0
-logging host 192.168.122.250
+logging host ${WS_V4_SUBNET}.250
 ipv6 route ::/0 GigabitEthernet0/0 FE80::1
 END
 }

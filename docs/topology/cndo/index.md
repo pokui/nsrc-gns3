@@ -57,15 +57,15 @@ to run the NOC.
 
 IP Address      | DNS Name
 :-------------- | :---------------------------
-192.168.122.2   | transit1-nren.ws.nsrc.org
-192.168.122.3   | transit2-nren.ws.nsrc.org
-192.168.122.10  | srv1.campus1.ws.nsrc.org
-192.168.122.20  | srv1.campus2.ws.nsrc.org
-192.168.122.30  | srv1.campus3.ws.nsrc.org
-192.168.122.40  | srv1.campus4.ws.nsrc.org
-192.168.122.50  | srv1.campus5.ws.nsrc.org
-192.168.122.60  | srv1.campus6.ws.nsrc.org
-192.168.122.254 | transit-nren.ws.nsrc.org (on transit1-nren)
+100.64.0.2   | transit1-nren.ws.nsrc.org
+100.64.0.3   | transit2-nren.ws.nsrc.org
+100.64.0.10  | srv1.campus1.ws.nsrc.org
+100.64.0.20  | srv1.campus2.ws.nsrc.org
+100.64.0.30  | srv1.campus3.ws.nsrc.org
+100.64.0.40  | srv1.campus4.ws.nsrc.org
+100.64.0.50  | srv1.campus5.ws.nsrc.org
+100.64.0.60  | srv1.campus6.ws.nsrc.org
+100.64.0.254 | transit-nren.ws.nsrc.org (on transit1-nren)
 
 See the training materials for the addressing plan used inside the network.
 

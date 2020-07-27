@@ -22,7 +22,7 @@ Each group contains:
 
 ![Group topology](riso-group1.png)
 
-Each srvX server has a backdoor connection onto the class 192.168.122.x
+Each srvX server has a backdoor connection onto the class 100.64.0.x
 network to allow fast downloads, since the CSR1000v virtual router applies a
 1Mbps throughput limit.  This is shown as a "NAT" connector in the topology.
 
@@ -40,11 +40,11 @@ you wish.
 
 The second server should be built identically to the first, except:
 
-* Change the classroom IPv4 address from 192.168.122.1 to 192.168.122.8
+* Change the classroom IPv4 address from 100.64.0.1 to 100.64.0.8
 * Change the classroom IPv6 address from fe80::1 to fe80::8
 * Disable DHCP on the classroom network
-* Edit `~/public_html/cgi-bin/gns3man` and set `GNS3_URL = "http://192.168.122.8:3080"`
-* Edit `/usr/local/bin/gns3-shellinabox.py` and set `TARGET="192.168.122.8"`
+* Edit `~/public_html/cgi-bin/gns3man` and set `GNS3_URL = "http://100.64.0.8:3080"`
+* Edit `/usr/local/bin/gns3-shellinabox.py` and set `TARGET="100.64.0.8"`
 
 The first three can all be changed using `virsh net-edit default` followed
 by a reboot:
@@ -52,9 +52,9 @@ by a reboot:
 ```
 <!-- before -->
 
-  <ip address='192.168.122.1' netmask='255.255.255.0' localPtr='yes'>
+  <ip address='100.64.0.1' netmask='255.255.252.0' localPtr='yes'>
     <dhcp>
-      <range start='192.168.122.100' end='192.168.122.249'/>
+      <range start='100.64.1.0' end='100.64.3.254'/>
     </dhcp>
   </ip>
   <ip family='ipv6' address='fe80::1' prefix='64'>
@@ -62,7 +62,7 @@ by a reboot:
 
 <!-- after -->
 
-  <ip address='192.168.122.8' netmask='255.255.255.0' localPtr='yes'>
+  <ip address='100.64.0.8' netmask='255.255.252.0' localPtr='yes'>
   </ip>
   <ip family='ipv6' address='fe80::8' prefix='64'>
   </ip>
@@ -77,8 +77,8 @@ or if you require remote management access.
 The easiest way to manage two GNS3 topologies at the same time is to use the
 web interfaces:
 
-* <http://192.168.122.1:3080/> for server 1
-* <http://192.168.122.8:3080/> for server 2
+* <http://100.64.0.1:3080/> for server 1
+* <http://100.64.0.8:3080/> for server 2
 
 You *can* add multiple servers to the standalone GNS3 GUI, but you may need
 to keep switching between topologies - in which case, you should be very
@@ -114,20 +114,20 @@ be enough RAM to run the NOC.
 
 IP Address      | DNS Name
 :-------------- | :---------------------------
-192.168.122.1   | vtp.ws.nsrc.org (server for groups 1-4)
-192.168.122.2   | tr1.ws.nsrc.org
-192.168.122.3   | tr2.ws.nsrc.org
-192.168.122.5   | rs1.ws.nsrc.org
-192.168.122.6   | rs2.ws.nsrc.org
-192.168.122.8   | vtp2.ws.nsrc.org (server for groups 5-8)
-192.168.122.10  | srv1.ws.nsrc.org
-192.168.122.20  | srv2.ws.nsrc.org
-192.168.122.30  | srv3.ws.nsrc.org
-192.168.122.40  | srv4.ws.nsrc.org
-192.168.122.50  | srv5.ws.nsrc.org
-192.168.122.60  | srv6.ws.nsrc.org
-192.168.122.70  | srv7.ws.nsrc.org
-192.168.122.80  | srv8.ws.nsrc.org
+100.64.0.1   | vtp.ws.nsrc.org (server for groups 1-4)
+100.64.0.2   | tr1.ws.nsrc.org
+100.64.0.3   | tr2.ws.nsrc.org
+100.64.0.5   | rs1.ws.nsrc.org
+100.64.0.6   | rs2.ws.nsrc.org
+100.64.0.8   | vtp2.ws.nsrc.org (server for groups 5-8)
+100.64.0.10  | srv1.ws.nsrc.org
+100.64.0.20  | srv2.ws.nsrc.org
+100.64.0.30  | srv3.ws.nsrc.org
+100.64.0.40  | srv4.ws.nsrc.org
+100.64.0.50  | srv5.ws.nsrc.org
+100.64.0.60  | srv6.ws.nsrc.org
+100.64.0.70  | srv7.ws.nsrc.org
+100.64.0.80  | srv8.ws.nsrc.org
 
 See the training materials for the addressing plan used inside the network.
 

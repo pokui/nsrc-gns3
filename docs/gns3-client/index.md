@@ -17,7 +17,7 @@ and select Server in the left-hand menu.
 Uncheck "Enable local server" (that would be if you were running the backend
 within a VM on your laptop)
 
-Under "Remote main server" give the IP address 192.168.122.1, TCP port 3080,
+Under "Remote main server" give the IP address 100.64.0.1, TCP port 3080,
 and the GNS3 server authentication username and password if you configured
 them.
 
@@ -30,7 +30,7 @@ working.
 # GNS3 web interface
 
 GNS3 server also has an experimental web interface: it is available at
-<http://192.168.122.1:3080/static/web-ui/bundled>
+<http://100.64.0.1:3080/static/web-ui/bundled>
 
 The functions of this are limited at the moment: it can be used to view the
 topology, find out information about nodes, and start and stop them.

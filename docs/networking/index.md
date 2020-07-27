@@ -2,7 +2,7 @@
 
 libvirt will have created a default bridge called "virbr0" - you can see
 this using `brctl show` or `ifconfig virbr0`.  Your server's address on this
-bridge is `192.168.122.1`.
+bridge is `100.64.0.1`.
 
 You now need to change its configuration, to shrink the DHCP pool range and
 add a static route.
@@ -27,14 +27,14 @@ Edit it so it looks like this (leave the sections marked `....` alone):
   <bridge name='virbr0' stp='off' delay='0'/>
   <mac address='....'/>
   <domain name='ws.nsrc.org' localOnly='yes'/>
-  <ip address='192.168.122.1' netmask='255.255.255.0' localPtr='yes'>
+  <ip address='100.64.0.1' netmask='255.255.252.0' localPtr='yes'>
     <dhcp>
-      <range start='192.168.122.100' end='192.168.122.249'/>
+      <range start='100.64.1.0' end='100.64.3.254'/>
     </dhcp>
   </ip>
   <ip family='ipv6' address='fe80::1' prefix='64'>
   </ip>
-  <route address='100.64.0.0' prefix='10' gateway='192.168.122.254'/>
+  <route address='100.64.0.0' prefix='10' gateway='100.64.0.254'/>
   <route family='ipv6' address='2001:db8::' prefix='32' gateway='fe80::254'/>
   <route family='ipv6' address='2001:10::' prefix='28' gateway='fe80::254'/>
 </network>
@@ -213,10 +213,10 @@ You should find that:
 
 - your server picks up an IP address via DHCP on its WAN (USB adapter)
 - `brctl show` shows that eno1 is attached to the virbr0 bridge
-- if you plug a laptop into the LAN port (eno1), it picks up a 192.168.122.x
+- if you plug a laptop into the LAN port (eno1), it picks up a 100.64.0.x
   address and has Internet access via the server.  This will be your
   classroom (student) network
-- still on the LAN port, ssh to 192.168.122.1 to get access to your server
+- still on the LAN port, ssh to 100.64.0.1 to get access to your server
 
 That is: virbr0 is providing DHCP, DNS and NAT routing services to clients
 connected to the LAN port.

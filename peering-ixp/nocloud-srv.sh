@@ -32,7 +32,7 @@ for i in $(seq 1 8); do
   GWV4="100.68.$i.29"
   IPV6="2001:db8:$i:21::30"
   GWV6="2001:db8:$i:21::29"
-  BACKDOOR="192.168.122.$((10*i))"
+  BACKDOOR="100.64.0.$((10*i))"
 
   ######## NETWORK CONFIG ########
   cat <<EOS >"$TMPDIR/network-config"
@@ -48,10 +48,10 @@ ethernets:
   $ETH1:
     accept-ra: false
     addresses:
-      - $BACKDOOR/24
+      - $BACKDOOR/22
     nameservers:
       addresses:
-        - 192.168.122.1
+        - 100.64.0.1
       search:
         - ws.nsrc.org
 EOS
@@ -87,7 +87,7 @@ write_files:
   # Assume classroom server has virbr0 on standard address and apt-cacher-ng is available
   - path: /etc/apt/apt.conf.d/99proxy
     content: |
-      Acquire::http::Proxy "http://192.168.122.1:3142/";
+      Acquire::http::Proxy "http://100.64.0.1:3142/";
   - path: /etc/gai.conf
     content: |
       # New label table with separate label for 2001:db8::/32.
@@ -106,7 +106,7 @@ write_files:
       label 2001:0::/32   7
       label 2001:db8::/32 6
       label 2001:10::/28  6
-  # Policy routing so inbound traffic to 192.168.122.x always returns via same interface
+  # Policy routing so inbound traffic to 100.64.0.0/22 always returns via same interface
   - path: /etc/iproute2/rt_tables
     append: true
     content: |
@@ -118,13 +118,13 @@ write_files:
       if [ "\$IFACE" = "$ETH1" ]; then
         # Apply policy routing
         ip rule add from $BACKDOOR table backdoor
-        ip route add default via 192.168.122.1 dev $ETH1 metric 100 table backdoor
-        ip route add 192.168.122.0/24 dev $ETH1  proto kernel  scope link  src $BACKDOOR  table backdoor
+        ip route add default via 100.64.0.1 dev $ETH1 metric 100 table backdoor
+        ip route add 100.64.0.0/22 dev $ETH1  proto kernel  scope link  src $BACKDOOR  table backdoor
         ip route flush cache
       fi
   - path: /etc/sysctl.d/90-rpf.conf
     content: |
-      # Loose reverse path filtering (traffic from 192.168.122 address may come in via $ETH0)
+      # Loose reverse path filtering (traffic from 100.64.0.0/22 address may come in via $ETH0)
       net.ipv4.conf.all.rp_filter=2
 runcmd:
   - IFACE=$ETH1 /etc/networkd-dispatcher/routable.d/50-backdoor

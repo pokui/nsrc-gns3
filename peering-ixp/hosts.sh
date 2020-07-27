@@ -10,15 +10,15 @@ ff02::2 ip6-allrouters
 
 ### Management ###
 
-192.168.122.1		vtp.ws.nsrc.org apt.ws.nsrc.org gns3.ws.nsrc.org www.ws.nsrc.org gw.ws.nsrc.org
-192.168.122.249		elk.ws.nsrc.org kibana.ws.nsrc.org elk
+100.64.0.1		vtp.ws.nsrc.org apt.ws.nsrc.org gns3.ws.nsrc.org www.ws.nsrc.org gw.ws.nsrc.org
+100.64.0.249		elk.ws.nsrc.org kibana.ws.nsrc.org elk
 2001:DB8:0:0::249	elk.ws.nsrc.org kibana.ws.nsrc.org elk
-192.168.122.250		noc.ws.nsrc.org noc
+100.64.0.250		noc.ws.nsrc.org noc
 2001:DB8::250		noc.ws.nsrc.org noc
-192.168.122.251		ap1.ws.nsrc.org ap1
-192.168.122.252		ap2.ws.nsrc.org ap2
-192.168.122.253		sw.ws.nsrc.org sw
-192.168.122.254		tr-vrrp.ws.nsrc.org tr-vrrp
+100.64.0.251		ap1.ws.nsrc.org ap1
+100.64.0.252		ap2.ws.nsrc.org ap2
+100.64.0.253		sw.ws.nsrc.org sw
+100.64.0.254		tr-vrrp.ws.nsrc.org tr-vrrp
 
 ### Core infrastructure ###
 EOS
@@ -26,9 +26,9 @@ EOS
 for TR in $(seq 1 2); do
   cat <<EOS
 
-192.168.122.$(( TR+1 ))	gi0-0.tr${TR}.ws.nsrc.org tr${TR}.ws.nsrc.org tr${TR}
-2001:DB8::$(( TR+1 ))	gi0-0.tr${TR}.ws.nsrc.org
-2001:18::$(( TR-1 ))	gi0-0.tr${TR}.ws.nsrc.org
+100.64.0.$(( TR+1 ))		gi0-0.tr${TR}.ws.nsrc.org tr${TR}.ws.nsrc.org tr${TR}
+2001:DB8::$(( TR+1 ))		gi0-0.tr${TR}.ws.nsrc.org
+2001:18::$(( TR-1 ))		gi0-0.tr${TR}.ws.nsrc.org
 EOS
   for G in $(seq 1 9); do
     cat <<EOS
@@ -43,13 +43,13 @@ cat <<EOS
 2001:db8:ffff:2::10	ens3.rs1.ws.nsrc.org
 100.127.1.254		ens4.rs1.ws.nsrc.org
 2001:db8:ffff:1::fe	ens4.rs1.ws.nsrc.org
-192.168.122.5		ens5.rs1.ws.nsrc.org rs1.ws.nsrc.org rs1
+100.64.0.5		ens5.rs1.ws.nsrc.org rs1.ws.nsrc.org rs1
 
 100.127.2.10		ens3.rs2.ws.nsrc.org
 2001:db8:fffe:2::10	ens3.rs2.ws.nsrc.org
 100.127.3.254		ens4.rs2.ws.nsrc.org
 2001:db8:fffe:1::fe	ens4.rs2.ws.nsrc.org
-192.168.122.6		ens5.rs2.ws.nsrc.org rs2.ws.nsrc.org rs2
+100.64.0.6		ens5.rs2.ws.nsrc.org rs2.ws.nsrc.org rs2
 
 100.121.1.17	gi0-0.sr1.ws.nsrc.org
 2001:18:0:18::1	gi0-0.sr1.ws.nsrc.org
@@ -154,6 +154,6 @@ ${PEER_LOCAL_V6}	gi0-2.p${GROUP}.ws.nsrc.org
 
 100.68.${GROUP}.30	ens3.srv${GROUP}.ws.nsrc.org srv${GROUP}.ws.nsrc.org srv${GROUP}
 2001:db8:${GROUP}:21::30	ens3.srv${GROUP}.ws.nsrc.org srv${GROUP}.ws.nsrc.org srv${GROUP}
-192.168.122.$(( GROUP*10 ))	ens4.srv${GROUP}.ws.nsrc.org oob.srv${GROUP}.ws.nsrc.org oob.srv${GROUP}
+100.64.0.$(( GROUP*10 ))	ens4.srv${GROUP}.ws.nsrc.org oob.srv${GROUP}.ws.nsrc.org oob.srv${GROUP}
 EOS
 done

@@ -57,7 +57,7 @@ Then add this to the very end of the file:
 
 ```
 # Allow PasswordAuthentication from trusted networks only
-Match Address 100.64.0.0/10,10.0.0.0/8,192.168.0.0/16,2001:db8::/32,fc00::/7
+Match Address 100.64.0.0/10,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,2001:db8::/32,fc00::/7
 PasswordAuthentication yes
 ```
 

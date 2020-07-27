@@ -31,10 +31,10 @@ interface Loopback0
 !
 interface GigabitEthernet0/0
  description Workshop LAN
- ip address ${WS_V4_SUBNET}.$((1 + DEV)) 255.255.255.0
+ ip address ${WS_V4_SUBNET}.$((1 + DEV)) ${WS_V4_NETMASK}
 END
   # Add .254 alias as target for inbound static routes.  Could be VRRP
-  [ "$DEV" == "1" ] && echo " ip address ${WS_V4_SUBNET}.254 255.255.255.0 secondary"
+  [ "$DEV" == "1" ] && echo " ip address ${WS_V4_SUBNET}.254 ${WS_V4_NETMASK} secondary"
   cat <<END
  no ip redirects
  no ip proxy-arp
@@ -96,7 +96,7 @@ conf_static_transit () {
   cat <<END
 !
 logging facility local0
-logging host 192.168.122.250
+logging host ${WS_V4_SUBNET}.250
 ipv6 route ::/0 GigabitEthernet0/0 FE80::1
 END
   case ${DEV} in
@@ -179,7 +179,7 @@ render_bgp=conf_bgp_transit
 conf_snmp_transit () {
   cat <<END
 !
-access-list 99 permit ${WS_V4_SUBNET}.0 0.0.0.255
+access-list 99 permit ${WS_V4_SUBNET}.0 ${WS_V4_WILDMASK}
 !
 snmp-server community ${SNMP_COMMUNITY} RO 99
 snmp-server group ReadGroup v3 auth access 99
