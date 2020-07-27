@@ -223,7 +223,7 @@ EOS
     sudo egrep '<mac address=' /etc/libvirt/qemu/networks/default.xml
 cat <<EOS
   <domain name='ws.nsrc.org' localOnly='yes'/>
-  <ip address='100.64.0.${IP_OFFSET}' netmask='255.255.252.0' localPtr='yes'>
+  <ip address='100.64.0.${IP_OFFSET}' netmask='255.255.252.0'>
 EOS
 [ "$IP_OFFSET" = "1" ] && cat <<EOS
     <dhcp>

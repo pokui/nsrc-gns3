@@ -52,7 +52,7 @@ by a reboot:
 ```
 <!-- before -->
 
-  <ip address='100.64.0.1' netmask='255.255.252.0' localPtr='yes'>
+  <ip address='100.64.0.1' netmask='255.255.252.0'>
     <dhcp>
       <range start='100.64.1.0' end='100.64.3.254'/>
     </dhcp>
@@ -62,7 +62,7 @@ by a reboot:
 
 <!-- after -->
 
-  <ip address='100.64.0.8' netmask='255.255.252.0' localPtr='yes'>
+  <ip address='100.64.0.8' netmask='255.255.252.0'>
   </ip>
   <ip family='ipv6' address='fe80::8' prefix='64'>
   </ip>

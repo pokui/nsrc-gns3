@@ -27,7 +27,7 @@ Edit it so it looks like this (leave the sections marked `....` alone):
   <bridge name='virbr0' stp='off' delay='0'/>
   <mac address='....'/>
   <domain name='ws.nsrc.org' localOnly='yes'/>
-  <ip address='100.64.0.1' netmask='255.255.252.0' localPtr='yes'>
+  <ip address='100.64.0.1' netmask='255.255.252.0'>
     <dhcp>
       <range start='100.64.1.0' end='100.64.3.254'/>
     </dhcp>
