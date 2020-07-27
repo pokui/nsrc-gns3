@@ -18,7 +18,7 @@
         "computes": [],
         "drawings": [
             {
-                "drawing_id": "1fc4f08f-48fa-4078-ba5f-313f489fff61",
+                "drawing_id": "3e7aae19-1881-42b3-86f0-1e4cf136efd0",
                 "locked": true,
                 "rotation": 0,
                 "svg": "<svg height=\"200.0\" width=\"264.0\"><ellipse cx=\"132\" cy=\"100\" fill=\"#c8c9ce\" fill-opacity=\"1.0\" rx=\"132\" ry=\"100\" stroke=\"#7f7f7f\" stroke-dasharray=\"25, 25\" stroke-width=\"1\" /></svg>",
@@ -27,7 +27,7 @@
                 "z": -3
             },
             {
-                "drawing_id": "047cadc7-2a11-42c6-b7df-5112f05cfdf1",
+                "drawing_id": "4dcf650d-2c80-4115-9082-66dbfe195281",
                 "locked": true,
                 "rotation": 0,
                 "svg": "<svg height=\"200.0\" width=\"264.0\"><ellipse cx=\"132\" cy=\"100\" fill=\"#c8c9ce\" fill-opacity=\"1.0\" rx=\"132\" ry=\"100\" stroke=\"#7f7f7f\" stroke-dasharray=\"25, 25\" stroke-width=\"1\" /></svg>",
@@ -36,7 +36,7 @@
                 "z": -3
             },
             {
-                "drawing_id": "a102811a-c051-4a9e-8aae-c4db2f6c8864",
+                "drawing_id": "f562bd23-cdc0-407d-ab4d-d176ff25181a",
                 "locked": true,
                 "rotation": 0,
                 "svg": "<svg height=\"200.0\" width=\"264.0\"><ellipse cx=\"132\" cy=\"100\" fill=\"#c8c9ce\" fill-opacity=\"1.0\" rx=\"132\" ry=\"100\" stroke=\"#7f7f7f\" stroke-dasharray=\"25, 25\" stroke-width=\"1\" /></svg>",
@@ -45,7 +45,7 @@
                 "z": -3
             },
             {
-                "drawing_id": "0191d146-00ce-49d8-a56d-000abb143f7d",
+                "drawing_id": "35171ddd-c87f-4bbe-8c14-75adbe7278e7",
                 "locked": true,
                 "rotation": 0,
                 "svg": "<svg height=\"200.0\" width=\"264.0\"><ellipse cx=\"132\" cy=\"100\" fill=\"#c8c9ce\" fill-opacity=\"1.0\" rx=\"132\" ry=\"100\" stroke=\"#7f7f7f\" stroke-dasharray=\"25, 25\" stroke-width=\"1\" /></svg>",
@@ -54,7 +54,7 @@
                 "z": -3
             },
             {
-                "drawing_id": "0dd8ef63-eb6b-4c52-8802-124d9b152789",
+                "drawing_id": "0564cc64-1ac1-4395-9ad2-6481d6a0474b",
                 "locked": true,
                 "rotation": 0,
                 "svg": "<svg height=\"32\" width=\"74\"><text fill=\"#000000\" fill-opacity=\"1.0\" font-family=\"TypeWriter\" font-size=\"10.0\" font-weight=\"bold\">Route Server\n   AS65533</text></svg>",
@@ -63,7 +63,7 @@
                 "z": 2
             },
             {
-                "drawing_id": "7dd531f9-c8df-4dfd-80dc-96f42ac7dd7b",
+                "drawing_id": "26d3efb7-4f71-4932-a68f-3f90d90fd463",
                 "locked": true,
                 "rotation": 0,
                 "svg": "<svg height=\"118.0\" width=\"147.0\"><ellipse cx=\"73\" cy=\"59\" fill=\"#c8c9ce\" fill-opacity=\"1.0\" rx=\"74\" ry=\"59\" stroke=\"#7f7f7f\" stroke-dasharray=\"25, 25\" stroke-width=\"1\" /></svg>",
@@ -72,7 +72,7 @@
                 "z": -3
             },
             {
-                "drawing_id": "d5589061-7545-4a38-90c6-35abe9c60c3c",
+                "drawing_id": "1c7a0263-ee5e-49ab-8429-78de69ef00fc",
                 "locked": true,
                 "rotation": 0,
                 "svg": "<svg height=\"20\" width=\"39\"><text fill=\"#000000\" fill-opacity=\"1.0\" font-family=\"TypeWriter\" font-size=\"10.0\" font-weight=\"bold\">AS122</text></svg>",
@@ -81,7 +81,7 @@
                 "z": 2
             },
             {
-                "drawing_id": "ab77a2cc-e61d-4dd8-9e4c-33fdd833e82f",
+                "drawing_id": "8da76333-a255-4dc1-9c89-b24e63813882",
                 "locked": true,
                 "rotation": 0,
                 "svg": "<svg height=\"32\" width=\"47\"><text fill=\"#000000\" fill-opacity=\"1.0\" font-family=\"TypeWriter\" font-size=\"10.0\" font-weight=\"bold\">Group 5\n  AS50</text></svg>",
@@ -90,7 +90,7 @@
                 "z": 2
             },
             {
-                "drawing_id": "20b9e10e-2e70-47cf-b5f3-689491f2bf6c",
+                "drawing_id": "49089f3d-4cd9-478c-8c79-c7ae1c865da5",
                 "locked": true,
                 "rotation": 0,
                 "svg": "<svg height=\"32\" width=\"48\"><text fill=\"#000000\" fill-opacity=\"1.0\" font-family=\"TypeWriter\" font-size=\"10.0\" font-weight=\"bold\">Group 6\n  AS60</text></svg>",
@@ -99,7 +99,7 @@
                 "z": 2
             },
             {
-                "drawing_id": "4f651edb-4177-48a3-91c1-2170386e741b",
+                "drawing_id": "c338299c-d14f-4056-94e4-3c2ef727d08e",
                 "locked": true,
                 "rotation": 0,
                 "svg": "<svg height=\"32\" width=\"48\"><text fill=\"#000000\" fill-opacity=\"1.0\" font-family=\"TypeWriter\" font-size=\"10.0\" font-weight=\"bold\">Group 7\n  AS70</text></svg>",
@@ -108,7 +108,7 @@
                 "z": 2
             },
             {
-                "drawing_id": "aa773b34-4d83-48dc-a13f-cdee4f4395f2",
+                "drawing_id": "543171cb-0aca-4bff-9672-d74787d1e046",
                 "locked": true,
                 "rotation": 0,
                 "svg": "<svg height=\"32\" width=\"49\"><text fill=\"#000000\" fill-opacity=\"1.0\" font-family=\"TypeWriter\" font-size=\"10.0\" font-weight=\"bold\">Group 8\n  AS80</text></svg>",
@@ -117,7 +117,7 @@
                 "z": 2
             },
             {
-                "drawing_id": "0fe5f9fd-73f1-4306-bb49-76b7dfadf616",
+                "drawing_id": "5fdd8a54-9c3b-4830-b4b2-a72fae90f897",
                 "locked": true,
                 "rotation": 0,
                 "svg": "<svg height=\"32\" width=\"77\"><text fill=\"#000000\" fill-opacity=\"1.0\" font-family=\"TypeWriter\" font-size=\"10.0\" font-weight=\"bold\">IXP2 Services\n      AS132</text></svg>",
@@ -129,7 +129,7 @@
         "links": [
             {
                 "filters": {},
-                "link_id": "274aa32b-25dd-4903-870c-34ee52d5b590",
+                "link_id": "25263e46-ec09-4b65-967a-e78a2676b14a",
                 "nodes": [
                     {
                         "adapter_number": 1,
@@ -140,7 +140,7 @@
                             "x": -7,
                             "y": 29
                         },
-                        "node_id": "21d68a98-4406-47d8-862c-70652d71a1d5",
+                        "node_id": "4f692c26-c9ee-4db6-9aba-c7e2464a6e84",
                         "port_number": 0
                     },
                     {
@@ -152,7 +152,7 @@
                             "x": 159,
                             "y": 35
                         },
-                        "node_id": "0d535a29-6ca0-4d22-b3a4-3eb688badec7",
+                        "node_id": "f041ae97-66a9-4c27-8642-526c39dce5d0",
                         "port_number": 0
                     }
                 ],
@@ -160,7 +160,7 @@
             },
             {
                 "filters": {},
-                "link_id": "1d49afec-5aa2-4353-8397-5e55e8bd3dec",
+                "link_id": "4ee90c24-a4f2-437c-b007-abe80a4bf74f",
                 "nodes": [
                     {
                         "adapter_number": 1,
@@ -171,7 +171,7 @@
                             "x": -15,
                             "y": 33
                         },
-                        "node_id": "65e28b26-5f6e-46aa-ada9-a33e32a2873a",
+                        "node_id": "1d070a91-ece6-4661-9b94-d75259125458",
                         "port_number": 0
                     },
                     {
@@ -183,7 +183,7 @@
                             "x": 69,
                             "y": 30
                         },
-                        "node_id": "a81d72bb-2651-46cd-b69b-da12360d9db6",
+                        "node_id": "a9dd6914-a206-4942-8228-340d251841b5",
                         "port_number": 0
                     }
                 ],
@@ -191,7 +191,7 @@
             },
             {
                 "filters": {},
-                "link_id": "7e69dec7-d354-4208-b8d3-e849f75c364c",
+                "link_id": "3ed46b97-7970-4750-8973-902831b2c43f",
                 "nodes": [
                     {
                         "adapter_number": 1,
@@ -202,7 +202,7 @@
                             "x": -15,
                             "y": 32
                         },
-                        "node_id": "853460ce-8d32-4a58-aab5-d696f98abc32",
+                        "node_id": "112e26e6-673b-4812-93ad-bb36c327ecc2",
                         "port_number": 0
                     },
                     {
@@ -214,7 +214,7 @@
                             "x": 69,
                             "y": 31
                         },
-                        "node_id": "6f2c7ecc-b30c-42b1-976a-e94814ef8fe9",
+                        "node_id": "52f303ae-b298-4b3f-88f0-757637bf91d6",
                         "port_number": 0
                     }
                 ],
@@ -222,7 +222,7 @@
             },
             {
                 "filters": {},
-                "link_id": "cef8ba29-9ed4-44ec-99d4-9bbda6ccf2bf",
+                "link_id": "1896b372-6760-454e-9799-8ce1a89b3032",
                 "nodes": [
                     {
                         "adapter_number": 1,
@@ -233,7 +233,7 @@
                             "x": -15,
                             "y": 32
                         },
-                        "node_id": "7be89b7e-4ba2-45ce-b6d4-ec09faace448",
+                        "node_id": "e640274a-b6e3-4fe4-8158-b3c299c0e01e",
                         "port_number": 0
                     },
                     {
@@ -245,7 +245,7 @@
                             "x": 69,
                             "y": 32
                         },
-                        "node_id": "66b1cfcc-ea37-4d9f-b6d8-4ffc111dc841",
+                        "node_id": "02afdcda-9bf4-4f02-bfff-c0c9a0d8754a",
                         "port_number": 0
                     }
                 ],
@@ -253,7 +253,7 @@
             },
             {
                 "filters": {},
-                "link_id": "610edd03-875a-4c4a-b681-d4bc6b284e7e",
+                "link_id": "0866f286-c41a-4c61-9243-e0d704616445",
                 "nodes": [
                     {
                         "adapter_number": 2,
@@ -264,7 +264,7 @@
                             "x": 31,
                             "y": 69
                         },
-                        "node_id": "caf7b91e-f683-499e-ad18-44e1c192d1a8",
+                        "node_id": "6022fe69-f7ac-4203-9f04-f4a8a72e7818",
                         "port_number": 0
                     },
                     {
@@ -276,7 +276,7 @@
                             "x": 30,
                             "y": -9
                         },
-                        "node_id": "6cd0e481-0026-49f8-ab52-802340cdef53",
+                        "node_id": "0484224f-a734-4cc5-b1c1-478300421f55",
                         "port_number": 0
                     }
                 ],
@@ -284,7 +284,7 @@
             },
             {
                 "filters": {},
-                "link_id": "a8f0810e-8b9e-407f-8a61-efd076df6829",
+                "link_id": "a0ecee3a-e948-4c34-a255-e528233e239a",
                 "nodes": [
                     {
                         "adapter_number": 2,
@@ -295,7 +295,7 @@
                             "x": 33,
                             "y": -17
                         },
-                        "node_id": "cddce0de-2139-4074-b5d2-c6604c6e19cf",
+                        "node_id": "cf7ffef4-1b3e-42b0-96e2-e8346a8c5bed",
                         "port_number": 0
                     },
                     {
@@ -307,7 +307,7 @@
                             "x": 25,
                             "y": 63
                         },
-                        "node_id": "b7001d36-554d-4a38-8e70-c3ffea682889",
+                        "node_id": "a6043741-acd8-45de-a0fa-18d9fdc0db43",
                         "port_number": 0
                     }
                 ],
@@ -315,7 +315,7 @@
             },
             {
                 "filters": {},
-                "link_id": "58955e86-5dec-46da-bda4-7d6cca5fd445",
+                "link_id": "9670ccac-3295-447e-be89-6125fdab2722",
                 "nodes": [
                     {
                         "adapter_number": 3,
@@ -326,7 +326,7 @@
                             "x": 28,
                             "y": -18
                         },
-                        "node_id": "cddce0de-2139-4074-b5d2-c6604c6e19cf",
+                        "node_id": "cf7ffef4-1b3e-42b0-96e2-e8346a8c5bed",
                         "port_number": 0
                     },
                     {
@@ -338,7 +338,7 @@
                             "x": 20,
                             "y": 63
                         },
-                        "node_id": "b7001d36-554d-4a38-8e70-c3ffea682889",
+                        "node_id": "a6043741-acd8-45de-a0fa-18d9fdc0db43",
                         "port_number": 0
                     }
                 ],
@@ -346,7 +346,7 @@
             },
             {
                 "filters": {},
-                "link_id": "385f436b-635f-41ef-a07f-fe3f5887a258",
+                "link_id": "0963ea23-3270-4f64-b6cd-16f3bfd42ddf",
                 "nodes": [
                     {
                         "adapter_number": 1,
@@ -357,7 +357,7 @@
                             "x": 54,
                             "y": -11
                         },
-                        "node_id": "cddce0de-2139-4074-b5d2-c6604c6e19cf",
+                        "node_id": "cf7ffef4-1b3e-42b0-96e2-e8346a8c5bed",
                         "port_number": 0
                     },
                     {
@@ -369,7 +369,7 @@
                             "x": 10,
                             "y": 63
                         },
-                        "node_id": "caf7b91e-f683-499e-ad18-44e1c192d1a8",
+                        "node_id": "6022fe69-f7ac-4203-9f04-f4a8a72e7818",
                         "port_number": 0
                     }
                 ],
@@ -377,7 +377,7 @@
             },
             {
                 "filters": {},
-                "link_id": "5c18e0f5-bdcc-4478-b5e3-4e91633ee7e2",
+                "link_id": "e4da8997-fd4a-4a55-b422-d1bf336d0d4c",
                 "nodes": [
                     {
                         "adapter_number": 1,
@@ -388,7 +388,7 @@
                             "x": -7,
                             "y": 29
                         },
-                        "node_id": "caf7b91e-f683-499e-ad18-44e1c192d1a8",
+                        "node_id": "6022fe69-f7ac-4203-9f04-f4a8a72e7818",
                         "port_number": 0
                     },
                     {
@@ -400,7 +400,7 @@
                             "x": 65,
                             "y": 23
                         },
-                        "node_id": "b7001d36-554d-4a38-8e70-c3ffea682889",
+                        "node_id": "a6043741-acd8-45de-a0fa-18d9fdc0db43",
                         "port_number": 0
                     }
                 ],
@@ -408,7 +408,7 @@
             },
             {
                 "filters": {},
-                "link_id": "7c17c9b4-225e-4593-a525-815c2ada9485",
+                "link_id": "e309fa0e-d67f-40c7-b9d4-c04d50c9106e",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -419,7 +419,7 @@
                             "x": 33,
                             "y": 61
                         },
-                        "node_id": "210c9186-7964-448c-a746-53e7f2bd2458",
+                        "node_id": "81819e2a-66dc-4934-99bb-bc32ef796000",
                         "port_number": 0
                     },
                     {
@@ -431,7 +431,7 @@
                             "x": 29,
                             "y": -9
                         },
-                        "node_id": "34f55553-5fe2-4a6f-b466-9e6bc8194c05",
+                        "node_id": "2a31f179-3e28-4e62-b4b1-146df852ad91",
                         "port_number": 0
                     }
                 ],
@@ -439,7 +439,7 @@
             },
             {
                 "filters": {},
-                "link_id": "b740949a-3d6c-478e-bdd0-6226a5acd363",
+                "link_id": "4c51c6d0-87c7-4974-b756-181ca975b25f",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -450,7 +450,7 @@
                             "x": 2,
                             "y": -4
                         },
-                        "node_id": "9d64e94a-c156-4249-8574-4317503b1350",
+                        "node_id": "717012b1-d17c-4c3b-ab11-0c30f3f16d0b",
                         "port_number": 0
                     },
                     {
@@ -462,7 +462,7 @@
                             "x": 63,
                             "y": 48
                         },
-                        "node_id": "a293b884-81af-4b2e-ad4a-edf13e69a6f3",
+                        "node_id": "17862ed4-5868-4d87-acb7-e99103a94bf6",
                         "port_number": 0
                     }
                 ],
@@ -470,7 +470,7 @@
             },
             {
                 "filters": {},
-                "link_id": "9a0d8117-adf1-405b-b1a4-594210a0942e",
+                "link_id": "1a92a0f4-3b51-41cd-aced-4f357af29496",
                 "nodes": [
                     {
                         "adapter_number": 1,
@@ -481,7 +481,7 @@
                             "x": 62,
                             "y": -5
                         },
-                        "node_id": "9d64e94a-c156-4249-8574-4317503b1350",
+                        "node_id": "717012b1-d17c-4c3b-ab11-0c30f3f16d0b",
                         "port_number": 0
                     },
                     {
@@ -493,7 +493,7 @@
                             "x": 3,
                             "y": 49
                         },
-                        "node_id": "31c6c183-5f73-4287-90cb-4bd13b4e75f8",
+                        "node_id": "c5685266-8cd2-4aad-b624-5dc5ca04a38b",
                         "port_number": 0
                     }
                 ],
@@ -501,7 +501,7 @@
             },
             {
                 "filters": {},
-                "link_id": "e63cdaa8-3c8c-4e70-b5d6-a780b623366e",
+                "link_id": "3143a253-0ba0-4744-846c-98f6e346bfa3",
                 "nodes": [
                     {
                         "adapter_number": 2,
@@ -512,7 +512,7 @@
                             "x": 32,
                             "y": 61
                         },
-                        "node_id": "9d64e94a-c156-4249-8574-4317503b1350",
+                        "node_id": "717012b1-d17c-4c3b-ab11-0c30f3f16d0b",
                         "port_number": 0
                     },
                     {
@@ -524,7 +524,7 @@
                             "x": 33,
                             "y": -17
                         },
-                        "node_id": "2adcb446-d81e-4f86-8290-a5d2817acd55",
+                        "node_id": "c6891c50-2a22-451c-b616-59e4ee23c4fc",
                         "port_number": 0
                     }
                 ],
@@ -532,7 +532,7 @@
             },
             {
                 "filters": {},
-                "link_id": "7ba42e51-5f9c-4f78-b32c-62458f5ace41",
+                "link_id": "5e4ebc06-26c9-41e5-82d6-e9c49b1ceba7",
                 "nodes": [
                     {
                         "adapter_number": 3,
@@ -543,7 +543,7 @@
                             "x": 0,
                             "y": 43
                         },
-                        "node_id": "9d64e94a-c156-4249-8574-4317503b1350",
+                        "node_id": "717012b1-d17c-4c3b-ab11-0c30f3f16d0b",
                         "port_number": 0
                     },
                     {
@@ -555,7 +555,7 @@
                             "x": 65,
                             "y": 7
                         },
-                        "node_id": "21d68a98-4406-47d8-862c-70652d71a1d5",
+                        "node_id": "4f692c26-c9ee-4db6-9aba-c7e2464a6e84",
                         "port_number": 0
                     }
                 ],
@@ -563,7 +563,7 @@
             },
             {
                 "filters": {},
-                "link_id": "59cb3248-75b2-4192-854a-ec430b582144",
+                "link_id": "d02e469f-86de-48f6-a9b7-85042aecb3e2",
                 "nodes": [
                     {
                         "adapter_number": 4,
@@ -574,7 +574,7 @@
                             "x": 72,
                             "y": 21
                         },
-                        "node_id": "9d64e94a-c156-4249-8574-4317503b1350",
+                        "node_id": "717012b1-d17c-4c3b-ab11-0c30f3f16d0b",
                         "port_number": 0
                     },
                     {
@@ -586,7 +586,7 @@
                             "x": -6,
                             "y": 22
                         },
-                        "node_id": "85bafbf4-25b0-412e-ad32-92556b180193",
+                        "node_id": "a1af1edf-6d86-4985-82da-f7e703940fc3",
                         "port_number": 0
                     }
                 ],
@@ -594,7 +594,7 @@
             },
             {
                 "filters": {},
-                "link_id": "48d3634c-76f4-4405-aacb-4ffea4e39771",
+                "link_id": "b6a90496-b90c-4e91-be25-28bae4e9336e",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -605,7 +605,7 @@
                             "x": 2,
                             "y": -4
                         },
-                        "node_id": "88ebd0ec-7e09-4c5a-89ca-9a6408e146fd",
+                        "node_id": "0e4e615c-aace-4e77-80fd-c32984ea80e7",
                         "port_number": 0
                     },
                     {
@@ -617,7 +617,7 @@
                             "x": 63,
                             "y": 48
                         },
-                        "node_id": "78ed77e5-b052-4f40-b8d6-f3f083837ed5",
+                        "node_id": "a931832c-4e07-4d46-a392-793639dea61f",
                         "port_number": 0
                     }
                 ],
@@ -625,7 +625,7 @@
             },
             {
                 "filters": {},
-                "link_id": "bbe59c47-4085-4a82-bfde-355c24159955",
+                "link_id": "890b09bc-1f1b-42bb-a04c-7809ec456b9a",
                 "nodes": [
                     {
                         "adapter_number": 1,
@@ -636,7 +636,7 @@
                             "x": 62,
                             "y": -4
                         },
-                        "node_id": "88ebd0ec-7e09-4c5a-89ca-9a6408e146fd",
+                        "node_id": "0e4e615c-aace-4e77-80fd-c32984ea80e7",
                         "port_number": 0
                     },
                     {
@@ -648,7 +648,7 @@
                             "x": 3,
                             "y": 48
                         },
-                        "node_id": "bf70f2ac-b916-46b6-b3d4-49f3500de459",
+                        "node_id": "c46e73cb-e872-4dd4-acaa-eb5baeab71dc",
                         "port_number": 0
                     }
                 ],
@@ -656,7 +656,7 @@
             },
             {
                 "filters": {},
-                "link_id": "068aa6df-328d-4e24-bd77-2e5ebc35b036",
+                "link_id": "c172d782-096b-47af-a812-8fb999b3759f",
                 "nodes": [
                     {
                         "adapter_number": 2,
@@ -667,7 +667,7 @@
                             "x": 32,
                             "y": 61
                         },
-                        "node_id": "88ebd0ec-7e09-4c5a-89ca-9a6408e146fd",
+                        "node_id": "0e4e615c-aace-4e77-80fd-c32984ea80e7",
                         "port_number": 0
                     },
                     {
@@ -679,7 +679,7 @@
                             "x": 33,
                             "y": -17
                         },
-                        "node_id": "0f994ae2-dcb4-4e01-ba7b-0ef2ac0c1692",
+                        "node_id": "3cec887e-bc54-46cb-9f37-ea9827f6b26b",
                         "port_number": 0
                     }
                 ],
@@ -687,7 +687,7 @@
             },
             {
                 "filters": {},
-                "link_id": "5b0590ad-a600-4c60-9bac-dc9d2ca59c33",
+                "link_id": "c3dd10d4-ed10-4ff1-833b-7d6e52dd0fa5",
                 "nodes": [
                     {
                         "adapter_number": 3,
@@ -698,7 +698,7 @@
                             "x": 0,
                             "y": 43
                         },
-                        "node_id": "88ebd0ec-7e09-4c5a-89ca-9a6408e146fd",
+                        "node_id": "0e4e615c-aace-4e77-80fd-c32984ea80e7",
                         "port_number": 0
                     },
                     {
@@ -710,7 +710,7 @@
                             "x": 65,
                             "y": 7
                         },
-                        "node_id": "65e28b26-5f6e-46aa-ada9-a33e32a2873a",
+                        "node_id": "1d070a91-ece6-4661-9b94-d75259125458",
                         "port_number": 0
                     }
                 ],
@@ -718,7 +718,7 @@
             },
             {
                 "filters": {},
-                "link_id": "15e1b4f5-0f40-40bc-a0f9-ab04479cab78",
+                "link_id": "df7478c4-6c7e-4271-8317-9063744d2798",
                 "nodes": [
                     {
                         "adapter_number": 4,
@@ -729,7 +729,7 @@
                             "x": 73,
                             "y": 22
                         },
-                        "node_id": "88ebd0ec-7e09-4c5a-89ca-9a6408e146fd",
+                        "node_id": "0e4e615c-aace-4e77-80fd-c32984ea80e7",
                         "port_number": 0
                     },
                     {
@@ -741,7 +741,7 @@
                             "x": -7,
                             "y": 22
                         },
-                        "node_id": "c871594d-702b-4961-827a-3a16e95675e1",
+                        "node_id": "6701b9d3-d220-4077-8627-14f2a09e72a4",
                         "port_number": 0
                     }
                 ],
@@ -749,7 +749,7 @@
             },
             {
                 "filters": {},
-                "link_id": "3b7e0ef9-1715-4226-b16a-a8f1dfb3c55c",
+                "link_id": "abfad97c-8718-4056-9167-9a6696b314c9",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -760,7 +760,7 @@
                             "x": 2,
                             "y": -4
                         },
-                        "node_id": "e27b75a3-01d5-457c-89b9-d8803cd06abe",
+                        "node_id": "e636b648-8567-4880-b16b-67860e025cf9",
                         "port_number": 0
                     },
                     {
@@ -772,7 +772,7 @@
                             "x": 63,
                             "y": 48
                         },
-                        "node_id": "a0e0b4d3-cd6f-4cd7-88b9-6f9ceaeb6871",
+                        "node_id": "85e5ea85-116b-4bd8-9f71-36eb5a7465e6",
                         "port_number": 0
                     }
                 ],
@@ -780,7 +780,7 @@
             },
             {
                 "filters": {},
-                "link_id": "17a8a833-2211-446a-9a1e-c0324d7018be",
+                "link_id": "ab7e4fc4-979f-431c-a54d-1c2e2b07fbff",
                 "nodes": [
                     {
                         "adapter_number": 1,
@@ -791,7 +791,7 @@
                             "x": 62,
                             "y": -4
                         },
-                        "node_id": "e27b75a3-01d5-457c-89b9-d8803cd06abe",
+                        "node_id": "e636b648-8567-4880-b16b-67860e025cf9",
                         "port_number": 0
                     },
                     {
@@ -803,7 +803,7 @@
                             "x": 3,
                             "y": 48
                         },
-                        "node_id": "049ce124-733f-4b90-ae95-536e8961911c",
+                        "node_id": "41de4059-5acb-487b-8b93-0b52cf11ca2c",
                         "port_number": 0
                     }
                 ],
@@ -811,7 +811,7 @@
             },
             {
                 "filters": {},
-                "link_id": "0f2e2850-201f-4d92-a903-57f9530d82e4",
+                "link_id": "9a881d23-aae3-4e02-8288-7115f0fe48c6",
                 "nodes": [
                     {
                         "adapter_number": 2,
@@ -822,7 +822,7 @@
                             "x": 33,
                             "y": 62
                         },
-                        "node_id": "e27b75a3-01d5-457c-89b9-d8803cd06abe",
+                        "node_id": "e636b648-8567-4880-b16b-67860e025cf9",
                         "port_number": 0
                     },
                     {
@@ -834,7 +834,7 @@
                             "x": 33,
                             "y": -18
                         },
-                        "node_id": "e08e4625-7316-40a4-833b-b1891d6e2128",
+                        "node_id": "93a8fcd5-25ae-404d-9612-e6e92b622f29",
                         "port_number": 0
                     }
                 ],
@@ -842,7 +842,7 @@
             },
             {
                 "filters": {},
-                "link_id": "2a267519-4e5f-42db-bf9b-9c4ddf463bf2",
+                "link_id": "02cbcc95-13ef-417c-a74d-5fef9be57ad4",
                 "nodes": [
                     {
                         "adapter_number": 3,
@@ -853,7 +853,7 @@
                             "x": 0,
                             "y": 43
                         },
-                        "node_id": "e27b75a3-01d5-457c-89b9-d8803cd06abe",
+                        "node_id": "e636b648-8567-4880-b16b-67860e025cf9",
                         "port_number": 0
                     },
                     {
@@ -865,7 +865,7 @@
                             "x": 66,
                             "y": 8
                         },
-                        "node_id": "853460ce-8d32-4a58-aab5-d696f98abc32",
+                        "node_id": "112e26e6-673b-4812-93ad-bb36c327ecc2",
                         "port_number": 0
                     }
                 ],
@@ -873,7 +873,7 @@
             },
             {
                 "filters": {},
-                "link_id": "ebbf74e7-3504-403f-8921-d8e788897889",
+                "link_id": "664eebbc-7074-4ef3-934c-4bfbf55dd706",
                 "nodes": [
                     {
                         "adapter_number": 4,
@@ -884,7 +884,7 @@
                             "x": 72,
                             "y": 22
                         },
-                        "node_id": "e27b75a3-01d5-457c-89b9-d8803cd06abe",
+                        "node_id": "e636b648-8567-4880-b16b-67860e025cf9",
                         "port_number": 0
                     },
                     {
@@ -896,7 +896,7 @@
                             "x": -6,
                             "y": 21
                         },
-                        "node_id": "0c41c79f-3413-426e-bbd7-c7ab17882d78",
+                        "node_id": "0367aa51-739a-45ff-a5a9-adf6042f37db",
                         "port_number": 0
                     }
                 ],
@@ -904,7 +904,7 @@
             },
             {
                 "filters": {},
-                "link_id": "3f8b66f3-f332-4ab2-9c15-fb633be5ea98",
+                "link_id": "d3b63a0f-328b-4381-9fc4-310778cf975e",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -915,7 +915,7 @@
                             "x": 2,
                             "y": -4
                         },
-                        "node_id": "80e2ca88-f816-47a8-bbe8-b29fb5ce2a22",
+                        "node_id": "27e1f278-f691-4261-ad7f-3196d2563560",
                         "port_number": 0
                     },
                     {
@@ -927,7 +927,7 @@
                             "x": 63,
                             "y": 48
                         },
-                        "node_id": "d231c1c1-ec98-4643-a443-98c66469de46",
+                        "node_id": "b08127bd-950b-4216-8b5d-3166a79219eb",
                         "port_number": 0
                     }
                 ],
@@ -935,7 +935,7 @@
             },
             {
                 "filters": {},
-                "link_id": "e4a75153-3747-4f87-96dd-13ed761d1b9f",
+                "link_id": "bd3e48a3-4f05-4d73-bc52-806f60f3bd08",
                 "nodes": [
                     {
                         "adapter_number": 1,
@@ -946,7 +946,7 @@
                             "x": 62,
                             "y": -4
                         },
-                        "node_id": "80e2ca88-f816-47a8-bbe8-b29fb5ce2a22",
+                        "node_id": "27e1f278-f691-4261-ad7f-3196d2563560",
                         "port_number": 0
                     },
                     {
@@ -958,7 +958,7 @@
                             "x": 3,
                             "y": 48
                         },
-                        "node_id": "b637c525-cc28-4f9c-9aec-98af2715269f",
+                        "node_id": "ca11c17f-2e10-4622-8b32-01e86acf72cb",
                         "port_number": 0
                     }
                 ],
@@ -966,7 +966,7 @@
             },
             {
                 "filters": {},
-                "link_id": "6ed8b38a-2b61-4867-b1a2-6168e3ab7d2d",
+                "link_id": "a7873a20-9a0c-47d7-8683-5ad06b3d3207",
                 "nodes": [
                     {
                         "adapter_number": 2,
@@ -977,7 +977,7 @@
                             "x": 33,
                             "y": 62
                         },
-                        "node_id": "80e2ca88-f816-47a8-bbe8-b29fb5ce2a22",
+                        "node_id": "27e1f278-f691-4261-ad7f-3196d2563560",
                         "port_number": 0
                     },
                     {
@@ -989,7 +989,7 @@
                             "x": 33,
                             "y": -18
                         },
-                        "node_id": "351afc67-ff9e-4032-bcc6-c9e9aa72f2dc",
+                        "node_id": "1d2e8582-9286-4ab7-919b-2a65f1e3fe3c",
                         "port_number": 0
                     }
                 ],
@@ -997,7 +997,7 @@
             },
             {
                 "filters": {},
-                "link_id": "e93b7cbc-0762-4c4c-8715-f468b271713a",
+                "link_id": "57f250fe-9135-44ab-aaea-e5751fde47bf",
                 "nodes": [
                     {
                         "adapter_number": 3,
@@ -1008,7 +1008,7 @@
                             "x": -1,
                             "y": 42
                         },
-                        "node_id": "80e2ca88-f816-47a8-bbe8-b29fb5ce2a22",
+                        "node_id": "27e1f278-f691-4261-ad7f-3196d2563560",
                         "port_number": 0
                     },
                     {
@@ -1020,7 +1020,7 @@
                             "x": 66,
                             "y": 8
                         },
-                        "node_id": "7be89b7e-4ba2-45ce-b6d4-ec09faace448",
+                        "node_id": "e640274a-b6e3-4fe4-8158-b3c299c0e01e",
                         "port_number": 0
                     }
                 ],
@@ -1028,7 +1028,7 @@
             },
             {
                 "filters": {},
-                "link_id": "5b3621fc-f4d0-4f0c-bde5-23d2cb6a9035",
+                "link_id": "ae578ea2-1853-494d-b1f0-3ee2e7f1689a",
                 "nodes": [
                     {
                         "adapter_number": 4,
@@ -1039,7 +1039,7 @@
                             "x": 73,
                             "y": 22
                         },
-                        "node_id": "80e2ca88-f816-47a8-bbe8-b29fb5ce2a22",
+                        "node_id": "27e1f278-f691-4261-ad7f-3196d2563560",
                         "port_number": 0
                     },
                     {
@@ -1051,7 +1051,7 @@
                             "x": -7,
                             "y": 22
                         },
-                        "node_id": "a5be530f-2e61-40c7-b775-533bda85d402",
+                        "node_id": "1013b420-cd0d-400a-be6e-f0ffcda4bdec",
                         "port_number": 0
                     }
                 ],
@@ -1059,7 +1059,7 @@
             },
             {
                 "filters": {},
-                "link_id": "5611ac1d-4a25-476e-9954-5f9e115654eb",
+                "link_id": "db118311-fbf3-4fba-9b43-8aa445690137",
                 "nodes": [
                     {
                         "adapter_number": 1,
@@ -1070,7 +1070,7 @@
                             "x": 0,
                             "y": 0
                         },
-                        "node_id": "a293b884-81af-4b2e-ad4a-edf13e69a6f3",
+                        "node_id": "17862ed4-5868-4d87-acb7-e99103a94bf6",
                         "port_number": 0
                     },
                     {
@@ -1082,7 +1082,7 @@
                             "x": 66,
                             "y": 43
                         },
-                        "node_id": "210c9186-7964-448c-a746-53e7f2bd2458",
+                        "node_id": "81819e2a-66dc-4934-99bb-bc32ef796000",
                         "port_number": 0
                     }
                 ],
@@ -1090,7 +1090,7 @@
             },
             {
                 "filters": {},
-                "link_id": "3d4c3c30-5b6e-421b-99ab-05318d5fc10f",
+                "link_id": "94da1c5b-afc4-47fb-81b1-62d0eb8c3226",
                 "nodes": [
                     {
                         "adapter_number": 1,
@@ -1101,7 +1101,7 @@
                             "x": -6,
                             "y": 18
                         },
-                        "node_id": "78ed77e5-b052-4f40-b8d6-f3f083837ed5",
+                        "node_id": "a931832c-4e07-4d46-a392-793639dea61f",
                         "port_number": 0
                     },
                     {
@@ -1113,7 +1113,7 @@
                             "x": 72,
                             "y": 25
                         },
-                        "node_id": "210c9186-7964-448c-a746-53e7f2bd2458",
+                        "node_id": "81819e2a-66dc-4934-99bb-bc32ef796000",
                         "port_number": 0
                     }
                 ],
@@ -1121,7 +1121,7 @@
             },
             {
                 "filters": {},
-                "link_id": "10a3f829-ea3a-4d46-889f-a527abf1bfa0",
+                "link_id": "a6f5ac79-c01c-4cac-9ba5-e5b5018ec867",
                 "nodes": [
                     {
                         "adapter_number": 1,
@@ -1132,7 +1132,7 @@
                             "x": -3,
                             "y": 38
                         },
-                        "node_id": "a0e0b4d3-cd6f-4cd7-88b9-6f9ceaeb6871",
+                        "node_id": "85e5ea85-116b-4bd8-9f71-36eb5a7465e6",
                         "port_number": 0
                     },
                     {
@@ -1144,7 +1144,7 @@
                             "x": 69,
                             "y": 5
                         },
-                        "node_id": "210c9186-7964-448c-a746-53e7f2bd2458",
+                        "node_id": "81819e2a-66dc-4934-99bb-bc32ef796000",
                         "port_number": 0
                     }
                 ],
@@ -1152,7 +1152,7 @@
             },
             {
                 "filters": {},
-                "link_id": "562e3d44-c030-4036-855a-bb9ff1e265b8",
+                "link_id": "69e16050-0e4c-4f49-b66b-676fa36e8146",
                 "nodes": [
                     {
                         "adapter_number": 1,
@@ -1163,7 +1163,7 @@
                             "x": 4,
                             "y": 50
                         },
-                        "node_id": "d231c1c1-ec98-4643-a443-98c66469de46",
+                        "node_id": "b08127bd-950b-4216-8b5d-3166a79219eb",
                         "port_number": 0
                     },
                     {
@@ -1175,7 +1175,7 @@
                             "x": 61,
                             "y": -6
                         },
-                        "node_id": "210c9186-7964-448c-a746-53e7f2bd2458",
+                        "node_id": "81819e2a-66dc-4934-99bb-bc32ef796000",
                         "port_number": 0
                     }
                 ],
@@ -1183,7 +1183,7 @@
             },
             {
                 "filters": {},
-                "link_id": "aa4f002a-5adc-4992-b699-3f05e8fc2f94",
+                "link_id": "b4379515-4ed9-478d-b2ff-ac1348ead719",
                 "nodes": [
                     {
                         "adapter_number": 0,
@@ -1194,7 +1194,7 @@
                             "x": -6,
                             "y": 22
                         },
-                        "node_id": "cddce0de-2139-4074-b5d2-c6604c6e19cf",
+                        "node_id": "cf7ffef4-1b3e-42b0-96e2-e8346a8c5bed",
                         "port_number": 0
                     },
                     {
@@ -1206,7 +1206,7 @@
                             "x": 72,
                             "y": 21
                         },
-                        "node_id": "210c9186-7964-448c-a746-53e7f2bd2458",
+                        "node_id": "81819e2a-66dc-4934-99bb-bc32ef796000",
                         "port_number": 0
                     }
                 ],
@@ -1214,7 +1214,7 @@
             },
             {
                 "filters": {},
-                "link_id": "208da887-f4bb-4906-91bd-9c1e790b9bce",
+                "link_id": "35c08d33-8909-45cb-9767-f3ba6e20f5b9",
                 "nodes": [
                     {
                         "adapter_number": 1,
@@ -1225,7 +1225,7 @@
                             "x": -6,
                             "y": 24
                         },
-                        "node_id": "a924a508-f08e-4c93-9ddb-2fb70936a2a2",
+                        "node_id": "85cbd07c-692f-450b-91f1-a0785543c458",
                         "port_number": 0
                     },
                     {
@@ -1237,7 +1237,7 @@
                             "x": 72,
                             "y": 19
                         },
-                        "node_id": "2adcb446-d81e-4f86-8290-a5d2817acd55",
+                        "node_id": "c6891c50-2a22-451c-b616-59e4ee23c4fc",
                         "port_number": 0
                     }
                 ],
@@ -1245,7 +1245,7 @@
             },
             {
                 "filters": {},
-                "link_id": "676f514c-a64a-4cf8-a8b4-0939249ffde5",
+                "link_id": "afac5db9-a4d1-48f9-bdcc-8662ed34c78d",
                 "nodes": [
                     {
                         "adapter_number": 1,
@@ -1256,7 +1256,7 @@
                             "x": -6,
                             "y": 25
                         },
-                        "node_id": "0fe6e938-3ad2-4194-b687-ecf0c86492ef",
+                        "node_id": "61d4b6e7-b859-4d43-832c-9a0da3b43a55",
                         "port_number": 0
                     },
                     {
@@ -1268,7 +1268,7 @@
                             "x": 72,
                             "y": 18
                         },
-                        "node_id": "0f994ae2-dcb4-4e01-ba7b-0ef2ac0c1692",
+                        "node_id": "3cec887e-bc54-46cb-9f37-ea9827f6b26b",
                         "port_number": 0
                     }
                 ],
@@ -1276,7 +1276,7 @@
             },
             {
                 "filters": {},
-                "link_id": "909565b5-8a1e-4ed3-a8e2-a65ac1abca56",
+                "link_id": "dac629a3-13bd-4834-bfe0-8797cc0b5383",
                 "nodes": [
                     {
                         "adapter_number": 1,
@@ -1287,7 +1287,7 @@
                             "x": -6,
                             "y": 25
                         },
-                        "node_id": "881da462-2764-456c-8f85-bf8d61ad56cc",
+                        "node_id": "29fe4007-04d1-4a49-a4a9-300a9e35ae1b",
                         "port_number": 0
                     },
                     {
@@ -1299,7 +1299,7 @@
                             "x": 72,
                             "y": 18
                         },
-                        "node_id": "e08e4625-7316-40a4-833b-b1891d6e2128",
+                        "node_id": "93a8fcd5-25ae-404d-9612-e6e92b622f29",
                         "port_number": 0
                     }
                 ],
@@ -1307,7 +1307,7 @@
             },
             {
                 "filters": {},
-                "link_id": "0b3771c4-27b1-4565-81e2-08f22850fada",
+                "link_id": "c5af9ca4-3b0d-4a90-8629-779fcc09825d",
                 "nodes": [
                     {
                         "adapter_number": 1,
@@ -1318,7 +1318,7 @@
                             "x": -6,
                             "y": 25
                         },
-                        "node_id": "eebe4d5e-6ada-4e2a-b8d9-13d811778012",
+                        "node_id": "ee327c63-e7a9-44bd-869b-61bbb9aef0b0",
                         "port_number": 0
                     },
                     {
@@ -1330,7 +1330,7 @@
                             "x": 72,
                             "y": 18
                         },
-                        "node_id": "351afc67-ff9e-4032-bcc6-c9e9aa72f2dc",
+                        "node_id": "1d2e8582-9286-4ab7-919b-2a65f1e3fe3c",
                         "port_number": 0
                     }
                 ],
@@ -1338,7 +1338,7 @@
             },
             {
                 "filters": {},
-                "link_id": "b9086a13-b5c1-4a29-aabe-1150b5b2afec",
+                "link_id": "28946537-2822-424c-a57c-77bd3b84479d",
                 "nodes": [
                     {
                         "adapter_number": 1,
@@ -1349,7 +1349,7 @@
                             "x": 33,
                             "y": -18
                         },
-                        "node_id": "31c6c183-5f73-4287-90cb-4bd13b4e75f8",
+                        "node_id": "c5685266-8cd2-4aad-b624-5dc5ca04a38b",
                         "port_number": 0
                     },
                     {
@@ -1361,7 +1361,7 @@
                             "x": 33,
                             "y": 62
                         },
-                        "node_id": "bf70f2ac-b916-46b6-b3d4-49f3500de459",
+                        "node_id": "c46e73cb-e872-4dd4-acaa-eb5baeab71dc",
                         "port_number": 0
                     }
                 ],
@@ -1369,7 +1369,7 @@
             },
             {
                 "filters": {},
-                "link_id": "ec26b75f-29d8-4cbb-b322-b12e22da7b46",
+                "link_id": "eaf50120-5eb5-49f6-9f62-ad580fb1cf81",
                 "nodes": [
                     {
                         "adapter_number": 1,
@@ -1380,7 +1380,7 @@
                             "x": 32,
                             "y": -17
                         },
-                        "node_id": "049ce124-733f-4b90-ae95-536e8961911c",
+                        "node_id": "41de4059-5acb-487b-8b93-0b52cf11ca2c",
                         "port_number": 0
                     },
                     {
@@ -1392,7 +1392,7 @@
                             "x": 33,
                             "y": 61
                         },
-                        "node_id": "b637c525-cc28-4f9c-9aec-98af2715269f",
+                        "node_id": "ca11c17f-2e10-4622-8b32-01e86acf72cb",
                         "port_number": 0
                     }
                 ],
@@ -1400,7 +1400,7 @@
             },
             {
                 "filters": {},
-                "link_id": "6a707fe9-708f-4e14-b1fd-579dd078ffed",
+                "link_id": "4dcc612b-dcd3-4db5-9d99-b2b796512d8c",
                 "nodes": [
                     {
                         "adapter_number": 2,
@@ -1411,7 +1411,7 @@
                             "x": 61,
                             "y": -5
                         },
-                        "node_id": "31c6c183-5f73-4287-90cb-4bd13b4e75f8",
+                        "node_id": "c5685266-8cd2-4aad-b624-5dc5ca04a38b",
                         "port_number": 0
                     },
                     {
@@ -1423,7 +1423,7 @@
                             "x": -3,
                             "y": 51
                         },
-                        "node_id": "b7001d36-554d-4a38-8e70-c3ffea682889",
+                        "node_id": "a6043741-acd8-45de-a0fa-18d9fdc0db43",
                         "port_number": 0
                     }
                 ],
@@ -1431,7 +1431,7 @@
             },
             {
                 "filters": {},
-                "link_id": "a1497ef9-533e-4dce-9736-42a59b0d9d2f",
+                "link_id": "e8076a19-223b-4dac-ab9f-d7ff1dadd033",
                 "nodes": [
                     {
                         "adapter_number": 2,
@@ -1442,7 +1442,7 @@
                             "x": 69,
                             "y": 5
                         },
-                        "node_id": "bf70f2ac-b916-46b6-b3d4-49f3500de459",
+                        "node_id": "c46e73cb-e872-4dd4-acaa-eb5baeab71dc",
                         "port_number": 0
                     },
                     {
@@ -1454,7 +1454,7 @@
                             "x": -11,
                             "y": 39
                         },
-                        "node_id": "b7001d36-554d-4a38-8e70-c3ffea682889",
+                        "node_id": "a6043741-acd8-45de-a0fa-18d9fdc0db43",
                         "port_number": 0
                     }
                 ],
@@ -1462,7 +1462,7 @@
             },
             {
                 "filters": {},
-                "link_id": "61859d36-ff7d-4332-b7cc-6bd216e2ac51",
+                "link_id": "b548e373-05a0-4568-9078-b369650c7022",
                 "nodes": [
                     {
                         "adapter_number": 2,
@@ -1473,7 +1473,7 @@
                             "x": 72,
                             "y": 26
                         },
-                        "node_id": "049ce124-733f-4b90-ae95-536e8961911c",
+                        "node_id": "41de4059-5acb-487b-8b93-0b52cf11ca2c",
                         "port_number": 0
                     },
                     {
@@ -1485,7 +1485,7 @@
                             "x": -14,
                             "y": 18
                         },
-                        "node_id": "b7001d36-554d-4a38-8e70-c3ffea682889",
+                        "node_id": "a6043741-acd8-45de-a0fa-18d9fdc0db43",
                         "port_number": 0
                     }
                 ],
@@ -1493,7 +1493,7 @@
             },
             {
                 "filters": {},
-                "link_id": "6770e906-82d2-441c-9274-ec281081e63b",
+                "link_id": "d907628e-e37f-42a3-b4c5-387d8998106c",
                 "nodes": [
                     {
                         "adapter_number": 2,
@@ -1504,7 +1504,7 @@
                             "x": 66,
                             "y": 44
                         },
-                        "node_id": "b637c525-cc28-4f9c-9aec-98af2715269f",
+                        "node_id": "ca11c17f-2e10-4622-8b32-01e86acf72cb",
                         "port_number": 0
                     },
                     {
@@ -1516,7 +1516,7 @@
                             "x": -7,
                             "y": 1
                         },
-                        "node_id": "b7001d36-554d-4a38-8e70-c3ffea682889",
+                        "node_id": "a6043741-acd8-45de-a0fa-18d9fdc0db43",
                         "port_number": 0
                     }
                 ],
@@ -1541,7 +1541,7 @@
                 },
                 "locked": true,
                 "name": "NAT-TR2",
-                "node_id": "34f55553-5fe2-4a6f-b466-9e6bc8194c05",
+                "node_id": "2a31f179-3e28-4e62-b4b1-146df852ad91",
                 "node_type": "nat",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
@@ -1564,7 +1564,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5104,
+                "console": 5046,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -1579,7 +1579,7 @@
                 },
                 "locked": true,
                 "name": "SRV5",
-                "node_id": "21d68a98-4406-47d8-862c-70652d71a1d5",
+                "node_id": "4f692c26-c9ee-4db6-9aba-c7e2464a6e84",
                 "node_type": "qemu",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
@@ -1596,8 +1596,8 @@
                     "hda_disk_image": "nsrc-rs-20200428-c1d6625a.qcow2",
                     "hda_disk_image_md5sum": "c1d6625a5fbc4bc7d05b6e42e982260e",
                     "hda_disk_interface": "virtio",
-                    "hdb_disk_image": "riso-srv5-hdb-20200504-757de688.img",
-                    "hdb_disk_image_md5sum": "757de688bb00ec9ffa7ee96acc10d0c1",
+                    "hdb_disk_image": "riso-srv5-hdb-20200727-a8926613.img",
+                    "hdb_disk_image_md5sum": "a8926613b6a3f2379162fc50bb658357",
                     "hdb_disk_interface": "virtio",
                     "hdc_disk_image": "",
                     "hdc_disk_image_md5sum": null,
@@ -1614,11 +1614,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:77:37:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 1024,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: isplab\nPassword: lab-PW"
                 },
                 "symbol": ":/symbols/classic/qemu_guest.svg",
@@ -1630,7 +1631,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5108,
+                "console": 5048,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -1645,7 +1646,7 @@
                 },
                 "locked": true,
                 "name": "TR2",
-                "node_id": "210c9186-7964-448c-a746-53e7f2bd2458",
+                "node_id": "81819e2a-66dc-4934-99bb-bc32ef796000",
                 "node_type": "qemu",
                 "port_name_format": "Gi0/{0}",
                 "port_segment_size": 0,
@@ -1680,11 +1681,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:4a:27:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 512,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nsrc\nPassword: see instructor documentation"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -1696,7 +1698,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5116,
+                "console": 5050,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -1711,7 +1713,7 @@
                 },
                 "locked": true,
                 "name": "IXP2",
-                "node_id": "b7001d36-554d-4a38-8e70-c3ffea682889",
+                "node_id": "a6043741-acd8-45de-a0fa-18d9fdc0db43",
                 "node_type": "qemu",
                 "port_name_format": "Gi{1}/{0}",
                 "port_segment_size": 4,
@@ -1746,11 +1748,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:e1:44:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 768,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nsrc\nPassword: see instructor documentation"
                 },
                 "symbol": ":/symbols/multilayer_switch.svg",
@@ -1762,7 +1765,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5120,
+                "console": 5052,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -1777,7 +1780,7 @@
                 },
                 "locked": true,
                 "name": "RS2",
-                "node_id": "caf7b91e-f683-499e-ad18-44e1c192d1a8",
+                "node_id": "6022fe69-f7ac-4203-9f04-f4a8a72e7818",
                 "node_type": "qemu",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
@@ -1794,8 +1797,8 @@
                     "hda_disk_image": "nsrc-rs-20200428-c1d6625a.qcow2",
                     "hda_disk_image_md5sum": "c1d6625a5fbc4bc7d05b6e42e982260e",
                     "hda_disk_interface": "virtio",
-                    "hdb_disk_image": "riso-rs2-hdb-20200518-e49e2587.img",
-                    "hdb_disk_image_md5sum": "e49e2587471a57ca541e9ac8b9400594",
+                    "hdb_disk_image": "riso-rs2-hdb-20200727-6e722d28.img",
+                    "hdb_disk_image_md5sum": "6e722d2880bd240da1afe54096bbc5de",
                     "hdb_disk_interface": "virtio",
                     "hdc_disk_image": "",
                     "hdc_disk_image_md5sum": null,
@@ -1812,11 +1815,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:c7:25:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 1024,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nsrc\nPassword: see instructor documentation"
                 },
                 "symbol": ":/symbols/qemu_guest.svg",
@@ -1828,7 +1832,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5132,
+                "console": 5054,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -1843,7 +1847,7 @@
                 },
                 "locked": true,
                 "name": "B5",
-                "node_id": "a293b884-81af-4b2e-ad4a-edf13e69a6f3",
+                "node_id": "17862ed4-5868-4d87-acb7-e99103a94bf6",
                 "node_type": "qemu",
                 "port_name_format": "Gi{port1}",
                 "port_segment_size": 0,
@@ -1878,11 +1882,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:0a:29:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 3072,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: isplab\nPassword: lab-PW"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -1894,7 +1899,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5136,
+                "console": 5056,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -1909,7 +1914,7 @@
                 },
                 "locked": true,
                 "name": "C5",
-                "node_id": "9d64e94a-c156-4249-8574-4317503b1350",
+                "node_id": "717012b1-d17c-4c3b-ab11-0c30f3f16d0b",
                 "node_type": "qemu",
                 "port_name_format": "Gi{port1}",
                 "port_segment_size": 0,
@@ -1944,11 +1949,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:73:31:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 3072,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: isplab\nPassword: lab-PW"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -1960,7 +1966,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5140,
+                "console": 5058,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -1975,7 +1981,7 @@
                 },
                 "locked": true,
                 "name": "P5",
-                "node_id": "31c6c183-5f73-4287-90cb-4bd13b4e75f8",
+                "node_id": "c5685266-8cd2-4aad-b624-5dc5ca04a38b",
                 "node_type": "qemu",
                 "port_name_format": "Gi{port1}",
                 "port_segment_size": 0,
@@ -2010,11 +2016,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:2f:be:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 3072,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: isplab\nPassword: lab-PW"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -2026,7 +2033,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5144,
+                "console": 5060,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -2041,7 +2048,7 @@
                 },
                 "locked": true,
                 "name": "B6",
-                "node_id": "78ed77e5-b052-4f40-b8d6-f3f083837ed5",
+                "node_id": "a931832c-4e07-4d46-a392-793639dea61f",
                 "node_type": "qemu",
                 "port_name_format": "Gi{port1}",
                 "port_segment_size": 0,
@@ -2076,11 +2083,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:16:b7:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 3072,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: isplab\nPassword: lab-PW"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -2092,7 +2100,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5148,
+                "console": 5062,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -2107,7 +2115,7 @@
                 },
                 "locked": true,
                 "name": "P6",
-                "node_id": "bf70f2ac-b916-46b6-b3d4-49f3500de459",
+                "node_id": "c46e73cb-e872-4dd4-acaa-eb5baeab71dc",
                 "node_type": "qemu",
                 "port_name_format": "Gi{port1}",
                 "port_segment_size": 0,
@@ -2142,11 +2150,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:ee:b8:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 3072,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: isplab\nPassword: lab-PW"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -2158,7 +2167,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5152,
+                "console": 5064,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -2173,7 +2182,7 @@
                 },
                 "locked": true,
                 "name": "SRV6",
-                "node_id": "65e28b26-5f6e-46aa-ada9-a33e32a2873a",
+                "node_id": "1d070a91-ece6-4661-9b94-d75259125458",
                 "node_type": "qemu",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
@@ -2190,8 +2199,8 @@
                     "hda_disk_image": "nsrc-rs-20200428-c1d6625a.qcow2",
                     "hda_disk_image_md5sum": "c1d6625a5fbc4bc7d05b6e42e982260e",
                     "hda_disk_interface": "virtio",
-                    "hdb_disk_image": "riso-srv6-hdb-20200504-f895e4e8.img",
-                    "hdb_disk_image_md5sum": "f895e4e8df4fe859aa5f25f0082facfb",
+                    "hdb_disk_image": "riso-srv6-hdb-20200727-6c21a0ca.img",
+                    "hdb_disk_image_md5sum": "6c21a0caed3801e4a0413ada52d385a2",
                     "hdb_disk_interface": "virtio",
                     "hdc_disk_image": "",
                     "hdc_disk_image_md5sum": null,
@@ -2208,11 +2217,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:d9:18:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 1024,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: isplab\nPassword: lab-PW"
                 },
                 "symbol": ":/symbols/classic/qemu_guest.svg",
@@ -2224,7 +2234,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5155,
+                "console": 5066,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -2239,7 +2249,7 @@
                 },
                 "locked": true,
                 "name": "C6",
-                "node_id": "88ebd0ec-7e09-4c5a-89ca-9a6408e146fd",
+                "node_id": "0e4e615c-aace-4e77-80fd-c32984ea80e7",
                 "node_type": "qemu",
                 "port_name_format": "Gi{port1}",
                 "port_segment_size": 0,
@@ -2274,11 +2284,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:c3:f7:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 3072,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: isplab\nPassword: lab-PW"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -2290,7 +2301,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5157,
+                "console": 5068,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -2305,7 +2316,7 @@
                 },
                 "locked": true,
                 "name": "A5",
-                "node_id": "2adcb446-d81e-4f86-8290-a5d2817acd55",
+                "node_id": "c6891c50-2a22-451c-b616-59e4ee23c4fc",
                 "node_type": "qemu",
                 "port_name_format": "Gi{port1}",
                 "port_segment_size": 0,
@@ -2340,11 +2351,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:13:b4:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 3072,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: isplab\nPassword: lab-PW"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -2356,7 +2368,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5159,
+                "console": 5015,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -2371,7 +2383,7 @@
                 },
                 "locked": true,
                 "name": "Cust5",
-                "node_id": "a924a508-f08e-4c93-9ddb-2fb70936a2a2",
+                "node_id": "85cbd07c-692f-450b-91f1-a0785543c458",
                 "node_type": "qemu",
                 "port_name_format": "Gi0/{0}",
                 "port_segment_size": 0,
@@ -2406,11 +2418,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:88:a5:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 384,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: isplab\nPassword: lab-PW"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -2422,7 +2435,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5161,
+                "console": 5017,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -2437,7 +2450,7 @@
                 },
                 "locked": true,
                 "name": "Cust6",
-                "node_id": "0fe6e938-3ad2-4194-b687-ecf0c86492ef",
+                "node_id": "61d4b6e7-b859-4d43-832c-9a0da3b43a55",
                 "node_type": "qemu",
                 "port_name_format": "Gi0/{0}",
                 "port_segment_size": 0,
@@ -2472,11 +2485,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:c4:fc:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 384,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: isplab\nPassword: lab-PW"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -2488,7 +2502,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5163,
+                "console": 5019,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -2503,7 +2517,7 @@
                 },
                 "locked": true,
                 "name": "A6",
-                "node_id": "0f994ae2-dcb4-4e01-ba7b-0ef2ac0c1692",
+                "node_id": "3cec887e-bc54-46cb-9f37-ea9827f6b26b",
                 "node_type": "qemu",
                 "port_name_format": "Gi{port1}",
                 "port_segment_size": 0,
@@ -2538,11 +2552,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:47:d2:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 3072,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: isplab\nPassword: lab-PW"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -2554,7 +2569,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5165,
+                "console": 5021,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -2569,7 +2584,7 @@
                 },
                 "locked": true,
                 "name": "A8",
-                "node_id": "351afc67-ff9e-4032-bcc6-c9e9aa72f2dc",
+                "node_id": "1d2e8582-9286-4ab7-919b-2a65f1e3fe3c",
                 "node_type": "qemu",
                 "port_name_format": "Gi{port1}",
                 "port_segment_size": 0,
@@ -2604,11 +2619,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:65:f3:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 3072,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: isplab\nPassword: lab-PW"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -2620,7 +2636,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5167,
+                "console": 5023,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -2635,7 +2651,7 @@
                 },
                 "locked": true,
                 "name": "C8",
-                "node_id": "80e2ca88-f816-47a8-bbe8-b29fb5ce2a22",
+                "node_id": "27e1f278-f691-4261-ad7f-3196d2563560",
                 "node_type": "qemu",
                 "port_name_format": "Gi{port1}",
                 "port_segment_size": 0,
@@ -2670,11 +2686,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:98:8f:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 3072,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: isplab\nPassword: lab-PW"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -2686,7 +2703,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5169,
+                "console": 5025,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -2701,7 +2718,7 @@
                 },
                 "locked": true,
                 "name": "SRV8",
-                "node_id": "7be89b7e-4ba2-45ce-b6d4-ec09faace448",
+                "node_id": "e640274a-b6e3-4fe4-8158-b3c299c0e01e",
                 "node_type": "qemu",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
@@ -2718,8 +2735,8 @@
                     "hda_disk_image": "nsrc-rs-20200428-c1d6625a.qcow2",
                     "hda_disk_image_md5sum": "c1d6625a5fbc4bc7d05b6e42e982260e",
                     "hda_disk_interface": "virtio",
-                    "hdb_disk_image": "riso-srv8-hdb-20200504-92457e6b.img",
-                    "hdb_disk_image_md5sum": "92457e6b1613ad83f9510ef342c3e46d",
+                    "hdb_disk_image": "riso-srv8-hdb-20200727-b3956161.img",
+                    "hdb_disk_image_md5sum": "b3956161d7c8218ae49292fed07ffe04",
                     "hdb_disk_interface": "virtio",
                     "hdc_disk_image": "",
                     "hdc_disk_image_md5sum": null,
@@ -2736,11 +2753,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:1a:37:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 1024,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: isplab\nPassword: lab-PW"
                 },
                 "symbol": ":/symbols/classic/qemu_guest.svg",
@@ -2752,7 +2770,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5171,
+                "console": 5027,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -2767,7 +2785,7 @@
                 },
                 "locked": true,
                 "name": "Cust7",
-                "node_id": "881da462-2764-456c-8f85-bf8d61ad56cc",
+                "node_id": "29fe4007-04d1-4a49-a4a9-300a9e35ae1b",
                 "node_type": "qemu",
                 "port_name_format": "Gi0/{0}",
                 "port_segment_size": 0,
@@ -2802,11 +2820,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:dd:b8:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 384,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: isplab\nPassword: lab-PW"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -2818,7 +2837,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5173,
+                "console": 5029,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -2833,7 +2852,7 @@
                 },
                 "locked": true,
                 "name": "B8",
-                "node_id": "d231c1c1-ec98-4643-a443-98c66469de46",
+                "node_id": "b08127bd-950b-4216-8b5d-3166a79219eb",
                 "node_type": "qemu",
                 "port_name_format": "Gi{port1}",
                 "port_segment_size": 0,
@@ -2868,11 +2887,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:3a:69:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 3072,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: isplab\nPassword: lab-PW"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -2884,7 +2904,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5175,
+                "console": 5031,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -2899,7 +2919,7 @@
                 },
                 "locked": true,
                 "name": "C7",
-                "node_id": "e27b75a3-01d5-457c-89b9-d8803cd06abe",
+                "node_id": "e636b648-8567-4880-b16b-67860e025cf9",
                 "node_type": "qemu",
                 "port_name_format": "Gi{port1}",
                 "port_segment_size": 0,
@@ -2934,11 +2954,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:10:4e:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 3072,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: isplab\nPassword: lab-PW"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -2950,7 +2971,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5177,
+                "console": 5088,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -2965,7 +2986,7 @@
                 },
                 "locked": true,
                 "name": "P8",
-                "node_id": "b637c525-cc28-4f9c-9aec-98af2715269f",
+                "node_id": "ca11c17f-2e10-4622-8b32-01e86acf72cb",
                 "node_type": "qemu",
                 "port_name_format": "Gi{port1}",
                 "port_segment_size": 0,
@@ -3000,11 +3021,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:10:b3:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 3072,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: isplab\nPassword: lab-PW"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -3016,7 +3038,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5179,
+                "console": 5090,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -3031,7 +3053,7 @@
                 },
                 "locked": true,
                 "name": "Cust8",
-                "node_id": "eebe4d5e-6ada-4e2a-b8d9-13d811778012",
+                "node_id": "ee327c63-e7a9-44bd-869b-61bbb9aef0b0",
                 "node_type": "qemu",
                 "port_name_format": "Gi0/{0}",
                 "port_segment_size": 0,
@@ -3066,11 +3088,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:92:fc:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 384,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: isplab\nPassword: lab-PW"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -3082,7 +3105,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5181,
+                "console": 5092,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -3097,7 +3120,7 @@
                 },
                 "locked": true,
                 "name": "B7",
-                "node_id": "a0e0b4d3-cd6f-4cd7-88b9-6f9ceaeb6871",
+                "node_id": "85e5ea85-116b-4bd8-9f71-36eb5a7465e6",
                 "node_type": "qemu",
                 "port_name_format": "Gi{port1}",
                 "port_segment_size": 0,
@@ -3132,11 +3155,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:40:db:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 3072,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: isplab\nPassword: lab-PW"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -3148,7 +3172,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5183,
+                "console": 5094,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -3163,7 +3187,7 @@
                 },
                 "locked": true,
                 "name": "P7",
-                "node_id": "049ce124-733f-4b90-ae95-536e8961911c",
+                "node_id": "41de4059-5acb-487b-8b93-0b52cf11ca2c",
                 "node_type": "qemu",
                 "port_name_format": "Gi{port1}",
                 "port_segment_size": 0,
@@ -3198,11 +3222,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:57:2a:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 3072,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: isplab\nPassword: lab-PW"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -3214,7 +3239,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5185,
+                "console": 5096,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -3229,7 +3254,7 @@
                 },
                 "locked": true,
                 "name": "SRV7",
-                "node_id": "853460ce-8d32-4a58-aab5-d696f98abc32",
+                "node_id": "112e26e6-673b-4812-93ad-bb36c327ecc2",
                 "node_type": "qemu",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
@@ -3246,8 +3271,8 @@
                     "hda_disk_image": "nsrc-rs-20200428-c1d6625a.qcow2",
                     "hda_disk_image_md5sum": "c1d6625a5fbc4bc7d05b6e42e982260e",
                     "hda_disk_interface": "virtio",
-                    "hdb_disk_image": "riso-srv7-hdb-20200504-42109e3c.img",
-                    "hdb_disk_image_md5sum": "42109e3c05d43c1efc1386c53ae9cb7a",
+                    "hdb_disk_image": "riso-srv7-hdb-20200727-f0dcf490.img",
+                    "hdb_disk_image_md5sum": "f0dcf490a52c2df13266c6c056ce9ac3",
                     "hdb_disk_interface": "virtio",
                     "hdc_disk_image": "",
                     "hdc_disk_image_md5sum": null,
@@ -3264,11 +3289,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:32:95:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 1024,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: isplab\nPassword: lab-PW"
                 },
                 "symbol": ":/symbols/classic/qemu_guest.svg",
@@ -3280,7 +3306,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5187,
+                "console": 5098,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -3295,7 +3321,7 @@
                 },
                 "locked": true,
                 "name": "A7",
-                "node_id": "e08e4625-7316-40a4-833b-b1891d6e2128",
+                "node_id": "93a8fcd5-25ae-404d-9612-e6e92b622f29",
                 "node_type": "qemu",
                 "port_name_format": "Gi{port1}",
                 "port_segment_size": 0,
@@ -3330,11 +3356,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:2f:45:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 3072,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: isplab\nPassword: lab-PW"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -3346,7 +3373,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5237,
+                "console": 5100,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -3361,7 +3388,7 @@
                 },
                 "locked": true,
                 "name": "SR2",
-                "node_id": "cddce0de-2139-4074-b5d2-c6604c6e19cf",
+                "node_id": "cf7ffef4-1b3e-42b0-96e2-e8346a8c5bed",
                 "node_type": "qemu",
                 "port_name_format": "Gi0/{0}",
                 "port_segment_size": 0,
@@ -3396,11 +3423,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:65:4f:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 512,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: nsrc\nPassword: see instructor documentation"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -3427,7 +3455,7 @@
                 },
                 "locked": true,
                 "name": "NAT-SRV5",
-                "node_id": "0d535a29-6ca0-4d22-b3a4-3eb688badec7",
+                "node_id": "f041ae97-66a9-4c27-8642-526c39dce5d0",
                 "node_type": "nat",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
@@ -3465,7 +3493,7 @@
                 },
                 "locked": true,
                 "name": "NAT-SRV6",
-                "node_id": "a81d72bb-2651-46cd-b69b-da12360d9db6",
+                "node_id": "a9dd6914-a206-4942-8228-340d251841b5",
                 "node_type": "nat",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
@@ -3503,7 +3531,7 @@
                 },
                 "locked": true,
                 "name": "NAT-SRV7",
-                "node_id": "6f2c7ecc-b30c-42b1-976a-e94814ef8fe9",
+                "node_id": "52f303ae-b298-4b3f-88f0-757637bf91d6",
                 "node_type": "nat",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
@@ -3541,7 +3569,7 @@
                 },
                 "locked": true,
                 "name": "NAT-SRV8",
-                "node_id": "66b1cfcc-ea37-4d9f-b6d8-4ffc111dc841",
+                "node_id": "02afdcda-9bf4-4f02-bfff-c0c9a0d8754a",
                 "node_type": "nat",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
@@ -3579,7 +3607,7 @@
                 },
                 "locked": true,
                 "name": "NAT-RS2",
-                "node_id": "6cd0e481-0026-49f8-ab52-802340cdef53",
+                "node_id": "0484224f-a734-4cc5-b1c1-478300421f55",
                 "node_type": "nat",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
@@ -3602,7 +3630,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5038,
+                "console": 5045,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -3617,7 +3645,7 @@
                 },
                 "locked": true,
                 "name": "T5",
-                "node_id": "85bafbf4-25b0-412e-ad32-92556b180193",
+                "node_id": "a1af1edf-6d86-4985-82da-f7e703940fc3",
                 "node_type": "qemu",
                 "port_name_format": "Gi0/{0}",
                 "port_segment_size": 0,
@@ -3652,11 +3680,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:f7:99:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 384,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: isplab\nPassword: lab-PW"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -3668,7 +3697,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5040,
+                "console": 5049,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -3683,7 +3712,7 @@
                 },
                 "locked": true,
                 "name": "T8",
-                "node_id": "a5be530f-2e61-40c7-b775-533bda85d402",
+                "node_id": "1013b420-cd0d-400a-be6e-f0ffcda4bdec",
                 "node_type": "qemu",
                 "port_name_format": "Gi0/{0}",
                 "port_segment_size": 0,
@@ -3718,11 +3747,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:f1:49:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 384,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: isplab\nPassword: lab-PW"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -3734,7 +3764,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5042,
+                "console": 5053,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -3749,7 +3779,7 @@
                 },
                 "locked": true,
                 "name": "T6",
-                "node_id": "c871594d-702b-4961-827a-3a16e95675e1",
+                "node_id": "6701b9d3-d220-4077-8627-14f2a09e72a4",
                 "node_type": "qemu",
                 "port_name_format": "Gi0/{0}",
                 "port_segment_size": 0,
@@ -3784,11 +3814,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:5d:d2:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 384,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: isplab\nPassword: lab-PW"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -3800,7 +3831,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5044,
+                "console": 5057,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -3815,7 +3846,7 @@
                 },
                 "locked": true,
                 "name": "T7",
-                "node_id": "0c41c79f-3413-426e-bbd7-c7ab17882d78",
+                "node_id": "0367aa51-739a-45ff-a5a9-adf6042f37db",
                 "node_type": "qemu",
                 "port_name_format": "Gi0/{0}",
                 "port_segment_size": 0,
@@ -3850,11 +3881,12 @@
                     "linked_clone": true,
                     "mac_address": "0c:a6:09:9c:f2:00",
                     "on_close": "power_off",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
                     "ram": 384,
+                    "replicate_network_connection_state": true,
                     "usage": "Username: isplab\nPassword: lab-PW"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -3868,6 +3900,6 @@
     },
     "type": "topology",
     "variables": [],
-    "version": "2.2.8",
+    "version": "2.2.11",
     "zoom": 100
 }
