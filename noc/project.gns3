@@ -123,8 +123,8 @@
                     "hda_disk_image": "nsrc-nmm-20200614-c595bb42.qcow2",
                     "hda_disk_image_md5sum": "c595bb42197a0c3f7116393236a4949e",
                     "hda_disk_interface": "virtio",
-                    "hdb_disk_image": "noc-hdb-20200605-57220f0e.img",
-                    "hdb_disk_image_md5sum": "57220f0e02dfab04330634f30d7865bb",
+                    "hdb_disk_image": "noc-hdb-20200727-abb285a3.img",
+                    "hdb_disk_image_md5sum": "abb285a3f0af489abb4625c972d8d8e1",
                     "hdb_disk_interface": "virtio",
                     "hdc_disk_image": "",
                     "hdc_disk_image_md5sum": null,
@@ -141,7 +141,7 @@
                     "linked_clone": true,
                     "mac_address": "0c:45:ff:f2:78:00",
                     "on_close": "shutdown_signal",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
@@ -160,6 +160,6 @@
     },
     "type": "topology",
     "variables": [],
-    "version": "2.2.9",
+    "version": "2.2.11",
     "zoom": 100
 }

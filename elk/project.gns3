@@ -91,7 +91,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5003,
+                "console": 5043,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -123,8 +123,8 @@
                     "hda_disk_image": "nsrc-elk-20200611-8291da57.qcow2",
                     "hda_disk_image_md5sum": "8291da5762c7cfe852c945e846fb7330",
                     "hda_disk_interface": "virtio",
-                    "hdb_disk_image": "elk-hdb-20200611-0c58f831.img",
-                    "hdb_disk_image_md5sum": "0c58f83133d6eb43bf93486d2f10d051",
+                    "hdb_disk_image": "elk-hdb-20200727-6d3add67.img",
+                    "hdb_disk_image_md5sum": "6d3add671ef4e80a76a992f750881c32",
                     "hdb_disk_interface": "virtio",
                     "hdc_disk_image": "",
                     "hdc_disk_image_md5sum": null,
@@ -141,7 +141,7 @@
                     "linked_clone": true,
                     "mac_address": "0c:45:ff:f2:78:00",
                     "on_close": "shutdown_signal",
-                    "options": "-nographic -cpu host",
+                    "options": "-nographic -cpu Skylake-Server",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
@@ -160,6 +160,6 @@
     },
     "type": "topology",
     "variables": [],
-    "version": "2.2.9",
+    "version": "2.2.11",
     "zoom": 100
 }
