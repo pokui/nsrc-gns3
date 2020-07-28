@@ -23,7 +23,7 @@ Login to your server as your normal user (e.g. "nsrc"), fetch the script and
 run it:
 
 ```
-wget https://raw.githubusercontent.com/nsrc-org/nsrc-gns3/master/gns3setup
+wget https://raw.githubusercontent.com/nsrc-org/nsrc-gns3/main/gns3setup
 chmod +x gns3setup
 ./gns3setup
 ```

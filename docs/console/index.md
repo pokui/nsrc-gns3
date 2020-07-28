@@ -20,7 +20,7 @@ We have written a front-end which dynamically queries the GNS3 API for the
 ports.  Download it and install it:
 
 ```
-wget https://raw.githubusercontent.com/nsrc-org/nsrc-gns3/master/gns3-shellinabox.py
+wget https://raw.githubusercontent.com/nsrc-org/nsrc-gns3/main/gns3-shellinabox.py
 chmod +x gns3-shellinabox.py
 sudo mv gns3-shellinabox.py /usr/local/bin/gns3-shellinabox.py
 ```

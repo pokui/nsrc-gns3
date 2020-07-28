@@ -55,7 +55,7 @@ As the `nsrc` user, make the directory and install the script:
 ```bash
 mkdir -p ~/public_html/cgi-bin
 cd ~/public_html/cgi-bin
-wget https://raw.githubusercontent.com/nsrc-org/nsrc-gns3/master/gns3man
+wget https://raw.githubusercontent.com/nsrc-org/nsrc-gns3/main/gns3man
 chmod 755 ~/public_html/cgi-bin ~/public_html/cgi-bin/gns3man
 ```
 

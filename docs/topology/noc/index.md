@@ -108,7 +108,7 @@ exercises.  You could:
 
 You should also install a HTML page at `/var/www/html/index.html` which links
 to all the tools.  You can use
-[this sample](https://raw.githubusercontent.com/nsrc-org/nsrc-noc-setup/master/noc/index.html)
+[this sample](https://raw.githubusercontent.com/nsrc-org/nsrc-noc-setup/main/noc/index.html)
 as a base.
 
 ## snmpd
