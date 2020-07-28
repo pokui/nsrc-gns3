@@ -75,7 +75,7 @@ apt-cacher-ng: ALL
 On your server, create `/etc/apt/apt.conf.d/99proxy` containing:
 
 ```
-Acquire::http::Proxy "http://100.64.0.1:3142/";
+Acquire::http::Proxy "http://127.0.0.1:3142/";
 Acquire::https::Proxy "DIRECT";
 ```
 

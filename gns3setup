@@ -381,7 +381,7 @@ EOS
   (
 cat <<EOS
 # gns3setup
-Acquire::http::Proxy "http://100.64.0.1:3142/";
+Acquire::http::Proxy "http://127.0.0.1:3142/";
 Acquire::https::Proxy "DIRECT";
 EOS
   ) | REPLACE /etc/apt/apt.conf.d/99proxy sudo || IF_CHANGED
