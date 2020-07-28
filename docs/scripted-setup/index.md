@@ -88,7 +88,7 @@ password = XXXXXXXX
 ```
 
 `USERNAME` will typically be the user you run the script under and `XXXXXXXX`
-wii be your randomly generated password.
+will be your randomly generated password.
 
 You can check for it in and edit `$HOME/.config/GNS3/2.2/gns3_server.conf` . 
 Note that the username and password are stored in cleartext and do not need to 
