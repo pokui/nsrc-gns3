@@ -95,13 +95,13 @@ your new WAN interface, with DHCP enabled, and `optional: true` so that
 booting is not delayed if it's not plugged in.
 
 When you've finished, it should look like this, but with your WAN
-interface name in place of `enx086d41e68ba8`:
+interface name in place of `enx00e04c063260`:
 
 ```
 network:
   version: 2
   ethernets:
-    enx086d41e68ba8:
+    enx00e04c063260:
       dhcp4: true
       optional: true
 ```
@@ -248,13 +248,13 @@ virsh net-start default
 
 The permanent solution is to create
 `/etc/networkd-dispatcher/routable.d/accept-ra` with the following contents
-(and make it executable)
+(and make it executable) - replace `enx00e04c063260` with your WAN interface.
 
 ```
 #!/bin/bash -eu
 # https://superuser.com/questions/1208952/qemu-kvm-libvirt-forwarding
 if [ "$IFACE" = "enx00e04c063260" ]; then
-  sysctl net.ipv6.conf.$WAN_INTERFACE.enx00e04c063260=2
+  sysctl net.ipv6.conf.enx00e04c063260.accept_ra=2
 fi
 ```
 
