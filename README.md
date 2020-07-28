@@ -13,7 +13,7 @@ mkdocs build
 
 The output is generated in a `site/` directory.
 
-# Renegerating the hosts file
+# Regenerating the hosts file
 
 ```
 cd cndo
