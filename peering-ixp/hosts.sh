@@ -11,6 +11,7 @@ ff02::2 ip6-allrouters
 ### Management ###
 
 100.64.0.1		vtp.ws.nsrc.org apt.ws.nsrc.org gns3.ws.nsrc.org www.ws.nsrc.org gw.ws.nsrc.org
+100.64.0.8		vtp2.ws.nsrc.org
 100.64.0.249		elk.ws.nsrc.org kibana.ws.nsrc.org elk
 2001:DB8:0:0::249	elk.ws.nsrc.org kibana.ws.nsrc.org elk
 100.64.0.250		noc.ws.nsrc.org noc

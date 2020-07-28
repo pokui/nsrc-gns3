@@ -14,6 +14,7 @@ ff02::2 ip6-allrouters
 2001:DB8:0:0::2		gi0-0.transit1.nren.ws.nsrc.org transit1.nren.ws.nsrc.org
 100.64.0.3		gi0-0.transit2.nren.ws.nsrc.org transit2.nren.ws.nsrc.org
 2001:DB8:0:0::3		gi0-0.transit2.nren.ws.nsrc.org transit2.nren.ws.nsrc.org
+100.64.0.8		vtp2.ws.nsrc.org
 EOS
 
 for campus in $(seq 1 6); do
