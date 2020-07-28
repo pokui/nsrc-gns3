@@ -17,9 +17,10 @@ and select Server in the left-hand menu.
 Uncheck "Enable local server" (that would be if you were running the backend
 within a VM on your laptop)
 
-Under "Remote main server" give the IP address 100.64.0.1, TCP port 3080,
-and the GNS3 server authentication username and password if you configured
-them.
+Under "Remote main server" give the IP address 100.64.0.1, TCP port 3080, and
+the GNS3 server authentication username and password if you configured them. If
+you used the setup script a default one was created for you. Check the settings
+in `$HOME/.config/GNS3/2.2/gns3_server.conf` to verify.
 
 ![GNS3 Preferences](gns3-preferences.png)
 
