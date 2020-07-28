@@ -74,16 +74,28 @@ You may be asked whether ubridge should be usable by non-root users.  Say Yes.
 
 ## netdata license
 
-You will be asked to accept the netdata license. Say Yes.
+You may be asked to accept the netdata license. Say Yes.
 
 # Set GNS3 server password
 
-The script does not set a username or password for the GNS3 administrative
-interface.
+The script creates a default username and password for your GNS3 server. It
+will be printed at the end of the output similar to the following: 
 
-You should edit `$HOME/.config/GNS3/2.2/gns3_server.conf` to uncomment and
-change the auth settings, to prevent students from being able to control the
-GNS3 server.
+```
+All done!
+user = USERNAME
+password = XXXXXXXX
+```
+
+`USERNAME` will typically be the user you run the script under and `XXXXXXXX`
+wii be your randomly generated password.
+
+You can check for it in and edit `$HOME/.config/GNS3/2.2/gns3_server.conf` . 
+Note that the username and password are stored in cleartext and do not need to 
+match your login username and password.
+
+You will need to use this password when connecting your GNS3 client to manage 
+the topologies.
 
 # Review and reboot server
 
