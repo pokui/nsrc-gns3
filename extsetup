@@ -86,7 +86,7 @@ fi
 # of a non-existent domain, we want an NXDOMAIN response from dnsmasq
 # rather than matching a wildcard record in the public DNS
 #
-mods="$MODS dns"
+MODS="$MODS dns"
 conf_dns() {
     (
 cat <<'EOS'
@@ -121,14 +121,14 @@ EOS
 # NOTE: at this point Apache must already be running so
 # that certs can be issued
 #
-mods="$MODS dehydrated"
+MODS="$MODS dehydrated"
 conf_dehydrated() {
 sudo mkdir -p /etc/dehydrated
 sudo mkdir -p /var/www/html/.well-known/acme-challenge
 sudo touch /var/www/html/.well-known/acme-challenge/test123
 
 if ! curl -Ss localhost/.well-known/acme-challenge/test123; then
-  sudo a2dissite 100-vtp-cloud || true
+  sudo a2dissite 100-vtp-sites || true
   sudo a2disconf 100-vtp-access || true
   sudo a2ensite 000-default
   sudo systemctl restart apache2
