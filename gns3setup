@@ -320,10 +320,12 @@ cat <<EOS
   sysctl net.ipv4.conf.virbr0.send_redirects=0
   iptables -I FORWARD -j ACCEPT -s 100.64.0.0/10 -i virbr0
   iptables -I FORWARD -j ACCEPT -d 100.64.0.0/10 -o virbr0 -m conntrack --ctstate RELATED,ESTABLISHED
+  iptables -t nat -I POSTROUTING -j RETURN -o lo
   iptables -t nat -I POSTROUTING -j RETURN -o virbr0
-  iptables -t nat -A POSTROUTING -j MASQUERADE -s 100.64.0.0/10
+  iptables -t nat -A POSTROUTING -j MASQUERADE -s 100.64.0.0/10 '!' -d 100.64.0.0/10
   ip6tables -I FORWARD -j ACCEPT -i virbr0
   ip6tables -I FORWARD -j ACCEPT -o virbr0 -m conntrack --ctstate RELATED,ESTABLISHED
+  ip6tables -t nat -I POSTROUTING -j RETURN -o lo
   ip6tables -t nat -I POSTROUTING -j RETURN -o virbr0
   ip6tables -t nat -A POSTROUTING -j MASQUERADE -s 2001:db8::/32
   ip6tables -t nat -A POSTROUTING -j MASQUERADE -s 2001:10::/28
