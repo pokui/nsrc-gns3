@@ -302,10 +302,6 @@ RequestHeader set X-Forwarded-For "expr=%{REMOTE_ADDR}"
 SSLProxyEngine On
 SSLProxyVerify none
 
-# Proxying: sensible defaults when target does not give explicit charset
-# (fixes problem with prometheus icons in text/css)
-AddDefaultCharset utf-8
-xml2EncDefault utf-8
 # Rewrite absolute links which point to *.ws.nsrc.org when proxying
 ProxyHTMLEnable On
 ProxyHTMLInterp On
@@ -352,6 +348,11 @@ Listen 9093
 <VirtualHost *:80 _default_:*>
 	DocumentRoot /var/www/html
 
+	# Proxying: sensible defaults when target does not give explicit charset
+	# (fixes problem with prometheus icons in text/css)
+	AddDefaultCharset utf-8
+	xml2EncDefault utf-8
+
 	RewriteEngine On
 
 	# Access by IP address: serve locally
@@ -395,6 +396,9 @@ Listen 8443
 
 <VirtualHost *:443 *:8443>
 	DocumentRoot /var/www/html
+
+	AddDefaultCharset utf-8
+	xml2EncDefault utf-8
 
 	SSLEngine on
 	SSLCertificateFile      /etc/dehydrated/certs/vtp_cloud/fullchain.pem
