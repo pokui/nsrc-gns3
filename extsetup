@@ -81,10 +81,15 @@ fi
 
 #
 # When resolving *.ws.nsrc.org domains, we want the kit to forward to
-# dnsmasq instead of using the internal DNS.  Normally this doesn't
+# dnsmasq instead of using the link-learned DNS.  Normally this doesn't
 # matter because we look in /etc/hosts first anyway, but in the case
 # of a non-existent domain, we want an NXDOMAIN response from dnsmasq
-# rather than matching a wildcard record in the public DNS
+# rather than going to the public DNS.
+#
+# Unfortunately, systemd-resolved doesn't behave well: all queries are
+# send to "DNS" (not just ws.nsrc.org) in parallel with being sent to
+# the DNS servers learned on the uplink.  This config now only exists
+# to revert the previous config, and add FallbackDNS.
 #
 MODS="$MODS dns"
 conf_dns() {
@@ -104,9 +109,9 @@ cat <<'EOS'
 # See resolved.conf(5) for details
 
 [Resolve]
-DNS=100.64.0.1
+#DNS=
 FallbackDNS=9.9.9.9
-Domains=~ws.nsrc.org
+#Domains=
 #LLMNR=no
 #MulticastDNS=no
 #DNSSEC=no
