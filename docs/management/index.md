@@ -7,6 +7,12 @@ is checked.  Do this for each topology you use (CNDO, NMM)
 
 ![Edit project](gns3-leave-open.png)
 
+!!! Warning
+
+    If you restore the entire project from a snapshot - using `Edit > Manage
+    Snapshots` - then this flag is reset.  Remember to set it again
+    afterwards.
+
 For the NOC, you can check all three boxes so your NOC VM auto-starts as
 soon as the server boots.
 
